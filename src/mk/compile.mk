@@ -5,7 +5,6 @@
 #APP_NAME=	
 #PROJ=		
 #REMOTE=		github
-#DIST_PREFIX=	$(HOME)/Desktop
 
 # defs
 POM=		pom.xml
@@ -15,13 +14,6 @@ AS_DIR=		$(MTARG)/appassembler
 # determine version
 VER=		$(shell git tag -l | sort -V | tail -1 | sed 's/.//')
 VPREF=		$(if $(VER),-$(VER),-0.1.0-SNAPSHOT)
-
-# app assemble (maven plugin
-ANRCMD=		head -1 project.clj | sed 's/(defproject \(.*\)\/\(.*\) .*/\2/'
-APP_NAME_REF=	$(if $(APP_NAME),$(APP_NAME),$(shell $(ANRCMD)))
-APP_SNAME_REF=	$(if $(APP_SCR_NAME),$(APP_SCR_NAME),$(APP_NAME_REF))
-DIST_DIR=	$(if $(DIST_PREFIX),$(DIST_PREFIX)/$(APP_NAME_REF),$(HOME)/Desktop/$(APP_NAME_REF))
-DIST_BIN_DIR=	$(DIST_DIR)/bin
 
 # jar
 LIB_JAR=	$(MTARG)/$(APP_NAME_REF)$(VPREF).jar
@@ -36,7 +28,6 @@ GITUSER=	$(if $(USER),$(USER),$(shell $(USRCMD)))
 
 # doc (codox)
 DOC_DIR=	$(MTARG)/doc
-ASBIN_DIR=	src/asbin
 
 # executables
 GTAGUTIL=	$(ZBHOME)/src/python/gtagutil
@@ -55,9 +46,6 @@ install:
 
 .PHONEY:
 uber:		$(UBER_JAR)
-
-.PHONEY:
-dist:		$(DIST_BIN_DIR)
 
 .PHONEY:
 deploy:
@@ -99,16 +87,6 @@ $(UBER_JAR):
 $(POM):
 	lein pom
 
-$(AS_DIR):	$(POM)
-	lein with-profile +appassem jar
-	mvn package appassembler:assemble
-
-$(DIST_BIN_DIR):	$(AS_DIR)
-	mkdir -p $(DIST_DIR)
-	cp -r target/appassembler/* $(DIST_DIR)
-	[ -d $(ASBIN_DIR) ] && cp -r $(ASBIN_DIR)/* $(DIST_BIN_DIR) || true
-	chmod 0755 $(DIST_BIN_DIR)/$(APP_SNAME_REF)
-
 .PHONEY:
 forcepush:
 	git push
@@ -137,14 +115,6 @@ pushdocs:	$(DOC_DIR)
 	  git push -u origin gh-pages )
 
 .PHONEY:
-cleandist:
-	@echo "removing $(DIST_DIR)..."
-	rm -fr $(DIST_DIR)
-
-.PHONEY:
 clean:
-	rm -fr $(POM)* target dev-resources src/clojure/$(APP_NAME_REF)/version.clj
+	rm -fr $(POM)* target dev-resources src/clojure/$(APP_NAME_REF)/version.clj $(ADD_CLEAN)
 	rmdir test 2>/dev/null || true
-
-.PHONEY:
-cleanall:	clean cleandist
