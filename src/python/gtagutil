@@ -1,0 +1,147 @@
+#!/usr/bin/env python
+
+from random import shuffle
+import time
+import re
+import sys
+import os
+import argparse
+from operator import attrgetter
+from git import Repo, TagReference
+
+USAGE = "usage: %s [argument]" % sys.argv[0]
+ACTIONS = { 'create': 'create a new tag',
+            'recreate': 'recreate the last tag with the previous tag\'s comment',
+            'del': 'delete the last tag',
+            'show': 'print the last tag version'}
+GIT_DIR = '.git'
+
+def enum(*sequential, **named):
+    enums = dict(zip(sequential, range(len(sequential))), **named)
+    reverse = dict((value, key) for key, value in enums.iteritems())
+    enums['reverse_mapping'] = reverse
+    return type('Enum', (), enums)
+
+VersionPart = enum(major = 1, minor = 2, debug = 3)
+
+def find_par_dir(cur_path, dir_name):
+    match_dir = os.path.abspath(os.path.join(cur_path, dir_name))
+    if os.path.exists(match_dir):
+        return match_dir
+    else:
+        par_path = os.path.abspath(os.path.join(cur_path, os.pardir))
+        if (par_path == cur_path):
+            return None
+        else:
+            return find_par_dir(par_path, dir_name)
+
+class TagUtil:
+    def __init__(self, repo_dir):
+        self.repo = Repo(repo_dir)
+        assert not self.repo.bare
+
+    def parse_version(self, name):
+        m = re.search('v(\d+)\.(\d+)\.(\d+)$', name)
+        if m is not None:
+            ver = m.group(1)
+            return {'major': int(m.group(1)),
+                    'minor': int(m.group(2)),
+                    'debug': int(m.group(3))}
+
+    def format_version(self, ver, prefix='v'):
+        return '%s%d.%d.%d' % (prefix, ver['major'], ver['minor'], ver['debug'])
+
+    def get_entries(self):
+        tags = self.repo.tags
+        tags = sorted(tags, key=attrgetter('object.tagged_date'))
+        tag_entries = [];
+        for tag in tags:
+            name = tag.object.tag
+            ver = self.parse_version(tag.object.tag)
+            if ver is not None:
+                tag_entries.append({'name': name,
+                                    'ver': ver,
+                                    'date': tag.object.tagged_date,
+                                    'tag': tag,
+                                    'message': tag.object.message})
+        return tag_entries
+
+    def last_tag_entry(self):
+        entries = self.get_entries()
+        if (len(entries) > 0):
+            return entries[-1]
+
+    def print_last_tag(self):
+        entry = self.last_tag_entry()
+        if entry:
+            print self.format_version(entry['ver'], prefix='')
+
+    def increment_version(self, versionPart):
+        entry = self.last_tag_entry()
+        if entry:
+            ver = entry['ver']
+            ver_key = VersionPart.reverse_mapping[versionPart]
+            ver[ver_key] = ver[ver_key] + 1
+        else:
+            ver = {'major': 0, 'minor': 0, 'debug': 1}
+        return self.format_version(ver)
+
+    def delete_last_tag(self):
+        entry = self.last_tag_entry()
+        tag = entry['tag']
+        name = entry['name']
+        print 'deleting', name
+        TagReference.delete(self.repo, tag)
+
+    def recreate_last_tag(self):
+        entry = self.last_tag_entry()
+        tag = entry['tag']
+        name = entry['name']
+        msg = entry['message']
+        print 'deleting', name
+        TagReference.delete(self.repo, tag)
+        print 'creating %s with commit <%s>' % (name, msg)
+        TagReference.create(self.repo, name, message=msg)
+
+    def create(self, message, versionPart):
+        new_tag_name = self.increment_version(versionPart)
+        print 'creating %s with commit <%s>' % (new_tag_name, message)
+        TagReference.create(self.repo, new_tag_name, message=message)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+	formatter_class=argparse.RawDescriptionHelpFormatter,
+	description = 'Git tag helper',
+        epilog = 'actions:\n' +
+	"\n".join(map(lambda x: "%s: %s" % (x, ACTIONS[x]), ACTIONS)))
+    parser.add_argument('action', nargs = '*', help = 'the convenience action to invoke (see below)')
+    parser.add_argument('-m', default = 'none',
+                        help = 'message for the new tag')
+    args = parser.parse_args()
+    actions = args.action
+    if len(actions) == 0:
+	parser.print_help()
+        sys.exit(1)
+    action = args.action[0]
+    git_dir = find_par_dir('.', GIT_DIR)
+    #print 'git_dir: %s' % git_dir
+    if git_dir == None:
+        print >> sys.stderr, 'no .git director found in current or ancestor directory'
+        sys.exit(1)
+    tu = TagUtil(git_dir)
+    if action == 'create':
+        tu.create(args.m, VersionPart.debug)
+    elif action == 'recreate':
+        tu.recreate_last_tag()
+    elif action == 'del':
+        tu.delete_last_tag()
+    elif action == 'show':
+        tu.print_last_tag()
+    else:
+        print >> sys.stderr, ('unkonwn action: %s' % action)
+        parser.print_help()
+        sys.exit(1)
+
+if __name__ == '__main__':
+    main()
