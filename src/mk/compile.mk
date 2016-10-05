@@ -1,7 +1,7 @@
 ## makefile automates the build and deployment for lein projects
 
 # edit these if you want
-#USER=		
+#GUSER=		
 #APP_NAME=	
 #PROJ=		
 #REMOTE=		github
@@ -24,7 +24,7 @@ GITREMOTE=	$(if $(REMOTE),$(REMOTE),github)
 PNCMD=		git remote -v | grep $(GITREMOTE) | grep push | sed 's/.*\/\(.*\).git .*/\1/'
 PROJ_REF=	$(if $(PROJ),$(PROJ),$(shell $(PNCMD)))
 USRCMD=		git remote -v | grep $(GITREMOTE) | grep push | sed 's/.*\/\(.*\)\/.*/\1/'
-GITUSER=	$(if $(USER),$(USER),$(shell $(USRCMD)))
+GITUSER=	$(if $(GUSER),$(GUSER),$(shell $(USRCMD)))
 
 # doc (codox)
 DOC_DIR=	$(MTARG)/doc
