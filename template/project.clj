@@ -30,6 +30,7 @@
                                      [:id "${project.app.name}"])]]
                                   [:environmentSetupFileName "setupenv"])}]]
   :profiles {:uberjar {:aot [${project.main-class}]}
+             :appassem {:aot :all}
              :dev
              {:jvm-opts
               ["-Dlog4j.configurationFile=test-resources/log4j2.xml" "-Xms4g" "-Xmx12g" "-XX:+UseConcMarkSweepGC"]
