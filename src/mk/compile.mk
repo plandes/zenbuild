@@ -84,6 +84,11 @@ $(UBER_JAR):
 	@echo compiling $(UBER_JAR)
 	lein with-profile +uberjar uberjar
 
+.PHONEY:
+checkdep:
+	@echo compiling $(UBER_JAR)
+	lein with-profile +checkdep uberjar
+
 $(POM):
 	lein pom
 
