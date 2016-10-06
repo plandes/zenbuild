@@ -6,9 +6,6 @@
 #ADD_CLEAN+=	$(ASBIN_DIR)
 
 # app assemble (maven plugin
-ANRCMD=		grep '(defproject' project.clj | head -1 | sed 's/(defproject \(.*\)\/\(.*\) .*/\2/'
-APP_NAME_REF=	$(if $(APP_NAME),$(APP_NAME),$(shell $(ANRCMD)))
-APP_SNAME_REF=	$(if $(APP_SCR_NAME),$(APP_SCR_NAME),$(APP_NAME_REF))
 DIST_DIR=	$(if $(DIST_PREFIX),$(DIST_PREFIX)/$(APP_NAME_REF),$(HOME)/Desktop/$(APP_NAME_REF))
 DIST_BIN_DIR=	$(DIST_DIR)/bin
 ASBIN_DIR=	src/asbin

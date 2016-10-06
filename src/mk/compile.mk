@@ -15,6 +15,11 @@ AS_DIR=		$(MTARG)/appassembler
 VER=		$(shell git tag -l | sort -V | tail -1 | sed 's/.//')
 VPREF=		$(if $(VER),-$(VER),-0.1.0-SNAPSHOT)
 
+# application name (jars and dist)
+ANRCMD=		grep '(defproject' project.clj | head -1 | sed 's/(defproject \(.*\)\/\(.*\) .*/\2/'
+APP_NAME_REF=	$(if $(APP_NAME),$(APP_NAME),$(shell $(ANRCMD)))
+APP_SNAME_REF=	$(if $(APP_SCR_NAME),$(APP_SCR_NAME),$(APP_NAME_REF))
+
 # jar
 LIB_JAR=	$(MTARG)/$(APP_NAME_REF)$(VPREF).jar
 UBER_JAR=	$(MTARG)/$(APP_NAME_REF)$(VPREF)-standalone.jar

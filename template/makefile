@@ -1,7 +1,7 @@
 ## makefile automates the build and deployment for lein projects
 
 # edit these if you want
-#USER=		johndoe
+#GUSER=		johndoe
 #APP_SCR_NAME=	${project.app.name}
 #PROJ=		
 #REMOTE=	origin
