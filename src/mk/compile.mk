@@ -26,7 +26,7 @@ UBER_JAR=	$(MTARG)/$(APP_NAME_REF)$(VPREF)-standalone.jar
 
 # git
 GITREMOTE=	$(if $(REMOTE),$(REMOTE),github)
-PNCMD=		git remote -v | grep $(GITREMOTE) | grep push | sed 's/.*\/\(.*\).git .*/\1/'
+PNCMD=		git remote -v | grep $(GITREMOTE) | grep push | sed -e 's:^.*/\(.*\) (push):\1:' -e 's:.git$$::'
 PROJ_REF=	$(if $(PROJ),$(PROJ),$(shell $(PNCMD)))
 USRCMD=		git remote -v | grep $(GITREMOTE) | grep push | sed 's/.*\/\(.*\)\/.*/\1/'
 GITUSER=	$(if $(GUSER),$(GUSER),$(shell $(USRCMD)))
@@ -123,6 +123,10 @@ pushdocs:	$(DOC_DIR)
 	  git add . ; \
 	  git commit -am "new doc push" ; \
 	  git push -u origin gh-pages )
+
+.PHONEY:
+deptree:	$(POM)
+	mvn dependency:tree -D verbose
 
 .PHONEY:
 clean:
