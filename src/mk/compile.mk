@@ -125,6 +125,10 @@ pushdocs:	$(DOC_DIR)
 	  git push -u origin gh-pages )
 
 .PHONEY:
+deptree:	$(POM)
+	mvn dependency:tree -D verbose
+
+.PHONEY:
 clean:
 	rm -fr $(POM)* target dev-resources src/clojure/$(APP_NAME_REF)/version.clj $(ADD_CLEAN)
 	rmdir test 2>/dev/null || true
