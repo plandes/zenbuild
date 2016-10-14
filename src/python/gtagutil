@@ -51,8 +51,18 @@ class TagUtil:
     def format_version(self, ver, prefix='v'):
         return '%s%d.%d.%d' % (prefix, ver['major'], ver['minor'], ver['debug'])
 
+    def remove_non_tagged_dates(self, tags):
+        to_del = []
+        for tag in tags:
+            if not hasattr(tag.object, 'tagged_date'):
+                to_del.append(tag)
+        for tag in to_del:
+            tags.remove(tag)
+        return tags
+
     def get_entries(self):
         tags = self.repo.tags
+        tags = self.remove_non_tagged_dates(tags)
         tags = sorted(tags, key=attrgetter('object.tagged_date'))
         tag_entries = [];
         for tag in tags:
