@@ -17,12 +17,13 @@ VPREF=		$(if $(VER),-$(VER),-0.1.0-SNAPSHOT)
 
 # application name (jars and dist)
 ANRCMD=		grep '(defproject' project.clj | head -1 | sed 's/(defproject \(.*\)\/\(.*\) .*/\2/'
-APP_NAME_REF=	$(if $(APP_NAME),$(APP_NAME),$(shell $(ANRCMD)))
+ANRRES=		$(shell $(ANRCMD))
+APP_NAME_REF=	$(if $(APP_NAME),$(APP_NAME),$(ANRRES))
 APP_SNAME_REF=	$(if $(APP_SCR_NAME),$(APP_SCR_NAME),$(APP_NAME_REF))
 
 # jar
-LIB_JAR=	$(MTARG)/$(APP_NAME_REF)$(VPREF).jar
-UBER_JAR=	$(MTARG)/$(APP_NAME_REF)$(VPREF)-standalone.jar
+LIB_JAR=	$(MTARG)/$(ANRRES)$(VPREF).jar
+UBER_JAR=	$(MTARG)/$(ANRRES)$(VPREF)-standalone.jar
 
 # git
 GITREMOTE=	$(if $(REMOTE),$(REMOTE),github)
@@ -31,8 +32,10 @@ PROJ_REF=	$(if $(PROJ),$(PROJ),$(shell $(PNCMD)))
 USRCMD=		git remote -v | grep $(GITREMOTE) | grep push | sed 's/.*\/\(.*\)\/.*/\1/'
 GITUSER=	$(if $(GUSER),$(GUSER),$(shell $(USRCMD)))
 
-# doc (codox)
-DOC_DIR=	$(MTARG)/doc
+# doc
+DOC_SRC_DIR=	./doc
+# codox
+DOC_DST_DIR=	$(MTARG)/doc
 
 # executables
 GTAGUTIL=	$(ZBHOME)/src/python/gtagutil
@@ -103,23 +106,24 @@ forcepush:
 	git push --tags --force
 
 .PHONEY:
-docs:		$(DOC_DIR)
+docs:		$(DOC_DST_DIR)
 
 # https://github.com/weavejester/codox/wiki/Deploying-to-GitHub-Pages
-$(DOC_DIR):
-	rm -rf $(DOC_DIR) && mkdir -p $(DOC_DIR)
-	git clone https://github.com/$(GITUSER)/$(PROJ_REF).git $(DOC_DIR)
+$(DOC_DST_DIR):
+	rm -rf $(DOC_DST_DIR) && mkdir -p $(DOC_DST_DIR)
+	git clone https://github.com/$(GITUSER)/$(PROJ_REF).git $(DOC_DST_DIR)
 	git update-ref -d refs/heads/gh-pages 
 	git push $(GITREMOTE) --mirror
-	( cd $(DOC_DIR) ; \
+	( cd $(DOC_DST_DIR) ; \
 	  git symbolic-ref HEAD refs/heads/gh-pages ; \
 	  rm .git/index ; \
 	  git clean -fdx )
+	cp -r $(DOC_SRC_DIR)/* $(DOC_DST_DIR)
 	lein codox
 
 .PHONEY:
-pushdocs:	$(DOC_DIR)
-	( cd $(DOC_DIR) ; \
+pushdocs:	$(DOC_DST_DIR)
+	( cd $(DOC_DST_DIR) ; \
 	  git add . ; \
 	  git commit -am "new doc push" ; \
 	  git push -u origin gh-pages )
