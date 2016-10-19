@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import re
+
+class AwsCredsEnv():
+    def __init__(self, creds_file = None, env_aws_key = 'AWS_KEYID', env_aws_secret = 'AWS_SECRET'):
+        if creds_file is None:
+            creds_file = os.path.join(os.getenv('HOME'), '.aws', 'credentials')
+        self.creds_file = creds_file
+        self.env_aws_key = env_aws_key
+        self.env_aws_secret = env_aws_secret
+
+    def file_to_key_values(self):
+        kv_regex = re.compile('^(.*?)\s*=\s*(.*?)\s*$')
+        kvs = {}
+        with open(self.creds_file, 'r') as f:
+            content = f.readlines()
+            for line in content:
+                match = kv_regex.match(line)
+                if match is not None:
+                    kvs[match.group(1)] = match.group(2)
+        self.creds_data = kvs
+
+    def get_prop(self, name):
+        if not hasattr(self, 'creds_data'):
+            self.file_to_key_values()
+        if name in self.creds_data:
+            return self.creds_data[name]
+        else:
+            raise Exception('no key <%s> in creds file <%s>' % (name, self.creds_file))
+
+    def execute(self, command):
+        os.environ[self.env_aws_key] = self.get_prop('aws_access_key_id')
+        os.environ[self.env_aws_secret] = self.get_prop('aws_secret_access_key')
+        os.system('export')
+        os.system(command)
+
+def main(args):
+    ace = AwsCredsEnv()
+    ace.execute(' '.join(args[1:]))
+
+if __name__ == '__main__':
+    main(sys.argv)

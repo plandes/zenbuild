@@ -39,6 +39,11 @@ DOC_DST_DIR=	$(MTARG)/doc
 
 # executables
 GTAGUTIL=	$(ZBHOME)/src/python/gtagutil
+AWSENV=		$(ZBHOME)/src/python/awsenv
+
+# deploy
+LDEPLOY_REPO=	$(if $(DEPLOY_REPO),$(DEPLOY_REPO),NONE_SET)
+
 
 # targets
 
@@ -83,6 +88,11 @@ info:
 	@echo "uberjar: $(UBER_JAR)"
 	@echo "app-script: $(APP_SNAME_REF)"
 	@echo "app-dist: $(DIST_DIR)"
+	@echo "deploy-repo: $(LDEPLOY_REPO)"
+
+.PHONEY:
+deptree:	$(POM)
+	mvn dependency:tree -D verbose
 
 $(LIB_JAR):
 	@echo compiling $(LIB_JAR)
@@ -129,8 +139,8 @@ pushdocs:	$(DOC_DST_DIR)
 	  git push -u origin gh-pages )
 
 .PHONEY:
-deptree:	$(POM)
-	mvn dependency:tree -D verbose
+s3deploy:
+	$(AWSENV) lein deploy $(LDEPLOY_REPO)
 
 .PHONEY:
 clean:
