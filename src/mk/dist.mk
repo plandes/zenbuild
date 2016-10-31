@@ -11,7 +11,7 @@ DIST_BIN_DIR=	$(DIST_DIR)/bin
 ASBIN_DIR=	src/asbin
 ASBIN_FILE=	$(ASBIN_DIR)/setupenv
 
-.PHONEY:
+.PHONY: dist
 dist:		$(DIST_BIN_DIR)
 
 $(AS_DIR):	$(POM)

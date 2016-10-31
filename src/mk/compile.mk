@@ -47,38 +47,38 @@ LDEPLOY_REPO=	$(if $(DEPLOY_REPO),$(DEPLOY_REPO),NONE_SET)
 
 # targets
 
-.PHONEY:
+.PHONY: compile
 compile:	$(LIB_JAR)
 
-.PHONEY:
+.PHONY: jar
 jar:		$(LIB_JAR)
 
-.PHONEY:
+.PHONY: install
 install:
 	lein install
 
-.PHONEY:
+.PHONY: uber
 uber:		$(UBER_JAR)
 
-.PHONEY:
+.PHONY: deploy
 deploy:
 	lein deploy clojars
 
-.PHONEY:
+.PHONY: run
 run:
 	lein run
 
-.PHONEY:
+.PHONY: forcetag
 forcetag:
 	git add -A :/
 	git commit -am 'none' || echo "not able to commit"
 	$(GTAGUTIL) recreate
 
-.PHONEY:
+.PHONY: newtag
 newtag:
 	$(GTAGUTIL) create -m '`git log -1 --pretty=%B`'
 
-.PHONEY:
+.PHONY: info
 info:
 	@echo "version: $(VER)"
 	@echo "project: $(PROJ_REF)"
@@ -90,7 +90,7 @@ info:
 	@echo "app-dist: $(DIST_DIR)"
 	@echo "deploy-repo: $(LDEPLOY_REPO)"
 
-.PHONEY:
+.PHONY: deptree
 deptree:	$(POM)
 	mvn dependency:tree -D verbose
 
@@ -102,7 +102,7 @@ $(UBER_JAR):
 	@echo compiling $(UBER_JAR)
 	lein with-profile +uberjar uberjar
 
-.PHONEY:
+.PHONY: checkdep
 checkdep:
 	@echo compiling $(UBER_JAR)
 	lein with-profile +appassem uberjar
@@ -110,12 +110,12 @@ checkdep:
 $(POM):
 	lein pom
 
-.PHONEY:
+.PHONY: forcepush
 forcepush:
 	git push
 	git push --tags --force
 
-.PHONEY:
+.PHONY: docs
 docs:		$(DOC_DST_DIR)
 
 # https://github.com/weavejester/codox/wiki/Deploying-to-GitHub-Pages
@@ -131,18 +131,18 @@ $(DOC_DST_DIR):
 	cp -r $(DOC_SRC_DIR)/* $(DOC_DST_DIR)
 	lein codox
 
-.PHONEY:
+.PHONY: pushdocs
 pushdocs:	$(DOC_DST_DIR)
 	( cd $(DOC_DST_DIR) ; \
 	  git add . ; \
 	  git commit -am "new doc push" ; \
 	  git push -u origin gh-pages )
 
-.PHONEY:
+.PHONY: s3deploy
 s3deploy:
 	$(AWSENV) lein deploy $(LDEPLOY_REPO)
 
-.PHONEY:
+.PHONY: clean
 clean:
 	rm -fr $(POM)* target dev-resources src/clojure/$(APP_NAME_REF)/version.clj $(ADD_CLEAN)
 	rmdir test 2>/dev/null || true
