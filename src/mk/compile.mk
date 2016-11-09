@@ -68,6 +68,13 @@ deploy:
 run:
 	lein run
 
+.PHONEY: init
+init:
+	git init .
+	git add -A :/
+	git commit -am 'initial commit'
+	$(GTAGUTIL) create -m 'initial release'
+
 .PHONY: forcetag
 forcetag:
 	git add -A :/
