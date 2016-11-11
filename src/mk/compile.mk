@@ -135,7 +135,7 @@ $(DOC_DST_DIR):
 	  git symbolic-ref HEAD refs/heads/gh-pages ; \
 	  rm .git/index ; \
 	  git clean -fdx )
-	cp -r $(DOC_SRC_DIR)/* $(DOC_DST_DIR)
+	if [ -d $(DOC_SRC_DIR) ] ; then cp -r $(DOC_SRC_DIR)/* $(DOC_DST_DIR) ; fi
 	lein codox
 
 .PHONY: pushdocs
