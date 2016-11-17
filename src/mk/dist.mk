@@ -14,7 +14,7 @@ ASBIN_FILE=	$(ASBIN_DIR)/setupenv
 .PHONY: dist
 dist:		$(DIST_BIN_DIR)
 
-$(AS_DIR):	$(POM)
+$(AS_DIR):	$(POM) $(COMP_DEPS)
 	lein with-profile +appassem jar
 	mvn package appassembler:assemble
 

@@ -47,24 +47,24 @@ LDEPLOY_REPO=	$(if $(DEPLOY_REPO),$(DEPLOY_REPO),NONE_SET)
 
 # targets
 
-.PHONY: compile
+.PHONEY: compile
 compile:	$(LIB_JAR)
 
-.PHONY: jar
+.PHONEY: jar
 jar:		$(LIB_JAR)
 
-.PHONY: install
+.PHONEY: install
 install:
 	lein install
 
-.PHONY: uber
+.PHONEY: uber
 uber:		$(UBER_JAR)
 
-.PHONY: deploy
+.PHONEY: deploy
 deploy:
 	lein deploy clojars
 
-.PHONY: run
+.PHONEY: run
 run:
 	lein run
 
@@ -75,19 +75,20 @@ init:
 	git commit -am 'initial commit'
 	$(GTAGUTIL) create -m 'initial release'
 
-.PHONY: forcetag
+.PHONEY: forcetag
 forcetag:
 	git add -A :/
 	git commit -am 'none' || echo "not able to commit"
 	$(GTAGUTIL) recreate
 
-.PHONY: newtag
+.PHONEY: newtag
 newtag:
 	$(GTAGUTIL) create -m '`git log -1 --pretty=%B`'
 
-.PHONY: info
+.PHONEY: info
 info:
 	@echo "version: $(VER)"
+	@echo "comp-deps: $(COMP_DEPS)"
 	@echo "project: $(PROJ_REF)"
 	@echo "remote: $(GITREMOTE)"
 	@echo "user: $(GITUSER)"
@@ -97,19 +98,19 @@ info:
 	@echo "app-dist: $(DIST_DIR)"
 	@echo "deploy-repo: $(LDEPLOY_REPO)"
 
-.PHONY: deptree
+.PHONEY: deptree
 deptree:	$(POM)
 	mvn dependency:tree -D verbose
 
-$(LIB_JAR):
+$(LIB_JAR):	$(COMP_DEPS)
 	@echo compiling $(LIB_JAR)
 	lein jar
 
-$(UBER_JAR):
+$(UBER_JAR):	$(COMP_DEPS)
 	@echo compiling $(UBER_JAR)
 	lein with-profile +uberjar uberjar
 
-.PHONY: checkdep
+.PHONEY: checkdep
 checkdep:
 	@echo compiling $(UBER_JAR)
 	lein with-profile +appassem uberjar
@@ -117,12 +118,12 @@ checkdep:
 $(POM):
 	lein pom
 
-.PHONY: forcepush
+.PHONEY: forcepush
 forcepush:
 	git push
 	git push --tags --force
 
-.PHONY: docs
+.PHONEY: docs
 docs:		$(DOC_DST_DIR)
 
 # https://github.com/weavejester/codox/wiki/Deploying-to-GitHub-Pages
@@ -138,18 +139,18 @@ $(DOC_DST_DIR):
 	cp -r $(DOC_SRC_DIR)/* $(DOC_DST_DIR)
 	lein codox
 
-.PHONY: pushdocs
+.PHONEY: pushdocs
 pushdocs:	$(DOC_DST_DIR)
 	( cd $(DOC_DST_DIR) ; \
 	  git add . ; \
 	  git commit -am "new doc push" ; \
 	  git push -u origin gh-pages )
 
-.PHONY: s3deploy
+.PHONEY: s3deploy
 s3deploy:
 	$(AWSENV) lein deploy $(LDEPLOY_REPO)
 
-.PHONY: clean
+.PHONEY: clean
 clean:
 	rm -fr $(POM)* target dev-resources src/clojure/$(APP_NAME_REF)/version.clj $(ADD_CLEAN)
 	rmdir test 2>/dev/null || true
