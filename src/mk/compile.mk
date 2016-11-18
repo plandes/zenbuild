@@ -54,7 +54,7 @@ compile:	$(LIB_JAR)
 jar:		$(LIB_JAR)
 
 .PHONY: install
-install:
+install:	$(COMP_DEPS)
 	lein install
 
 .PHONY: uber
