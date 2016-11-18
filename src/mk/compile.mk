@@ -47,45 +47,45 @@ LDEPLOY_REPO=	$(if $(DEPLOY_REPO),$(DEPLOY_REPO),NONE_SET)
 
 # targets
 
-.PHONEY: compile
+.PHONY: compile
 compile:	$(LIB_JAR)
 
-.PHONEY: jar
+.PHONY: jar
 jar:		$(LIB_JAR)
 
-.PHONEY: install
+.PHONY: install
 install:
 	lein install
 
-.PHONEY: uber
+.PHONY: uber
 uber:		$(UBER_JAR)
 
-.PHONEY: deploy
+.PHONY: deploy
 deploy:
 	lein deploy clojars
 
-.PHONEY: run
+.PHONY: run
 run:
 	lein run
 
-.PHONEY: init
+.PHONY: init
 init:
 	git init .
 	git add -A :/
 	git commit -am 'initial commit'
 	$(GTAGUTIL) create -m 'initial release'
 
-.PHONEY: forcetag
+.PHONY: forcetag
 forcetag:
 	git add -A :/
 	git commit -am 'none' || echo "not able to commit"
 	$(GTAGUTIL) recreate
 
-.PHONEY: newtag
+.PHONY: newtag
 newtag:
 	$(GTAGUTIL) create -m '`git log -1 --pretty=%B`'
 
-.PHONEY: info
+.PHONY: info
 info:
 	@echo "version: $(VER)"
 	@echo "comp-deps: $(COMP_DEPS)"
@@ -98,7 +98,7 @@ info:
 	@echo "app-dist: $(DIST_DIR)"
 	@echo "deploy-repo: $(LDEPLOY_REPO)"
 
-.PHONEY: deptree
+.PHONY: deptree
 deptree:	$(POM)
 	mvn dependency:tree -D verbose
 
@@ -110,7 +110,7 @@ $(UBER_JAR):	$(COMP_DEPS)
 	@echo compiling $(UBER_JAR)
 	lein with-profile +uberjar uberjar
 
-.PHONEY: checkdep
+.PHONY: checkdep
 checkdep:
 	@echo compiling $(UBER_JAR)
 	lein with-profile +appassem uberjar
@@ -118,12 +118,12 @@ checkdep:
 $(POM):
 	lein pom
 
-.PHONEY: forcepush
+.PHONY: forcepush
 forcepush:
 	git push
 	git push --tags --force
 
-.PHONEY: docs
+.PHONY: docs
 docs:		$(DOC_DST_DIR)
 
 # https://github.com/weavejester/codox/wiki/Deploying-to-GitHub-Pages
@@ -139,18 +139,18 @@ $(DOC_DST_DIR):
 	if [ -d $(DOC_SRC_DIR) ] ; then cp -r $(DOC_SRC_DIR)/* $(DOC_DST_DIR) ; fi
 	lein codox
 
-.PHONEY: pushdocs
+.PHONY: pushdocs
 pushdocs:	$(DOC_DST_DIR)
 	( cd $(DOC_DST_DIR) ; \
 	  git add . ; \
 	  git commit -am "new doc push" ; \
 	  git push -u origin gh-pages )
 
-.PHONEY: s3deploy
+.PHONY: s3deploy
 s3deploy:
 	$(AWSENV) lein deploy $(LDEPLOY_REPO)
 
-.PHONEY: clean
+.PHONY: clean
 clean:
 	rm -fr $(POM)* target dev-resources src/clojure/$(APP_NAME_REF)/version.clj $(ADD_CLEAN)
 	rmdir test 2>/dev/null || true

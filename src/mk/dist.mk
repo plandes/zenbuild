@@ -28,7 +28,7 @@ $(DIST_BIN_DIR):	$(ASBIN_FILE) $(AS_DIR)
 	[ -d $(ASBIN_DIR) ] && cp -r $(ASBIN_DIR)/* $(DIST_BIN_DIR) || true
 	chmod 0755 $(DIST_BIN_DIR)/$(APP_SNAME_REF)
 
-.PHONEY:
+.PHONY:
 cleandist:	clean
 	@echo "removing $(DIST_DIR)..."
 	rm -fr $(DIST_DIR)
