@@ -6,7 +6,7 @@
 #ADD_CLEAN+=	$(ASBIN_DIR)
 
 # app assemble (maven plugin
-DIST_DIR=	$(if $(DIST_PREFIX),$(DIST_PREFIX)/$(APP_NAME_REF),$(HOME)/Desktop/$(APP_NAME_REF))
+DIST_DIR=	$(if $(DIST_PREFIX),$(DIST_PREFIX)/$(APP_NAME_REF),target/dist/$(APP_NAME_REF))
 DIST_BIN_DIR=	$(DIST_DIR)/bin
 ASBIN_DIR=	src/asbin
 ASBIN_FILE=	$(ASBIN_DIR)/setupenv
