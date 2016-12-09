@@ -7,9 +7,11 @@
 
 # app assemble (maven plugin
 DIST_DIR=	$(if $(DIST_PREFIX),$(DIST_PREFIX)/$(APP_NAME_REF),target/dist/$(APP_NAME_REF))
-DIST_BIN_DIR=	$(DIST_DIR)/bin
+DIST_BIN_DNAME=	bin
+DIST_BIN_DIR=	$(DIST_DIR)/$(DIST_BIN_DNAME)
 ASBIN_DIR=	src/asbin
-ASBIN_FILE=	$(ASBIN_DIR)/setupenv
+ASBIN_NAME=	setupenv
+ASBIN_FILE=	$(ASBIN_DIR)/$(ASBIN_NAME)
 
 .PHONY: dist
 dist:		$(DIST_BIN_DIR)
