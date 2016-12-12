@@ -14,6 +14,7 @@
   :javac-options ["-Xlint:unchecked"]
   :jar-exclusions [#".gitignore"]
   :exclusions [org.slf4j/slf4j-log4j12
+               log4j/log4j
                ch.qos.logback/logback-classic]
   :dependencies [[org.clojure/clojure "1.8.0"]
 
@@ -21,7 +22,7 @@
                  [org.clojure/tools.logging "0.3.1"]
 
                  ;; command line
-                 [com.zensols.tools/actioncli "0.0.11"]]
+                 [com.zensols.tools/actioncli "0.0.12"]]
   :pom-plugins [[org.codehaus.mojo/appassembler-maven-plugin "1.6"
                  {:configuration ([:programs
                                    [:program
