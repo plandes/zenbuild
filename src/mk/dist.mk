@@ -12,9 +12,20 @@ DIST_BIN_DIR=	$(DIST_DIR)/$(DIST_BIN_DNAME)
 ASBIN_DIR=	src/asbin
 ASBIN_NAME=	setupenv
 ASBIN_FILE=	$(ASBIN_DIR)/$(ASBIN_NAME)
+DIST_UJAR_REF=	$(if $(DIST_UJAR_NAME),$(DIST_UJAR_NAME),$(ANRRES).jar)
+DIST_UJAR_FILE=	$(DIST_DIR)/$(DIST_UJAR_REF)
 
 .PHONY: dist
 dist:		$(DIST_BIN_DIR)
+
+.PHONY: distuber
+distuber:	checkver uber
+	cp $(UBER_JAR) $(DIST_UJAR_FILE)
+
+.PHONY:	distinfo
+distinfo:
+	@echo "dist jar: $(DIST_UJAR_FILE)"
+	@echo "dist assem: $(DIST_BIN_DIR)"
 
 $(AS_DIR):	$(POM) $(COMP_DEPS)
 	lein with-profile +appassem jar

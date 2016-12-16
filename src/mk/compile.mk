@@ -22,7 +22,8 @@ APP_NAME_REF=	$(if $(APP_NAME),$(APP_NAME),$(ANRRES))
 APP_SNAME_REF=	$(if $(APP_SCR_NAME),$(APP_SCR_NAME),$(APP_NAME_REF))
 
 # jar
-LIB_JAR=	$(MTARG)/$(ANRRES)$(VPREF).jar
+LIB_JAR_NAME=	$(ANRRES)$(VPREF).jar
+LIB_JAR=	$(MTARG)/$(LIB_JAR_NAME)
 UBER_JAR=	$(MTARG)/$(ANRRES)$(VPREF)-standalone.jar
 
 # git
@@ -114,6 +115,13 @@ $(UBER_JAR):	$(COMP_DEPS)
 checkdep:
 	@echo compiling $(UBER_JAR)
 	lein with-profile +appassem uberjar
+
+.PHONY: checkver
+checkver:
+	@( LV=$$(lein git-version) ; echo $$LV =? $(VER) ; [ "$$LV" == "$(VER)" ] )
+
+.PHONY:	check
+check:	checkdep checkver
 
 $(POM):
 	lein pom
