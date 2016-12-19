@@ -9,7 +9,6 @@
 # defs
 POM=		pom.xml
 MTARG=		target
-AS_DIR=		$(MTARG)/appassembler
 
 # determine version
 VER=		$(shell git tag -l | sort -V | tail -1 | sed 's/.//')
