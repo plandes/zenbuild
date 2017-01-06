@@ -17,9 +17,12 @@ $(DOCKER_PREFIX):	$(DOCKER_DIST_PREFIX)
 	mkdir -p $(DOCKER_PREFIX)
 	mkdir -p $(DOCKER_IMG_PREFIX)
 	cp -r $(DOCKER_DIST_PREFIX)/$(APP_NAME_REF) $(DOCKER_IMG_PREFIX)
-	cp $(APP_START_SCR) $(DOCKER_IMG_PREFIX)
+	[ ! -z "$(DOCKER_START_SCR)" ] && cp $(DOCKER_START_SCR) $(DOCKER_IMG_PREFIX) || true
 	cp src/docker/Dockerfile $(DOCKER_PREFIX)
-	cp src/docker/$(ASBIN_NAME) $(DOCKER_IMG_PREFIX)/$(APP_SNAME_REF)/$(DIST_BIN_DNAME)
+	[ -f src/docker/$(ASBIN_NAME) ] && cp src/docker/$(ASBIN_NAME) $(DOCKER_IMG_PREFIX)/$(APP_SNAME_REF)/$(DIST_BIN_DNAME) || true
+
+.PHONY: dockerprep
+dockerprep:		$(DOCKER_PREFIX)
 
 .PHONY: dockerdist
 dockerdist:	$(DOCKER_PREFIX) $(DOCKER_OBJS)
@@ -43,3 +46,7 @@ dockerlogin:
 .PHONY: dockerlogs
 dockerlogs:
 	$(DOCKER_CMD) logs nlps -f
+
+.PHONY: dockerclean
+dockerclean:
+	rm -rf $(DOCKER_DIST_PREFIX)
