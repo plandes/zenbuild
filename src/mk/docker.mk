@@ -1,6 +1,7 @@
 # edit these
 #DOCKER_IMG_NAME=
 #DOCKER_OBJS=
+#DOCKER_CONTAINER=
 
 # docker config
 DOCKER_CMD=		docker
@@ -9,6 +10,11 @@ DOCKER_DIST_PREFIX=	target/docker-app-dist
 DOCKER_PREFIX=		target/docker-image
 DOCKER_IMG_PREFIX=	$(DOCKER_PREFIX)/img
 DOCKER_IMG=		$(DOCKER_USER)/$(DOCKER_IMG_NAME)
+DOCKER_CONTAINER ?=	$(shell grep container_name docker-compose.yml | awk '{print $$2}')
+
+.PHONY: dockerinfo
+dockerinfo:
+	@echo "container: $(DOCKER_CONTAINER)"
 
 $(DOCKER_DIST_PREFIX):
 	make DIST_PREFIX=$(DOCKER_DIST_PREFIX) dist
@@ -45,7 +51,7 @@ dockerlogin:
 
 .PHONY: dockerlogs
 dockerlogs:
-	$(DOCKER_CMD) logs nlps -f
+	$(DOCKER_CMD) logs $(DOCKER_CONTAINER) -f
 
 .PHONY: dockerclean
 dockerclean:
