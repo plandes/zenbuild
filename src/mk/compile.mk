@@ -81,6 +81,11 @@ forcetag:
 	git commit -am 'none' || echo "not able to commit"
 	$(GTAGUTIL) recreate
 
+.PHONY: forcepush
+forcepush:
+	git push
+	git push --tags --force
+
 .PHONY: newtag
 newtag:
 	$(GTAGUTIL) create -m '`git log -1 --pretty=%B`'
@@ -125,11 +130,6 @@ check:	checkdep checkver
 $(POM):
 	lein pom
 
-.PHONY: forcepush
-forcepush:
-	git push
-	git push --tags --force
-
 .PHONY: docs
 docs:		$(DOC_DST_DIR)
 
@@ -159,5 +159,5 @@ s3deploy:
 
 .PHONY: clean
 clean:
-	rm -fr $(POM)* target dev-resources src/clojure/$(APP_NAME_REF)/version.clj $(ADD_CLEAN)
+	rm -fr $(POM)* target .nrepl-port .lein-repl-history dev-resources src/clojure/$(APP_NAME_REF)/version.clj $(ADD_CLEAN)
 	rmdir test 2>/dev/null || true
