@@ -29,7 +29,7 @@ distinfo:
 	@echo "comp deps: $(COMP_DEPS)"
 
 $(AS_DIR):	$(POM) $(COMP_DEPS)
-	lein with-profile +appassem jar
+	$(LEIN) with-profile +appassem jar
 	mvn package appassembler:assemble
 
 $(DIST_BIN_DIR):	$(AS_DIR)

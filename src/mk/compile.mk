@@ -6,6 +6,9 @@
 #PROJ=		
 #REMOTE=		github
 
+# environment
+LEIN=		lein
+
 # defs
 POM=		pom.xml
 MTARG=		target
@@ -55,18 +58,18 @@ jar:		$(LIB_JAR)
 
 .PHONY: install
 install:	$(COMP_DEPS)
-	lein install
+	$(LEIN) install
 
 .PHONY: uber
 uber:		$(UBER_JAR)
 
 .PHONY: deploy
 deploy:
-	lein deploy clojars
+	$(LEIN) deploy clojars
 
 .PHONY: run
 run:
-	lein run
+	$(LEIN) run
 
 .PHONY: init
 init:
@@ -109,26 +112,26 @@ deptree:	$(POM)
 
 $(LIB_JAR):	$(COMP_DEPS)
 	@echo compiling $(LIB_JAR)
-	lein jar
+	$(LEIN) jar
 
 $(UBER_JAR):	$(COMP_DEPS)
 	@echo compiling $(UBER_JAR)
-	lein with-profile +uberjar uberjar
+	$(LEIN) with-profile +uberjar uberjar
 
 .PHONY: checkdep
 checkdep:
 	@echo compiling $(UBER_JAR)
-	lein with-profile +appassem uberjar
+	$(LEIN) with-profile +appassem uberjar
 
 .PHONY: checkver
 checkver:
-	@( LV=$$(lein git-version) ; echo $$LV =? $(VER) ; [ "$$LV" == "$(VER)" ] )
+	@( LV=$$($(LEIN) git-version) ; echo $$LV =? $(VER) ; [ "$$LV" == "$(VER)" ] )
 
 .PHONY:	check
 check:	checkdep checkver
 
 $(POM):
-	lein pom
+	$(LEIN) pom
 
 .PHONY: docs
 docs:		$(DOC_DST_DIR)
@@ -144,7 +147,7 @@ $(DOC_DST_DIR):
 	  rm .git/index ; \
 	  git clean -fdx )
 	if [ -d $(DOC_SRC_DIR) ] ; then cp -r $(DOC_SRC_DIR)/* $(DOC_DST_DIR) ; fi
-	lein codox
+	$(LEIN) codox
 
 .PHONY: pushdocs
 pushdocs:	$(DOC_DST_DIR)
@@ -155,7 +158,7 @@ pushdocs:	$(DOC_DST_DIR)
 
 .PHONY: s3deploy
 s3deploy:
-	$(AWSENV) lein deploy $(LDEPLOY_REPO)
+	$(AWSENV) $(LEIN) deploy $(LDEPLOY_REPO)
 
 .PHONY: clean
 clean:
