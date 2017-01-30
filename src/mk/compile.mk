@@ -26,7 +26,8 @@ APP_SNAME_REF=	$(if $(APP_SCR_NAME),$(APP_SCR_NAME),$(APP_NAME_REF))
 # jar
 LIB_JAR_NAME=	$(ANRRES)$(VPREF).jar
 LIB_JAR=	$(MTARG)/$(LIB_JAR_NAME)
-UBER_JAR=	$(MTARG)/$(ANRRES)$(VPREF)-standalone.jar
+UBER_JAR_NAME=	$(ANRRES)$(VPREF)-standalone.jar
+UBER_JAR=	$(MTARG)/$(UBER_JAR_NAME)
 
 # git
 GITREMOTE=	$(if $(REMOTE),$(REMOTE),github)
