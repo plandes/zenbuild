@@ -1,9 +1,8 @@
 ## makefile automates the application distribution for lein projects
 
 # edit these if you want
-#DIST_PREFIX=	$(HOME)/Desktop
-#ZMODEL=	
-#ADD_CLEAN+=	$(ASBIN_DIR)
+DIST_PREFIX ?=	$(HOME)/Desktop
+ASBIN_DIR ?=	src/asbin
 
 # app assemble (maven plugin
 AS_DIR=		$(MTARG)/appassembler

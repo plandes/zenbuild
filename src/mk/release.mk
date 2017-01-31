@@ -7,7 +7,7 @@ REL_BZ2=	$(REL_BIN_DIR)/$(REL_PREFIX).tar.bz2
 REL_UBER=	$(REL_BIN_DIR)/$(UBER_JAR_NAME)
 REL_DIST ?=	$(REL_UBER) $(REL_ZIP) $(REL_BZ2)
 
-ADD_CLEAN+=	$(REL_DIR)
+ADD_CLEAN +=	$(REL_DIR)
 
 .PHONY:	release
 release:	relsign

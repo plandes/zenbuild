@@ -177,3 +177,7 @@ s3deploy:
 clean:
 	rm -fr $(POM)* target .nrepl-port .lein-repl-history dev-resources $(CLJ_VERSION) $(ADD_CLEAN)
 	rmdir test 2>/dev/null || true
+
+.PHONY:	cleanall
+cleanall:	clean
+	rm -fr $(ADD_CLEAN_ALL)
