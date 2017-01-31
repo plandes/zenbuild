@@ -23,6 +23,10 @@ ANRRES=		$(shell $(ANRCMD))
 APP_NAME_REF=	$(if $(APP_NAME),$(APP_NAME),$(ANRRES))
 APP_SNAME_REF=	$(if $(APP_SCR_NAME),$(APP_SCR_NAME),$(APP_NAME_REF))
 
+# main class
+MC_CMD=		grep -E '\s+:main\s+' project.clj | head -1 | sed 's/.*:main \(.*\)).*/\1/'
+MAIN_CLASS ?=	$(shell $(MC_CMD))
+
 # jar
 LIB_JAR_NAME=	$(ANRRES)$(VPREF).jar
 LIB_JAR=	$(MTARG)/$(LIB_JAR_NAME)
@@ -105,6 +109,7 @@ info:
 	@echo "uberjar: $(UBER_JAR)"
 	@echo "app-script: $(APP_SNAME_REF)"
 	@echo "app-dist: $(DIST_DIR)"
+	@echo "app-main-class: $(MAIN_CLASS)"
 	@echo "deploy-repo: $(LDEPLOY_REPO)"
 
 .PHONY: deptree
