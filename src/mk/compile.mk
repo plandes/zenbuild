@@ -14,7 +14,8 @@ POM=		pom.xml
 MTARG=		target
 
 # determine version
-VER=		$(shell git tag -l | sort -V | tail -1 | sed 's/.//')
+VER_LAST_TAG=	$(shell git tag -l | sort -V | tail -1 | sed 's/.//')
+VER=		$(shell git describe --match v*.* --abbrev=4 --dirty=-dirty | sed 's/^v//')
 VPREF=		$(if $(VER),-$(VER),-0.1.0-SNAPSHOT)
 
 # application name (jars and dist)
@@ -51,6 +52,10 @@ AWSENV=		$(ZBHOME)/src/python/awsenv
 
 # deploy
 LDEPLOY_REPO=	$(if $(DEPLOY_REPO),$(DEPLOY_REPO),NONE_SET)
+
+# auto generated file
+CLJ_PVER=	$(shell grep -E '\s+:path\s+"src/clojure' project.clj | head -1 | sed 's/.*:path[ \t]*"\(.*\)".*/\1/')
+CLJ_VERSION=	$(if $(CLJ_PVER),$(CLJ_PVER)/version.clj,src/clojure/$(APP_NAME_REF)/version.clj)
 
 
 # targets
@@ -110,6 +115,7 @@ info:
 	@echo "app-script: $(APP_SNAME_REF)"
 	@echo "app-dist: $(DIST_DIR)"
 	@echo "app-main-class: $(MAIN_CLASS)"
+	@echo "clj-version-file: $(CLJ_VERSION)"
 	@echo "deploy-repo: $(LDEPLOY_REPO)"
 
 .PHONY: deptree
@@ -131,7 +137,7 @@ checkdep:
 
 .PHONY: checkver
 checkver:
-	@( LV=$$($(LEIN) git-version) ; echo $$LV =? $(VER) ; [ "$$LV" == "$(VER)" ] )
+	@echo $(VER_LAST_TAG) =? $(VER) ; [ "$(VER_LAST_TAG)" == "$(VER)" ]
 
 .PHONY:	check
 check:	checkdep checkver
@@ -169,5 +175,5 @@ s3deploy:
 
 .PHONY: clean
 clean:
-	rm -fr $(POM)* target .nrepl-port .lein-repl-history dev-resources src/clojure/$(APP_NAME_REF)/version.clj $(ADD_CLEAN)
+	rm -fr $(POM)* target .nrepl-port .lein-repl-history dev-resources $(CLJ_VERSION) $(ADD_CLEAN)
 	rmdir test 2>/dev/null || true
