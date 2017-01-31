@@ -153,7 +153,7 @@ $(DOC_DST_DIR):
 	  rm .git/index ; \
 	  git clean -fdx )
 	if [ -d $(DOC_SRC_DIR) ] ; then cp -r $(DOC_SRC_DIR)/* $(DOC_DST_DIR) ; fi
-	[ -d src/java ] && $(LEIN) javadoc
+	[ -d src/java ] && $(LEIN) javadoc || true
 	$(LEIN) codox
 
 .PHONY: pushdocs
