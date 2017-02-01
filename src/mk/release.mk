@@ -1,20 +1,20 @@
 REL_DIR=	rel
 REL_PREP_DIR=	$(REL_DIR)/prep
 REL_BIN_DIR=	$(REL_DIR)/dist
-REL_PREFIX=	$(ANRRES)$(VPREF)
+REL_PREFIX=	$(ANRRES)
 REL_ZIP=	$(REL_BIN_DIR)/$(REL_PREFIX).zip
 REL_BZ2=	$(REL_BIN_DIR)/$(REL_PREFIX).tar.bz2
-REL_UBER=	$(REL_BIN_DIR)/$(UBER_JAR_NAME)
+REL_UBER=	$(REL_BIN_DIR)/$(ANRRES).jar
 REL_DIST ?=	$(REL_UBER) $(REL_ZIP) $(REL_BZ2)
 
 ADD_CLEAN +=	$(REL_DIR)
 
-.PHONY:	release
-release:	relsign
+.PHONY:	reldist
+reldist:	release
 		ghrelease -r $(GITUSER)/$(PROJ_REF) -p $(REL_BIN_DIR)/*
 
-.PHONY:	relsign
-relsign:	$(REL_DIST)
+.PHONY:	release
+release:	$(REL_DIST)
 		for i in $(REL_BIN_DIR)/* ; do \
 			gpg --armor --detach-sign $$i ; \
 		done
@@ -42,7 +42,7 @@ reluber:	$(REL_UBER)
 # this deletes target/ whether we like it or not (from lein)
 $(REL_UBER):	$(UBER_JAR)
 	mkdir -p $(REL_BIN_DIR)
-	cp $(UBER_JAR) $(REL_BIN_DIR)
+	cp $(UBER_JAR) $(REL_UBER)
 
 .PHONY: relclean
 relclean:
