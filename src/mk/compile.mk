@@ -5,6 +5,7 @@
 #APP_NAME=	
 #PROJ=		
 #REMOTE=		github
+LEIN_PROJECT ?=	project.clj
 
 # environment
 LEIN=		lein
@@ -19,13 +20,13 @@ VER=		$(shell git describe --match v*.* --abbrev=4 --dirty=-dirty | sed 's/^v//'
 VPREF=		$(if $(VER),-$(VER),-0.1.0-SNAPSHOT)
 
 # application name (jars and dist)
-ANRCMD=		grep '(defproject' project.clj | head -1 | sed 's/(defproject \(.*\)\/\(.*\) .*/\2/'
+ANRCMD=		grep '(defproject' $(LEIN_PROJECT) | head -1 | sed 's/(defproject \(.*\)\/\(.*\) .*/\2/'
 ANRRES=		$(shell $(ANRCMD))
 APP_NAME_REF=	$(if $(APP_NAME),$(APP_NAME),$(ANRRES))
 APP_SNAME_REF=	$(if $(APP_SCR_NAME),$(APP_SCR_NAME),$(APP_NAME_REF))
 
 # main class
-MC_CMD=		grep -E '\s+:main\s+' project.clj | head -1 | sed 's/.*:main \(.*\)).*/\1/'
+MC_CMD=		grep -E '\s+:main\s+' $(LEIN_PROJECT) | head -1 | sed 's/.*:main \(.*\)).*/\1/'
 MAIN_CLASS ?=	$(shell $(MC_CMD))
 
 # jar
@@ -54,7 +55,7 @@ AWSENV=		$(ZBHOME)/src/python/awsenv
 LDEPLOY_REPO=	$(if $(DEPLOY_REPO),$(DEPLOY_REPO),NONE_SET)
 
 # auto generated file
-CLJ_PVER=	$(shell grep -E '\s+:path\s+"src/clojure' project.clj | head -1 | sed 's/.*:path[ \t]*"\(.*\)".*/\1/')
+CLJ_PVER=	$(shell grep -E '\s+:path\s+"src/clojure' $(LEIN_PROJECT) | head -1 | sed 's/.*:path[ \t]*"\(.*\)".*/\1/')
 CLJ_VERSION=	$(if $(CLJ_PVER),$(CLJ_PVER)/version.clj,src/clojure/$(APP_NAME_REF)/version.clj)
 
 
@@ -69,6 +70,15 @@ jar:		$(LIB_JAR)
 .PHONY: install
 install:	$(COMP_DEPS)
 	$(LEIN) install
+
+.PHONY: snapshot
+snapshot:	$(COMP_DEPS)
+	@grep ':snapshot' $(LEIN_PROJECT) > /dev/null ; \
+		if [ $$? == 1 ] ; then \
+			echo "no snapshot profile found in $(LEIN_PROJECT)" ; \
+			false ; \
+		fi
+	$(LEIN) with-profile +snapshot install
 
 .PHONY: uber
 uber:		$(UBER_JAR)
