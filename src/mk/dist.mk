@@ -27,6 +27,9 @@ distinfo:
 	@echo "dist assem: $(DIST_BIN_DIR)"
 	@echo "comp deps: $(COMP_DEPS)"
 
+.PHONY: app
+app:		$(AS_DIR)
+
 $(AS_DIR):	$(POM) $(COMP_DEPS)
 	$(LEIN) with-profile +appassem jar
 	mvn package appassembler:assemble
