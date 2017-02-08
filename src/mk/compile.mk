@@ -16,7 +16,7 @@ MTARG=		target
 
 # determine version
 VER_LAST_TAG=	$(shell git tag -l | sort -V | tail -1 | sed 's/.//')
-VER=		$(shell git describe --match v*.* --abbrev=4 --dirty=-dirty | sed 's/^v//')
+VER ?=		$(shell git describe --match v*.* --abbrev=4 --dirty=-dirty | sed 's/^v//')
 VPREF=		$(if $(VER),-$(VER),-0.1.0-SNAPSHOT)
 
 # application name (jars and dist)
