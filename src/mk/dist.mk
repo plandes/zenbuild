@@ -9,14 +9,14 @@ AS_DIR=		$(MTARG)/appassembler
 DIST_DIR=	$(if $(DIST_PREFIX),$(DIST_PREFIX)/$(APP_NAME_REF),target/dist/$(APP_NAME_REF))
 DIST_BIN_DNAME=	bin
 DIST_BIN_DIR=	$(DIST_DIR)/$(DIST_BIN_DNAME)
-DIST_UJAR_REF=	$(if $(DIST_UJAR_NAME),$(DIST_UJAR_NAME),$(ANRRES).jar)
+DIST_UJAR_REF=	$(ANRRES).jar
 DIST_UJAR_FILE=	$(DIST_DIR)/$(DIST_UJAR_REF)
 
 .PHONY: dist
 dist:		$(DIST_BIN_DIR)
 
 .PHONY: distuber
-distuber:	checkver uber
+distuber:	uber
 	mkdir -p $(DIST_DIR)
 	cp $(UBER_JAR) $(DIST_UJAR_FILE)
 
