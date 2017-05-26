@@ -34,6 +34,7 @@ LIB_JAR_NAME=	$(ANRRES)$(VPREF).jar
 LIB_JAR=	$(MTARG)/$(LIB_JAR_NAME)
 UBER_JAR_NAME=	$(ANRRES)$(VPREF)-standalone.jar
 UBER_JAR=	$(MTARG)/$(UBER_JAR_NAME)
+UBER_JAR_PROFS+=with-profile +uberjar
 
 # git
 GITREMOTE=	$(if $(REMOTE),$(REMOTE),github)
@@ -128,9 +129,13 @@ info:
 	@echo "clj-version-file: $(CLJ_VERSION)"
 	@echo "deploy-repo: $(LDEPLOY_REPO)"
 
-.PHONY: deptree
-deptree:	$(POM)
+.PHONY: mvndeptree
+mvndeptree:	$(POM)
 	mvn dependency:tree -D verbose
+
+.PHONY: deptree
+deptree:
+	lein deps :tree
 
 $(LIB_JAR):	$(COMP_DEPS)
 	@echo compiling $(LIB_JAR)
@@ -138,7 +143,7 @@ $(LIB_JAR):	$(COMP_DEPS)
 
 $(UBER_JAR):	$(COMP_DEPS)
 	@echo compiling $(UBER_JAR)
-	$(LEIN) with-profile +uberjar uberjar
+	$(LEIN) $(UBER_JAR_PROFS) uberjar
 
 .PHONY: checkdep
 checkdep:
