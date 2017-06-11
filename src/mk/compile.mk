@@ -85,7 +85,7 @@ snapshot:	$(COMP_DEPS)
 uber:		$(UBER_JAR)
 
 .PHONY: deploy
-deploy:
+deploy:	checkver
 	$(LEIN) deploy clojars
 
 .PHONY: run
@@ -161,7 +161,7 @@ $(POM):
 	$(LEIN) pom
 
 .PHONY: docs
-docs:		$(DOC_DST_DIR)
+docs:	checkver $(DOC_DST_DIR)
 
 # https://github.com/weavejester/codox/wiki/Deploying-to-GitHub-Pages
 $(DOC_DST_DIR):
