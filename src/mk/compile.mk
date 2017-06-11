@@ -161,7 +161,7 @@ $(POM):
 	$(LEIN) pom
 
 .PHONY: docs
-docs:	checkver $(DOC_DST_DIR)
+docs:	$(DOC_DST_DIR)
 
 # https://github.com/weavejester/codox/wiki/Deploying-to-GitHub-Pages
 $(DOC_DST_DIR):
@@ -178,7 +178,7 @@ $(DOC_DST_DIR):
 	$(LEIN) codox
 
 .PHONY: pushdocs
-pushdocs:	$(DOC_DST_DIR)
+pushdocs:	checkver $(DOC_DST_DIR)
 	( cd $(DOC_DST_DIR) ; \
 	  git add . ; \
 	  git commit -am "new doc push" ; \
