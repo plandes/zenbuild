@@ -84,6 +84,10 @@ snapshot:	$(COMP_DEPS)
 .PHONY: uber
 uber:		$(UBER_JAR)
 
+.PHONY:	cleanuber
+cleanuber:
+	rm -f $(LIB_JAR) $(UBER_JAR)
+
 .PHONY: deploy
 deploy:	checkver
 	$(LEIN) deploy clojars
@@ -154,8 +158,12 @@ checkdep:
 checkver:
 	@echo $(VER_LAST_TAG) =? $(VER) ; [ "$(VER_LAST_TAG)" == "$(VER)" ]
 
+.PHONY:	leintest
+leintest:
+	$(LEIN) test
+
 .PHONY:	check
-check:	checkdep checkver
+check:	checkver leintest checkdep
 
 $(POM):
 	$(LEIN) pom
@@ -175,7 +183,7 @@ $(DOC_DST_DIR):
 	  git clean -fdx )
 	if [ -d $(DOC_SRC_DIR) ] ; then cp -r $(DOC_SRC_DIR)/* $(DOC_DST_DIR) ; fi
 	[ -d src/java ] && $(LEIN) javadoc || true
-	$(LEIN) codox
+	$(LEIN) $(LEIN_DOC_PROFS) codox
 
 .PHONY: pushdocs
 pushdocs:	checkver $(DOC_DST_DIR)
