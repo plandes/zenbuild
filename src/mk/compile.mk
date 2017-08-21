@@ -137,8 +137,8 @@ info:
 mvndeptree:	$(POM)
 	mvn dependency:tree -D verbose
 
-.PHONY: deptree
-deptree:
+.PHONY: deps
+deps:
 	lein deps :tree
 
 $(LIB_JAR):	$(COMP_DEPS)
