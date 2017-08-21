@@ -40,10 +40,23 @@ dockerdist:	$(DOCKER_PREFIX) $(DOCKER_OBJS)
 dockerpush:	dockerdist
 	$(DOCKER_CMD) push $(DOCKER_IMG)
 
+.PHONY:	dockersnapshot
+dockersnapshot:
+	VER=snapshot make dockerdist
+
+.PHONY:	dockerrmsnapshot
+dockerrmsnapshot:
+	$(DOCKER_CMD) rmi $(DOCKER_IMG):snapshot || true
+
 .PHONY: dockerrm
 dockerrm:
 	$(DOCKER_CMD) rmi $(DOCKER_IMG):$(VER) || true
 	$(DOCKER_CMD) rmi $(DOCKER_IMG) || true
+
+# remove all "orphan" images
+.PHONY:	dockerrmi
+dockerrmi:
+	$(DOCKER_CMD) images | grep '<none>' | awk '{print $$3}' | xargs docker rmi || true
 
 .PHONY: dockerlogin
 dockerlogin:
