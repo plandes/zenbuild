@@ -53,7 +53,12 @@ GTAGUTIL=	$(ZBHOME)/src/python/gtagutil
 AWSENV=		$(ZBHOME)/src/python/awsenv
 
 # deploy
-LDEPLOY_REPO=	$(if $(DEPLOY_REPO),$(DEPLOY_REPO),NONE_SET)
+DEPLOY_REPO ?=	clojars
+ifeq ($(DEPLOY_REPO),clojars)
+DEPLOY_CMD=	$(LEIN) deploy $(DEPLOY_REPO)
+else
+DEPLOY_CMD=	$(AWSENV) $(LEIN) deploy $(DEPLOY_REPO)
+endif
 
 # auto generated file
 CLJ_PVER=	$(shell grep -E '\s+:path\s+"src/clojure' $(LEIN_PROJECT) | head -1 | sed 's/.*:path[ \t]*"\(.*\)".*/\1/')
@@ -90,7 +95,7 @@ cleanuber:
 
 .PHONY: deploy
 deploy:	checkver
-	$(LEIN) deploy clojars
+	$(DEPLOY_CMD)
 
 .PHONY: run
 run:
@@ -131,7 +136,7 @@ info:
 	@echo "app-dist: $(DIST_DIR)"
 	@echo "app-main-class: $(MAIN_CLASS)"
 	@echo "clj-version-file: $(CLJ_VERSION)"
-	@echo "deploy-repo: $(LDEPLOY_REPO)"
+	@echo "deploy: $(DEPLOY_CMD)"
 
 .PHONY: mvndeptree
 mvndeptree:	$(POM)
@@ -140,6 +145,10 @@ mvndeptree:	$(POM)
 .PHONY: deptree
 deptree:
 	lein deps :tree
+
+.PHONY:	deps
+deps:
+	$(AWSENV) $(LEIN) deps
 
 $(LIB_JAR):	$(COMP_DEPS)
 	@echo compiling $(LIB_JAR)
@@ -191,10 +200,6 @@ pushdocs:	checkver $(DOC_DST_DIR)
 	  git add . ; \
 	  git commit -am "new doc push" ; \
 	  git push -u origin gh-pages )
-
-.PHONY: s3deploy
-s3deploy:
-	$(AWSENV) $(LEIN) deploy $(LDEPLOY_REPO)
 
 .PHONY: clean
 clean:
