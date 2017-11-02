@@ -70,6 +70,10 @@ CLJ_VERSION=	$(if $(CLJ_PVER),$(CLJ_PVER)/version.clj,src/clojure/$(APP_NAME_REF
 .PHONY: compile
 compile:	$(LIB_JAR)
 
+.PHONY:	javac
+javac:
+		$(LEIN) javac
+
 .PHONY: jar
 jar:		$(LIB_JAR)
 
@@ -185,7 +189,6 @@ $(DOC_DST_DIR):
 	rm -rf $(DOC_DST_DIR) && mkdir -p $(DOC_DST_DIR)
 	git clone https://github.com/$(GITUSER)/$(PROJ_REF).git $(DOC_DST_DIR)
 	git update-ref -d refs/heads/gh-pages 
-	git push $(GITREMOTE) --mirror
 	( cd $(DOC_DST_DIR) ; \
 	  git symbolic-ref HEAD refs/heads/gh-pages ; \
 	  rm .git/index ; \
@@ -196,6 +199,7 @@ $(DOC_DST_DIR):
 
 .PHONY: pushdocs
 pushdocs:	checkver $(DOC_DST_DIR)
+	git push $(GITREMOTE) --mirror
 	( cd $(DOC_DST_DIR) ; \
 	  git add . ; \
 	  git commit -am "new doc push" ; \
