@@ -10,11 +10,16 @@ REL_DIST ?=	$(REL_UBER) $(REL_ZIP) $(REL_BZ2)
 ADD_CLEAN +=	$(REL_DIR)
 
 .PHONY:	reldist
-reldist:	release
+reldist:	release relupload
+
+.PHONY:	relupload
+relupload:
 		ghrelease -r $(GITUSER)/$(PROJ_REF) -p $(REL_BIN_DIR)/*
 
 .PHONY:	release
-release:	$(REL_DIST)
+release:	$(REL_BIN_DIR)
+
+$(REL_BIN_DIR):	$(REL_DIST)
 		for i in $(REL_BIN_DIR)/* ; do \
 			gpg --armor --detach-sign $$i ; \
 		done
