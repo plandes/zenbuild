@@ -77,6 +77,10 @@ javac:
 .PHONY: jar
 jar:		$(LIB_JAR)
 
+.PHONY: javac
+javac:
+		$(LEIN) javac
+
 .PHONY: install
 install:	$(COMP_DEPS)
 	$(LEIN) install
