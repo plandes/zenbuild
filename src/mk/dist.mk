@@ -26,10 +26,11 @@ distuber:	uber
 
 .PHONY:	distinfo
 distinfo:
-	@echo "dist dir: $(DIST_DIR)"
-	@echo "dist jar: $(DIST_UJAR_FILE)"
-	@echo "dist assem: $(DIST_BIN_DIR)"
-	@echo "comp deps: $(COMP_DEPS)"
+	@echo "app-ref-name: $(APP_NAME_REF)"
+	@echo "dist-dir: $(DIST_DIR)"
+	@echo "dist-jar: $(DIST_UJAR_FILE)"
+	@echo "dist-assem: $(DIST_BIN_DIR)"
+	@echo "comp-deps: $(COMP_DEPS)"
 
 .PHONY: app
 app:		$(AS_DIR)

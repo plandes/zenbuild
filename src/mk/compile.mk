@@ -20,10 +20,10 @@ VER ?=		$(shell git describe --match v*.* --abbrev=4 --dirty=-dirty | sed 's/^v/
 VPREF=		$(if $(VER),-$(VER),-0.1.0-SNAPSHOT)
 
 # application name (jars and dist)
-ANRCMD=		grep '(defproject' $(LEIN_PROJECT) | head -1 | sed 's/(defproject \(.*\)\/\(.*\) .*/\2/'
-ANRRES=		$(shell $(ANRCMD))
-APP_NAME_REF=	$(if $(APP_NAME),$(APP_NAME),$(ANRRES))
-APP_SNAME_REF=	$(if $(APP_SCR_NAME),$(APP_SCR_NAME),$(APP_NAME_REF))
+ANRCMD ?=	grep '(defproject' $(LEIN_PROJECT) | head -1 | sed 's/(defproject \(.*\)\/\(.*\) .*/\2/'
+ANRRES ?=	$(shell $(ANRCMD))
+APP_NAME_REF ?=	$(if $(APP_NAME),$(APP_NAME),$(ANRRES))
+APP_SNAME_REF ?= $(if $(APP_SCR_NAME),$(APP_SCR_NAME),$(APP_NAME_REF))
 
 # main class
 MC_CMD=		grep -E '\s+:main\s+' $(LEIN_PROJECT) | head -1 | sed 's/.*:main \(.*\)).*/\1/'
