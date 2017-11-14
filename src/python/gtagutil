@@ -17,8 +17,8 @@ ACTIONS = { 'create': 'create a new tag',
 GIT_DIR = '.git'
 
 def enum(*sequential, **named):
-    enums = dict(zip(sequential, range(len(sequential))), **named)
-    reverse = dict((value, key) for key, value in enums.iteritems())
+    enums = dict(list(zip(sequential, list(range(len(sequential))))), **named)
+    reverse = dict((value, key) for key, value in enums.items())
     enums['reverse_mapping'] = reverse
     return type('Enum', (), enums)
 
@@ -84,7 +84,7 @@ class TagUtil:
     def print_last_tag(self):
         entry = self.last_tag_entry()
         if entry:
-            print self.format_version(entry['ver'], prefix='')
+            print((self.format_version(entry['ver'], prefix='')))
 
     def increment_version(self, versionPart):
         entry = self.last_tag_entry()
@@ -100,7 +100,7 @@ class TagUtil:
         entry = self.last_tag_entry()
         tag = entry['tag']
         name = entry['name']
-        print 'deleting', name
+        print(('deleting', name))
         TagReference.delete(self.repo, tag)
 
     def recreate_last_tag(self):
@@ -108,36 +108,36 @@ class TagUtil:
         tag = entry['tag']
         name = entry['name']
         msg = entry['message']
-        print 'deleting', name
+        print('deleting', name)
         TagReference.delete(self.repo, tag)
-        print 'creating %s with commit <%s>' % (name, msg)
+        print('creating %s with commit <%s>' % (name, msg))
         TagReference.create(self.repo, name, message=msg)
 
     def create(self, message, versionPart):
         new_tag_name = self.increment_version(versionPart)
-        print 'creating %s with commit <%s>' % (new_tag_name, message)
+        print('creating %s with commit <%s>' % (new_tag_name, message))
         TagReference.create(self.repo, new_tag_name, message=message)
 
 
 def main():
     parser = argparse.ArgumentParser(
-	formatter_class=argparse.RawDescriptionHelpFormatter,
-	description = 'Git tag helper',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description = 'Git tag helper',
         epilog = 'actions:\n' +
-	"\n".join(map(lambda x: "%s: %s" % (x, ACTIONS[x]), ACTIONS)))
+        "\n".join(["%s: %s" % (x, ACTIONS[x]) for x in ACTIONS]))
     parser.add_argument('action', nargs = '*', help = 'the convenience action to invoke (see below)')
     parser.add_argument('-m', default = 'none',
                         help = 'message for the new tag')
     args = parser.parse_args()
     actions = args.action
     if len(actions) == 0:
-	parser.print_help()
+        parser.print_help()
         sys.exit(1)
     action = args.action[0]
     git_dir = find_par_dir('.', GIT_DIR)
     #print 'git_dir: %s' % git_dir
     if git_dir == None:
-        print >> sys.stderr, 'no .git director found in current or ancestor directory'
+        print('no .git director found in current or ancestor directory', file=sys.stderr)
         sys.exit(1)
     tu = TagUtil(git_dir)
     if action == 'create':
@@ -149,7 +149,7 @@ def main():
     elif action == 'show':
         tu.print_last_tag()
     else:
-        print >> sys.stderr, ('unkonwn action: %s' % action)
+        print(('unkonwn action: %s' % action), file=sys.stderr)
         parser.print_help()
         sys.exit(1)
 
