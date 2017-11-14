@@ -27,8 +27,10 @@ pytest:
 
 # package by creating the egg and wheel distribution binaries
 .PHONY:	pypkg
-pypkg:	$(MTARG_PYDIST_DIR)
-$(MTARG_PYDIST_DIR):	$(MTARG_PYDIST_BDIR)
+#pypkg:	$(MTARG_PYDIST_DIR)
+#$(MTARG_PYDIST_DIR):	$(MTARG_PYDIST_BDIR)
+pypkg:	$(MTARG_PYDIST_ATFC)
+$(MTARG_PYDIST_ATFC):	$(MTARG_PYDIST_BDIR)
 	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON) setup.py bdist_egg )
 	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON) setup.py bdist_wheel )
 	cp $(MTARG_PYDIST_ATFC)/* $(MTARG_PYDIST_DIR)

@@ -20,6 +20,7 @@ relupload:
 release:	$(REL_BIN_DIR)
 
 $(REL_BIN_DIR):	$(REL_DIST)
+		[ ! -z "$(MTARG_PYDIST_ATFC)" ] && cp -r $(MTARG_PYDIST_ATFC)/* $(REL_BIN_DIR)
 		for i in $(REL_BIN_DIR)/* ; do \
 			gpg --armor --detach-sign $$i ; \
 		done
