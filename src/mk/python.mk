@@ -14,8 +14,8 @@ $(MTARG_PYDIST_BDIR):
 	@echo "building egg in $(MTARG_PYDIST_BDIR)"
 	mkdir -p $(MTARG_PYDIST_BDIR)
 	cp -r $(PY_SRC)/* $(MTARG_PYDIST_BDIR)
-	cp README.md $(MTARG_PYDIST_BDIR)
-	cp LICENSE $(MTARG_PYDIST_BDIR)/LICENSE.txt
+	[ -f README.md ] && cp README.md $(MTARG_PYDIST_BDIR) || true
+	[ -f LICENSE ] && cp LICENSE $(MTARG_PYDIST_BDIR)/LICENSE.txt || true
 
 # run python tests
 .PHONY:	pytest
@@ -26,10 +26,8 @@ pytest:
 	done
 
 # package by creating the egg and wheel distribution binaries
-.PHONY:	pypkg
-#pypkg:	$(MTARG_PYDIST_DIR)
-#$(MTARG_PYDIST_DIR):	$(MTARG_PYDIST_BDIR)
-pypkg:	$(MTARG_PYDIST_ATFC)
+.PHONY:	pypackage
+pypackage:	$(MTARG_PYDIST_ATFC)
 $(MTARG_PYDIST_ATFC):	$(MTARG_PYDIST_BDIR)
 	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON) setup.py bdist_egg )
 	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON) setup.py bdist_wheel )
