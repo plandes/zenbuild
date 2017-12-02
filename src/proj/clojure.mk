@@ -49,10 +49,6 @@ DOC_SRC_DIR=	./doc
 # codox
 DOC_DST_DIR=	$(MTARG)/doc
 
-# executables
-GTAGUTIL=	$(ZBHOME)/src/python/gtagutil
-AWSENV=		$(ZBHOME)/src/python/awsenv
-
 # deploy
 DEPLOY_REPO ?=	clojars
 ifeq ($(DEPLOY_REPO),clojars)
@@ -68,6 +64,8 @@ CLJ_VERSION=	$(if $(CLJ_PVER),$(CLJ_PVER)/version.clj,src/clojure/$(APP_NAME_REF
 # clean setup
 ADD_CLEAN +=	$(POM)* .nrepl-port .lein-repl-history dev-resources $(CLJ_VERSION)
 
+
+all:		info
 
 # targets
 .PHONY: compile
@@ -131,7 +129,7 @@ newtag:
 	$(GTAGUTIL) create -m '`git log -1 --pretty=%B`'
 
 .PHONY: info
-info:
+info:	envinfo
 	@echo "version: $(VER)"
 	@echo "comp-deps: $(COMP_DEPS)"
 	@echo "project: $(PROJ_REF)"
@@ -144,7 +142,6 @@ info:
 	@echo "app-main-class: $(MAIN_CLASS)"
 	@echo "clj-version-file: $(CLJ_VERSION)"
 	@echo "deploy: $(DEPLOY_CMD)"
-	@echo "make-include: $(BUILD_INC)"
 
 .PHONY: mvndeptree
 mvndeptree:	$(POM)

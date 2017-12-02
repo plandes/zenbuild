@@ -1,5 +1,4 @@
-Clojure Build Utility
-=====================
+# Build Utilities
 
 This package has tools, configuration files and utilities for building,
 installing and deploying Clojure projects.
@@ -8,9 +7,9 @@ For an example see the
 [NLP parse project](https://github.com/plandes/clj-nlp-parse).
 
 
-License
---------
-Copyright © 2016 Paul Landes
+## License
+
+Copyright © 2016, 2017 Paul Landes
 
 Apache License version 2.0
 

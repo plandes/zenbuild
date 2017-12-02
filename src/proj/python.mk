@@ -1,15 +1,13 @@
 ## makefile automates the build and deployment for python projects
 
 ## includes
-include $(BUILD_INC)/src/mk/python.mk
+include $(BUILD_MK_DIR)/python.mk
 
 .PHONY: info
-info:
-	echo include $(BUILD_INC)/src/mk/python.mk
+info:	envinfo
 	@echo "interpreter: $(PYTHON)"
 	@echo "py-src: $(PY_SRC)"
 	@echo "py-test: $(PY_SRC_TEST)"
-	@echo "make-include: $(BUILD_INC)"
 	@echo "clean: $(ADD_CLEAN)"
 
 .PHONY:	run

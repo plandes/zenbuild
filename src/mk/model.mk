@@ -9,3 +9,7 @@ COMP_DEPS+=	$(ASBIN_FILE)
 $(ASBIN_FILE):
 	mkdir -p $(ASBIN_DIR)
 	echo 'JAVA_OPTS="-Dzensols.model=$(ZMODEL)"' > $(ASBIN_FILE)
+
+.PHONY:	modelinfo
+modelinfo:
+	@echo "zenmodel: $(ZMODEL)"
