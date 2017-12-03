@@ -5,6 +5,7 @@ ASBIN_DIR=	src/asbin
 ASBIN_NAME=	setupenv
 ASBIN_FILE=	$(ASBIN_DIR)/$(ASBIN_NAME)
 COMP_DEPS+=	$(ASBIN_FILE)
+ADD_CLEAN +=	model
 INFO_TARGETS +=	modelinfo
 
 $(ASBIN_FILE):
@@ -14,3 +15,8 @@ $(ASBIN_FILE):
 .PHONY:	modelinfo
 modelinfo:
 	@echo "zenmodel: $(ZMODEL)"
+
+.PHONY: test
+test:
+	ln -s $(ZMODEL) || true
+	lein test
