@@ -1,5 +1,6 @@
 # python
-PYTHON ?=		python
+PYTHON_BIN ?=		python
+PIP_BIN ?=		pip
 PY_SRC ?=		src/python
 PY_SRC_TEST ?=		test/python
 PY_COMPILED +=		$(shell find $(PY_SRC) -name \*.pyc -type f)
@@ -12,7 +13,7 @@ INFO_TARGETS +=		pythoninfo
 
 .PHONY: pythoninfo
 pythoninfo:
-	@echo "interpreter: $(PYTHON)"
+	@echo "interpreter: $(PYTHON_BIN)"
 	@echo "py-src: $(PY_SRC)"
 	@echo "py-test: $(PY_SRC_TEST)"
 	@echo "clean: $(ADD_CLEAN)"
@@ -23,6 +24,11 @@ $(MTARG_PYDIST_BDIR):
 	cp -r $(PY_SRC)/* $(MTARG_PYDIST_BDIR)
 	[ -f README.md ] && cp README.md $(MTARG_PYDIST_BDIR) || true
 	[ -f LICENSE ] && cp LICENSE $(MTARG_PYDIST_BDIR)/LICENSE.txt || true
+
+# install deps
+.PHONY:	pydeps
+pydeps:
+	$(PIP_BIN) install -r $(PY_SRC)/requirements.txt
 
 # run python tests
 .PHONY:	pytest
@@ -36,19 +42,19 @@ pytest:
 .PHONY:	pypackage
 pypackage:	$(MTARG_PYDIST_ATFC)
 $(MTARG_PYDIST_ATFC):	$(MTARG_PYDIST_BDIR)
-	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON) setup.py bdist_egg )
-	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON) setup.py bdist_wheel )
+	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py bdist_egg )
+	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py bdist_wheel )
 	cp $(MTARG_PYDIST_ATFC)/* $(MTARG_PYDIST_DIR)
 	@echo "create egg in $(MTARG_PYDIST_DIR)"
 
 # install the library locally
 .PHONY:	pyinstall
 pyinstall:	pypkg
-#	pip install wheel
-	pip install $(MTARG_PYDIST_DIR)/*.whl
+#	$(PIP_BIN) install wheel
+	$(PIP_BIN) install $(MTARG_PYDIST_DIR)/*.whl
 
 # create a pip distribution and upload it
 .PHONY:	pydist
 pydist:	$(MTARG_PYDIST_BDIR)
-	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON) setup.py sdist upload -r pypitest )
-	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON) setup.py sdist upload -r pypi )
+	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py sdist upload -r pypitest )
+	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py sdist upload -r pypi )
