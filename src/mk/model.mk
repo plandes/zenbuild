@@ -5,6 +5,7 @@ ASBIN_DIR=	src/asbin
 ASBIN_NAME=	setupenv
 ASBIN_FILE=	$(ASBIN_DIR)/$(ASBIN_NAME)
 COMP_DEPS+=	$(ASBIN_FILE)
+INFO_TARGETS +=	modelinfo
 
 $(ASBIN_FILE):
 	mkdir -p $(ASBIN_DIR)

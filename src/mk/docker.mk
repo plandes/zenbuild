@@ -11,6 +11,7 @@ DOCKER_PREFIX=		target/docker-image
 DOCKER_IMG_PREFIX=	$(DOCKER_PREFIX)/img
 DOCKER_IMG=		$(DOCKER_USER)/$(DOCKER_IMG_NAME)
 DOCKER_CONTAINER ?=	$(shell grep container_name docker-compose.yml | awk '{print $$2}')
+INFO_TARGETS +=		dockerinfo
 
 .PHONY: dockerinfo
 dockerinfo:

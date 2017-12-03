@@ -64,8 +64,9 @@ CLJ_VERSION=	$(if $(CLJ_PVER),$(CLJ_PVER)/version.clj,src/clojure/$(APP_NAME_REF
 # clean setup
 ADD_CLEAN +=	$(POM)* .nrepl-port .lein-repl-history dev-resources $(CLJ_VERSION)
 
+# info
+INFO_TARGETS +=	clojureinfo
 
-all:		info
 
 # targets
 .PHONY: compile
@@ -128,8 +129,8 @@ forcepush:
 newtag:
 	$(GTAGUTIL) create -m '`git log -1 --pretty=%B`'
 
-.PHONY: info
-info:	envinfo
+.PHONY:	clojureinfo
+clojureinfo:
 	@echo "version: $(VER)"
 	@echo "comp-deps: $(COMP_DEPS)"
 	@echo "project: $(PROJ_REF)"
