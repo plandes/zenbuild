@@ -3,13 +3,6 @@
 ## includes
 include $(BUILD_MK_DIR)/python.mk
 
-.PHONY: info
-info:	envinfo
-	@echo "interpreter: $(PYTHON)"
-	@echo "py-src: $(PY_SRC)"
-	@echo "py-test: $(PY_SRC_TEST)"
-	@echo "clean: $(ADD_CLEAN)"
-
 .PHONY:	run
 run:		pytest
 

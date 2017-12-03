@@ -1,14 +1,21 @@
 # python
-PYTHON ?=	python
-PY_SRC ?=	src/python
-PY_SRC_TEST ?=	test/python
-PY_COMPILED +=	$(shell find $(PY_SRC) -name \*.pyc -type f)
-PY_CACHE +=	$(shell find $(PY_SRC) -type d -name __pycache__)
+PYTHON ?=		python
+PY_SRC ?=		src/python
+PY_SRC_TEST ?=		test/python
+PY_COMPILED +=		$(shell find $(PY_SRC) -name \*.pyc -type f)
+PY_CACHE +=		$(shell find $(PY_SRC) -type d -name __pycache__)
 MTARG_PYDIST_DIR=	$(MTARG)/pydist
 MTARG_PYDIST_BDIR=	$(MTARG_PYDIST_DIR)/build
 MTARG_PYDIST_ATFC=	$(MTARG_PYDIST_BDIR)/dist
+ADD_CLEAN +=		$(PY_COMPILED) $(PY_CACHE)
+INFO_TARGETS +=		pythoninfo
 
-ADD_CLEAN +=	$(PY_COMPILED) $(PY_CACHE)
+.PHONY: pythoninfo
+pythoninfo:
+	@echo "interpreter: $(PYTHON)"
+	@echo "py-src: $(PY_SRC)"
+	@echo "py-test: $(PY_SRC_TEST)"
+	@echo "clean: $(ADD_CLEAN)"
 
 $(MTARG_PYDIST_BDIR):
 	@echo "building egg in $(MTARG_PYDIST_BDIR)"

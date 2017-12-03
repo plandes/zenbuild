@@ -1,4 +1,6 @@
-# edit these
+## docker makefile include
+
+# must declare these these
 #DOCKER_IMG_NAME=
 #DOCKER_OBJS=
 #DOCKER_CONTAINER=
@@ -50,7 +52,7 @@ dockerrmsnapshot:
 	$(DOCKER_CMD) rmi $(DOCKER_IMG):snapshot || true
 
 .PHONY: dockerrm
-dockerrm:
+dockerrm:	dockerrmsnapshot dockerrmi
 	$(DOCKER_CMD) rmi $(DOCKER_IMG):$(VER) || true
 	$(DOCKER_CMD) rmi $(DOCKER_IMG) || true
 
