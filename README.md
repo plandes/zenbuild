@@ -10,7 +10,7 @@ This repo, with its set of make files, is to be used on Clojure and Python
 build projects like the [NLP parse project].  Scala/sbt make setup is under
 development.
 
-See the [template](https://github.com/plandes/zenbuild#usage) project for more
+See the [template](https://github.com/plandes/template#usage) project for more
 information on use cases and how to use this repo.
 
 
