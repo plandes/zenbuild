@@ -11,3 +11,6 @@ test:		pytest
 
 .PHONY:	package
 package:	pypackage
+
+.PHONY:	deps
+deps:		pydeps
