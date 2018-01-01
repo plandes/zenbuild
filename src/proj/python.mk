@@ -4,7 +4,7 @@
 include $(BUILD_MK_DIR)/python.mk
 
 .PHONY:	run
-run:		pytest
+run:		pyrun
 
 .PHONY:	test
 test:		pytest
@@ -14,3 +14,12 @@ package:	pypackage
 
 .PHONY:	deps
 deps:		pydeps
+
+.PHONY: install
+install:	pyinstall
+
+.PHONY:	uninstall
+uninstall:	pyuninstall
+
+.PHONY:	reinstall
+reinstall:	uninstall install

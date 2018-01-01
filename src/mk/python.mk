@@ -2,7 +2,9 @@
 PYTHON_BIN ?=		python
 PIP_BIN ?=		pip
 PY_SRC ?=		src/python
+PY_SRC_CLI ?=		src/bin
 PY_SRC_TEST ?=		test/python
+PY_SRC_TEST_PKGS ?=	$(basename $(notdir $(wildcard $(PY_SRC_TEST)/*.py)))
 PY_COMPILED +=		$(shell find $(PY_SRC) -name \*.pyc -type f)
 PY_CACHE +=		$(shell find $(PY_SRC) -type d -name __pycache__)
 MTARG_PYDIST_DIR=	$(MTARG)/pydist
@@ -16,6 +18,7 @@ pythoninfo:
 	@echo "interpreter: $(PYTHON_BIN)"
 	@echo "py-src: $(PY_SRC)"
 	@echo "py-test: $(PY_SRC_TEST)"
+	@echo "py-test-pkgs: $(PY_SRC_TEST_PKGS)"
 	@echo "clean: $(ADD_CLEAN)"
 
 $(MTARG_PYDIST_BDIR):
@@ -33,7 +36,15 @@ pydeps:
 # run python tests
 .PHONY:	pytest
 pytest:
-	@for i in $(PY_SRC_TEST)/* ; do \
+	@for i in $(PY_SRC_TEST_PKGS) ; do \
+		echo "testing $$i" ; \
+		PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) python -m unittest $$i ; \
+	done
+
+# run python clis
+.PHONY:	pyrun
+pyrun:
+	@for i in $(PY_SRC_CLI)/* ; do \
 		echo "testing $$i" ; \
 		PYTHONPATH=$(PY_SRC) python $$i ; \
 	done
@@ -49,8 +60,7 @@ $(MTARG_PYDIST_ATFC):	$(MTARG_PYDIST_BDIR)
 
 # install the library locally
 .PHONY:	pyinstall
-pyinstall:	pypkg
-#	$(PIP_BIN) install wheel
+pyinstall:	pypackage
 	$(PIP_BIN) install $(MTARG_PYDIST_DIR)/*.whl
 
 # create a pip distribution and upload it
@@ -58,3 +68,7 @@ pyinstall:	pypkg
 pydist:	$(MTARG_PYDIST_BDIR)
 	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py sdist upload -r pypitest )
 	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py sdist upload -r pypi )
+
+.PHONY:	pyuninstall
+pyuninstall:
+	yes | $(PIP_BIN) uninstall `$(PYTHON_BIN) $(PY_SRC)/setup.py --name`

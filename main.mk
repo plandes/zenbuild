@@ -6,7 +6,7 @@ BUILD_HOME_DIR :=	$(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 BUILD_SRC_DIR :=	$(BUILD_HOME_DIR)/src
 BUILD_MK_DIR :=		$(BUILD_SRC_DIR)/mk
 
-PROJ_MKS =		$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_MODULES) clean))
+PROJ_MKS =		$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_MODULES) clean git))
 
 # executables
 PY_TOOL_DIR=		$(BUILD_HOME_DIR)/src/python
