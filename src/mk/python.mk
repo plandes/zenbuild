@@ -38,15 +38,15 @@ pydeps:
 pytest:
 	@for i in $(PY_SRC_TEST_PKGS) ; do \
 		echo "testing $$i" ; \
-		PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) python -m unittest $$i ; \
+		PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) $(PYTHON_BIN) -m unittest $$i ; \
 	done
 
 # run python clis
 .PHONY:	pyrun
 pyrun:
 	@for i in $(PY_SRC_CLI)/* ; do \
-		echo "testing $$i" ; \
-		PYTHONPATH=$(PY_SRC) python $$i ; \
+		echo "running $$i" ; \
+		PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) $$i ; \
 	done
 
 # package by creating the egg and wheel distribution binaries
@@ -71,4 +71,4 @@ pydist:	$(MTARG_PYDIST_BDIR)
 
 .PHONY:	pyuninstall
 pyuninstall:
-	yes | $(PIP_BIN) uninstall `$(PYTHON_BIN) $(PY_SRC)/setup.py --name`
+	yes | $(PIP_BIN) uninstall `$(PYTHON_BIN) $(PY_SRC)/setup.py --name` || true
