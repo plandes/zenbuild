@@ -1,3 +1,8 @@
+# git
+GITREMOTE ?=	github
+GITPROJ ?=	$(shell git remote -v | grep $(GITREMOTE) | grep push | sed -e 's:^.*/\(.*\) (push):\1:' -e 's:.git$$::')
+GITUSER ?=	$(shell git remote -v | grep $(GITREMOTE) | grep push | sed 's/.*\/\(.*\)\/.*/\1/')
+
 .PHONY: init
 init:
 	git init .

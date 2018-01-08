@@ -6,6 +6,7 @@ BUILD_HOME_DIR :=	$(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 BUILD_SRC_DIR :=	$(BUILD_HOME_DIR)/src
 BUILD_MK_DIR :=		$(BUILD_SRC_DIR)/mk
 
+# to be included
 PROJ_MKS =		$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_MODULES) clean git))
 
 # executables
@@ -26,7 +27,7 @@ include $(PROJ_MKS)
 
 .PHONY:	info
 info:	$(INFO_TARGETS)
-	@echo "modules: $(PROJ_MODULES)"
+	@echo "project-modules: $(PROJ_MODULES)"
 	@echo "module-include-files: $(PROJ_MKS)"
 	@echo "info-targs: $(INFO_TARGETS)"
 	@echo "build-home: $(BUILD_HOME_DIR)"

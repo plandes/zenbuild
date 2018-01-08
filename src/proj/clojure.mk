@@ -9,7 +9,7 @@
 LEIN_PROJECT ?=	project.clj
 
 # environment
-LEIN=		lein
+LEIN ?=		lein
 
 # defs
 POM=		pom.xml
@@ -36,13 +36,6 @@ LIB_JAR=	$(MTARG)/$(LIB_JAR_NAME)
 UBER_JAR_NAME=	$(ANRRES)$(VPREF)-standalone.jar
 UBER_JAR=	$(MTARG)/$(UBER_JAR_NAME)
 UBER_JAR_PROFS+=with-profile +uberjar
-
-# git
-GITREMOTE=	$(if $(REMOTE),$(REMOTE),github)
-PNCMD=		git remote -v | grep $(GITREMOTE) | grep push | sed -e 's:^.*/\(.*\) (push):\1:' -e 's:.git$$::'
-PROJ_REF=	$(if $(PROJ),$(PROJ),$(shell $(PNCMD)))
-USRCMD=		git remote -v | grep $(GITREMOTE) | grep push | sed 's/.*\/\(.*\)\/.*/\1/'
-GITUSER=	$(if $(GUSER),$(GUSER),$(shell $(USRCMD)))
 
 # doc
 DOC_SRC_DIR=	./doc
@@ -111,7 +104,7 @@ run:
 clojureinfo:
 	@echo "version: $(VER)"
 	@echo "comp-deps: $(COMP_DEPS)"
-	@echo "project: $(PROJ_REF)"
+	@echo "git-project: $(GITPROJ)"
 	@echo "remote: $(GITREMOTE)"
 	@echo "user: $(GITUSER)"
 	@echo "jar: $(LIB_JAR)"
@@ -167,7 +160,7 @@ docs:	$(DOC_DST_DIR)
 # https://github.com/weavejester/codox/wiki/Deploying-to-GitHub-Pages
 $(DOC_DST_DIR):
 	rm -rf $(DOC_DST_DIR) && mkdir -p $(DOC_DST_DIR)
-	git clone https://github.com/$(GITUSER)/$(PROJ_REF).git $(DOC_DST_DIR)
+	git clone https://github.com/$(GITUSER)/$(GITPROJ).git $(DOC_DST_DIR)
 	git update-ref -d refs/heads/gh-pages 
 	( cd $(DOC_DST_DIR) ; \
 	  git symbolic-ref HEAD refs/heads/gh-pages ; \
