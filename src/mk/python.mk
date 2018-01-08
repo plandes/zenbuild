@@ -6,7 +6,7 @@ PY_SRC_CLI ?=		src/bin
 PY_SRC_TEST ?=		test/python
 PY_SRC_TEST_PKGS ?=	$(basename $(notdir $(wildcard $(PY_SRC_TEST)/*.py)))
 PY_COMPILED +=		$(shell find $(PY_SRC) -name \*.pyc -type f)
-PY_CACHE +=		$(shell find $(PY_SRC) -type d -name __pycache__)
+PY_CACHE +=		$(shell find $(PY_SRC) $(PY_SRC_TEST) -type d -name __pycache__)
 MTARG_PYDIST_DIR=	$(MTARG)/pydist
 MTARG_PYDIST_BDIR=	$(MTARG_PYDIST_DIR)/build
 MTARG_PYDIST_ATFC=	$(MTARG_PYDIST_BDIR)/dist
@@ -60,7 +60,7 @@ $(MTARG_PYDIST_ATFC):	$(MTARG_PYDIST_BDIR)
 
 # install the library locally
 .PHONY:	pyinstall
-pyinstall:	pypackage
+pyinstall:	pytest pypackage
 	$(PIP_BIN) install $(MTARG_PYDIST_DIR)/*.whl
 
 # create a pip distribution and upload it
@@ -70,5 +70,5 @@ pydist:	$(MTARG_PYDIST_BDIR)
 	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py sdist upload -r pypi )
 
 .PHONY:	pyuninstall
-pyuninstall:
+pyuninstall:	clean
 	yes | $(PIP_BIN) uninstall `$(PYTHON_BIN) $(PY_SRC)/setup.py --name` || true
