@@ -13,7 +13,6 @@ LEIN ?=		lein
 
 # defs
 POM=		pom.xml
-#MTARG=		target
 
 # determine version
 VER_LAST_TAG=	$(shell git tag -l | sort -V | tail -1 | sed 's/.//')

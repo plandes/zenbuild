@@ -8,3 +8,18 @@ compile:	dockerbuild
 
 .PHONY: install
 install:	dockerpush
+
+.PHONY:	up
+up:	dockerup
+
+.PHONY:	down
+down:	dockerdown
+
+.PHONY: log
+log:	dockerlog
+
+.PHONY:	restart
+restart:dockerrestart
+
+.PHONY:	login
+login:	dockerlogin

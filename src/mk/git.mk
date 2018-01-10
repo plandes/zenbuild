@@ -3,8 +3,18 @@ GITREMOTE ?=	github
 GITPROJ ?=	$(shell git remote -v | grep $(GITREMOTE) | grep push | sed -e 's:^.*/\(.*\) (push):\1:' -e 's:.git$$::')
 GITUSER ?=	$(shell git remote -v | grep $(GITREMOTE) | grep push | sed 's/.*\/\(.*\)\/.*/\1/')
 
-.PHONY: init
-init:
+#GITVER_LAST_TAG=	$(shell git tag -l | sort -V | tail -1 | sed 's/.//')
+GITVER ?=		$(shell git describe --match v*.* --abbrev=4 --dirty=-dirty | sed 's/^v//')
+
+INFO_TARGETS +=	gitinfo
+
+.PHONY:	gitinfo
+gitinfo:
+	@echo "git-user: $(GITUSER)"
+	@echo "git-version: $(GITVER)"
+
+.PHONY: gitinit
+gitinit:
 	git init .
 	git add -A :/
 	git commit -am 'initial commit'
