@@ -23,6 +23,11 @@ dockerinfo:
 	@echo "container: $(DOCKER_CONTAINER)"
 	@echo "docker-version: $(DOCKER_VERSION)"
 
+.PHONY:	dockercheckver
+dockercheckver:
+	$(eval DOCKER_VER_LAST_TAG := $(shell git tag -l | sort -V | tail -1 | sed 's/.//'))
+	@echo $(DOCKER_VER_LAST_TAG) =? $(DOCKER_VERSION) ; [ "$(DOCKER_VER_LAST_TAG)" == "$(DOCKER_VERSION)" ]
+
 .PHONY: dockerbuild
 dockerbuild:	$(DOCKER_OBJS)
 	$(DOCKER_CMD) rmi $(DOCKER_IMG) || true
@@ -41,16 +46,15 @@ dockerpush:	dockerbuild
 
 .PHONY:	dockersnapshot
 dockersnapshot:
-	VER=snapshot make dockerbuild
+	DOCKER_VERSION=snapshot make dockerbuild
 
-.PHONY:	dockerrmsnapshot
-dockerrmsnapshot:
-	$(DOCKER_CMD) rmi $(DOCKER_IMG):snapshot || true
+.PHONY:	dockerinstall
+dockerinstall:	dockercheckver
+	make dockerbuild
 
 .PHONY: dockerrm
-dockerrm:	dockerrmsnapshot dockerrmi
-	$(DOCKER_CMD) rmi $(DOCKER_IMG):$(DOCKER_VERSION) || true
-	$(DOCKER_CMD) rmi $(DOCKER_IMG) || true
+dockerrm:	dockerrmi
+	$(DOCKER_CMD) images | grep $(DOCKER_IMG) | awk '{print $$2}' | xargs -i{} $(DOCKER_CMD) rmi $(DOCKER_IMG):{}
 
 # remove all "orphan" images
 .PHONY:	dockerrmi
@@ -61,7 +65,7 @@ dockerrmi:
 dockerrmzombie:
 	$(DOCKER_CMD) ps -a --format '{{.Names}} {{.Status}}' | \
 		grep Exited | \
-		awk '{print $1}' | \
+		awk '{print $$1}' | \
 		xargs $(DOCKER_CMD) rm
 
 .PHONY:	dockerup

@@ -3,23 +3,29 @@
 ## includes
 include $(BUILD_MK_DIR)/docker.mk
 
-.PHONY:	compile
-compile:	dockerbuild
+.PHONY:	build
+build:		dockersnapshot
 
-.PHONY: install
-install:	dockerpush
+.PHONY:	compile
+compile:	dockersnapshot
+
+.PHONY:	install
+install:	dockerinstall
+
+.PHONY: deploy
+deploy:		dockerpush
 
 .PHONY:	up
-up:	dockerup
+up:		dockerup
 
 .PHONY:	down
-down:	dockerdown
+down:		dockerdown
 
 .PHONY: log
-log:	dockerlog
+log:		dockerlog
 
 .PHONY:	restart
-restart:dockerrestart
+restart:	dockerrestart
 
 .PHONY:	login
-login:	dockerlogin
+login:		dockerlogin
