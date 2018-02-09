@@ -4,10 +4,7 @@
 include $(BUILD_MK_DIR)/docker.mk
 
 .PHONY:	build
-build:		dockersnapshot
-
-.PHONY:	compile
-compile:	dockersnapshot
+build:		dockerbuild
 
 .PHONY:	install
 install:	dockerinstall
@@ -21,6 +18,9 @@ up:		dockerup
 .PHONY:	down
 down:		dockerdown
 
+.PHONY:	ps
+ps:		dockerps
+
 .PHONY: log
 log:		dockerlog
 
@@ -29,3 +29,12 @@ restart:	dockerrestart
 
 .PHONY:	login
 login:		dockerlogin
+
+.PHONY:	rmi
+rmi:		dockerrmi
+
+.PHONY:	rmzombie
+rmzombie:	dockerrmzombie
+
+.PHONY:	rmz
+rmz:		dockerrmzombie

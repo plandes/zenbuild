@@ -12,7 +12,8 @@ DOCKER_USER ?=		$(GITUSER)
 DOCKER_CONTAINER ?=	$(shell grep container_name docker-compose.yml | awk '{print $$2}')
 DOCKER_IMG_NAME ?=	$(DOCKER_CONTAINER)
 DOCKER_IMG=		$(DOCKER_USER)/$(DOCKER_IMG_NAME)
-DOCKER_VERSION ?=	$(GITVER)
+DOCKER_VERSION ?=	snapshot
+DOCKER_BUILD_DEPS ?=	dockerbuild
 
 INFO_TARGETS +=		dockerinfo
 
@@ -44,16 +45,13 @@ dockerbuildnocache:	$(DOCKER_OBJS)
 dockerpush:	dockerbuild
 	$(DOCKER_CMD) push $(DOCKER_IMG)
 
-.PHONY:	dockersnapshot
-dockersnapshot:
-	DOCKER_VERSION=snapshot make dockerbuild
-
 .PHONY:	dockerinstall
 dockerinstall:	dockercheckver
-	make dockerbuild
+	make DOCKER_VERSION=$(GITVER) dockerbuild
 
 .PHONY: dockerrm
 dockerrm:	dockerrmi
+	@echo "remember to shut down the image first"
 	$(DOCKER_CMD) images | grep $(DOCKER_IMG) | awk '{print $$2}' | xargs -i{} $(DOCKER_CMD) rmi $(DOCKER_IMG):{}
 
 # remove all "orphan" images
@@ -63,13 +61,14 @@ dockerrmi:
 
 .PHONY:	dockerrmzombie
 dockerrmzombie:
-	$(DOCKER_CMD) ps -a --format '{{.Names}} {{.Status}}' | \
+	for i in $$($(DOCKER_CMD) ps -a --format '{{.Names}} {{.Status}}' | \
 		grep Exited | \
-		awk '{print $$1}' | \
-		xargs $(DOCKER_CMD) rm
+		awk '{print $$1}') ; do \
+		$(DOCKER_CMD) rm $$i ; \
+	done
 
 .PHONY:	dockerup
-dockerup:	dockerbuild
+dockerup:	$(DOCKER_BUILD_DEPS)
 	$(DOCKER_CMP_CMD) up -d
 
 .PHONY:	dockerdown
@@ -78,6 +77,10 @@ dockerdown:
 
 .PHONY:	dockerrestart
 dockerrestart:	dockerdown dockerup
+
+.PHONY:	dockerps
+dockerps:
+	$(DOCKER_CMD) ps -a
 
 .PHONY: dockerlogin
 dockerlogin:
