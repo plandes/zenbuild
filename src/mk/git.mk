@@ -15,10 +15,6 @@ gitinfo:
 
 .PHONY: gitinit
 gitinit:
-	@if [ -d .git ] ; then \
-		echo "error: already initialized" ; \
-		exit 1 ; \
-	fi
 	git init .
 	git add -A :/
 	git commit -am 'initial commit'
