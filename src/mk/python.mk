@@ -1,5 +1,6 @@
 # python
 PYTHON_BIN ?=		python
+PYTHON_BIN_ARGS ?=	
 PIP_BIN ?=		pip
 PY_SRC ?=		src/python
 PY_SRC_CLI ?=		src/bin
@@ -46,7 +47,7 @@ pytest:
 pyrun:
 	@for i in $(PY_SRC_CLI)/* ; do \
 		echo "running $$i" ; \
-		PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) $$i ; \
+		PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) $(PYTHON_BIN_ARGS) $$i ; \
 	done
 
 # package by creating the egg and wheel distribution binaries
