@@ -47,7 +47,7 @@ pytest:
 pyrun:
 	@for i in $(PY_SRC_CLI)/* ; do \
 		echo "running $$i" ; \
-		PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) $(PYTHON_BIN_ARGS) $$i ; \
+		PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) $$i $(PYTHON_BIN_ARGS) ; \
 	done
 
 # package by creating the egg and wheel distribution binaries
