@@ -16,7 +16,7 @@ gitinfo:
 .PHONY: gitinit
 gitinit:
 	@if [ -d .git ] ; then \
-		echo "already initialized" ; \
+		echo "error: already initialized" ; \
 		exit 1 ; \
 	fi
 	git init .
