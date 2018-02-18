@@ -25,7 +25,7 @@ gitreinit:
 	rm -fr .git .gitmodules zenbuild
 	git init .
 	git submodule add https://github.com/plandes/zenbuild
-	make -C gitinit
+	make gitinit
 
 .PHONY: forcetag
 forcetag:
