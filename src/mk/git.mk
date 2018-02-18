@@ -20,6 +20,13 @@ gitinit:
 	git commit -am 'initial commit'
 	$(GTAGUTIL) create -m 'initial release'
 
+.PHONY:	gitreinit
+gitreinit:
+	rm -fr .git .gitmodules zenbuild
+	git init .
+	git submodule add https://github.com/plandes/zenbuild
+	make -C gitinit
+
 .PHONY: forcetag
 forcetag:
 	git add -A :/
