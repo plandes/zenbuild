@@ -27,6 +27,10 @@ gitreinit:
 	git submodule add https://github.com/plandes/zenbuild
 	make gitinit
 
+.PHONY: tag
+tag:
+	$(GTAGUTIL) create
+
 .PHONY: forcetag
 forcetag:
 	git add -A :/
