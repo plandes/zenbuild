@@ -8,8 +8,10 @@ PY_SRC_TEST ?=		test/python
 PY_SRC_TEST_PKGS ?=	$(basename $(notdir $(wildcard $(PY_SRC_TEST)/*.py)))
 PY_COMPILED +=		$(shell find $(PY_SRC) -name \*.pyc -type f)
 PY_CACHE +=		$(shell find $(PY_SRC) $(PY_SRC_TEST) -type d -name __pycache__)
+PY_RESOURCES +=		resource
 MTARG_PYDIST_DIR=	$(MTARG)/pydist
 MTARG_PYDIST_BDIR=	$(MTARG_PYDIST_DIR)/build
+MTARG_PYDIST_RES ?=	$(MTARG_PYDIST_BDIR)/resources
 MTARG_PYDIST_ATFC=	$(MTARG_PYDIST_BDIR)/dist
 ADD_CLEAN +=		$(PY_COMPILED) $(PY_CACHE)
 INFO_TARGETS +=		pythoninfo
@@ -26,6 +28,13 @@ $(MTARG_PYDIST_BDIR):
 	@echo "building egg in $(MTARG_PYDIST_BDIR)"
 	mkdir -p $(MTARG_PYDIST_BDIR)
 	cp -r $(PY_SRC)/* $(MTARG_PYDIST_BDIR)
+	@for i in $(PY_RESOURCES) ; do \
+		if [ -e $$i ] ; then \
+			mkdir -p $(MTARG_PYDIST_RES) ; \
+			echo "copying $$i -> $(MTARG_PYDIST_RES)" ; \
+			cp -r $$i $(MTARG_PYDIST_RES) ; \
+		fi ; \
+	done
 	[ -f README.md ] && cp README.md $(MTARG_PYDIST_BDIR) || true
 	[ -f LICENSE ] && cp LICENSE $(MTARG_PYDIST_BDIR)/LICENSE.txt || true
 
