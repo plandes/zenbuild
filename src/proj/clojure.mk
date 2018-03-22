@@ -45,8 +45,10 @@ DOC_DST_DIR=	$(MTARG)/doc
 DEPLOY_REPO ?=	clojars
 ifeq ($(DEPLOY_REPO),clojars)
 DEPLOY_CMD=	$(LEIN) deploy $(DEPLOY_REPO)
+DEPS_CMD=	$(LEIN) deps
 else
 DEPLOY_CMD=	$(AWSENV) $(LEIN) deploy $(DEPLOY_REPO)
+DEPS_CMD=	$(AWSENV) $(LEIN) deps
 endif
 
 # auto generated file
@@ -124,7 +126,7 @@ deptree:
 
 .PHONY:	deps
 deps:
-	$(AWSENV) $(LEIN) deps
+	$(DEPS_CMD)
 
 $(LIB_JAR):	$(COMP_DEPS)
 	@echo compiling $(LIB_JAR)
