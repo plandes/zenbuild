@@ -10,6 +10,16 @@ This repo, with its set of make files, is to be used on Clojure and Python
 build projects like the [NLP parse project].  Scala/sbt make setup is under
 development.
 
+## Compiling and Using Build Environment
+
+This repo use to be used as a dependency, and you can too if you want.
+However, I've *flipped* the paradigm and now use this repo as a [git module]
+since it works well as a tracked version by the parent for each project that
+uses it.  Examples:
+
+* [Python project](https://github.com/plandes/zotsite)
+* [Clojure](https://github.com/plandes/clj-nlp-parse)
+
 See the [template](https://github.com/plandes/template#usage) project for more
 information on use cases and how to use this repo.
 
@@ -19,20 +29,49 @@ information on use cases and how to use this repo.
 Building a project using this build setup requires certain software to be
 installed:
 
-1. Install [GNU make]: `brew install make` / `sudo yum groupinstall "Development Tools"`
-2. Install [Git]: `brew install git` / `sudo yum install git`
+1. Install [GNU make]:
+
+*MacOS*:
+```bash
+brew install make
+```
+
+*Linux (CentOS)*:
+```bash
+sudo yum groupinstall "Development Tools"
+```
+
+2. Install [Git]:
+
+*MacOS*:
+```bash
+brew install git
+```
+
+*Linux (CentOS)*:
+```bash
+sudo yum install git
+```
 3. Install [Python 3]:
-  - MacOS:
+
+*MacOS*:
 ```bash
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew install python
 ```
-   - Linux (CentOS):
+
+*Linux (CentOS)*:
 ```bash
 sudo yum -y install https://centos7.iuscommunity.org/ius-release.rpm
 sudo yum -y install python36u
 ```
-4. Install [gitpython]: `pip install gitpython`
+
+4. Install [gitpython]:
+
+```bash
+pip install gitpython
+```
+
 5. For Clojure projects: install [Leiningen] (this is just a script):
 ```bash
 wget -O /usr/local/bin/lein https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein && chmod 0755 /usr/local/bin/lein
@@ -66,3 +105,4 @@ limitations under the License.
 [GNU make]: https://www.gnu.org/software/make/
 [Leiningen]: http://leiningen.org
 [Python 3]: https://www.python.org/download/releases/3.0/
+[git module]: https://git-scm.com/book/en/v2/Git-Tools-Submodules
