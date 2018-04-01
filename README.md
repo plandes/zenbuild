@@ -37,14 +37,6 @@ sudo yum -y install python36u
 ```bash
 wget -O /usr/local/bin/lein https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein && chmod 0755 /usr/local/bin/lein
 ```
-5. Clone the project you want to build (i.e. the [mkproj] project)
-```bash
-git clone https://github.com/plandes/clj-mkproj
-```
-6. Compile build and test:
-```bash
-make -C clj-mkproj test
-```
 
 
 ## License
