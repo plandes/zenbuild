@@ -1,7 +1,7 @@
 # Build Utilities
 
 This package has tools, configuration files and utilities for building,
-installing and deploying Clojure projects.
+installing and deploying projects.
 
 
 ## Usage
@@ -19,22 +19,29 @@ information on use cases and how to use this repo.
 Building a project using this build setup requires certain software to be
 installed:
 
-- Install [GNU make]
-- Install [Git]
-- Install [Python 3]
-- Install [gitpython]
-- For Clojure projects: install [Leiningen] (this is just a script)
-- Download (this repo) build system:
+1. Install [GNU make]: `brew install make` / `sudo yum groupinstall "Development Tools"`
+2. Install [Git]: `brew install git` / `sudo yum install git`
+3. Install [Python 3]:
+  - MacOS:
 ```bash
-mkdir zenbuild && \
-  wget -O - https://api.github.com/repos/plandes/zenbuild/tarball | \
-  tar zxfv - -C zenbuild --strip-components 1
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew install python
 ```
-- Clone the project you want to build (i.e. the [mkproj] project)
+   - Linux (CentOS):
+```bash
+sudo yum -y install https://centos7.iuscommunity.org/ius-release.rpm
+sudo yum -y install python36u
+```
+4. Install [gitpython]: `pip install gitpython`
+5. For Clojure projects: install [Leiningen] (this is just a script):
+```bash
+wget -O /usr/local/bin/lein https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein && chmod 0755 /usr/local/bin/lein
+```
+5. Clone the project you want to build (i.e. the [mkproj] project)
 ```bash
 git clone https://github.com/plandes/clj-mkproj
 ```
-- Compile build and test:
+6. Compile build and test:
 ```bash
 make -C clj-mkproj test
 ```
