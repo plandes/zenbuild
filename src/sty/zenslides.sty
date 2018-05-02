@@ -40,8 +40,9 @@
 \setbeamercolor{title separator}{fg=blue}
 
 %% biblatex
-\usepackage[style=numeric,backend=biber]{biblatex}
-\addbibresource{slides.bib}
+\newcommand{\dsaddbiblatex}[1]{%
+  \usepackage[style=numeric,backend=biber]{biblatex}
+  \addbibresource{#1}}
 
 %% theme
 \setbeamertemplate{navigation symbols}{}
@@ -77,6 +78,14 @@
   \printbibliography
 \end{frame}}
 
+%% quotes in boxes
+\newenvironment{dsquote}{
+\begin{beamercolorbox}[dp=0.3cm,rounded=true,shadow=true]{postit}%
+\footnotesize%
+\it%
+\noindent%
+}{\end{beamercolorbox}}
+
 
 %% fix
 % gets rid of the aweful spaced "References" at the bottom
@@ -84,4 +93,3 @@
 
 %% homegrown
 \newcommand{\dssec}[1]{}%\section*{#1}}
-
