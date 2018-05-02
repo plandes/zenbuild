@@ -4,19 +4,19 @@
 # build environment
 BUILD_HOME_DIR :=	$(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 BUILD_SRC_DIR :=	$(BUILD_HOME_DIR)/src
+BUILD_BIN_DIR :=	$(BUILD_HOME_DIR)/bin
 BUILD_MK_DIR :=		$(BUILD_SRC_DIR)/mk
 
 # to be included
 PROJ_MKS =		$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_MODULES) clean git))
 
 # executables
-PY_TOOL_DIR=		$(BUILD_HOME_DIR)/src/python
-GTAGUTIL=		$(PY_TOOL_DIR)/gtagutil
-AWSENV=			$(PY_TOOL_DIR)/awsenv
+GTAGUTIL=		$(BIN_DIR)/gtagutil
+AWSENV=			$(BIN_DIR)/awsenv
 
 # build defaults
 PROJ_TYPE ?=		default
-MTARG ?=		target
+MTARG ?=		$(abspath ./target)
 
 ## targets
 all:			info

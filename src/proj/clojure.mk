@@ -1,10 +1,5 @@
 ## makefile automates the build and deployment for lein projects
 
-# edit these if you want
-#GUSER=		
-#APP_NAME=	
-#PROJ=		
-#REMOTE=		github
 
 LEIN_PROJECT ?=	project.clj
 
@@ -75,106 +70,106 @@ jar:		$(LIB_JAR)
 
 .PHONY: install
 install:	$(COMP_DEPS)
-	$(LEIN) install
+		$(LEIN) install
 
 .PHONY: snapshot
 snapshot:	$(COMP_DEPS)
-	@grep ':snapshot' $(LEIN_PROJECT) > /dev/null ; \
-		if [ $$? == 1 ] ; then \
-			echo "no snapshot profile found in $(LEIN_PROJECT)" ; \
-			false ; \
-		fi
-	$(LEIN) with-profile +snapshot install
+		@grep ':snapshot' $(LEIN_PROJECT) > /dev/null ; \
+			if [ $$? == 1 ] ; then \
+				echo "no snapshot profile found in $(LEIN_PROJECT)" ; \
+				false ; \
+			fi
+		$(LEIN) with-profile +snapshot install
 
 .PHONY: uber
 uber:		$(UBER_JAR)
 
 .PHONY:	cleanuber
 cleanuber:
-	rm -f $(LIB_JAR) $(UBER_JAR)
+		rm -f $(LIB_JAR) $(UBER_JAR)
 
 .PHONY: deploy
 deploy:	checkver
-	$(DEPLOY_CMD)
+		$(DEPLOY_CMD)
 
 .PHONY: run
 run:
-	$(LEIN) run
+		$(LEIN) run
 
 .PHONY:	clojureinfo
 clojureinfo:
-	@echo "version: $(VER)"
-	@echo "comp-deps: $(COMP_DEPS)"
-	@echo "git-project: $(GITPROJ)"
-	@echo "remote: $(GITREMOTE)"
-	@echo "user: $(GITUSER)"
-	@echo "jar: $(LIB_JAR)"
-	@echo "uberjar: $(UBER_JAR)"
-	@echo "app-script: $(APP_SNAME_REF)"
-	@echo "app-dist: $(DIST_DIR)"
-	@echo "app-main-class: $(MAIN_CLASS)"
-	@echo "clj-version-file: $(CLJ_VERSION)"
-	@echo "deploy: $(DEPLOY_CMD)"
+		@echo "version: $(VER)"
+		@echo "comp-deps: $(COMP_DEPS)"
+		@echo "git-project: $(GITPROJ)"
+		@echo "remote: $(GITREMOTE)"
+		@echo "user: $(GITUSER)"
+		@echo "jar: $(LIB_JAR)"
+		@echo "uberjar: $(UBER_JAR)"
+		@echo "app-script: $(APP_SNAME_REF)"
+		@echo "app-dist: $(DIST_DIR)"
+		@echo "app-main-class: $(MAIN_CLASS)"
+		@echo "clj-version-file: $(CLJ_VERSION)"
+		@echo "deploy: $(DEPLOY_CMD)"
 
 .PHONY: mvndeptree
 mvndeptree:	$(POM)
-	mvn dependency:tree -D verbose
+		mvn dependency:tree -D verbose
 
 .PHONY: deptree
 deptree:
-	lein deps :tree
+		lein deps :tree
 
 .PHONY:	deps
 deps:
-	$(DEPS_CMD)
+		$(DEPS_CMD)
 
 $(LIB_JAR):	$(COMP_DEPS)
-	@echo compiling $(LIB_JAR)
-	$(LEIN) jar
+		@echo compiling $(LIB_JAR)
+		$(LEIN) jar
 
 $(UBER_JAR):	$(COMP_DEPS)
-	@echo compiling $(UBER_JAR)
-	$(LEIN) $(UBER_JAR_PROFS) uberjar
+		@echo compiling $(UBER_JAR)
+		$(LEIN) $(UBER_JAR_PROFS) uberjar
 
 .PHONY: checkdep
 checkdep:
-	@echo compiling $(UBER_JAR)
-	$(LEIN) with-profile +appassem uberjar
+		@echo compiling $(UBER_JAR)
+		$(LEIN) with-profile +appassem uberjar
 
 .PHONY: checkver
 checkver:
-	@echo $(VER_LAST_TAG) =? $(VER) ; [ "$(VER_LAST_TAG)" == "$(VER)" ]
+		@echo $(VER_LAST_TAG) =? $(VER) ; [ "$(VER_LAST_TAG)" == "$(VER)" ]
 
 .PHONY:	leintest
 leintest:
-	$(LEIN) test
+		$(LEIN) test
 
 .PHONY:	check
-check:	checkver leintest checkdep
+check:		checkver leintest checkdep
 
 $(POM):
-	$(LEIN) pom
+		$(LEIN) pom
 
 .PHONY: docs
-docs:	$(DOC_DST_DIR)
+docs:		$(DOC_DST_DIR)
 
 # https://github.com/weavejester/codox/wiki/Deploying-to-GitHub-Pages
 $(DOC_DST_DIR):
-	rm -rf $(DOC_DST_DIR) && mkdir -p $(DOC_DST_DIR)
-	git clone https://github.com/$(GITUSER)/$(GITPROJ).git $(DOC_DST_DIR)
-	git update-ref -d refs/heads/gh-pages 
-	( cd $(DOC_DST_DIR) ; \
-	  git symbolic-ref HEAD refs/heads/gh-pages ; \
-	  rm .git/index ; \
-	  git clean -fdx )
-	if [ -d $(DOC_SRC_DIR) ] ; then cp -r $(DOC_SRC_DIR)/* $(DOC_DST_DIR) ; fi
-	[ -d src/java ] && $(LEIN) javadoc || true
-	$(LEIN) $(LEIN_DOC_PROFS) codox
+		rm -rf $(DOC_DST_DIR) && mkdir -p $(DOC_DST_DIR)
+		git clone https://github.com/$(GITUSER)/$(GITPROJ).git $(DOC_DST_DIR)
+		git update-ref -d refs/heads/gh-pages 
+		( cd $(DOC_DST_DIR) ; \
+		  git symbolic-ref HEAD refs/heads/gh-pages ; \
+		  rm .git/index ; \
+		  git clean -fdx )
+		if [ -d $(DOC_SRC_DIR) ] ; then cp -r $(DOC_SRC_DIR)/* $(DOC_DST_DIR) ; fi
+		[ -d src/java ] && $(LEIN) javadoc || true
+		$(LEIN) $(LEIN_DOC_PROFS) codox
 
 .PHONY: pushdocs
 pushdocs:	checkver $(DOC_DST_DIR)
-	git push $(GITREMOTE) --mirror
-	( cd $(DOC_DST_DIR) ; \
-	  git add . ; \
-	  git commit -am "new doc push" ; \
-	  git push -u origin gh-pages )
+		git push $(GITREMOTE) --mirror
+		( cd $(DOC_DST_DIR) ; \
+		  git add . ; \
+		  git commit -am "new doc push" ; \
+		  git push -u origin gh-pages )

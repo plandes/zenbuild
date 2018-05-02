@@ -1,0 +1,87 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zenslides}[4/30/2018 Slides]
+
+%% beamer
+\usepackage{xspace}
+
+%% homegrown
+\usepackage{zenelem}
+
+\newcommand{\dssimpletitledef}{%
+  \institute[\theuniversityshort]{%
+    \inst{1}%
+    \theuniversitydept\\
+    \theuniversity
+  }
+  \author[\theauthor]{\theauthor\inst{1} \\ {\small \texttt{\theauthoremail}}}
+  \title[\doctitle\hspace{2em}\insertframenumber/\inserttotalframenumber]{\doclongtitle}}
+
+% \institute[UIC]
+% {
+%   \inst{1}%
+%   \theuniversity\\
+%   Department of Computer Science
+%   \and
+%   \inst{2}%
+%   \theuniversity\\
+%   Department of Computer Science
+% }
+% \author[\theauthor]
+% {\theauthor\inst{1}
+% \and Anastasios Sidiropoulos\inst{2}}
+% \title[\doctitle]{\doclongtitle}
+%\subtitle{A short story}
+
+%% theme
+\usepackage{pgfpages}
+\usetheme{metropolis}
+\usecolortheme{seahorse}
+\logo{\includegraphics[height=1cm]{\theuniversitylogo}}
+\setbeamercolor{title separator}{fg=blue}
+
+%% biblatex
+\usepackage[style=numeric,backend=biber]{biblatex}
+\addbibresource{slides.bib}
+
+%% theme
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+\setbeamertemplate{frametitle continuation}[from second]
+\setbeamercolor{postit}{fg=black,bg=lightgray}
+
+%% beamer env
+\makeatletter
+% make footer slide number, title, etc
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{section in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor~~\beamer@ifempty{\insertshortinstitute}{}{(\insertshortinstitute)}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{section in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.34\paperwidth,ht=2.25ex,dp=1ex,right]{section in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+%% references frame command
+\newcommand{\dsrefframe}{%
+\begin{frame}[t,noframenumbering,allowframebreaks]
+  \frametitle{References}
+  \renewcommand*{\bibfont}{\scriptsize}
+  \printbibliography
+\end{frame}}
+
+
+%% fix
+% gets rid of the aweful spaced "References" at the bottom
+\renewcommand{\section}[2]{}%
+
+%% homegrown
+\newcommand{\dssec}[1]{}%\section*{#1}}
+
