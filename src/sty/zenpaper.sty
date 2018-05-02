@@ -1,0 +1,42 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zenpaper}[2018/02/04 academic paper]
+
+\usepackage{xcolor}
+
+% make links dark blue
+\definecolor{darkblue}{rgb}{0, 0, 0.7}
+
+\usepackage[
+    bookmarks,
+    linktocpage,
+    colorlinks=true,
+    linkcolor=darkblue,
+    urlcolor=darkblue,
+    citecolor=darkblue
+]
+{hyperref}
+\usepackage{coling2018}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage{url}
+
+\usepackage[inline]{enumitem}
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{qtree}
+\usepackage{mdframed}
+\usepackage{zenelem}
+% \usepackage{float}
+% \usepackage{dblfloatfix}
+
+\newcommand{\dpsimpletitledef}{%
+\title{\doclongtitle}
+\author{\theauthor\\
+  \theuniversitydept\\
+  \theuniversity\\
+  \theuniversityaddress\\
+  {\tt \theauthoremail}
+}
+\date{}}
