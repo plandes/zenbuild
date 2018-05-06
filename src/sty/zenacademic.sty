@@ -1,0 +1,45 @@
+%%
+%% Paul Landes  2018-05-06
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zenacademic}[5/06/2018 Slides]
+
+\newcommand{\zssingletitledef}{%
+  \author{%
+    \theauthor\\
+    \theuniversity\\
+    \theuniversitydept\\
+    \theuniversityaddress\\
+    Email: \theauthoremail}
+  \title{\doclongtitle}
+  \date{}}
+
+\newcommand{\zstwotitledef}[2]{%
+  \institute[\theuniversityshort]{%
+    \inst{1}%
+    \theuniversity\\
+    \theuniversitydept\\
+    \theuniversityaddress}
+  \author[\theauthor]{\theauthor~({\tt \theauthoremail})\inst{1}\\
+  \and #1~({\tt \theauthoremail})\inst{1}}
+  \title[\doctitle]{\doclongtitle}
+  \date{}}
+
+\newcommand{\zstwotitleinstdef}[5]{%
+  \institute[\theuniversityshort]{%
+    \inst{1}%
+    \theuniversity\\
+    \theuniversitydept\\
+    \theuniversityaddress
+    \and
+    \inst{2}%
+    #3\\
+    #4\\
+    #5}
+  \author[\theauthor]{\theauthor\inst{1} {\tt \theauthoremail}}
+  \author[#1]{#1 {\tt #2}}
+  \title[\doctitle]{\doclongtitle}
+  \date{}}
+
+%\subtitle{A short story}

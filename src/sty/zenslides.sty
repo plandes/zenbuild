@@ -1,38 +1,19 @@
+%%
+%% Paul Landes  2018-05-06
+%%
+
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenslides}[4/30/2018 Slides]
 
 %% beamer
 \usepackage{xspace}
 
-\newcommand{\zssimpletitledef}{%
-  \institute[\theuniversityshort]{%
-    \inst{1}%
-    \theuniversitydept\\
-    \theuniversity
-  }
-  \author[\theauthor]{\theauthor\inst{1} \\ {\small \texttt{\theauthoremail}}}
-  \title[\doctitle\hspace{2em}\insertframenumber/\inserttotalframenumber]{\doclongtitle}}
-
-% \institute[UIC]
-% {
-%   \inst{1}%
-%   \theuniversity\\
-%   Department of Computer Science
-%   \and
-%   \inst{2}%
-%   \theuniversity\\
-%   Department of Computer Science
-% }
-% \author[\theauthor]
-% {\theauthor\inst{1}
-% \and Anastasios Sidiropoulos\inst{2}}
-% \title[\doctitle]{\doclongtitle}
-%\subtitle{A short story}
-
 %% theme
 \usepackage{pgfpages}
 \usetheme{metropolis}
 \usecolortheme{seahorse}
+
+% academic
 \logo{\includegraphics[height=1cm]{\theuniversitylogo}}
 \setbeamercolor{title separator}{fg=blue}
 
@@ -55,10 +36,12 @@
   \leavevmode%
   \hbox{%
   \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{section in head/foot}%
-    \usebeamerfont{author in head/foot}\insertshortauthor~~\beamer@ifempty{\insertshortinstitute}{}{(\insertshortinstitute)}
+%    \usebeamerfont{author in head/foot}\insertshortauthor~~\beamer@ifempty{\insertshortinstitute}{}{(\insertshortinstitute)}
+    \usebeamerfont{author in head/foot}\theauthor
   \end{beamercolorbox}%
   \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{section in head/foot}%
-    \usebeamerfont{title in head/foot}\insertshorttitle
+%    \usebeamerfont{title in head/foot}\insertshorttitle
+    \usebeamerfont{title in head/foot}\doctitle
   \end{beamercolorbox}%
   \begin{beamercolorbox}[wd=.34\paperwidth,ht=2.25ex,dp=1ex,right]{section in head/foot}%
     \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
