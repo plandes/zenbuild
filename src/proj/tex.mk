@@ -96,8 +96,14 @@ pdf:		$(PDF_FILE)
 # file proccessing order, it completely skips the module make files
 $(PDF_FILE):	$(COMP_DEPS)
 		make $(COMP_DEPS)
+		@echo "latex first compile..."
 		( cd $(MTARG) ; $(LATEX_BIN) $(TEX).tex $(QUIET) )
+		@if [ ! -z "$(SECOND_RUN)" ] ; then \
+			echo "starting latex compile second run..." ; \
+			( cd $(MTARG) ; $(LATEX_BIN) $(TEX).tex $(QUIET) ) ; \
+		fi
 		@if [ ! -z "$(FINAL_PDF_NAME)" ] ; then \
+			echo "copy $(PDF_FILE) -> $(FINAL_PDF_NAME)..." ; \
 			cp $(PDF_FILE) "$(FINAL_PDF_NAME)" ; \
 		fi
 
