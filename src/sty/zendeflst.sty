@@ -1,0 +1,33 @@
+%%
+%% Paul Landes  11/20/2013
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zendeflst}[2013/11/20 Util Commands]
+
+% terms type list, the parameter is the string to take as thelength of the
+% longest \item passed (i.e. '0123456789012' gives room for a 12 character
+% string
+\usepackage{calc}
+\xdef\definitiondelimiter{:}
+\newenvironment{dddefinitionDISABLE}[1]
+{\begin{list}{}%
+    {\renewcommand\makelabel[1]{\bf \textsf{##1}\definitiondelimiter\hfil}%
+    \settowidth\labelwidth{\makelabel{#1}}%
+    \setlength\leftmargin{\labelwidth+\labelsep}}}%
+{\end{list}}
+
+\newenvironment{dddefinitiontype}[4]
+{\begin{list}{}%
+    {\renewcommand\makelabel[1]{#2{##1}\definitiondelimiter\hfil}%
+    \settowidth\labelwidth{\makelabel{#1}}%
+    \setlength\itemsep{#3}%
+    \setlength\leftmargin{#4+\labelwidth+\labelsep}}}%
+{\end{list}}
+
+%% ex:
+% \begin{dddefinition}{01234567890}
+% \item[key item] define...
+\newenvironment{dddefinition}[1]
+{\begin{dddefinitiontype}{#1}{\bf \textsf}{.3cm}{0in}}
+{\end{dddefinitiontype}}
