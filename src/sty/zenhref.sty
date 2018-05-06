@@ -9,20 +9,22 @@
 
 
 %% -- Command
-% define href package
 \usepackage{xcolor}
 
-% make links dark blue
-\definecolor{darkblue}{rgb}{0, 0, 0.7}
+% make links dark blue (ACL color)
+\definecolor{darkblue}{rgb}{0, 0, 0.5}
 
 \usepackage[
-    bookmarks,
-    linktocpage,
-    colorlinks=true,
-    linkcolor=darkblue,
-    urlcolor=darkblue,
-    citecolor=darkblue
+  pdftex,
+  bookmarks,
+  linktocpage,
+  colorlinks=true,
+  linkcolor=darkblue,
+  urlcolor=darkblue,
+  citecolor=darkblue
 ]
 {hyperref}
+
+\usepackage{hypcap}
 
 \newcommand{\zzhref}[1]{\href{#1}{#1}}
