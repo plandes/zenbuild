@@ -5,18 +5,11 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zendeflst}[2013/11/20 Util Commands]
 
-% terms type list, the parameter is the string to take as thelength of the
-% longest \item passed (i.e. '0123456789012' gives room for a 12 character
-% string
 \usepackage{calc}
 \xdef\definitiondelimiter{:}
-\newenvironment{dddefinitionDISABLE}[1]
-{\begin{list}{}%
-    {\renewcommand\makelabel[1]{\bf \textsf{##1}\definitiondelimiter\hfil}%
-    \settowidth\labelwidth{\makelabel{#1}}%
-    \setlength\leftmargin{\labelwidth+\labelsep}}}%
-{\end{list}}
 
+% terms type list, the parameter is the string to take as the length of the
+% longest \item passed (i.e. '0123456789012' gives room for 12 characters
 \newenvironment{dddefinitiontype}[4]
 {\begin{list}{}%
     {\renewcommand\makelabel[1]{#2{##1}\definitiondelimiter\hfil}%

@@ -62,13 +62,17 @@
 %% PL 4/23/2018
 %\usepackage{enumitem}
 
+\newenvironment{packedlistlen}[4]{
+\newcommand{\packedlistlenvspace}{#2}
+\begin{itemize}[topsep=#1]
+  \setlength{\itemsep}{#3}
+  \setlength{\parskip}{#4}
+}{\vspace{\packedlistlenvspace}%
+\end{itemize}}
+
 \newenvironment{packedlist}{
-\begin{itemize}[topsep=0pt,parsep=2pt]
-  \setlength{\topsep}{0pt}
-  \setlength{\itemsep}{0pt}
-  \setlength{\parskip}{0pt}
-  \setlength{\parsep}{0pt}
-}{\end{itemize}}
+\begin{packedlistlen}{0pt}{0pt}{2pt}{0pt}}
+{\end{packedlistlen}}
 
 \newenvironment{letlist}{
 \noindent
