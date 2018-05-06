@@ -47,13 +47,13 @@
 %\AfterEndEnvironment{lstlisting}{\end{mdframed}}
 
 %% special formatting for lstlisting given it has to parse ahead to find ending
-\lstnewenvironment{ddlisting}[3]
+\lstnewenvironment{zzlisting}[3]
   {\noindent\minipage{\linewidth}\lstset{label=lst:#1,language=#2,caption={#3}}}
   {\endminipage}
-\lstnewenvironment{ddlistingwithpagebreak}[3]
+\lstnewenvironment{zzlistingwithpagebreak}[3]
   {\noindent\lstset{label=lst:#1,language=#2,caption={#3}}}
   {}
-\newcommand{\ddcode}[1]{\tt #1}
+\newcommand{\zzcode}[1]{\tt #1}
 
 \definecolor{lightgray}{rgb}{.9,.9,.9}
 \definecolor{darkgray}{rgb}{.4,.4,.4}
@@ -74,10 +74,15 @@
   morestring=[b]"
 }
 
-\newcommand{\ddlistingfile}[4]{%
+%% -- Commands
+\newcommand{\zzlistingfile}[4]{%
 \lstinputlisting[caption=#4,label=lst:#3,language=#2]{#1}}
 
-\newcommand{\ddlstref}[1]{Listing~\ref{lst:#1}}
-\newcommand{\ddlstpref}[1]{on page~\pageref{lst:#1}}
-\newcommand{\ddLstref}[1]{Listing~\ref{lst:#1}}
-\newcommand{\ddseelst}[1]{see \ddlstref{lst:#1}}
+
+%% -- References
+\newcommand{\zzlstref}[1]{Listing~\ref{lst:#1}}
+\newcommand{\zzlstpref}[1]{on page~\pageref{lst:#1}}
+\newcommand{\zzLstref}[1]{Listing~\ref{lst:#1}}
+\newcommand{\zzseelst}[1]{see \zzlstref{lst:#1}}
+\newcommand{\zzallineref}[2]{\zzalgoref{#1} line~\ref{algoline:#1:#2}}
+\newcommand{\zzseeallineref}[2]{(see \zzalref{#1}{#2})}

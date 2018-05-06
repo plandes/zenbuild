@@ -4,10 +4,7 @@
 %% beamer
 \usepackage{xspace}
 
-%% homegrown
-\usepackage{zenelem}
-
-\newcommand{\dssimpletitledef}{%
+\newcommand{\zssimpletitledef}{%
   \institute[\theuniversityshort]{%
     \inst{1}%
     \theuniversitydept\\
@@ -40,7 +37,7 @@
 \setbeamercolor{title separator}{fg=blue}
 
 %% biblatex
-\newcommand{\dsaddbiblatex}[1]{%
+\newcommand{\zsaddbiblatex}[1]{%
   \usepackage[style=numeric,backend=biber]{biblatex}
   \addbibresource{#1}}
 
@@ -71,7 +68,7 @@
 }
 
 %% references frame command
-\newcommand{\dsrefframe}{%
+\newcommand{\zsrefframe}{%
 \begin{frame}[t,noframenumbering,allowframebreaks]
   \frametitle{References}
   \renewcommand*{\bibfont}{\scriptsize}
@@ -79,7 +76,7 @@
 \end{frame}}
 
 %% quotes in boxes
-\newenvironment{dsquote}{
+\newenvironment{zsquote}{
 \begin{beamercolorbox}[dp=0.3cm,rounded=true,shadow=true]{postit}%
 \footnotesize%
 \it%
@@ -92,4 +89,4 @@
 \renewcommand{\section}[2]{}%
 
 %% homegrown
-\newcommand{\dssec}[1]{}%\section*{#1}}
+\newcommand{\zssec}[1]{}%\section*{#1}}

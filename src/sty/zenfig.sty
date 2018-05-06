@@ -1,0 +1,64 @@
+%%
+%% Paul Landes  5/06/2018
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zenfig}[2018/05/06 Elements: figures, listings, tables, references]
+
+\usepackage{graphicx}
+\usepackage{float}
+
+
+
+%% -- style
+\providecommand{\zzfigure}[3]{
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=#1]{#2.eps}
+\end{center}
+\caption{#3}
+\label{fig:#2}
+\end{figure}
+}
+\providecommand{\zzfiguretc}[3]{
+\begin{figure*}[h!]
+\begin{center}
+\includegraphics[width=#1]{#2.eps}
+\end{center}
+\caption{#3}
+\label{fig:#2}
+\end{figure*}
+}
+\providecommand{\zzfigureh}[3]{
+%\begin{figure}[htb!]
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=#1]{#2.eps}
+\end{center}
+\caption{#3}
+\label{fig:#2}
+\end{figure}
+}
+\providecommand{\zzfigurenw}[2]{\zzfigure{\textwidth}{#1}{#2}}
+
+\providecommand{\zzfigurerast}[4]{
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=#1]{#2.#3}
+\end{center}
+\caption{#4}
+\label{fig:#2}
+\end{figure}
+\end{frame}
+}
+
+% toc names
+\renewcommand{\listfigurename}{Figures}
+
+
+
+%% -- References
+\newcommand{\zzseesec}[1]{(see \zzsecref{#1})}
+\newcommand{\zzfigref}[1]{Figure~\ref{fig:#1}}
+\newcommand{\zzFigref}[1]{Figure~\ref{fig:#1}}
+\newcommand{\zzseefig}[1]{(see \zzfigref{#1})}

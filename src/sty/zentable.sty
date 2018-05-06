@@ -1,0 +1,71 @@
+%%
+%% Paul Landes  4/01/2011
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zentable}[2016/10/18 Simple and Variable Table Column]
+
+\usepackage{tabularx}
+
+
+
+%% -- basic table (\begin{zzbasictable}{results}{Results}{|l|l})
+\newenvironment{zzbasictable}[3]%
+{%
+\newcommand{\zzbasictablecap}{#2}
+\newcommand{\zzbasictablelab}{tab:#1}
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{#3}
+}%
+{%
+\end{tabular}
+\caption{\zzbasictablecap}
+\label{\zzbasictablelab}
+\end{center}
+\end{table}
+}%
+
+%% -- basic table (\begin{zztable}{results}{Results}{\small}{|l|l})
+\newenvironment{zztable}[4]%
+{%
+\newcommand{\zzbasictablecap}{#2}
+\newcommand{\zzbasictablelab}{tab:#1}
+\begin{table}[ht]
+#3
+\begin{center}
+\begin{tabular}{#4}
+}%
+{%
+\end{tabular}
+\caption{\zzbasictablecap}
+\label{\zzbasictablelab}
+\end{center}
+\end{table}
+}%
+
+
+
+% ex: \begin{zzvarcoltable}{param-feat-sets}{Argument feature sets.}{}{|l|X|}
+% ex: \begin{zzvarcoltable}{param-feat-sets}{Argument feature sets.}{\small}{|l|X|}
+% ex: \begin{zzvarcoltable}[3in]{param-feat-sets}{Argument feature sets.}{\small}{|l|X|}
+\newenvironment{zzvarcoltable}[5][\textwidth]%
+{%
+\newcommand{\zzvarcoltablelab}{tab:#2}%
+\newcommand{\zzvarcoltablecap}{#3}%
+\table[ht]%
+\centering#4%
+\tabularx{#1}{#5}%
+}
+{%
+\endtabularx%
+\caption{\zzvarcoltablecap}%
+\label{\zzvarcoltablelab}%
+\endtable%
+}
+
+
+%% -- References
+\newcommand{\zztabref}[1]{Table~\ref{tab:#1}}
+\newcommand{\zzseetab}[1]{(see \zztabref{#1})}
+\newcommand{\zzTabref}[1]{Table~\ref{tab:#1}}

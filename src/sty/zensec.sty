@@ -1,0 +1,25 @@
+%%
+%% Paul Landes  12/24/2013
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zensec}[2018/03/06 Sections]
+
+
+%% -- Commands
+\newcommand{\zzpart}[2]{\part*{#2}\label{sec:#1}%
+\addcontentsline{toc}{part}{#2}}
+
+\newcommand{\zzsec}[2]{\section{#2}\label{sec:#1}}
+\newcommand{\zzsubsec}[2]{\subsection{#2}\label{sec:#1}}
+\newcommand{\zzsubsubsec}[2]{\subsubsection{#2}\label{sec:#1}}
+\newcommand{\zzpara}[2]{\paragraph{#2}\label{sec:#1}}
+
+
+
+%% -- References
+\newcommand{\zzsecref}[1]{Section~\ref{sec:#1}}
+
+
+%% -- Mark places to return to work (must use zenindex.sty)
+\newcommand{\zztodo}[1]{FINISH MORE HERE: #1\idx{NOT FINISHED!#1}}
