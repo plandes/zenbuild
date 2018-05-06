@@ -18,8 +18,8 @@
 \end{center}
 \caption{#3}
 \label{fig:#2}
-\end{figure}
-}
+\end{figure}}
+
 \providecommand{\zzfiguretc}[3]{
 \begin{figure*}[h!]
 \begin{center}
@@ -27,8 +27,8 @@
 \end{center}
 \caption{#3}
 \label{fig:#2}
-\end{figure*}
-}
+\end{figure*}}
+
 \providecommand{\zzfigureh}[3]{
 %\begin{figure}[htb!]
 \begin{figure}[H]
@@ -37,8 +37,8 @@
 \end{center}
 \caption{#3}
 \label{fig:#2}
-\end{figure}
-}
+\end{figure}}
+
 \providecommand{\zzfigurenw}[2]{\zzfigure{\textwidth}{#1}{#2}}
 
 \providecommand{\zzfigurerast}[4]{
@@ -49,8 +49,20 @@
 \caption{#4}
 \label{fig:#2}
 \end{figure}
-\end{frame}
-}
+\end{frame}}
+
+% place a figure across two columns for two column articles
+\providecommand{\zzfiguretcolw}[3]{
+\begin{figure*}[h!]
+\begin{center}
+\includegraphics[width=#1]{#2.eps}
+\end{center}
+\caption{#3}
+\label{fig:#2}
+\end{figure*}}
+
+\providecommand{\zzfiguretcol}[2]{\zzfiguretcolw{\textwidth}{#1}{#2}}
+
 
 % toc names
 \renewcommand{\listfigurename}{Figures}

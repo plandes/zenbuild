@@ -15,7 +15,7 @@
 \usepackage[\zzalgoconfig]{algorithm2e}
 \usepackage{latexsym}
 %\usepackage{mdframed}
-
+\usepackage{tocloft}
 
 
 %% -- Commands
@@ -143,3 +143,7 @@
 \newcommand{\zzalgoref}[1]{Algorithm~\ref{algo:#1}}
 \newcommand{\zzAlgoref}[1]{\zzalgoref{#1}}
 \newcommand{\zzseealgo}[1]{(see \zzalgoref{#1})}
+
+
+%% -- Commands
+\newcommand{\trans}{\ensuremath{^{\scriptscriptstyle\mathsf{T}}}}
