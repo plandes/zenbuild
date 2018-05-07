@@ -1,0 +1,30 @@
+%%
+%% Paul Landes  2018-05-06
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zenacro}[5/06/2018 Acronyms]
+
+\usepackage{acro}
+\acsetup{first-long-format=\itshape}
+
+\newcommand{\zzdefacro}[2]{
+\DeclareAcronym{#1}{
+  short=#2,
+  long=#2,
+  first-style=long
+}
+\expandafter\newcommand\csname #1\endcsname{\ac{#1}}%
+\expandafter\newcommand\csname #1s\endcsname{\acp{#1}}%
+\expandafter\newcommand\csname #1cap\endcsname{\Acl{#1}}%
+\expandafter\newcommand\csname #1scap\endcsname{\Aclp{#1}}%
+%\expandafter\newcommand\csname {\MakeUppercase #1}\endcsname{\Ac{agent}}%
+%\@namedef{\expandafter\MakeUppercase\expandafter #1}{\Ac{agent}}
+%\newcommand{\Agent}{\Acl{agent}}
+%\edef\@tempa{\expandafter\@gobble\string#1}%
+%\newcomand{\tmp1}{HERE: @tempa}
+%\newcommand{\Agent}{\Acl{agent}}
+%\newcommand{\Agents}{\Aclp{agent}}
+}
+
+\newcommand{\zzdefacroterm}[1]{\zzdefacro{#1}{#1}}
