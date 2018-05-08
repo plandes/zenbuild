@@ -44,6 +44,39 @@
 \end{table}
 }%
 
+%% -- basic two column table (\begin{zztable}{results}{Results}{\small}{|l|l})
+\newenvironment{zztabletcol}[4]%
+{%
+\newcommand{\zzbasictablecap}{#2}
+\newcommand{\zzbasictablelab}{tab:#1}
+\begin{table*}[!ht]
+\centering
+#3
+\begin{tabular}{#4}
+}%
+{%
+\end{tabular}
+\caption{\zzbasictablecap}
+\label{\zzbasictablelab}
+\end{table*}
+}%
+
+\newenvironment{zzvarcoltabletcol}[4]%
+{%
+\newcommand{\zzbasictablecap}{#2}
+\newcommand{\zzbasictablelab}{tab:#1}
+\begin{table*}[!ht]
+\centering
+#3
+\begin{tabularx}{\textwidth}{#4}
+}%
+{%
+\end{tabularx}
+\caption{\zzbasictablecap}
+\label{\zzbasictablelab}
+\end{table*}
+}%
+
 
 
 % ex: \begin{zzvarcoltable}{param-feat-sets}{Argument feature sets.}{}{|l|X|}
@@ -63,6 +96,21 @@
 \label{\zzvarcoltablelab}%
 \endtable%
 }
+
+% \newenvironment{zzvarcoltabletcol}[5][\textwidth]%
+% {%
+% \newcommand{\zzvarcoltablelab}{tab:#2}%
+% \newcommand{\zzvarcoltablecap}{#3}%
+% \table*[ht]%
+% \centering#4%
+% \tabularx{#1}{#5}%
+% }
+% {%
+% \endtabularx%
+% \caption{\zzvarcoltablecap}%
+% \label{\zzvarcoltablelab}%
+% \endtable*%
+% }
 
 
 %% -- References
