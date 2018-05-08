@@ -7,11 +7,19 @@
 
 \newcommand{\zssingletitledef}{%
   \author{%
+    \theauthor \\
+    {\tt \theauthoremail}}
+  \title{{\bf \doclongtitle} \\
+    {\normalfont \doctype}}
+  \date{}}
+
+\newcommand{\zssingletitledeffull}{%
+  \author{%
     \theauthor\\
     \theuniversity\\
     \theuniversitydept\\
     \theuniversityaddress\\
-    Email: \theauthoremail}
+    Email: {\tt \theauthoremail}}
   \title{\doclongtitle}
   \date{}}
 
