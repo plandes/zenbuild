@@ -61,7 +61,7 @@ $(MTARG_FILE):
 		date >> $(MTARG_FILE)
 
 %.graffle:	$(MTARG_FILE)
-		cp $(GRAFFLE_DIR)/$(@F) $@
+		cp -r $(GRAFFLE_DIR)/$(@F) $@
 		osascript $(GRAF_BIN) $@ $(MTARG)
 
 %.eps:		$(VEC_DIR)/$(@F) $(MTARG_FILE)
