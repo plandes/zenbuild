@@ -30,7 +30,18 @@
     \theuniversitydept\\
     \theuniversityaddress}
   \author[\theauthor]{\theauthor~({\tt \theauthoremail})\inst{1}\\
-  \and #1~({\tt \theauthoremail})\inst{1}}
+  \and #1~({\tt #2})\inst{1}}
+  \title[\doctitle]{\doclongtitle}
+  \date{}}
+
+\newcommand{\zstwotitledefnoemail}[1]{%
+  \institute[\theuniversityshort]{%
+    \inst{1}%
+    \theuniversity\\
+    \theuniversitydept\\
+    \theuniversityaddress}
+  \author[\theauthor]{\theauthor\inst{1}\\
+  \and #1\inst{1}}
   \title[\doctitle]{\doclongtitle}
   \date{}}
 

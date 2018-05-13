@@ -9,23 +9,28 @@
 \usepackage{xspace}
 
 %% theme
-\usepackage{pgfpages}
-\usetheme{metropolis}
-\usecolortheme{seahorse}
+\newcommand{\zsmetropolistheme}{%
+  \usepackage{pgfpages}
+  \usetheme{metropolis}
+  \usecolortheme{seahorse}}
 
 % academic
-\logo{\includegraphics[height=1cm]{\theuniversitylogo}}
-\setbeamercolor{title separator}{fg=blue}
+\newcommand{\zsaddlogo}{%
+\logo{\includegraphics[height=1cm]{\theuniversitylogo}}}
+
+\newcommand{\zsaddsepcolors}{%
+\setbeamercolor{title separator}{fg=blue}}
 
 %% biblatex
 \newcommand{\zsaddbiblatex}[1]{%
   \usepackage[style=numeric,backend=biber]{biblatex}
   \addbibresource{#1}}
 
+\newcommand{\zsaddbiblatexstyle}[2]{%
+  \usepackage[style=#1,backend=biber]{biblatex}
+  \addbibresource{#2}}
+
 %% theme
-\setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{bibliography item}{\insertbiblabel}
-\setbeamertemplate{frametitle continuation}[from second]
 \setbeamercolor{postit}{fg=black,bg=lightgray}
 
 %% beamer env
@@ -52,7 +57,12 @@
 
 %% references frame command
 \newcommand{\zsrefframe}{%
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+\setbeamertemplate{frametitle continuation}[from second]
 \begin{frame}[t,noframenumbering,allowframebreaks]
+  %% fix
+  % gets rid of the aweful spaced "References" at the bottom
+  \renewcommand{\section}[2]{}
   \frametitle{References}
   \renewcommand*{\bibfont}{\scriptsize}
   \printbibliography
@@ -67,9 +77,13 @@
 }{\end{beamercolorbox}}
 
 
-%% fix
-% gets rid of the aweful spaced "References" at the bottom
-\renewcommand{\section}[2]{}%
+%% commands
+\renewcommand{\zzsec}[2]{\section{#2}\label{sec:#1}}
 
-%% homegrown
-\newcommand{\zssec}[1]{}%\section*{#1}}
+\newcommand{\zsquestionsframe}{%
+\begin{frame}[plain,c]{Thank You!}
+  \begin{center}
+    \Huge
+    Questions?
+  \end{center}
+\end{frame}}
