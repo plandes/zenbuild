@@ -82,13 +82,13 @@
 % ex: \begin{zzvarcoltable}{param-feat-sets}{Argument feature sets.}{}{|l|X|}
 % ex: \begin{zzvarcoltable}{param-feat-sets}{Argument feature sets.}{\small}{|l|X|}
 % ex: \begin{zzvarcoltable}[3in]{param-feat-sets}{Argument feature sets.}{\small}{|l|X|}
-\newenvironment{zzvarcoltable}[5][\textwidth]%
+\newenvironment{zzvarcoltable}[6][\textwidth]%
 {%
-\newcommand{\zzvarcoltablelab}{tab:#2}%
-\newcommand{\zzvarcoltablecap}{#3}%
-\table[ht]%
-\centering#4%
-\tabularx{#1}{#5}%
+\newcommand{\zzvarcoltablelab}{tab:#3}%
+\newcommand{\zzvarcoltablecap}{#4}%
+\table[#2]%
+\centering#5%
+\tabularx{#1}{#6}%
 }
 {%
 \endtabularx%
