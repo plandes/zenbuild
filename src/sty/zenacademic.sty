@@ -13,6 +13,21 @@
     {\normalfont \doctype}}
   \date{}}
 
+\newcommand{\zstwotitlesameinstacl}[2]{%
+  \author{\theauthor\\
+    \theuniversitydept\\
+    \theuniversity\\
+    \theuniversityaddress\\
+    {\tt \theauthoremail}
+    \And
+    #1\\
+    \theuniversitydept\\
+    \theuniversity\\
+    \theuniversityaddress\\
+    {\tt bdieugen@uic.edu}}
+  \title{\doctitle}
+  \date{}}
+
 \newcommand{\zssingletitledeffull}{%
   \author{%
     \theauthor\\
@@ -62,3 +77,9 @@
   \date{}}
 
 %\subtitle{A short story}
+
+%% -- cite
+\newcommand{\ci}[1]{\cite{#1}}
+
+% full URL cite
+\newcommand{\zzurlci}[2]{\href{#1}{#2}\footnote{\url{#1}}}
