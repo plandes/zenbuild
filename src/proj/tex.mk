@@ -83,6 +83,9 @@ imagedim:
 force:		$(COMP_DEPS)
 		( cd $(MTARG) ; $(LATEX_BIN) $(TEX).tex $(QUIET) )
 
+.PHONY:		forceshow
+forceshow:	force showpdf
+
 $(TEX_FILE):	$(TEX).tex
 		cp $(TEX).tex $(MTARG)
 

@@ -14,16 +14,22 @@
 \usepackage{amssymb}
 \usepackage[\zzalgoconfig]{algorithm2e}
 \usepackage{latexsym}
-%\usepackage{mdframed}
-\usepackage{tocloft}
+
 
 
-%% -- Commands
-\newcommand{\listequationsname}{List of Equations}
+%% -- Equation listing
+% equation listing not supported in beamer
+\newcommand{\zzlistequations}{%
+\usepackage{tocloft}
 \newlistof{zzequations}{equ}{{\cftloftitlefont\listequationsname}}
+}
+\newcommand{\listequationsname}{List of Equations}
 \newcommand{\zzequations}[1]{%
 \addcontentsline{equ}{zzequations}{\protect\numberline{\theequation}#1}\par}
 
+
+
+%% -- Commands
 \newenvironment{zzexample}[2]%
 {%
 \zzequations{#1}
@@ -72,7 +78,7 @@
 
 
 %% theorem, proofs
-\newtheorem{theorem}{Theorem}
+%\newtheorem{theorem}{Theorem}
 \renewcommand{\qedsymbol}{$\blacksquare$}
 
 \newenvironment{zztheorem}[1]%
@@ -80,7 +86,7 @@
 \label{the:#1}}
 {\end{theorem}}
 
-\newtheorem{lemma}{Lemma}
+%\newtheorem{lemma}{Lemma}
 \newenvironment{zzlemma}[1]%
 {\begin{lemma}
 \label{lem:#1}}
@@ -102,7 +108,7 @@
 \addcontentsline{equ}{zzequations}{\protect\numberline{\theequation}#1}\\}
 
 
-\newtheorem{zzdef}{Definition}
+%\newtheorem{zzdef}{Definition}
 
 \providecommand{\zzallabel}[1]{NOT DEFINED}
 
