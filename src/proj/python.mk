@@ -23,3 +23,6 @@ uninstall:	pyuninstall
 
 .PHONY:	reinstall
 reinstall:	uninstall install
+
+.PHONY:	deploy
+deploy:		pydist
