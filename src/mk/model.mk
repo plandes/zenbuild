@@ -5,7 +5,7 @@ ASBIN_DIR=	src/asbin
 ASBIN_NAME=	setupenv
 ASBIN_FILE=	$(ASBIN_DIR)/$(ASBIN_NAME)
 COMP_DEPS+=	$(ASBIN_FILE)
-ADD_CLEAN +=	model
+ADD_CLEAN_ALL += model
 INFO_TARGETS +=	modelinfo
 
 $(ASBIN_FILE):
@@ -17,6 +17,23 @@ modelinfo:
 	@echo "zenmodel: $(ZMODEL)"
 
 .PHONY: test
-test:
-	ln -s $(ZMODEL) || true
+test:	model
 	lein test
+
+model:
+	@echo creating model
+	if [ -z "$$ZMODEL" ] ; then \
+		make model-download ; \
+	else \
+		ln -s $(ZMODEL) || true ; \
+	fi
+
+.PHONY:	model-download
+model-download:
+	mkdir -p model/stanford/pos
+	wget -O model/model.zip http://nlp.stanford.edu/software/stanford-postagger-2015-12-09.zip && \
+		cd model && \
+		unzip model.zip && \
+		mv stanford-postagger-2015-12-09/models/english-left3words-distsim.tagger stanford/pos && \
+		rm -r model.zip stanford-postagger-2015-12-09
+	@echo "see https://github.com/plandes/clj-nlp-parse#setup for details on model configuration"
