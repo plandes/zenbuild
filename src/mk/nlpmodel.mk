@@ -28,8 +28,10 @@ model-test:	$(MODEL_DIR)
 $(MODEL_DIR):
 	@echo "creating model"
 	@if [ -z "$$ZMODEL" ] ; then \
+		echo "downloading model..." ; \
 		make model-download ; \
 	else \
+		echo "linking to $$ZMODEL..." ; \
 		ln -s $(ZMODEL) || true ; \
 	fi
 
@@ -43,6 +45,9 @@ model-download:
 		rm -r model.zip stanford-postagger-2015-12-09
 	@echo "see https://github.com/plandes/clj-nlp-parse#setup for details on model configuration"
 
+.PHONY:	glove-model
+glove-model:	$(GLOVE_MODEL)
+
 $(GLOVE_MODEL):
 	mkdir -p $(MODEL_DIR)/glove
 	wget -O $(MODEL_DIR)/model.zip http://nlp.stanford.edu/data/glove.6B.zip && \
@@ -50,3 +55,6 @@ $(GLOVE_MODEL):
 		unzip model.zip && \
 		rm model.zip && \
 		mv *.txt glove
+
+.PHONY:	models
+models:	model glove-model
