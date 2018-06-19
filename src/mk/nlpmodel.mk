@@ -1,6 +1,11 @@
 ## makefile automates the application distribution for lein projects
 
+# model
 ZMODEL ?=	$$ZMODEL
+MODEL_DIR=	model
+GLOVE_MODEL=	$(MODEL_DIR)/glove/glove.6B.50d.txt
+
+# application assemble
 ASBIN_DIR=	src/asbin
 ASBIN_NAME=	setupenv
 ASBIN_FILE=	$(ASBIN_DIR)/$(ASBIN_NAME)
@@ -17,12 +22,12 @@ modelinfo:
 	@echo "zenmodel: $(ZMODEL)"
 
 .PHONY: model-test
-model-test:	model
+model-test:	$(MODEL_DIR)
 		lein test
 
-model:
-	@echo creating model
-	if [ -z "$$ZMODEL" ] ; then \
+$(MODEL_DIR):
+	@echo "creating model"
+	@if [ -z "$$ZMODEL" ] ; then \
 		make model-download ; \
 	else \
 		ln -s $(ZMODEL) || true ; \
@@ -30,10 +35,18 @@ model:
 
 .PHONY:	model-download
 model-download:
-	mkdir -p model/stanford/pos
-	wget -O model/model.zip http://nlp.stanford.edu/software/stanford-postagger-2015-12-09.zip && \
-		cd model && \
+	mkdir -p $(MODEL_DIR)/stanford/pos
+	wget -O $(MODEL_DIR)/model.zip http://nlp.stanford.edu/software/stanford-postagger-2015-12-09.zip && \
+		cd $(MODEL_DIR) && \
 		unzip model.zip && \
 		mv stanford-postagger-2015-12-09/models/english-left3words-distsim.tagger stanford/pos && \
 		rm -r model.zip stanford-postagger-2015-12-09
 	@echo "see https://github.com/plandes/clj-nlp-parse#setup for details on model configuration"
+
+$(GLOVE_MODEL):
+	mkdir -p $(MODEL_DIR)/glove
+	wget -O $(MODEL_DIR)/model.zip http://nlp.stanford.edu/data/glove.6B.zip && \
+		cd $(MODEL_DIR) && \
+		unzip model.zip && \
+		rm model.zip && \
+		mv *.txt glove
