@@ -16,8 +16,8 @@ $(ASBIN_FILE):
 modelinfo:
 	@echo "zenmodel: $(ZMODEL)"
 
-.PHONY: test-model
-test-model:	model
+.PHONY: model-test
+model-test:	model
 		lein test
 
 model:
