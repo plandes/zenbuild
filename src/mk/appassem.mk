@@ -13,6 +13,10 @@ DIST_UJAR_REF=	$(ANRRES).jar
 DIST_UJAR_FILE=	$(DIST_DIR)/$(DIST_UJAR_REF)
 DIST_JAR_PROFS+=with-profile +appassem
 
+# make environment
+ADD_CLEAN_ALL+= $(ASBIN_DIR)
+
+
 .PHONY: dist
 dist:		$(DIST_BIN_DIR)
 
