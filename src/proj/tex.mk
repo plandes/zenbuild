@@ -10,11 +10,15 @@ GRAF_BIN=	$(BUILD_BIN_DIR)/exportgraffle.scpt
 ## everything else shouldn't need modifying paths
 nullstr=
 space=		$(nullstr) $(nullstring)
-TIPATH +=	$(MTARG) $(BUILD_SRC_DIR)/sty $(abspath ./sty)
-TIPATHSTR=	$(subst $(space),:,$(TIPATH))
+TIPATH +=	$(BUILD_SRC_DIR)/sty $(abspath ./sty)
+TIPATH_MTARG=	$(MTARG) $(TIPATH)
+TIPATHSTR=	$(subst $(space),:,$(TIPATH_MTARG))
 # trailing colon needed
 TPATH=		TEXINPUTS=$(TIPATHSTR):
 LATEX_BIN ?=	$(TPATH) pdflatex -output-directory $(MTARG)
+
+# export
+EXPORT_DIR ?=	$(MTARG)/export
 
 # paths
 VEC_DIR=	$(abspath ../vec)
@@ -43,6 +47,7 @@ QUIET ?=	> /dev/null
 PREV_POS ?=	{1500, 0}
 PREV_SIZE ?=	{1400, 1600}
 
+# build
 INFO_TARGETS +=	latexinfo
 
 
@@ -129,3 +134,16 @@ reposition:	showpdf
 		osascript -e 'tell application "System Events" to set position of first window of application process "Preview" to $(PREV_POS)'
 		osascript -e 'tell application "System Events" to set size of first window of application process "Preview" to $(PREV_SIZE)'
 		osascript -e 'tell application "Emacs" to activate'
+
+.PHONY:		export
+export:		pdf
+		mkdir -p $(EXPORT_DIR)
+		cp $(wildcard $(TEX).tex $(BIB_FILE) $(BBL_FILE)) $(EXPORT_DIR)
+		cp $(wildcard $(MTARG)/*.eps $(MTARG)/*.png $(MTARG)/*.jpg $(MTARG)/*.gif) $(EXPORT_DIR)
+		cp $(wildcard $(addsuffix /*,$(TIPATH))) $(EXPORT_DIR)
+		cp $(BUILD_SRC_DIR)/template/tex-export-makefile $(EXPORT_DIR)/makefile
+
+.PHONY:		showexportpdf
+showexportpdf:	export
+		make -C $(EXPORT_DIR)
+		open $(EXPORT_DIR)/$(TEX).pdf
