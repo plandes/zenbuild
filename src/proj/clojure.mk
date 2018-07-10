@@ -68,11 +68,11 @@ javac:
 .PHONY: jar
 jar:		$(LIB_JAR)
 
-.PHONY: install
+.PHONY: 	install
 install:	$(COMP_DEPS)
 		$(LEIN) install
 
-.PHONY: snapshot
+.PHONY: 	snapshot
 snapshot:	$(COMP_DEPS)
 		@grep ':snapshot' $(LEIN_PROJECT) > /dev/null ; \
 			if [ $$? == 1 ] ; then \
@@ -81,22 +81,25 @@ snapshot:	$(COMP_DEPS)
 			fi
 		$(LEIN) with-profile +snapshot install
 
-.PHONY: uber
+.PHONY: 	uber
 uber:		$(UBER_JAR)
 
-.PHONY:	cleanuber
+.PHONY:		cleanuber
 cleanuber:
 		rm -f $(LIB_JAR) $(UBER_JAR)
 
-.PHONY: deploy
-deploy:	checkver
+.PHONY: 	deploy
+deploy:		checkver
 		$(DEPLOY_CMD)
+
+.PHONY:		release
+release:	reldeploy
 
 .PHONY: run
 run:
 		$(LEIN) run
 
-.PHONY:	clojureinfo
+.PHONY:		clojureinfo
 clojureinfo:
 		@echo "version: $(VER)"
 		@echo "comp-deps: $(COMP_DEPS)"
@@ -111,15 +114,15 @@ clojureinfo:
 		@echo "clj-version-file: $(CLJ_VERSION)"
 		@echo "deploy: $(DEPLOY_CMD)"
 
-.PHONY: mvndeptree
+.PHONY: 	mvndeptree
 mvndeptree:	$(POM)
 		mvn dependency:tree -D verbose
 
-.PHONY: deptree
+.PHONY: 	deptree
 deptree:
 		lein deps :tree
 
-.PHONY:	deps
+.PHONY:		deps
 deps:
 		$(DEPS_CMD)
 
@@ -131,26 +134,26 @@ $(UBER_JAR):	$(COMP_DEPS)
 		@echo compiling $(UBER_JAR)
 		$(LEIN) $(UBER_JAR_PROFS) uberjar
 
-.PHONY: checkdep
+.PHONY: 	checkdep
 checkdep:
 		@echo compiling $(UBER_JAR)
 		$(LEIN) with-profile +appassem uberjar
 
-.PHONY: checkver
+.PHONY: 	checkver
 checkver:
 		@echo $(VER_LAST_TAG) =? $(VER) ; [ "$(VER_LAST_TAG)" == "$(VER)" ]
 
-.PHONY:	leintest
+.PHONY:		leintest
 leintest:
 		$(LEIN) test
 
-.PHONY:	check
+.PHONY:		check
 check:		checkver leintest checkdep
 
 $(POM):
 		$(LEIN) pom
 
-.PHONY: docs
+.PHONY: 	docs
 docs:		$(DOC_DST_DIR)
 
 # https://github.com/weavejester/codox/wiki/Deploying-to-GitHub-Pages
