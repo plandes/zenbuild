@@ -1,7 +1,14 @@
+## make include file for Python projects
+## PL 7/20/2018
+
+## config
+
 # python
 PYTHON_BIN ?=		python
 PYTHON_BIN_ARGS ?=	
 PIP_BIN ?=		pip
+
+# python path
 PY_SRC ?=		src/python
 PY_SRC_CLI ?=		src/bin
 PY_SRC_TEST ?=		test/python
@@ -9,19 +16,32 @@ PY_SRC_TEST_PKGS ?=	$(basename $(notdir $(wildcard $(PY_SRC_TEST)/*.py)))
 PY_COMPILED +=		$(shell find $(PY_SRC) -name \*.pyc -type f)
 PY_CACHE +=		$(shell find $(PY_SRC) $(PY_SRC_TEST) -type d -name __pycache__)
 PY_RESOURCES +=		resource
+
+# target
 MTARG_PYDIST_DIR=	$(MTARG)/pydist
 MTARG_PYDIST_BDIR=	$(MTARG_PYDIST_DIR)/build
 MTARG_PYDIST_RES ?=	$(MTARG_PYDIST_BDIR)/resources
 MTARG_PYDIST_ATFC=	$(MTARG_PYDIST_BDIR)/dist
+
+# deploy
+PYPI_TEST_URL ?=	https://test.pypi.org/legacy/
+PYPI_NON_TEST_URL ?=	https://upload.pypi.org/legacy/
+PYPI_USER ?=		pypiuser
+PYPI_SIGN ?=		pypiuser@example.com
+
+# build
 ADD_CLEAN +=		$(PY_COMPILED) $(PY_CACHE)
 INFO_TARGETS +=		pythoninfo
 
+
+# target
 .PHONY: pythoninfo
 pythoninfo:
 	@echo "interpreter: $(PYTHON_BIN)"
 	@echo "py-src: $(PY_SRC)"
 	@echo "py-test: $(PY_SRC_TEST)"
 	@echo "py-test-pkgs: $(PY_SRC_TEST_PKGS)"
+	@echo "py-dist-atfc: $(MTARG_PYDIST_ATFC)"
 	@echo "clean: $(ADD_CLEAN)"
 
 $(MTARG_PYDIST_BDIR):
@@ -75,10 +95,14 @@ pyinstall:	pytest pypackage
 
 # create a pip distribution and upload it
 .PHONY:	pydist
-pydist:	$(MTARG_PYDIST_BDIR)
-	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py sdist upload -r pypitest )
-	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py sdist upload -r pypi )
+pydist:	$(MTARG_PYDIST_ATFC)
+	@for url in $(PYPI_TEST_URL) $(PYPI_NON_TEST_URL) ; do \
+		$(PYTHON_BIN) -m twine upload \
+			--sign-with $(PYPI_SIGN) --username $(PYPI_USER) \
+			--repository-url $$url $(MTARG_PYDIST_ATFC)/* ; \
+	done
 
+# uninstall locally
 .PHONY:	pyuninstall
 pyuninstall:	clean
 	yes | $(PIP_BIN) uninstall `$(PYTHON_BIN) $(PY_SRC)/setup.py --name` || true
