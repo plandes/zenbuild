@@ -22,6 +22,7 @@ MTARG_PYDIST_DIR ?=	$(MTARG)/pydist
 MTARG_PYDIST_BDIR ?=	$(MTARG_PYDIST_DIR)/build
 MTARG_PYDIST_RES ?=	$(MTARG_PYDIST_BDIR)/resources
 MTARG_PYDIST_ATFC ?=	$(MTARG_PYDIST_BDIR)/dist
+MTARG_WHEEL_DIR ?=	$(MTARG)/wheel
 
 # deploy
 PYPI_TEST_URL ?=	https://test.pypi.org/legacy/
@@ -101,6 +102,13 @@ pydist:	$(MTARG_PYDIST_ATFC)
 			--sign-with $(PYPI_SIGN) --username $(PYPI_USER) \
 			--repository-url $$url $(MTARG_PYDIST_ATFC)/* ; \
 	done
+
+# create wheel and its dependencies
+.PHONY:	pywheel
+pywheel:$(MTARG_WHEEL_DIR)
+$(MTARG_WHEEL_DIR):	$(MTARG_PYDIST_ATFC)
+	mkdir -p $(MTARG_WHEEL_DIR)
+	$(PIP_BIN) wheel --wheel-dir=$(MTARG_WHEEL_DIR) $(MTARG_PYDIST_ATFC)/*.whl
 
 # uninstall locally
 .PHONY:	pyuninstall
