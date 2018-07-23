@@ -18,10 +18,10 @@ PY_CACHE +=		$(shell find $(PY_SRC) $(PY_SRC_TEST) -type d -name __pycache__)
 PY_RESOURCES +=		resource
 
 # target
-MTARG_PYDIST_DIR=	$(MTARG)/pydist
-MTARG_PYDIST_BDIR=	$(MTARG_PYDIST_DIR)/build
+MTARG_PYDIST_DIR ?=	$(MTARG)/pydist
+MTARG_PYDIST_BDIR ?=	$(MTARG_PYDIST_DIR)/build
 MTARG_PYDIST_RES ?=	$(MTARG_PYDIST_BDIR)/resources
-MTARG_PYDIST_ATFC=	$(MTARG_PYDIST_BDIR)/dist
+MTARG_PYDIST_ATFC ?=	$(MTARG_PYDIST_BDIR)/dist
 
 # deploy
 PYPI_TEST_URL ?=	https://test.pypi.org/legacy/
