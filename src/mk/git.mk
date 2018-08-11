@@ -1,6 +1,12 @@
-# git
+## git functionality
+
+# see bin/py-install-setup.sh
+GTAGUTIL ?=	gittag
+# default git rmeote
 GITREMOTE ?=	github
+# default project (todo move to gittag)
 GITPROJ ?=	$(shell git remote -v | grep $(GITREMOTE) | grep push | sed -e 's:^.*/\(.*\) (push):\1:' -e 's:.git$$::')
+# default git user (todo move to gittag)
 GITUSER ?=	$(shell git remote -v | grep $(GITREMOTE) | grep push | sed 's/.*\/\(.*\)\/.*/\1/')
 
 #GITVER_LAST_TAG=	$(shell git tag -l | sort -V | tail -1 | sed 's/.//')

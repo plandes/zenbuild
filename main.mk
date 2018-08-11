@@ -11,7 +11,6 @@ BUILD_MK_DIR :=		$(BUILD_SRC_DIR)/mk
 PROJ_MKS =		$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_MODULES) clean git))
 
 # executables
-GTAGUTIL=		$(BUILD_BIN_DIR)/gtagutil
 AWSENV=			$(BUILD_BIN_DIR)/awsenv
 
 # build defaults
