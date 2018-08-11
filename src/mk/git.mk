@@ -35,7 +35,7 @@ gitreinit:
 
 .PHONY: gittag
 gittag:
-	$(GTAGUTIL) create
+	$(GTAGUTIL) create || echo "gittag installed? see bin/py-install-setup.sh"
 
 .PHONY: forcetag
 forcetag:
