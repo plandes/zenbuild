@@ -1,7 +1,7 @@
 ## git functionality
 
 # see bin/py-install-setup.sh
-GTAGUTIL ?=	gittag
+GTAGUTIL ?=	zenpybuild
 # default git rmeote
 GITREMOTE ?=	github
 # default project (todo move to gittag)
