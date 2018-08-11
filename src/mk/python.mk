@@ -47,7 +47,7 @@ pythoninfo:
 	@echo "clean: $(ADD_CLEAN)"
 
 $(MTARG_PYDIST_BDIR):
-	@echo "building egg in $(MTARG_PYDIST_BDIR)"
+	@echo "building dist in $(MTARG_PYDIST_BDIR)"
 	mkdir -p $(MTARG_PYDIST_BDIR)
 	cp -r $(PY_SRC)/* $(MTARG_PYDIST_BDIR)
 	@for i in $(PY_RESOURCES) ; do \
