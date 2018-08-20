@@ -59,6 +59,7 @@ $(MTARG_PYDIST_BDIR):
 	done
 	[ -f README.md ] && cp README.md $(MTARG_PYDIST_BDIR) || true
 	[ -f LICENSE ] && cp LICENSE $(MTARG_PYDIST_BDIR)/LICENSE.txt || true
+	find $(MTARG_PYDIST_BDIR) -name \*_flymake.py -exec rm {} \;
 
 # install deps
 .PHONY:	pydeps
