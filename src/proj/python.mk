@@ -6,6 +6,9 @@ include $(BUILD_MK_DIR)/python.mk
 .PHONY:	run
 run:		pyrun
 
+.PHONY:	help
+help:		pyhelp
+
 .PHONY:	test
 test:		pytest
 

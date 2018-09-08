@@ -82,6 +82,11 @@ pyrun:
 		PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) $$i $(PYTHON_BIN_ARGS) ; \
 	done
 
+# display the command line help usage
+.PHONY:	pyhelp
+pyhelp:
+	make PYTHON_BIN_ARGS='--help' pyrun
+
 # package by creating the egg and wheel distribution binaries
 .PHONY:	pypackage
 pypackage:	$(MTARG_PYDIST_ATFC)
