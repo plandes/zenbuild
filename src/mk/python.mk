@@ -15,6 +15,7 @@ PY_SRC_TEST ?=		test/python
 PY_SRC_TEST_FILTER ?=	$(wildcard $(PY_SRC_TEST)/*_flymake.py)
 PY_SRC_TEST_PKGS ?=	$(basename $(notdir $(filter-out $(PY_SRC_TEST_FILTER),$(wildcard $(PY_SRC_TEST)/*.py))))
 PY_COMPILED +=		$(shell find $(PY_SRC) -name \*.pyc -type f)
+PY_FLYMAKE +=		$(shell find $(PY_SRC) -name \*_flymake.py -type f)
 PY_CACHE +=		$(shell find $(PY_SRC) $(PY_SRC_TEST) -type d -name __pycache__)
 PY_RESOURCES +=		resource
 
@@ -33,6 +34,7 @@ PYPI_SIGN ?=		pypiuser@example.com
 
 # build
 ADD_CLEAN +=		$(PY_COMPILED) $(PY_CACHE)
+ADD_CLEAN_ALL +=	$(PY_FLYMAKE)
 INFO_TARGETS +=		pythoninfo
 
 
