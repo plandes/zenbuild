@@ -15,8 +15,9 @@
   \usecolortheme{seahorse}}
 
 % academic
+\providecommand{\zsaddlogosize}{1cm}
 \newcommand{\zsaddlogo}{%
-\logo{\includegraphics[height=1cm]{\theuniversitylogo}}}
+\logo{\includegraphics[height=\zsaddlogosize]{\theuniversitylogo}}}
 
 \newcommand{\zsaddsepcolors}{%
 \setbeamercolor{title separator}{fg=blue}}
@@ -54,6 +55,10 @@
   \end{beamercolorbox}}%
   \vskip0pt%
 }
+
+%% config
+% no navigation
+\setbeamertemplate{navigation symbols}{}
 
 %% references frame command
 \newcommand{\zsrefframe}{%
