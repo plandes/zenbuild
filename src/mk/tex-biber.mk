@@ -9,3 +9,7 @@ $(BBL_FILE):	$(BIB_FILE)
 		( cd $(MTARG) ; $(LATEX_BIN) $(TEX).tex $(QUIET) )
 		@echo "running labibtex..."
 		( cd $(MTARG) ; $(BIBER) $(TEX) $(QUIET) )
+
+.PHONY:		cleanbib
+cleanbib:
+		sed -i '/^\s*urldate.*/d' $(BIB_FILE)
