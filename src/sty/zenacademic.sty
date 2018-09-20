@@ -28,6 +28,7 @@
   \title{\doctitle}
   \date{}}
 
+% full title single author
 \newcommand{\zssingletitledeffull}{%
   \author{%
     \theauthor\\
@@ -71,15 +72,13 @@
     #3\\
     #4\\
     #5}
-  \author[\theauthor]{\theauthor\inst{1} {\tt \theauthoremail}}
-  \author[#1]{#1 {\tt #2}}
+  \author{\theauthor\inst{1} {\tt \theauthoremail}\\
+    \and
+    #1\inst{2} {\tt #2}}
   \title[\doctitle]{\doclongtitle}
   \date{}}
 
 %\subtitle{A short story}
-
-%% -- cite
-\newcommand{\ci}[1]{\cite{#1}}
 
 % full URL cite
 \newcommand{\zzurlci}[2]{\href{#1}{#2}\footnote{\url{#1}}}
