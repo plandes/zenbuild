@@ -5,6 +5,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenacademic}[5/06/2018 Academic]
 
+% single author name, email
 \newcommand{\zssingletitledef}{%
   \author{%
     \theauthor \\
@@ -13,68 +14,54 @@
     {\normalfont \doctype}}
   \date{}}
 
-\newcommand{\zstwotitlesameinstacl}[2]{%
-  \author{\theauthor\\
-    \theuniversitydept\\
-    \theuniversity\\
-    \theuniversityaddress\\
-    {\tt \theauthoremail}
-    \And
-    #1\\
-    \theuniversitydept\\
-    \theuniversity\\
-    \theuniversityaddress\\
-    {\tt #2}}
-  \title{\doctitle}
-  \date{}}
-
 % full title single author
 \newcommand{\zssingletitledeffull}{%
   \author{%
     \theauthor\\
-    \theuniversity\\
-    \theuniversitydept\\
-    \theuniversityaddress\\
+    \theorganization\\
+    \theorganizationdept\\
+    \theorganizationaddress\\
     Email: {\tt \theauthoremail}}
   \title{\doclongtitle}
   \date{}}
 
+% dual author name, email, organization, department, address
 \newcommand{\zstwotitledef}[2]{%
-  \institute[\theuniversityshort]{%
+  \institute[\theorganizationshort]{%
     \inst{1}%
-    \theuniversity\\
-    \theuniversitydept\\
-    \theuniversityaddress}
+    \theorganization\\
+    \theorganizationdept\\
+    \theorganizationaddress}
   \author[\theauthor]{\theauthor~({\tt \theauthoremail})\inst{1}\\
   \and #1~({\tt #2})\inst{1}}
   \title[\doctitle]{\doclongtitle}
   \date{}}
 
 \newcommand{\zstwotitledefnoemail}[1]{%
-  \institute[\theuniversityshort]{%
+  \institute[\theorganizationshort]{%
     \inst{1}%
-    \theuniversity\\
-    \theuniversitydept\\
-    \theuniversityaddress}
+    \theorganization\\
+    \theorganizationdept\\
+    \theorganizationaddress}
   \author[\theauthor]{\theauthor\inst{1}\\
   \and #1\inst{1}}
   \title[\doctitle]{\doclongtitle}
   \date{}}
 
 \newcommand{\zstwotitleinstdef}[5]{%
-  \institute[\theuniversityshort]{%
+  \institute[\theorganizationshort]{%
     \inst{1}%
-    \theuniversity\\
-    \theuniversitydept\\
-    \theuniversityaddress
+    \theorganization\\
+    \theorganizationdept\\
+    \theorganizationaddress
     \and
     \inst{2}%
     #3\\
     #4\\
     #5}
-  \author{\theauthor\inst{1} {\tt \theauthoremail}\\
+  \author{\theauthor\ ({\tt \theauthoremail})\inst{1}\\
     \and
-    #1\inst{2} {\tt #2}}
+    #1 ({\tt #2})\inst{2}}
   \title[\doctitle]{\doclongtitle}
   \date{}}
 
