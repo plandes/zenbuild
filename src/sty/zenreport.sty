@@ -1,0 +1,31 @@
+%%
+%% Paul Landes  2018-09-20
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zenreport}[9/20/2018 Academic]
+
+
+\usepackage{zenacademic}
+
+\newcommand{\zrreportinit}{%
+  \zssingletitledef
+  \title{{\bf \doclongtitle}\\\doctype}
+  \newcommand{\zrsec}[1]{\section*{##1}}
+  \newcommand{\zrsubsec}[1]{\subsection*{##1}}
+}
+
+\newcommand{\zrreportinitacademic}{%
+  \author{\theauthor\ (\theauthoremail)}
+  \title{\doclongtitle\\\large\doctype}
+  \makeatletter
+  \patchcmd{\@maketitle}{\LARGE \@title}{\fontsize{16}{19.2}\selectfont{\bf\@title}}{}{}
+  \makeatother
+  \newcommand{\zrsec}[1]{\subsection*{##1}}
+  \newcommand{\zrsubsec}[1]{\subsubsection*{##1}}
+}
+
+\newcommand{\zrreptitle}{%
+  \maketitle
+  \thispagestyle{empty}
+}

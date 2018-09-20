@@ -8,7 +8,7 @@
 % single author name, email
 \newcommand{\zssingletitledef}{%
   \author{%
-    \theauthor \\
+    \theauthor\\
     {\tt \theauthoremail}}
   \title{{\bf \doclongtitle} \\
     {\normalfont \doctype}}
@@ -66,6 +66,11 @@
   \date{}}
 
 %\subtitle{A short story}
+
+%% biblatex
+\newcommand{\zzaddbiblatexstyle}[2]{%
+  \usepackage[style=#1,backend=biber]{biblatex}
+  \addbibresource{#2}}
 
 % full URL cite
 \newcommand{\zzurlci}[2]{\href{#1}{#2}\footnote{\url{#1}}}
