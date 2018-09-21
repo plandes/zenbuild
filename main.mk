@@ -24,6 +24,7 @@ all:			info
 include $(BUILD_SRC_DIR)/proj/$(PROJ_TYPE).mk
 include $(PROJ_MKS)
 
+## print build information
 .PHONY:	info
 info:	$(INFO_TARGETS)
 	@echo "project-modules: $(PROJ_MODULES)"
