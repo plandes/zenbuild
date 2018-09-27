@@ -9,8 +9,6 @@ OM_HTML_DIR ?=		$(OM_DOC_DIR)/html
 # export function for output formt
 OM_EXPORT_FUNC_HTML ?=	org-html-export-to-html
 OM_EXPORT_EVAL ?=	"t"
-#OM_EXPORT_FUNC_HTML ?=	org-twbs-export-as-html
-#OM_EXPORT_EVAL ?=	"(require 'ox-twbs)"
 OM_EXPORT_FUNCS +=	$(OM_EXPORT_FUNC_HTML)
 
 # org files
