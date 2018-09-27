@@ -1,4 +1,5 @@
-## default project contains nothing
-.PHONY: info
-info:	envinfo
-	@echo "you haven't specified a project type"
+## default none make project
+## created 9/26/2018
+#
+# place holder for no project make setup
+# useful for when only make modules are wanted

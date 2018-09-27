@@ -1,5 +1,5 @@
-# Latex document creation make file
-# Created: 01/27/2011
+# latex document creation make file
+# created: 01/27/2011
 
 ## top level paths
 #TEXLIBDIR ?=	$(BUILD_HOME_DIR)/lib
