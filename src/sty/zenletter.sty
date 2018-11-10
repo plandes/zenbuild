@@ -79,18 +79,27 @@
 \advance\indentedwidth -\longindentation
 %-cm
 
-\newcommand{\zlinfo}[5]{%
+\newcommand{\zlinitpersonal}[4]{%
+\name{#1}%
+\newcommand{\zladdress}{#2}
+\newcommand{\zlphone}{#3}
+\newcommand{\zlemail}{#4}
+\def\fromaddress{\fromname\\
+\zladdress\\
+\zlphone\\
+\zlemail}}
+
+\newcommand{\zlinitorg}[5]{%
 \name{#1}%
 \newcommand{\zlorganization}{#2}
 \newcommand{\zladdress}{#3}
 \newcommand{\zlphone}{#4}
 \newcommand{\zlemail}{#5}
-}
-
 \def\fromaddress{\fromname\\
+\zlorganization\\
 \zladdress\\
 \zlphone\\
-\zlemail}
+\zlemail}}
 
 \def\ps@headings{\def\@oddhead{\rm To \ignorespaces\toname \hfil \today
     \hfil Page \thepage}\def\@oddfoot{}}
