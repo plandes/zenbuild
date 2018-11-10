@@ -79,25 +79,32 @@
 \advance\indentedwidth -\longindentation
 %-cm
 
-\newcommand{\zlinitpersonal}[4]{%
+\newcommand{\zlinitpersonal}[7]{%
 \name{#1}%
 \newcommand{\zladdress}{#2}
-\newcommand{\zlphone}{#3}
-\newcommand{\zlemail}{#4}
+\newcommand{\zlcity}{#3}
+\newcommand{\zlstate}{#4}
+\newcommand{\zlzip}{#5}
+\newcommand{\zlphone}{#6}
+\newcommand{\zlemail}{#7}
 \def\fromaddress{\fromname\\
 \zladdress\\
+\zlcity, \zlstate. \zlzip\\
 \zlphone\\
 \zlemail}}
 
-\newcommand{\zlinitorg}[5]{%
+\newcommand{\zlinitorg}[8]{%
 \name{#1}%
 \newcommand{\zlorganization}{#2}
 \newcommand{\zladdress}{#3}
-\newcommand{\zlphone}{#4}
-\newcommand{\zlemail}{#5}
+\newcommand{\zlcity}{#4}
+\newcommand{\zlstate}{#5}
+\newcommand{\zlzip}{#6}
+\newcommand{\zlphone}{#7}
+\newcommand{\zlemail}{#8}
 \def\fromaddress{\fromname\\
 \zlorganization\\
-\zladdress\\
+\zlcity, \zlstate. \zlzip\\
 \zlphone\\
 \zlemail}}
 
