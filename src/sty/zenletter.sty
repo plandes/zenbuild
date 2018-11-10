@@ -79,19 +79,17 @@
 \advance\indentedwidth -\longindentation
 %-cm
 
-\newcommand{\zlinfo}[7]{%
+\newcommand{\zlinfo}[6]{%
 \name{#1}%
 \newcommand{\zlorganization}{#2}
 \newcommand{\zlstreet}{#3}
-\newcommand{\zlcity}{#4}
-\newcommand{\zlstate}{#5}
-\newcommand{\zlzip}{#6}
-\newcommand{\zlphone}{#7}
-\newcommand{\zlemail}{#8}
+\newcommand{\zladdress}{#4}
+\newcommand{\zlphone}{#5}
+\newcommand{\zlemail}{#6}
 }
 
-\def\fromaddress{\fromname \\
-\zlcity, \zlstate. \zlzip \\
+\def\fromaddress{\fromname\\
+\zladdress\\
 \zlphone\\
 \zlemail}
 
