@@ -1,0 +1,110 @@
+%%% zsletter.sty - Stanford letterhead style (for letter class)
+%%  1995/10/23 - Convert to LaTeX2e, add Stanford logo
+%% 1999/11/29 - modified to make more general (Emma Pease)
+%% 2000/03/18 - added black and white logo option bw-logo (Christoper Manning)
+%% 2000/09/01 - put in no-logo and britdate options (Christopher Manning)
+
+% What the user can define:
+% \zipcode{zipcode}  only define if not in 94305
+% \address{855 Serra Street\\ Stanford University\\ Stanford, CA 94305-4115}
+%  \address supercedes \location, \department, and \telephone
+% \location{Room 374}  acts as a modifier to the Standard Institutional address
+% \department{Department of XXX}  department name
+% \telephone{phone number}  default is Stanford Directory Infor
+% \name{Sender's name}  required
+
+% Class options:
+% color-logo: print the logo in color
+% bw-logo: print the logo in black and white, not color
+% no-logo: include no logo nor ``Stanford University'' text -- for printing
+%               on real letterhead
+% addressright: Place your address indented to right with date, not on
+%               the left margin
+% britdate: format the address day month year, not month day, year
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zenletter}[2005/03/25 Business letterhead]
+\RequirePackage[dvips]{graphicx}
+
+\def\logo{                      %create Logo and from address
+\null\vspace{-60pt}\begingroup
+%\centerline{\sulogo}
+%\sulogo
+%\vspace{10pt}
+%\centerline{\large\bf \zlcompany}
+%\centerline{\small\rm \zlcity, \zlstate. \zlzip}
+\endgroup\par}
+
+\def\completeaddress{\hspace*{\longindentation}
+\parbox{\indentedwidth}{\raggedright {\rm%
+                   \fromaddress}\\[2ex]
+                   \mbox{\@date}}}
+
+% this does left flush address but leaves the date out there
+%\def\completeaddress{\hbox{\vtop{\hsize=.6\textwidth\small\rm%
+%                   \fromaddress}}\hfill
+%                   \hbox{\@date}}
+
+\newcommand{\largebwlogo}{\includegraphics[height=1.7in]{large-bw.eps}}
+\newcommand{\largecolorlogo}{\includegraphics[height=1.7in]{large-color.eps}}
+
+% default logo if no option given
+\def\sulogo{\largebwlogo}
+
+%+cm
+\DeclareOption{colorlogo}{\def\sulogo{\largecolorlogo}}
+\DeclareOption{blackwhitelogo}{\def\sulogo{\largebwlogo}}
+\DeclareOption{nologo}{\def\sulogo{}}
+\DeclareOption{britdate}{\renewcommand*{\today}{\number\day\space
+   \ifcase\month\or
+   January\or February\or March\or April\or May\or June\or
+   July\or August\or September\or October\or November\or December\fi
+   \space\number\year}}
+
+\ProcessOptions
+
+%% customization for letter format
+\setlength\textwidth{6in}
+%\setlength\textheight{8in}
+\setlength\oddsidemargin{0.25in} % LaTeX adds a default 1in to this!
+\setlength\evensidemargin{0.25in}
+%\setlength\topmargin{.5in} % LaTeX adds a default 1in to this!
+%\setlength\headsep{0in}
+%\setlength\headheight{0in}
+\setlength\footskip{1in}
+
+% increase the indent for right stuff a little to 55%
+\longindentation=.55\textwidth
+\indentedwidth=\textwidth
+\advance\indentedwidth -\longindentation
+%-cm
+
+\newcommand{\zlinfo}[7]{%
+\name{#1}%
+\newcommand{\zlassumedname}{#1}
+\newcommand{\zlstreet}{#2}
+\newcommand{\zlcity}{#3}
+\newcommand{\zlstate}{#4}
+\newcommand{\zlzip}{#5}
+\newcommand{\zlphone}{#6}
+\newcommand{\zlemail}{#7}
+}
+
+\def\fromaddress{\fromname \\
+\zlcity, \zlstate. \zlzip \\
+\zlphone\\
+\zlemail}
+
+\def\ps@headings{\def\@oddhead{\rm To \ignorespaces\toname \hfil \today
+    \hfil Page \thepage}\def\@oddfoot{}}
+
+\def\@texttop{\vskip 0pt}
+
+\def\opening#1{\logo            %Create all up to start of text
+\vspace{10pt}
+\completeaddress\par
+\thispagestyle{empty} 
+\vspace{\parskip}
+{\raggedright \toname \\ \toaddress \par}%
+\vspace{1.25\parskip}%
+#1\par\nobreak}
