@@ -17,7 +17,7 @@ PY_SRC_TEST_PKGS ?=	$(basename $(notdir $(filter-out $(PY_SRC_TEST_FILTER),$(wil
 PY_COMPILED +=		$(shell find $(PY_SRC) -name \*.pyc -type f)
 PY_FLYMAKE +=		$(shell find $(PY_SRC) -name \*_flymake.py -type f)
 PY_CACHE +=		$(shell find $(PY_SRC) $(PY_SRC_TEST) -type d -name __pycache__)
-PY_RESOURCES +=		resource
+PY_RESOURCES +=		resources
 
 # target
 MTARG_PYDIST_DIR ?=	$(MTARG)/pydist
@@ -46,6 +46,7 @@ pythoninfo:
 	@echo "py-test: $(PY_SRC_TEST)"
 	@echo "py-test-pkgs: $(PY_SRC_TEST_PKGS)"
 	@echo "py-dist-atfc: $(MTARG_PYDIST_ATFC)"
+	@echo "py-dist-res: $(MTARG_PYDIST_RES)"
 	@echo "clean: $(ADD_CLEAN)"
 
 $(MTARG_PYDIST_BDIR):
@@ -55,7 +56,7 @@ $(MTARG_PYDIST_BDIR):
 	@for i in $(PY_RESOURCES) ; do \
 		if [ -e $$i ] ; then \
 			mkdir -p $(MTARG_PYDIST_RES) ; \
-			echo "copying $$i -> $(MTARG_PYDIST_RES)" ; \
+			echo "copying resource $$i -> $(MTARG_PYDIST_RES)" ; \
 			cp -r $$i $(MTARG_PYDIST_RES) ; \
 		fi ; \
 	done
