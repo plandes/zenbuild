@@ -1,35 +1,61 @@
-%%% zsletter.sty - Stanford letterhead style (for letter class)
+%%% zenletter.sty - Stanford letterhead style (for letter class)
+%% taken from https://nlp.stanford.edu/manning/tex/
+%% and more specifically: https://nlp.stanford.edu/manning/tex/suletter.zip
 %%  1995/10/23 - Convert to LaTeX2e, add Stanford logo
 %% 1999/11/29 - modified to make more general (Emma Pease)
 %% 2000/03/18 - added black and white logo option bw-logo (Christoper Manning)
 %% 2000/09/01 - put in no-logo and britdate options (Christopher Manning)
-
-% What the user can define:
-% \zipcode{zipcode}  only define if not in 94305
-% \address{855 Serra Street\\ Stanford University\\ Stanford, CA 94305-4115}
-%  \address supercedes \location, \department, and \telephone
-% \location{Room 374}  acts as a modifier to the Standard Institutional address
-% \department{Department of XXX}  department name
-% \telephone{phone number}  default is Stanford Directory Infor
-% \name{Sender's name}  required
-
-% Class options:
-% color-logo: print the logo in color
-% bw-logo: print the logo in black and white, not color
-% no-logo: include no logo nor ``Stanford University'' text -- for printing
-%               on real letterhead
-% addressright: Place your address indented to right with date, not on
-%               the left margin
-% britdate: format the address day month year, not month day, year
+%% 2018/11/27 - simply and add signature (Paul Landes)
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenletter}[2005/03/25 Business letterhead]
+\RequirePackage{kvoptions}
 \RequirePackage{graphicx}
 
-% create Logo and from address
-\def\logo{
-\null\vspace{-60pt}\begingroup
-\centerline{\sulogo}
+\DeclareStringOption[]{logo}[large-color]
+\DeclareStringOption[1.5in]{logosize}[default-size]
+\DeclareBoolOption{header}
+\DeclareStringOption[]{signature}[signature]
+\DeclareStringOption[1.4in]{signaturewidth}[default-size]
+\ProcessKeyvalOptions*
+
+\ifx\zenletter@logo\@empty
+  \providecommand{\zllogo}{}
+\else
+  \providecommand{\zllogo}{%
+    \includegraphics[height=\zenletter@logosize]{\zenletter@logo.eps}}
+\fi
+
+\ifzenletter@header
+  \providecommand{\zlheadline}{%
+    \vspace{-20pt}
+    \centerline{\large\bf \MakeUppercase \zlorganization}
+    \centerline{\small\rm \MakeUppercase \zlcity, \zlstate}
+    \vspace{20pt}}
+\else
+  \providecommand{\zlheadline}{}
+\fi
+
+\ifx\zenletter@signature\@empty
+  \newcommand{\zlclosing}[1]{\closing{#1}}
+\else
+  \newcommand{\zlclosing}[1]{\par\nobreak\vspace{\parskip}%
+     \noindent
+     \ifx\@empty\fromaddress\else
+     \hspace*{\longindentation}\fi
+     \parbox{\indentedwidth}{\raggedright
+          \ignorespaces #1\\%
+          \includegraphics[width=\zenletter@signaturewidth]%
+              {\zenletter@signature.eps}\\
+          \fromname
+          \strut}%
+   \par}
+\fi
+
+\def\logo{                      %create Logo and from address
+\null\vspace{-80pt}\begingroup
+\centerline{\zllogo}
+\zlheadline
 \endgroup\par}
 
 \def\completeaddress{\hspace*{\longindentation}
@@ -37,32 +63,10 @@
                    \fromaddress}\\[2ex]
                    \mbox{\@date}}}
 
-\newcommand{\largebwlogo}{\includegraphics[height=1.7in]{large-bw.eps}}
-\newcommand{\largecolorlogo}{\includegraphics[height=1.7in]{large-color.eps}}
-
-% default logo if no option given
-\def\sulogo{}
-
-%+cm
-\DeclareOption{colorlogo}{\def\sulogo{\largecolorlogo}}
-\DeclareOption{blackwhitelogo}{\def\sulogo{\largebwlogo}}
-\DeclareOption{nologo}{\def\sulogo{}}
-\DeclareOption{britdate}{\renewcommand*{\today}{\number\day\space
-   \ifcase\month\or
-   January\or February\or March\or April\or May\or June\or
-   July\or August\or September\or October\or November\or December\fi
-   \space\number\year}}
-
-\ProcessOptions
-
 %% customization for letter format
 \setlength\textwidth{6in}
-%\setlength\textheight{8in}
 \setlength\oddsidemargin{0.25in} % LaTeX adds a default 1in to this!
 \setlength\evensidemargin{0.25in}
-%\setlength\topmargin{.5in} % LaTeX adds a default 1in to this!
-%\setlength\headsep{0in}
-%\setlength\headheight{0in}
 \setlength\footskip{1in}
 
 % increase the indent for right stuff a little to 55%
@@ -117,15 +121,3 @@
 \zlcity, \zlstate. \zlzip\\
 \zlphone\\
 \zlemail}}
-
-% replaces \closing with a graphic signature
-\newcommand{\zlsignclosing}[3]{\par\nobreak\vspace{\parskip}%
-  \noindent
-  \ifx\@empty\fromaddress\else
-  \hspace*{\longindentation}\fi
-  \parbox{\indentedwidth}{\raggedright
-       \ignorespaces #1\\%
-       \includegraphics[width=#2]{#3.eps}\\
-       \fromname
-       \strut}%
-\par}
