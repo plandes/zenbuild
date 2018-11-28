@@ -24,15 +24,12 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenletter}[2005/03/25 Business letterhead]
-\RequirePackage[dvips]{graphicx}
+\RequirePackage{graphicx}
 
-\def\logo{                      %create Logo and from address
+% create Logo and from address
+\def\logo{
 \null\vspace{-60pt}\begingroup
-%\centerline{\sulogo}
-%\sulogo
-%\vspace{10pt}
-%\centerline{\large\bf \zlcompany}
-%\centerline{\small\rm \zlcity, \zlstate. \zlzip}
+\centerline{\sulogo}
 \endgroup\par}
 
 \def\completeaddress{\hspace*{\longindentation}
@@ -40,16 +37,11 @@
                    \fromaddress}\\[2ex]
                    \mbox{\@date}}}
 
-% this does left flush address but leaves the date out there
-%\def\completeaddress{\hbox{\vtop{\hsize=.6\textwidth\small\rm%
-%                   \fromaddress}}\hfill
-%                   \hbox{\@date}}
-
 \newcommand{\largebwlogo}{\includegraphics[height=1.7in]{large-bw.eps}}
 \newcommand{\largecolorlogo}{\includegraphics[height=1.7in]{large-color.eps}}
 
 % default logo if no option given
-\def\sulogo{\largebwlogo}
+\def\sulogo{}
 
 %+cm
 \DeclareOption{colorlogo}{\def\sulogo{\largecolorlogo}}
@@ -79,6 +71,23 @@
 \advance\indentedwidth -\longindentation
 %-cm
 
+\def\ps@headings{\def\@oddhead{\rm To \ignorespaces\toname \hfil \today
+    \hfil Page \thepage}\def\@oddfoot{}}
+
+\def\@texttop{\vskip 0pt}
+
+\def\opening#1{\logo            %Create all up to start of text
+\vspace{10pt}
+\completeaddress\par
+\thispagestyle{empty} 
+\vspace{\parskip}
+{\raggedright \toname \\ \toaddress \par}%
+\vspace{1.25\parskip}%
+#1\par\nobreak}
+
+
+%% commands
+% personal letter
 \newcommand{\zlinitpersonal}[7]{%
 \name{#1}%
 \newcommand{\zladdress}{#2}
@@ -93,6 +102,7 @@
 \zlphone\\
 \zlemail}}
 
+% business letter initialization
 \newcommand{\zlinitorg}[8]{%
 \name{#1}%
 \newcommand{\zlorganization}{#2}
@@ -108,16 +118,14 @@
 \zlphone\\
 \zlemail}}
 
-\def\ps@headings{\def\@oddhead{\rm To \ignorespaces\toname \hfil \today
-    \hfil Page \thepage}\def\@oddfoot{}}
-
-\def\@texttop{\vskip 0pt}
-
-\def\opening#1{\logo            %Create all up to start of text
-\vspace{10pt}
-\completeaddress\par
-\thispagestyle{empty} 
-\vspace{\parskip}
-{\raggedright \toname \\ \toaddress \par}%
-\vspace{1.25\parskip}%
-#1\par\nobreak}
+% replaces \closing with a graphic signature
+\newcommand{\zlsignclosing}[3]{\par\nobreak\vspace{\parskip}%
+  \noindent
+  \ifx\@empty\fromaddress\else
+  \hspace*{\longindentation}\fi
+  \parbox{\indentedwidth}{\raggedright
+       \ignorespaces #1\\%
+       \includegraphics[width=#2]{#3.eps}\\
+       \fromname
+       \strut}%
+\par}
