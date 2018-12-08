@@ -43,3 +43,8 @@ $(OM_HTML_DIR):
 
 $(OM_HTML_DIR)/%.html:	%.html
 			$(OM_INSTALL) -v -m 644 -t $(OM_HTML_DIR) $<
+
+# utility
+.PHONY:			orgmode-show
+orgmode-show:		orgmode-install-doc
+			open $(OM_HTML_DIR)/*
