@@ -2,8 +2,9 @@
 ## PL 12/08/2018
 
 # binaries
-OM_EMACS_BIN=		emacs
-OM_INSTALL=		install
+OM_EMACS_BIN ?=		emacs
+OM_ORG_SWITCHES +=	--no-window-system
+OM_INSTALL ?=		install
 
 # build config
 OM_DOC_DIR ?=		$(MTARG)/doc
@@ -41,7 +42,8 @@ $(OM_HTML_DIR):
 
 %.html: %.org
 			@for f in $(OM_EXPORT_FUNCS) ; do \
-		        	$(OM_EMACS_BIN) $< --batch --eval $(OM_EXPORT_EVAL) -f $$f --kill ; \
+		        	echo $(OM_EMACS_BIN) $< $(OM_EMACS_SWITCHES) --batch --eval $(OM_EXPORT_EVAL) -f $$f --kill ; \
+		        	$(OM_EMACS_BIN) $< $(OM_EMACS_SWITCHES) --batch --eval $(OM_EXPORT_EVAL) -f $$f --kill ; \
 			done
 
 $(OM_HTML_DIR)/%.html:	%.html
