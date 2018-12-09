@@ -15,7 +15,8 @@ OM_EXPORT_EVAL ?=	"t"
 OM_EXPORT_FUNCS +=	$(OM_EXPORT_FUNC_HTML)
 
 # org files
-OM_HTML_FILES ?=	$(patsubst %.org,$(OM_HTML_DIR)/%.html,$(wildcard *.org))
+OM_ORG_FILES +=		$(wildcard *.org)
+OM_HTML_FILES ?=	$(patsubst %.org,$(OM_HTML_DIR)/%.html,$(OM_ORG_FILES))
 
 # module config
 INFO_TARGETS +=		orgmodeinfo
