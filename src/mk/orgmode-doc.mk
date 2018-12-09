@@ -34,12 +34,13 @@ orgmodeinfo:
 
 # install documentation
 .PHONY:			orgmode-html
-orgmode-html:	$(OM_HTML_DIR) $(OM_HTML_FILES)	$(ADD_OM_DEPS)
+orgmode-html:		$(OM_HTML_DIR) $(OM_HTML_FILES)	$(ADD_OM_DEPS)
 
 # create the HTML documetnation dir
 $(OM_HTML_DIR):
 	        	mkdir -v -p $(OM_HTML_DIR)
 
+# use emacs org html export to genereate the files
 %.html: %.org
 			@for f in $(OM_EXPORT_FUNCS) ; do \
 		        	echo $(OM_EMACS_BIN) $< $(OM_EMACS_SWITCHES) --batch --eval $(OM_EXPORT_EVAL) -f $$f --kill ; \
@@ -49,7 +50,9 @@ $(OM_HTML_DIR):
 $(OM_HTML_DIR)/%.html:	%.html
 			$(OM_INSTALL) -v -m 644 -t $(OM_HTML_DIR) $<
 
-# utility
+# generate the HTML and browse to the file
 .PHONY:			orgmode-show
 orgmode-show:		orgmode-html
-			open $(OM_HTML_DIR)/*
+			@for i in $(OM_HTML_DIR)/* ; do \
+				open $$i ; \
+			done

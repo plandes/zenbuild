@@ -1,21 +1,30 @@
 ## makefile automates org mode files/documents
 
+# tell org mode where to generate HTML files
+OM_HTML_DIR ?=		$(MTARG)/site
+# tell content module to use org mode module to generate HTML files
 CNT_DEP_TARGS +=	orgmode-html
-CNT_SRC_DIR ?=		$(OM_HTML_DIR)/
+# the source repository directory that has content to copy to the site
+CNT_SITE_DIR ?=		./content
+# content staging directory where all files copied before deploy
+CNT_STAGE_DIR ?=	$(OM_HTML_DIR)/
 
-## includes
+## include org mode and content modules
 include $(BUILD_MK_DIR)/orgmode-doc.mk
 include $(BUILD_MK_DIR)/content.mk
 
 
-.PHONY:			doc
-doc:			orgmode-install-doc
+# package files in staging directory that has the generate site
+.PHONY:			package
+package:		cntsite
 
+# make the site and direct a browser to it
 .PHONY:			show
-show:			orgmode-show
+show:			cntsite orgmode-show
+
+# deploy and direct a browser to the deployed site
+.PHONY:			run
+run:			cntrun
 
 .PHONY:			deploy
 deploy:			cntdeploy
-
-.PHONY:			run
-run:			cntrun
