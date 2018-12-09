@@ -18,13 +18,14 @@ include $(BUILD_MK_DIR)/content.mk
 .PHONY:			package
 package:		cntsite
 
-# make the site and direct a browser to it
+# make the locally site and direct a browser to it
 .PHONY:			show
-show:			cntsite orgmode-show
+show:			orgmode-show
+
+# deploy the site to the webserver
+.PHONY:			deploy
+deploy:			cntdeploy
 
 # deploy and direct a browser to the deployed site
 .PHONY:			run
 run:			cntrun
-
-.PHONY:			deploy
-deploy:			cntdeploy
