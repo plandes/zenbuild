@@ -3,7 +3,7 @@
 
 CNT_DOC_URL ?=		https://example.com/webdavroot
 CNT_SRC_DIR ?=		$(MTARG)
-CNT_INST_DIR ?=		/tmp/some/install/path
+CNT_INST_DIR ?=		
 CNT_DEP_TARGS +=
 CNT_DEPLOY_URL ?=	https://example.com/site/index.html
 
@@ -14,6 +14,10 @@ cntmount:
 
 .PHONY:			cntdeploy
 cntdeploy:		cntmount $(CNT_DEP_TARGS)
+			@if [ -z "$(CNT_INST_DIR)" ] ; then \
+				echo "no install directory defined" ; \
+				exit 1 ; \
+			fi
 			rsync -rltpgoDuv --delete $(CNT_SRC_DIR) $(CNT_INST_DIR) || true
 
 .PHONY:			cntdeploydry
