@@ -1,9 +1,12 @@
+## make include file for Emacs Org projects
+## PL 12/08/2018
+
 # binaries
 OM_EMACS_BIN=		emacs
 OM_INSTALL=		install
 
 # build config
-OM_DOC_DIR ?=		doc
+OM_DOC_DIR ?=		$(MTARG)/doc
 OM_HTML_DIR ?=		$(OM_DOC_DIR)/html
 
 # export function for output formt
@@ -16,7 +19,6 @@ OM_HTML_FILES ?=	$(patsubst %.org,$(OM_HTML_DIR)/%.html,$(wildcard *.org))
 
 # module config
 INFO_TARGETS +=		orgmodeinfo
-ADD_CLEAN_ALL +=	$(OM_DOC_DIR)
 ADD_OM_DEPS +=
 
 
@@ -29,8 +31,8 @@ orgmodeinfo:
 			@echo "export-funcs: $(OM_EXPORT_FUNCS)"
 
 # install documentation
-.PHONY:			orgmode-install-doc
-orgmode-install-doc:	$(OM_HTML_DIR) $(OM_HTML_FILES)	$(ADD_OM_DEPS)
+.PHONY:			orgmode-html
+orgmode-html:	$(OM_HTML_DIR) $(OM_HTML_FILES)	$(ADD_OM_DEPS)
 
 # create the HTML documetnation dir
 $(OM_HTML_DIR):
@@ -46,5 +48,5 @@ $(OM_HTML_DIR)/%.html:	%.html
 
 # utility
 .PHONY:			orgmode-show
-orgmode-show:		orgmode-install-doc
+orgmode-show:		orgmode-html
 			open $(OM_HTML_DIR)/*

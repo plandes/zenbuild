@@ -1,15 +1,14 @@
-## make include for document creation
+## make include for github document creation
 ## PL 2018-08-04
 
 # doc
 DOC_SRC_DIR=	./doc
 # codox
 DOC_DST_DIR=	$(MTARG)/doc
-#
+# dependencies before git push
 DOC_PUSH_DEPS +=$(DOC_DST_DIR)
 
 
-### TODO: back-integrate this with the clojure make setup
 # targets
 .PHONY: 	docbuild
 docbuild:	$(DOC_DST_DIR)
