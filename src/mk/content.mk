@@ -26,10 +26,10 @@ cntinfo:
 # generate the content site by making the target dir and copying contents
 .PHONY:			cntsite
 cntsite:		$(CNT_DEP_TARGS)
-			@if [ -d "$(CNT_SITE_DIR)" ] ; then \
+			@if [ ! -d "$(CNT_STAGE_DIR)" ] ; then \
 				mkdir -pv $(CNT_STAGE_DIR) ; \
 			fi
-			cp -r $(CNT_SITE_DIR) $(CNT_STAGE_DIR)
+			cp -rRL $(CNT_SITE_DIR) $(CNT_STAGE_DIR)
 
 # mount the volume on OSX in order to copy
 .PHONY:			cntmount
