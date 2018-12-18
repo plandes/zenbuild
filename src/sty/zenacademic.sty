@@ -68,9 +68,12 @@
 %\subtitle{A short story}
 
 %% biblatex
-\newcommand{\zzaddbiblatexstyle}[2]{%
-  \usepackage[style=#1,backend=biber]{biblatex}
-  \addbibresource{#2}}
+\newcommand{\zzaddbiblatexstyle}[3]{%
+  \usepackage[style=#1,citestyle=#2,backend=biber]{biblatex}
+  \addbibresource{#3}}
 
 % full URL cite
 \newcommand{\zzurlci}[2]{\href{#1}{#2}\footnote{\url{#1}}}
+
+% inter document comments
+\newcommand{\note}[1]{{\color{red}(#1)}}
