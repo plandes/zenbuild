@@ -12,17 +12,31 @@
 \usepackage[inline]{enumitem}
 %% PL end
 
-\newenvironment{zzpackedlistlen}[4]{
-\newcommand{\zzpackedlistlenvspace}{#2}
+\newenvironment{zzpackeditemlen}[4]{
+\newcommand{\zzpackeditemlenvspace}{#2}
 \begin{itemize}[topsep=#1]
   \setlength{\itemsep}{#3}
   \setlength{\parskip}{#4}
-}{\vspace{\zzpackedlistlenvspace}
+}{\vspace{\zzpackeditemlenvspace}
 \end{itemize}}
 
-\newenvironment{zzpackedlist}{
-\begin{zzpackedlistlen}{0pt}{0pt}{2pt}{0pt}}
-{\end{zzpackedlistlen}}
+\newenvironment{zzpackeditem}{
+\begin{zzpackeditemlen}{0pt}{0pt}{2pt}{0pt}}
+{\end{zzpackeditemlen}}
+
+
+\newenvironment{zzpackedenumlen}[4]{
+\newcommand{\zzpackedenumlenvspace}{#2}
+\begin{enumerate}[topsep=#1]
+  \setlength{\itemsep}{#3}
+  \setlength{\parskip}{#4}
+}{\vspace{\zzpackedenumlenvspace}
+\end{enumerate}}
+
+\newenvironment{zzpackedenum}{
+\begin{zzpackedenumlen}{0pt}{0pt}{2pt}{0pt}}
+{\end{zzpackedenumlen}}
+
 
 \newenvironment{zzletlist}{
 \noindent
