@@ -82,9 +82,35 @@
 
 
 %% biblatex
-\newcommand{\zzaddbiblatexstyle}[3]{%
-  \usepackage[style=#1,citestyle=#2,backend=biber]{biblatex}
-  \addbibresource{#3}}
+\newcommand{\zzaddcommands}{%
+  % create new type of cite commands
+  \DeclareCiteCommand{\zzciteauthor}
+  {}
+  {\bibhyperref{\printnames{labelname}}}
+  {\multicitedelim}
+  {}
+  % ACL like short cite command
+  \DeclareCiteCommand{\zzshortcite}
+  {}
+  {\bibhyperref{\printnames{labelname} \printfield{year}}}
+  {\multicitedelim}
+  {}}
+
+\newcommand{\zzadddefbiblatexstyle}[2][numeric]{%
+  \usepackage[style=#1,citestyle=#1,backend=biber]{biblatex}
+  \addbibresource{#2}
+  \zzaddcommands}
+
+\newcommand{\zzaddbiblatexstyle}[2][numeric]{%
+  \usepackage[natbib=true,maxcitenames=1,backref,style=#1,citestyle=#1,backend=biber]{biblatex}
+  \AtEveryBibitem{
+    \clearfield{urlyear}
+    \ifentrytype{online}{}{% Remove url except for @online
+      \clearfield{url}
+    }
+  }
+  \addbibresource{#2}
+  \zzaddcommands}
 
 % full URL cite
 \newcommand{\zzurlci}[2]{\href{#1}{#2}\footnote{\url{#1}}}
