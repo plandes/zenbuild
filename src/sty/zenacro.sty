@@ -10,20 +10,30 @@
 
 % define an acronym
 % first-style = default | empty | square | short | long | reversed | footnote | sidenote | footnote-reversed|sidenote-reversed
-% ex: \zzdefnamedacro[long]{nlp}{NLP}{natural language processing}
-\newcommand{\zzdefnamedacro}[4][default]{%
+% ex: \zzdefnamedclassacro[long]{nlp}{NLP}{natural language processing}{abbrev}
+\newcommand{\zzdefnamedclassacro}[5][default]{%
 \DeclareAcronym{#2}{
   short=#3,
   long=#4,
-  first-style=#1
+  first-style=#1,
+  class=#5
 }}
+% ex: \zzdefnamedacro[long]{nlp}{NLP}{natural language processing}
+\newcommand{\zzdefnamedacro}[4][default]{%
+\zzdefnamedclassacro[#1]{#2}{#3}{#4}{abbrev}}
 
-\newcommand{\zzdefexpandacro}[4][default]{\zzdefnamedacro[#1]{#2}{#3}{#4}%
+\newcommand{\zzdefexpandclassacro}[5][default]{%
+\zzdefnamedclassacro[#1]{#2}{#3}{#4}{#5}%
 \expandafter\newcommand\csname #2\endcsname{\ac{#2}}%
 \expandafter\newcommand\csname #2s\endcsname{\acp{#2}}%
 \expandafter\newcommand\csname #2cap\endcsname{\Acl{#2}}%
 \expandafter\newcommand\csname #2scap\endcsname{\Aclp{#2}}}
 
-\newcommand{\zzdefacro}[2]{\zzdefexpandacro[long]{#1}{#2}{#2}}
+\newcommand{\zzdefexpandacro}[4][default]{%
+\zzdefexpandclassacro[#1]{#2}{#3}{#4}{abbrev}}
 
-\newcommand{\zzdefacroterm}[1]{\zzdefacro{#1}{#1}}
+\newcommand{\zzdefacro}[2]{%
+\zzdefexpandclassacro[long]{#1}{#2}{#2}{term}}
+
+\newcommand{\zzdefacroterm}[1]{%
+\zzdefexpandclassacro[long]{#1}{#1}{#1}{term}}
