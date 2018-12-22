@@ -8,7 +8,7 @@
 \usepackage{acro}
 \acsetup{first-long-format=\itshape}
 
-% define an acronymn
+% define an acronym
 % first-style = default | empty | square | short | long | reversed | footnote | sidenote | footnote-reversed|sidenote-reversed
 % ex: \zzdefnamedacro[long]{nlp}{NLP}{natural language processing}
 \newcommand{\zzdefnamedacro}[4][default]{%
@@ -18,10 +18,12 @@
   first-style=#1
 }}
 
-\newcommand{\zzdefacro}[2]{\zzdefnamedacro[long]{#1}{#2}{#2}
-\expandafter\newcommand\csname #1\endcsname{\ac{#1}}%
-\expandafter\newcommand\csname #1s\endcsname{\acp{#1}}%
-\expandafter\newcommand\csname #1cap\endcsname{\Acl{#1}}%
-\expandafter\newcommand\csname #1scap\endcsname{\Aclp{#1}}}
+\newcommand{\zzdefexpandacro}[4][default]{\zzdefnamedacro[#1]{#2}{#3}{#4}%
+\expandafter\newcommand\csname #2\endcsname{\ac{#2}}%
+\expandafter\newcommand\csname #2s\endcsname{\acp{#2}}%
+\expandafter\newcommand\csname #2cap\endcsname{\Acl{#2}}%
+\expandafter\newcommand\csname #2scap\endcsname{\Aclp{#2}}}
+
+\newcommand{\zzdefacro}[2]{\zzdefexpandacro[long]{#1}{#2}{#2}}
 
 \newcommand{\zzdefacroterm}[1]{\zzdefacro{#1}{#1}}
