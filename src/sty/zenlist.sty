@@ -12,6 +12,7 @@
 \usepackage[inline]{enumitem}
 %% PL end
 
+% don't use this
 \newenvironment{zzpackeditemlen}[4]{
 \newcommand{\zzpackeditemlenvspace}{#2}
 \begin{itemize}[topsep=#1]
@@ -20,11 +21,12 @@
 }{\vspace{\zzpackeditemlenvspace}
 \end{itemize}}
 
+% same as itemize environment but much less space between elements
 \newenvironment{zzpackeditem}{
 \begin{zzpackeditemlen}{0pt}{0pt}{2pt}{0pt}}
 {\end{zzpackeditemlen}}
 
-
+% don't use this
 \newenvironment{zzpackedenumlen}[4]{
 \newcommand{\zzpackedenumlenvspace}{#2}
 \begin{enumerate}[topsep=#1]
@@ -33,11 +35,12 @@
 }{\vspace{\zzpackedenumlenvspace}
 \end{enumerate}}
 
+% same as enumerate environment but much less space between elements
 \newenvironment{zzpackedenum}{
 \begin{zzpackedenumlen}{0pt}{0pt}{2pt}{0pt}}
 {\end{zzpackedenumlen}}
 
-
+% nice for a math let set of variables
 \newenvironment{zzletlist}{
 \noindent
 Let:
@@ -81,3 +84,8 @@ Let:
 \newenvironment{zzbfdefinition}[1]
 {\begin{zzdefinitiontype}{#1}{\bf}{.1cm}{0in}}
 {\end{zzdefinitiontype}}
+
+% horizontal enumerate (inline list) with letters: a) one b) two...
+\newenvironment{zzalphinline}[1][\alph*\upshape)]
+{\begin{enumerate*}[label=#1]}
+{\end{enumerate*}}
