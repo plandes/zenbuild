@@ -18,10 +18,14 @@
   first-style=#1,
   class=#5
 }}
+
 % ex: \zzdefnamedacro[long]{nlp}{NLP}{natural language processing}
 \newcommand{\zzdefnamedacro}[4][default]{%
-\zzdefnamedclassacro[#1]{#2}{#3}{#4}{abbrev}}
+\zzdefnamedclassacro[#1]{#2}{#3}{#4}{abbrev}
+\expandafter\newcommand\csname #2\endcsname{\ac{#2}}}
 
+% create the acronym and commands with cap and plural forms:
+% \<name>, \<names> (plural), \<namecap> (capital), \<namescap> (plural capital)
 \newcommand{\zzdefexpandclassacro}[5][default]{%
 \zzdefnamedclassacro[#1]{#2}{#3}{#4}{#5}%
 \expandafter\newcommand\csname #2\endcsname{\ac{#2}}%
