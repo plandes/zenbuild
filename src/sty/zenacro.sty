@@ -8,6 +8,8 @@
 \usepackage{acro}
 \acsetup{first-long-format=\itshape}
 
+%% acronym commands
+
 % define an acronym
 % first-style = default | empty | square | short | long | reversed | footnote | sidenote | footnote-reversed|sidenote-reversed
 % ex: \zzdefnamedclassacro[long]{nlp}{NLP}{natural language processing}{abbrev}
@@ -34,17 +36,26 @@
 \expandafter\newcommand\csname #2cap\endcsname{\Acl{#2}}%
 \expandafter\newcommand\csname #2scap\endcsname{\Aclp{#2}}}
 
+% define an expanded acronym with cap and plural forms (see \zzdefexpandclassacro)
+% ex: \zzdefexpandacro{tfidf}{TF/IDF}{term frequency/inverse document frequency}
 \newcommand{\zzdefexpandacro}[4][default]{%
 \zzdefexpandclassacro[#1]{#2}{#3}{#4}{abbrev}}
 
+% define a named term (first occurrence is italic) with cap and plural forms
+% (see \zzdefexpandclassacro)
+% ex: \zzdefacro{dl}{deep learning}
 \newcommand{\zzdefacro}[2]{%
 \zzdefexpandclassacro[long]{#1}{#2}{#2}{term}}
 
+% define a term (first occurrence is italic)
+% ex: \zzdefacroterm{corpus}
 \newcommand{\zzdefacroterm}[1]{%
 \zzdefexpandclassacro[long]{#1}{#1}{#1}{term}}
 
+
 %% hyperlink URLs
 \usepackage{zenhref}
+
 % define an URL as a hyperlink in a footnote
 % first-style = default | empty | square | short | long | reversed | footnote | sidenote | footnote-reversed|sidenote-reversed
 % ex: \zzdefurlacro{idebatecorp}{idebate corpus}{https://idebate.org/debatabase}
