@@ -52,6 +52,11 @@
 \newcommand{\zzdefacroterm}[1]{%
 \zzdefexpandclassacro[long]{#1}{#1}{#1}{term}}
 
+% define a definition
+% ex: \zzdefdef{role}{role}{proponent vs.\@ opponent}
+\newcommand{\zzdefdef}[3]{%
+\zzdefexpandclassacro{#1}{#2}{#3}{def}}
+
 
 %% hyperlink URLs
 \usepackage{zenhref}
