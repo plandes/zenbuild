@@ -34,9 +34,10 @@ GRAFFLES=	$(addprefix $(MTARG)/,$(notdir $(wildcard $(GRAFFLE_DIR)/*)))
 TEX_FILE=	$(MTARG)/$(TEX).tex
 PDF_FILE=	$(MTARG)/$(TEX).pdf
 MTARG_FILE=	$(MTARG)/mtarg.txt
+PRERUN_FILE=	$(MTARG)/prerun.txt
 
 # dependencies
-COMP_DEPS +=	$(MTARG_FILE) $(TEX_FILE) $(VECEPS) $(IMAGES) $(GRAFFLES) prerun
+COMP_DEPS +=	$(MTARG_FILE) $(TEX_FILE) $(VECEPS) $(IMAGES) $(GRAFFLES) $(PRERUN_FILE)
 DISTDIR=	$(TEX)-$(shell date +'%y-%m-%d')
 DISTZIP=	$(DISTDIR).zip
 
@@ -102,11 +103,13 @@ compdeps:	$(COMP_DEPS)
 .PHONY:		pdf
 pdf:		$(PDF_FILE)
 
-.PHONY:		prerun
-prerun:
+# run latex before resolving module targets (ie. bibtex, biber, index)
+$(PRERUN_FILE):
+		@echo "init run: $(TEX_INIT_RUN)"
 		@if [ ! -z "$(TEX_INIT_RUN)" ] ; then \
 			echo "starting latex pre start run..." ; \
 			( cd $(MTARG) ; $(LATEX_BIN) $(TEX).tex $(QUIET) ) ; \
+			date >> $(PRERUN_FILE) ; \
 		fi
 
 # should be able to put $(COMP_DEPS) as a dependency.  However, given the *.mk
