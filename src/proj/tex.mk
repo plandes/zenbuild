@@ -138,7 +138,7 @@ $(DISTZIP):	$(DISTDIR) $(PDF_FILE)
 		zip -r $(DISTZIP) $(DISTDIR)
 
 .PHONY:		run
-run:		showpdf
+run:		pdf
 
 .PHONY:		showquick
 showquick:
