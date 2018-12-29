@@ -16,6 +16,7 @@
 
 % use the draft keyword to find hanging citations (or links) when given the
 % "pdflatex ... levels ..." error
+\@ifpackageloaded{hyperref}{}{%
 \usepackage[
 %draft,
   pdftex,
@@ -28,6 +29,7 @@
   pdftitle={\doctitle}, pdfauthor={\theauthor}, pdfsubject={\doctype}
 ]
 {hyperref}
+}
 
 \usepackage{hypcap}
 
