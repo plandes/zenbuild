@@ -61,12 +61,13 @@
   \raisebox{0.5pt}{\hbox to \supsymwidth{\hfill{\tiny#1}\hfill}}
 }
 
-\newcommand{\enumsentence}[1]{\begin{quotation}#1\end{quotation}}
+\newcommand{\enumsentence}[1]{\begin{quote}#1\end{quote}}
 \newcommand{\evaluator}[1]{\uline{#1}$_{\smiley}$}
 \newcommand{\target}[2][\relax]{\uline{#2}$_{\ifx#1\relax\bigodot\else\tgtsym{#1}\fi}$}
 \newcommand{\comparator}[1]{#1$_{<}$}
 \newcommand{\comparatorthan}[1]{#1$_{>}$}
 \newcommand{\superordinate}[2][\relax]{#2$_{\ifx#1\relax\bigovoid\else\supsym{#1}\fi}$}
+\newcommand{\superordinatebef}[2][\relax]{$_{\ifx#1\relax\bigovoid\else\supsym{#1}\fi}$#2}
 \newcommand{\aspect}[1]{\uline{#1}$_{\ast}$}
 
 %% examples:
