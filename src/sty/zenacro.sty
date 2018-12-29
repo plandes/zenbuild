@@ -15,50 +15,64 @@
 % define an acronym
 % first-style = default | empty | square | short | long | reversed | footnote | sidenote | footnote-reversed|sidenote-reversed
 % ex: \zzdefnamedclassacro[long]{nlp}{NLP}{natural language processing}{abbrev}
-\newcommand{\zzdefnamedclassacro}[5][default]{%
+\newcommand{\zzdefnamedclassacro}[7][default]{%
 \DeclareAcronym{#2}{
   short=#3,
   long=#4,
   first-style=#1,
-  class=#5
+  class=#5,
+  short-indefinite=#6,
+  long-indefinite=#7
 }}
+
+% expand acro name into several commands with cap and plural forms:
+% \<name>, \<names> (plural), \<namecap> (capital), \<namescap> (plural capital)
+\newcommand{\zzexpandacrocmd}[3]{%
+\expandafter\newcommand\csname #1\endcsname{\index{#2}\ac{#1}}%
+\expandafter\newcommand\csname #1s\endcsname{\acp{#1}}%
+\expandafter\newcommand\csname #1capw\endcsname{\capitalisewords{#3}}%
+\expandafter\newcommand\csname #1cap\endcsname{\Acl{#1}}%
+\expandafter\newcommand\csname #1scap\endcsname{\Aclp{#1}}}
 
 % ex: \zzdefnamedacro[long]{nlp}{NLP}{natural language processing}
 %     creates command \nlp
 \newcommand{\zzdefnamedacro}[4][default]{%
-\zzdefnamedclassacro[#1]{#2}{#3}{#4}{abbrev}
+\zzdefnamedclassacro[#1]{#2}{#3}{{#4}}{abbrev}{a}{a}
 \expandafter\newcommand\csname #2\endcsname{\index{#3}\ac{#2}}}
 
 % create the acronym and commands with cap and plural forms:
 % \<name>, \<names> (plural), \<namecap> (capital), \<namescap> (plural capital)
-\newcommand{\zzdefexpandclassacro}[5][default]{%
-\zzdefnamedclassacro[#1]{#2}{#3}{#4}{#5}%
-\expandafter\newcommand\csname #2\endcsname{\index{#3}\ac{#2}}%
-\expandafter\newcommand\csname #2s\endcsname{\acp{#2}}%
-\expandafter\newcommand\csname #2capw\endcsname{\capitalisewords{#4}}%
-\expandafter\newcommand\csname #2cap\endcsname{\Acl{#2}}%
-\expandafter\newcommand\csname #2scap\endcsname{\Aclp{#2}}}
+\newcommand{\zzdefexpandclassacro}[7][default]{%
+\zzdefnamedclassacro[#1]{#2}{#3}{{#4}}{#5}{#6}{#7}%
+\zzexpandacrocmd{#2}{#3}{#4}}
 
 % define an expanded acronym with cap and plural forms (see \zzdefexpandclassacro)
 % ex: \zzdefexpandacro{tfidf}{TF/IDF}{term frequency/inverse document frequency}
 \newcommand{\zzdefexpandacro}[4][default]{%
-\zzdefexpandclassacro[#1]{#2}{#3}{#4}{abbrev}}
+\zzdefexpandclassacro[#1]{#2}{#3}{#4}{abbrev}{a}{a}}
 
 % define a named term (first occurrence is italic) with cap and plural forms
 % (see \zzdefexpandclassacro)
 % ex: \zzdefacro{dl}{deep learning}
 \newcommand{\zzdefacro}[2]{%
-\zzdefexpandclassacro[long]{#1}{#2}{#2}{term}}
+\zzdefexpandclassacro[long]{#1}{#2}{#2}{term}{a}{a}}
 
 % define a term (first occurrence is italic)
 % ex: \zzdefacroterm{corpus}
 \newcommand{\zzdefacroterm}[1]{%
-\zzdefexpandclassacro[long]{#1}{#1}{#1}{term}}
+\zzdefexpandclassacro[long]{#1}{#1}{#1}{term}{a}{a}}
 
 % define a definition
 % ex: \zzdefdef{role}{role}{proponent vs.\@ opponent}
+%\zzdefexpandclassacro{#1}{#2}{#3}{def}{a}{a}
 \newcommand{\zzdefdef}[3]{%
-\zzdefexpandclassacro{#1}{#2}{#3}{def}}
+\DeclareAcronym{#1}{
+  short=#2,
+  long=#3,
+  first-long-format=\normalfont,
+  class=def
+}%
+\zzexpandacrocmd{#1}{#2}{#3}}
 
 
 %% hyperlink URLs

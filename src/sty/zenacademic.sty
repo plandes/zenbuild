@@ -5,13 +5,17 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenacademic}[5/06/2018 Academic]
 
+\usepackage{hyphsubst}
+\HyphSubstLet{english}{usenglishmax}
+\usepackage[english]{babel}
+
 % single author name, email
 \newcommand{\zssingletitledef}{%
   \author{%
     \theauthor\\
     {\tt \theauthoremail}}
   \title{{\bf \doclongtitle} \\
-    {\normalfont \doctype}}
+    {\normalfont\ \doctype}}
   \date{}}
 
 % full title single author
@@ -53,7 +57,7 @@
     \inst{1}%
     \theorganization\\
     \theorganizationdept\\
-    \theorganizationaddress
+    \theorganizationaddress\
     \and
     \inst{2}%
     #3\\
@@ -114,8 +118,36 @@
   \addbibresource{#2}
   \zzaddcommands}
 
+
+%% commands
+
+% has quotes around it, indentied and italics
+\newcommand{\zaquoteinline}[1]{%
+\begin{quote}
+\it
+``#1''
+\end{quote}}
+
+% figure quote environment and reference
+\newenvironment{zaquote}[2]{%
+\newcommand{\zaquotelabel}{#1}%
+\newcommand{\zaquotecaption}{#2}%
+\begin{figure}\begin{quote}\itshape``\ignorespaces}%
+{\unskip''%
+\end{quote}%
+\caption{\zaquotecaption}%
+\label{\zaquotelabel}%
+\end{figure}}
+
+\newcommand{\zaquoteref}[1]{Figure~\ref{#1}}
+
 % full URL cite
 \newcommand{\zzurlci}[2]{\href{#1}{#2}\footnote{\url{#1}}}
 
 % inter document comments
 \newcommand{\zznote}[1]{{\color{red}(#1)}}
+
+
+%% -- Terms
+% everyone disagrees on this, so macro out for latest descender
+\newcommand{\zaie}{\mbox{i.e.}}
