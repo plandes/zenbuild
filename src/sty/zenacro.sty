@@ -7,6 +7,7 @@
 
 \usepackage{acro}
 \acsetup{first-long-format=\itshape}
+\usepackage{makeidx}
 
 %% acronym commands
 
@@ -31,10 +32,10 @@
 % \<name>, \<names> (plural), \<namecap> (capital), \<namescap> (plural capital)
 \newcommand{\zzdefexpandclassacro}[5][default]{%
 \zzdefnamedclassacro[#1]{#2}{#3}{#4}{#5}%
-\expandafter\newcommand\csname #2\endcsname{\ac{#2}}%
-\expandafter\newcommand\csname #2s\endcsname{\acp{#2}}%
-\expandafter\newcommand\csname #2cap\endcsname{\Acl{#2}}%
-\expandafter\newcommand\csname #2scap\endcsname{\Aclp{#2}}}
+\expandafter\newcommand\csname #2\endcsname{\index{#3}\ac{#2}}%
+\expandafter\newcommand\csname #2s\endcsname{\index{#3}\acp{#2}}%
+\expandafter\newcommand\csname #2cap\endcsname{\index{#3}\Acl{#2}}%
+\expandafter\newcommand\csname #2scap\endcsname{\index{#3}\Aclp{#2}}}
 
 % define an expanded acronym with cap and plural forms (see \zzdefexpandclassacro)
 % ex: \zzdefexpandacro{tfidf}{TF/IDF}{term frequency/inverse document frequency}
