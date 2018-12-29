@@ -142,7 +142,7 @@ run:		pdf
 
 .PHONY:		showquick
 showquick:
-		make PROJ_MODULES= showpdf
+		make PROJ_MODULES= SECOND_RUN= showpdf
 
 .PHONY:		showpdf
 showpdf:	$(PDF_FILE)
