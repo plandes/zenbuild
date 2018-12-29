@@ -98,11 +98,13 @@
 
 \newcommand{\zzadddefbiblatexstyle}[2][numeric]{%
   \usepackage[style=#1,citestyle=#1,backend=biber]{biblatex}
+  \usepackage{csquotes}
   \addbibresource{#2}
   \zzaddcommands}
 
 \newcommand{\zzaddbiblatexstyle}[2][numeric]{%
   \usepackage[natbib=true,maxcitenames=1,backref,style=#1,citestyle=#1,backend=biber]{biblatex}
+  \usepackage{csquotes}
   \AtEveryBibitem{
     \clearfield{urlyear}
     \ifentrytype{online}{}{% Remove url except for @online

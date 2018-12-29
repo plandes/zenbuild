@@ -137,6 +137,13 @@ $(DISTDIR):	$(PDF_FILE)
 $(DISTZIP):	$(DISTDIR) $(PDF_FILE)
 		zip -r $(DISTZIP) $(DISTDIR)
 
+.PHONY:		run
+run:		showpdf
+
+.PHONY:		showquick
+showquick:
+		make PROJ_MODULES= showpdf
+
 .PHONY:		showpdf
 showpdf:	$(PDF_FILE)
 		open $(PDF_FILE)
