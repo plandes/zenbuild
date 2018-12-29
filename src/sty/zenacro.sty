@@ -26,7 +26,7 @@
 %     creates command \nlp
 \newcommand{\zzdefnamedacro}[4][default]{%
 \zzdefnamedclassacro[#1]{#2}{#3}{#4}{abbrev}
-\expandafter\newcommand\csname #2\endcsname{\ac{#2}}}
+\expandafter\newcommand\csname #2\endcsname{\index{#3}\ac{#2}}}
 
 % create the acronym and commands with cap and plural forms:
 % \<name>, \<names> (plural), \<namecap> (capital), \<namescap> (plural capital)
@@ -76,4 +76,4 @@
   first-style=footnote,
   class=url
 }%
-\expandafter\newcommand\csname #1\endcsname{\ac{#1}}}
+\expandafter\newcommand\csname #1\endcsname{\index{#2}\ac{#1}}}
