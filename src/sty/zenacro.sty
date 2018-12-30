@@ -7,8 +7,14 @@
 
 \usepackage{acro}
 \acsetup{first-long-format=\itshape,hyperref=false}
+% add index entries for each acro
 \usepackage{makeidx}
+% uppercase first letter or each word command
 \usepackage{mfirstuc}
+% hyperlink URLs
+\usepackage{zenhref}
+% \zzsecaddtoc
+\usepackage{zensec}
 
 %% acronym commands
 
@@ -74,10 +80,6 @@
 }%
 \zzexpandacrocmd{#1}{#2}{#3}}
 
-
-%% hyperlink URLs
-\usepackage{zenhref}
-
 % define an URL as a hyperlink in a footnote
 % first-style = default | empty | square | short | long | reversed | footnote | sidenote | footnote-reversed|sidenote-reversed
 % ex: \zzdefurlacro{idebatecorp}{idebate corpus}{https://idebate.org/debatabase}
@@ -93,3 +95,19 @@
   class=url
 }%
 \expandafter\newcommand\csname #1\endcsname{\index{#2}\ac{#1}}}
+
+% print class of acros (not for client use)
+\newcommand{\zzprintclass}[5]{%
+  \zzsecaddtoc{#1}{#3}{acro:#1}{false}%
+  \printacronyms[include-classes=#2, name=#3]}
+
+% print the abbreviations list and add toc entry
+\newcommand{\zzprintabbrevs}[1][section]{\zzprintclass{#1}{abbrev}{Abbreviations}}
+
+% print the definitions list and add toc entry
+\newcommand{\zzprintdefs}[1][section]{\zzprintclass{#1}{def}{Definitions}}
+
+% print the definitions list and add toc entry
+\newcommand{\zzprintindex}[1][section]{
+  \zzsecaddtoc{#1}{Index}{spec:index}{false}%
+  \printindex}

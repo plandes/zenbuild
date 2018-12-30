@@ -5,13 +5,27 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zensec}[2018/03/06 Sections]
 
+\usepackage{ifthen}
+
 % add section name text refs if not using slides with incompatible beamer
 \ifx\zenslidesmode\undefined
   \usepackage{nameref}
 \fi
 
 
-%% -- Commands
+%% commands
+
+% add an 'invisible' section and table of contents entry for abbrevs, index, etc
+% <section|chapter|etc> <toc name> <label> <add number in toc: true|false>
+\newcommand{\zzsecaddtoc}[4]{%
+  \refstepcounter{#1}%
+  % use the next line instead to create a numbered entry
+  \ifthenelse{\equal{#4}{true}}%
+  {\addcontentsline{toc}{#1}{\protect\numberline{\thesection}#2}}%
+  {\addcontentsline{toc}{#1}{#2}}%
+  \sectionmark{#2}%
+  \label{#3}}
+
 \newcommand{\zzpart}[2]{\part*{#2}\label{sec:#1}%
 \addcontentsline{toc}{part}{#2}}
 
