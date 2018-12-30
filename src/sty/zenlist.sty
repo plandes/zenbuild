@@ -65,6 +65,7 @@ Let:
 
 % terms type list, the parameter is the string to take as the length of the
 % longest \item passed (i.e. '0123456789012' gives room for 12 characters
+% you probably want to use zzdefinition instead
 \newenvironment{zzdefinitiontype}[4]
 {\begin{list}{}%
     {\renewcommand\makelabel[1]{#2{##1}\definitiondelimiter\hfil}%

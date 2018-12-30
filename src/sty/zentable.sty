@@ -9,7 +9,8 @@
 
 
 
-%% -- basic table (\begin{zzbasictable}{results}{Results}{|l|l})
+%% basic table
+% ex: \begin{zzbasictable}{results}{Results}{|l|l}
 \newenvironment{zzbasictable}[3]%
 {%
 \newcommand{\zzbasictablecap}{#2}
@@ -26,7 +27,8 @@
 \end{table}
 }%
 
-%% -- basic table (\begin{zztable}{results}{Results}{\small}{|l|l})
+%% basic table
+% ex: \begin{zztable}{results}{Results}{\small}{|l|l}
 \newenvironment{zztable}[4]%
 {%
 \newcommand{\zzbasictablecap}{#2}
@@ -44,7 +46,8 @@
 \end{table}
 }%
 
-%% -- basic two column table (\begin{zztable}{results}{Results}{\small}{|l|l})
+% basic two column table
+% ex: \begin{zztable}{results}{Results}{\small}{|l|l}
 \newenvironment{zztabletcol}[4]%
 {%
 \newcommand{\zzbasictablecap}{#2}
@@ -82,6 +85,11 @@
 % ex: \begin{zzvarcoltable}{param-feat-sets}{Argument feature sets.}{}{|l|X|}
 % ex: \begin{zzvarcoltable}{param-feat-sets}{Argument feature sets.}{\small}{|l|X|}
 % ex: \begin{zzvarcoltable}[3in]{param-feat-sets}{Argument feature sets.}{\small}{|l|X|}
+
+% variable width column table
+% ex:
+% \begin{zzvarcoltable}[\textwidth]{h}{<label name>}{<caption>}
+% {\small}{|l|X|l|}
 \newenvironment{zzvarcoltable}[6][\textwidth]%
 {%
 \newcommand{\zzvarcoltablelab}{tab:#3}%
