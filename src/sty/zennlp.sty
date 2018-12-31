@@ -61,7 +61,7 @@
   \raisebox{0.5pt}{\hbox to \supsymwidth{\hfill{\tiny#1}\hfill}}
 }
 
-\newcommand{\enumsentence}[1]{\begin{quote}#1\end{quote}}
+\newcommand{\zzenumsentence}[1]{\begin{quote}#1\end{quote}}
 \newcommand{\evaluator}[1]{\uline{#1}$_{\smiley}$}
 \newcommand{\target}[2][\relax]{\uline{#2}$_{\ifx#1\relax\bigodot\else\tgtsym{#1}\fi}$}
 \newcommand{\comparator}[1]{#1$_{<}$}
@@ -70,9 +70,22 @@
 \newcommand{\superordinatebef}[2][\relax]{$_{\ifx#1\relax\bigovoid\else\supsym{#1}\fi}$#2}
 \newcommand{\aspect}[1]{\uline{#1}$_{\ast}$}
 
+% figure enumsentfig environment and reference
+% ex: \begin{zzenumsentfig}{<label>}{<caption>}
+\newenvironment{zzenumsentfig}[3][h]{%
+\newcommand{\zzenumsentfiglabel}{#2}%
+\newcommand{\zzenumsentfigcaption}{#3}%
+\begin{figure}[#1]
+\begin{quote}}%
+{\end{quote}%
+\caption{\zzenumsentfigcaption}%
+\label{fig:\zzenumsentfiglabel}%
+\end{figure}}
+
+
 %% examples:
 
-%% \enumsentence{
+%% \zzenumsentence{
 %%     \target{The Lost World}
 %%     was a 
 %%     \comparator{\attitude{better}}
@@ -81,14 +94,14 @@
 %%     \superordinate[2]{movie}.
 %% }
 
-%% \enumsentence{
+%% \zzenumsentence{
 %%     \evaluator{I} thought
 %%     \target[1]{they} were 
 %%     \comparator{less} \attitude{controversial} \comparatorthan{than}
 %%     \target[2]{the ones I mentioned above}.
 %% }
 
-%% \enumsentence{
+%% \zzenumsentence{
 %%     \target{A real rav muvhak ends up knowing you very well,
 %%     very intimately one might say}---in a way that I am not sure is actually 
 %%     \attitude{very appropriate} 
