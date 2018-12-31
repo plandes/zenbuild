@@ -1,12 +1,12 @@
 %%
 %% Paul Landes  2018-05-06
-%%
+%
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenacro}[5/06/2018 Acronyms]
 
 \usepackage{acro}
-\acsetup{first-long-format=\itshape,hyperref=false}
+\acsetup{first-long-format=\itshape,hyperref=false,tooltip=true,index=true,page-style=plain,pages=first}
 % add index entries for each acro
 \usepackage{makeidx}
 % uppercase first letter or each word command
@@ -34,7 +34,7 @@
 % expand acro name into several commands with cap and plural forms:
 % \<name>, \<names> (plural), \<namecap> (capital), \<namescap> (plural capital)
 \newcommand{\zzexpandacrocmd}[3]{%
-\expandafter\newcommand\csname #1\endcsname{\index{#2}\ac{#1}}%
+\expandafter\newcommand\csname #1\endcsname{\ac{#1}}%
 \expandafter\newcommand\csname #1s\endcsname{\acp{#1}}%
 \expandafter\newcommand\csname #1capw\endcsname{\capitalisewords{#3}}%
 \expandafter\newcommand\csname #1cap\endcsname{\Acl{#1}}%
@@ -44,7 +44,7 @@
 %     creates command \nlp
 \newcommand{\zzdefnamedacro}[4][default]{%
 \zzdefnamedclassacro[#1]{#2}{#3}{{#4}}{abbrev}{a}{a}
-\expandafter\newcommand\csname #2\endcsname{\index{#3}\ac{#2}}}
+\expandafter\newcommand\csname #2\endcsname{\ac{#2}}}
 
 % create the acronym and commands with cap and plural forms:
 % \<name>, \<names> (plural), \<namecap> (capital), \<namescap> (plural capital)
@@ -94,7 +94,7 @@
   first-style=footnote,
   class=url
 }%
-\expandafter\newcommand\csname #1\endcsname{\index{#2}\ac{#1}}}
+\expandafter\newcommand\csname #1\endcsname{\ac{#1}}}
 
 % print class of acros (not for client use)
 \newcommand{\zzprintclass}[5]{%
