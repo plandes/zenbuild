@@ -133,10 +133,11 @@
 \end{quote}}
 
 % figure quote environment and reference
-\newenvironment{zaquote}[2]{%
-\newcommand{\zaquotelabel}{#1}%
-\newcommand{\zaquotecaption}{#2}%
-\begin{figure}\begin{quote}\itshape``\ignorespaces}%
+% ex: \begin{zaquote}{<label>}{<caption>}
+\newenvironment{zaquote}[3][h]{%
+\newcommand{\zaquotelabel}{#2}%
+\newcommand{\zaquotecaption}{#3}%
+\begin{figure}[#1]\begin{quote}\itshape``\ignorespaces}%
 {\unskip''%
 \end{quote}%
 \caption{\zaquotecaption}%
