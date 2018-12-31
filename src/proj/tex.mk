@@ -122,6 +122,10 @@ $(PDF_FILE):	$(COMP_DEPS)
 			echo "starting latex compile second run..." ; \
 			( cd $(MTARG) ; $(LATEX_BIN) $(TEX).tex $(QUIET) ) ; \
 		fi
+
+.PHONY:		final
+final:
+		make SECOND_RUN=1 $(PDF_FILE)
 		@if [ ! -z "$(FINAL_PDF_NAME)" ] ; then \
 			echo "copy $(PDF_FILE) -> $(FINAL_PDF_NAME)..." ; \
 			cp $(PDF_FILE) "$(FINAL_PDF_NAME)" ; \
@@ -134,7 +138,7 @@ $(DISTDIR):	$(PDF_FILE)
 		mkdir -p $(DISTDIR)
 		cp $(PDF_FILE) $(DISTDIR)
 
-$(DISTZIP):	$(DISTDIR) $(PDF_FILE)
+$(DISTZIP):	$(DISTDIR) final
 		zip -r $(DISTZIP) $(DISTDIR)
 
 .PHONY:		run
