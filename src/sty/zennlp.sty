@@ -68,6 +68,7 @@
 \newcommand{\comparatorthan}[1]{#1$_{>}$}
 \newcommand{\superordinate}[2][\relax]{#2$_{\ifx#1\relax\bigovoid\else\supsym{#1}\fi}$}
 \newcommand{\superordinatebef}[2][\relax]{$_{\ifx#1\relax\bigovoid\else\supsym{#1}\fi}$#2}
+\newcommand{\ulinetext}[2]{\uline{#2}$_{\supsym{#1}}$}
 \newcommand{\aspect}[1]{\uline{#1}$_{\ast}$}
 
 % figure enumsentfig environment and reference
@@ -101,10 +102,10 @@
 %%     \target[2]{the ones I mentioned above}.
 %% }
 
-%% \zzenumsentence{
+%% \begin{zzenumsentfig}{name-ex1}{Some Really Cool Example}
 %%     \target{A real rav muvhak ends up knowing you very well,
 %%     very intimately one might say}---in a way that I am not sure is actually 
 %%     \attitude{very appropriate} 
 %%     or easy to negotiate 
 %%     \aspect{when the sexes differ}.
-%% }
+%% \end{zzenumsentfig}
