@@ -131,6 +131,10 @@ final:
 			cp $(PDF_FILE) "$(FINAL_PDF_NAME)" ; \
 		fi
 
+.PHONY:		finalshow
+finalshow:
+		make SECOND_RUN=1 showpdf
+
 .PHONY:		dist
 dist:		$(DISTZIP)
 
