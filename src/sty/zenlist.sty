@@ -9,7 +9,9 @@
 
 %% PL 5/06/2018
 %% note beamer can't handle this package, so don't add this package to slides
-\usepackage[inline]{enumitem}
+\ifx\zenslidesmode\undefined
+  \usepackage[inline]{enumitem}
+\fi
 %% PL end
 
 % don't use this
