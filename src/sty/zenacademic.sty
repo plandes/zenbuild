@@ -88,7 +88,7 @@
 %% biblatex
 \newcommand{\zzaddcommands}{%
   % create new type of cite commands
-  \DeclareCiteCommand{\zzciteauthor}
+  \DeclareCiteCommand{\zzciteauthorcite}
   {}
   {\bibhyperref{\printnames{labelname}}}
   {\multicitedelim}
@@ -98,7 +98,8 @@
   {}
   {\bibhyperref{\printnames{labelname} \printfield{year}}}
   {\multicitedelim}
-  {}}
+  {}%
+  \providecommand{\zzciteauthor}{\zzciteauthorcite}}
 
 \newcommand{\zzadddefbiblatexstyle}[2][numeric]{%
   \usepackage[style=#1,citestyle=#1,backend=biber]{biblatex}

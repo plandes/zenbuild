@@ -61,7 +61,7 @@
   \renewcommand{\section}[2]{}
   \frametitle{References}
   \renewcommand*{\bibfont}{\scriptsize}
-  \printbibliography
+  \printbibliography%
 \end{frame}}
 
 %% quotes in boxes
@@ -83,3 +83,7 @@
     Questions?
   \end{center}
 \end{frame}}
+
+\newcommand{\zzciteauthor}[1]{\zzciteauthorcite{#1}\footcite{#1}}
+
+\newcommand{\zscite}[1]{\footcite{#1}}
