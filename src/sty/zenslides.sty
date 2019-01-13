@@ -84,6 +84,6 @@
   \end{center}
 \end{frame}}
 
-\newcommand{\zzciteauthor}[1]{\zzciteauthorcite{#1}\footcite{#1}}
-
-\newcommand{\zscite}[1]{\footcite{#1}}
+%\renewcommand{\zzcite}[2][]{\footcite[#1]{#2}}
+\renewcommand{\zzcite}[2][]{\footnote{\citeauthor{#2}, \citetitle{#2} \citeyear{#2}~\cite[#1]{#2}}}
+\newcommand{\zzciteauthor}[1]{\zzciteauthorcite{#1}\zzcite{#1}}

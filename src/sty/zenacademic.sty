@@ -107,8 +107,8 @@
   \addbibresource{#2}
   \zzaddcommands}
 
-\newcommand{\zzaddbiblatexstyle}[2][numeric]{%
-  \usepackage[natbib=true,maxcitenames=1,backref,style=#1,citestyle=#1,backend=biber]{biblatex}
+\newcommand{\zzaddbiblatexstylesep}[3]{%
+  \usepackage[natbib=true,maxcitenames=1,backref,style=#1,citestyle=#2,backend=biber]{biblatex}
   \usepackage{csquotes}
   \AtEveryBibitem{
     \clearfield{urlyear}
@@ -116,8 +116,10 @@
       \clearfield{url}
     }
   }
-  \addbibresource{#2}
+  \addbibresource{#3}
   \zzaddcommands}
+
+\newcommand{\zzaddbiblatexstyle}[2][numeric]{\zzaddbiblatexstylesep{#1}{#1}{#2}}
 
 \newcommand{\zzprintbibliography}[1][section]{%
   \zzsecaddtoc{#1}{References}{spec:refs}{false}%
@@ -157,3 +159,5 @@
 %% -- Terms
 % everyone disagrees on this, so macro out for latest descender
 \newcommand{\zaie}{\mbox{i.e.}}
+
+\providecommand{\zzcite}[2][]{\cite[#1]{#2}}
