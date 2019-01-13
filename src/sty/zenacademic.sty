@@ -94,11 +94,12 @@
   {\multicitedelim}
   {}
   % ACL like short cite command
-  \DeclareCiteCommand{\zzshortcite}
+  \DeclareCiteCommand{\zzshortcitecite}
   {}
   {\bibhyperref{\printnames{labelname} \printfield{year}}}
   {\multicitedelim}
   {}%
+  \providecommand{\zzshortcite}{\zzshortcitecite}
   \providecommand{\zzciteauthor}{\zzciteauthorcite}}
 
 \newcommand{\zzadddefbiblatexstyle}[2][numeric]{%
