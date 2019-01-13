@@ -6,6 +6,7 @@
 
 ## stuff to include in a makefile.in
 GRAF_BIN=	$(BUILD_BIN_DIR)/exportgraffle.scpt
+SHOWPREV_BIN=	$(BUILD_BIN_DIR)/showpreview.scpt
 
 ## everything else shouldn't need modifying paths
 nullstr=
@@ -157,10 +158,8 @@ showpdf:	$(PDF_FILE)
 		open $(PDF_FILE)
 
 .PHONY:		reposition
-reposition:	showpdf
-		osascript -e 'tell application "System Events" to set position of first window of application process "Preview" to $(PREV_POS)'
-		osascript -e 'tell application "System Events" to set size of first window of application process "Preview" to $(PREV_SIZE)'
-		osascript -e 'tell application "Emacs" to activate'
+reposition:	$(PDF_FILE)
+		osascript $(SHOWPREV_BIN) $(PDF_FILE) $(PREV_LOC)
 
 .PHONY:		export
 export:		pdf
