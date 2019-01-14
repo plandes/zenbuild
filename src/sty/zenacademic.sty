@@ -136,6 +136,13 @@
 ``#1''
 \end{quote}}
 
+% has quotes around it, indentied and italics with author
+\newcommand{\zaquoteinlineauthor}[2]{%
+\begin{quote}
+\textit{``#2''}\\
+\end{quote}
+\hspace*{\fill}---#1}
+
 % figure quote environment and reference
 % ex: \begin{zaquote}{<label>}{<caption>}
 \newenvironment{zaquote}[3][h]{%
