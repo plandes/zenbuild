@@ -2,7 +2,7 @@
 
 # must declare these these
 #DOCKER_IMG_NAME=
-#DOCKER_OBJS=
+#DOCKER_BUILD_OBJS=
 #DOCKER_CONTAINER=
 
 # docker config
@@ -13,7 +13,7 @@ DOCKER_CONTAINER ?=	$(shell grep container_name docker-compose.yml | awk '{print
 DOCKER_IMG_NAME ?=	$(DOCKER_CONTAINER)
 DOCKER_IMG=		$(DOCKER_USER)/$(DOCKER_IMG_NAME)
 DOCKER_VERSION ?=	snapshot
-DOCKER_BUILD_DEPS ?=	dockerbuild
+DOCKER_UP_DEPS ?=	dockerbuild
 
 INFO_TARGETS +=		dockerinfo
 
@@ -30,13 +30,13 @@ dockercheckver:
 	@echo $(DOCKER_VER_LAST_TAG) =? $(DOCKER_VERSION) ; [ "$(DOCKER_VER_LAST_TAG)" == "$(DOCKER_VERSION)" ]
 
 .PHONY: dockerbuild
-dockerbuild:	$(DOCKER_OBJS)
+dockerbuild:	$(DOCKER_BUILD_OBJS)
 	$(DOCKER_CMD) rmi $(DOCKER_IMG) || true
 	$(DOCKER_CMD) build -t $(DOCKER_IMG) .
 	$(DOCKER_CMD) tag $(DOCKER_IMG) $(DOCKER_IMG):$(DOCKER_VERSION)
 
 .PHONY: dockerbuildnocache
-dockerbuildnocache:	$(DOCKER_OBJS)
+dockerbuildnocache:	$(DOCKER_BUILD_OBJS)
 	$(DOCKER_CMD) rmi $(DOCKER_IMG) || true
 	$(DOCKER_CMD) build --no-cache -t $(DOCKER_IMG) .
 	$(DOCKER_CMD) tag $(DOCKER_IMG) $(DOCKER_IMG):$(DOCKER_VERSION)
@@ -68,7 +68,7 @@ dockerrmzombie:
 	done
 
 .PHONY:	dockerup
-dockerup:	$(DOCKER_BUILD_DEPS)
+dockerup:	$(DOCKER_UP_DEPS)
 	$(DOCKER_CMP_CMD) up -d
 
 .PHONY:	dockerdown
