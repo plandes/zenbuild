@@ -6,6 +6,7 @@
 # python
 PYTHON_BIN ?=		python
 PYTHON_BIN_ARGS ?=	
+PYTHON_TEST_ARGS ?=	
 PIP_BIN ?=		pip
 
 # python path
@@ -74,7 +75,8 @@ pydeps:
 pytest:
 	@for i in $(PY_SRC_TEST_PKGS) ; do \
 		echo "testing $$i" ; \
-		PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) $(PYTHON_BIN) -m unittest $$i ; \
+		PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) $(PYTHON_BIN) \
+			$(PYTHON_TEST_ARGS) -m unittest $$i ; \
 	done
 
 # run python clis
