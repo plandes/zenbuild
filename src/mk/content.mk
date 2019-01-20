@@ -29,7 +29,9 @@ cntsite:		$(CNT_DEP_TARGS)
 			@if [ ! -d "$(CNT_STAGE_DIR)" ] ; then \
 				mkdir -pv $(CNT_STAGE_DIR) ; \
 			fi
-			cp -rRL $(CNT_SITE_DIR) $(CNT_STAGE_DIR)
+			@if [ -d "$(CNT_SITE_DIR)" ] ; then \
+				cp -rRL $(CNT_SITE_DIR) $(CNT_STAGE_DIR) ; \
+			fi
 
 # mount the volume on OSX in order to copy
 .PHONY:			cntmount
