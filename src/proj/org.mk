@@ -20,7 +20,7 @@ package:		cntsite
 
 # make the locally site and direct a browser to it
 .PHONY:			show
-show:			orgmode-show
+show:			package orgmode-show
 
 # deploy the site to the webserver
 .PHONY:			deploy
