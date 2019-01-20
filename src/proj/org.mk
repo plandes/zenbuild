@@ -8,6 +8,8 @@ CNT_DEP_TARGS +=	orgmode-html
 CNT_SITE_DIR ?=		./content
 # content staging directory where all files copied before deploy
 CNT_STAGE_DIR ?=	$(OM_HTML_DIR)/
+# used for `orgmode-show'
+OM_SHOW_DIR ?=		$(OM_HTML_DIR)/*.html
 
 ## include org mode and content modules
 include $(BUILD_MK_DIR)/orgmode-doc.mk

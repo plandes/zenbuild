@@ -9,6 +9,7 @@ OM_INSTALL ?=		install
 # build config
 OM_DOC_DIR ?=		$(MTARG)/doc
 OM_HTML_DIR ?=		$(OM_DOC_DIR)/html
+OM_SHOW_DIR ?=		$(OM_HTML_DIR)/*
 
 # export function for output formt
 OM_EXPORT_FUNC_HTML ?=	org-html-export-to-html
@@ -53,6 +54,6 @@ $(OM_HTML_DIR)/%.html:	%.html
 # generate the HTML and browse to the file
 .PHONY:			orgmode-show
 orgmode-show:		orgmode-html
-			@for i in $(OM_HTML_DIR)/* ; do \
+			@for i in $(OM_SHOW_DIR) ; do \
 				open $$i ; \
 			done
