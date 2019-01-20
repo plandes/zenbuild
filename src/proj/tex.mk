@@ -1,9 +1,6 @@
 # latex document creation make file
 # created: 01/27/2011
 
-## top level paths
-#TEXLIBDIR ?=	$(BUILD_HOME_DIR)/lib
-
 ## stuff to include in a makefile.in
 GRAF_BIN=	$(BUILD_BIN_DIR)/exportgraffle.scpt
 SHOWPREV_BIN=	$(BUILD_BIN_DIR)/showpreview.scpt
