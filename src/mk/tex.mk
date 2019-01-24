@@ -2,9 +2,10 @@
 # created: 01/27/2011
 
 ## stuff to include in a makefile.in
-GRAF_BIN=	$(BUILD_BIN_DIR)/exportgraffle.scpt
-SHOWPREV_BIN=	$(BUILD_BIN_DIR)/showpreview.scpt
-PRESENT_BIN=	/Applications/Presentation.app/Contents/MacOS/presentation.py
+GRAF_BIN ?=	$(BUILD_BIN_DIR)/exportgraffle.scpt
+SHOWPREV_BIN ?=	$(BUILD_BIN_DIR)/showpreview.scpt
+PRESENT_BIN ?=	/Applications/Presentation.app/Contents/MacOS/presentation.py
+PYTHON_BIN ?=	/usr/bin/python
 
 ## everything else shouldn't need modifying paths
 nullstr=
@@ -92,11 +93,11 @@ texforce:	$(COMP_DEPS)
 .PHONY:		forceshow
 texforceshow:	force texshowpdf
 
-# run latex before resolving module targets (see TEX_FILE target)
+# run latex before resolving module targets (see tex-bib*.mk, tex-index.mk)
 $(PRERUN_FILE):
 		@echo "init run: $(TEX_INIT_RUN)"
 		@if [ ! -z "$(TEX_INIT_RUN)" ] ; then \
-			echo "starting latex pre start run..." ; \
+			echo "starting latex pre-start run..." ; \
 			( cd $(MTARG) ; $(LATEX_BIN) $(TEX).tex $(QUIET) ) ; \
 			date >> $(PRERUN_FILE) ; \
 		fi
@@ -133,19 +134,19 @@ texdist:	texfinal
 			cp $(PDF_FILE) "$(FINAL_PDF_NAME)" ; \
 		fi
 
-# a one pass compile and show (will flub refs and bibliography)
-.PHONY:		texshowquick
-texshowquick:
-		make PROJ_MODULES= SECOND_RUN= texshowpdf
+# compile and display the file using a simple open (MacOS or alias out)
+.PHONY:		texshowpdf
+texshowpdf:	texpdf
+		open $(PDF_FILE)
 
 # compile the final version and show in Preview
 .PHONY:		texfinalshow
 texfinalshow:	texfinal texshowpdf
 
-# compile and display the file using a simple open (MacOS or alias out)
-.PHONY:		texshowpdf
-texshowpdf:	texpdf
-		open $(PDF_FILE)
+# a one pass compile and show (will flub refs and bibliography)
+.PHONY:		texshowquick
+texshowquick:
+		make PROJ_MODULES= SECOND_RUN= texshowpdf
 
 # show and reposition the Preview.app window (under MacOS)
 .PHONY:		texreposition
@@ -170,5 +171,5 @@ texshowexport:	texexport
 
 # present a slide deck
 .PHONY:		texpresent
-texpresent:
-		/usr/bin/python $(PRESENT_BIN) $(PDF_FILE)
+texpresent:	texfinal
+		$(PYTHON_BIN) $(PRESENT_BIN) $(PDF_FILE)
