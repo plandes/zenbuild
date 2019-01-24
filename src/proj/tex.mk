@@ -12,6 +12,9 @@ package:	texpackage
 .PHONY:		install
 install:	texinstall
 
+.PHONY:		export
+export:		texexport
+
 .PHONY:		show
 show:		texreposition
 

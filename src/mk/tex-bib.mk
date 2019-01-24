@@ -6,6 +6,7 @@ BBL_FILE=	$(LAT_COMP_PATH)/$(TEX).bbl
 COMP_DEPS +=	$(BBL_FILE)
 TEX_INIT_RUN = 	1
 
+
 $(BBL_FILE):	$(BIB_FILE)
 		cp $(BIB_FILE) $(LAT_COMP_PATH)
 		@echo "running bibtex..."

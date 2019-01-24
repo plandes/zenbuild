@@ -160,12 +160,15 @@ texreposition:	texpdf
 
 # create a no dependency (from zenbuild) directory with files to recreate PDF
 .PHONY:		texexport
-texexport:	pdf
+texexport:	texpdf
 		mkdir -p $(EXPORT_DIR)
 		cp $(wildcard $(TEX).tex $(BIB_FILE) $(BBL_FILE)) $(EXPORT_DIR)
 		cp $(wildcard $(LAT_COMP_PATH)/*.eps $(LAT_COMP_PATH)/*.png $(LAT_COMP_PATH)/*.jpg $(LAT_COMP_PATH)/*.gif) $(EXPORT_DIR)
 		cp $(wildcard $(addsuffix /*,$(TIPATH))) $(EXPORT_DIR)
 		cp $(BUILD_SRC_DIR)/template/tex-export-makefile $(EXPORT_DIR)/makefile
+		if [ ! -z "$(BIBER)" ] ; then \
+			touch $(EXPORT_DIR)/zenbiber ; \
+		fi
 
 # create the presentation form of the slides
 .PHONY:		texpresentpdf

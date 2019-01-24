@@ -5,6 +5,7 @@
 # binaries
 LATEX_BIN =	pdflatex
 BIBTEX=		bibtex
+BIBER=		biber
 BIB_FILE=	$(wildcard *.bib)
 
 # files
@@ -24,11 +25,17 @@ info:
 .PHONY:		pdf
 pdf:		$(PDF_FILE)
 
-$(TEX_FILE):	$(TEX).tex
-		cp $(TEX).tex $(MTARG)
-
 $(PDF_FILE):	$(TEX_FILE)
 		$(LATEX_BIN) $(TEX).tex
-		[ ! -z "$BIB_FILE" ] && $(BIBTEX) $(TEX)
+		if [ ! -z "$BIB_FILE" ] ; then \
+			if [ -f zenbiber ] ; then \
+				$(BIBER) $(TEX) ; \
+			else \
+				$(BIBTEX) $(TEX) ; \
+			fi \
+		fi
 		$(LATEX_BIN) $(TEX).tex
 		$(LATEX_BIN) $(TEX).tex
+
+clean:
+		rm *.pdf
