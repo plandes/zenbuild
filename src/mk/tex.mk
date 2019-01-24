@@ -4,6 +4,7 @@
 ## stuff to include in a makefile.in
 GRAF_BIN=	$(BUILD_BIN_DIR)/exportgraffle.scpt
 SHOWPREV_BIN=	$(BUILD_BIN_DIR)/showpreview.scpt
+PRESENT_BIN=	/Applications/Presentation.app/Contents/MacOS/presentation.py
 
 ## everything else shouldn't need modifying paths
 nullstr=
@@ -36,8 +37,6 @@ PRERUN_FILE=	$(MTARG)/prerun.txt
 
 # dependencies
 COMP_DEPS +=	$(MTARG_FILE) $(TEX_FILE) $(VECEPS) $(IMAGES) $(GRAFFLES) $(PRERUN_FILE)
-DISTDIR=	$(TEX)-$(shell date +'%y-%m-%d')
-DISTZIP=	$(DISTDIR).zip
 
 # compiles faster in Emacs avoiding fontification of verbose output
 QUIET ?=	> /dev/null
@@ -107,8 +106,8 @@ $(TEX_FILE):	$(TEX).tex
 		cp $(TEX).tex $(MTARG)
 
 # build the PDF
-.PHONY:		pdf
-pdf:		$(PDF_FILE)
+.PHONY:		texpdf
+texpdf:		$(PDF_FILE)
 
 # should be able to put $(COMP_DEPS) as a dependency.  However, given the *.mk
 # file proccessing order, it completely skips the module make files
@@ -124,43 +123,33 @@ $(PDF_FILE):	$(COMP_DEPS)
 # final version: compile twice for refs and bibliography then copy to desktop
 .PHONY:		texfinal
 texfinal:
-		make SECOND_RUN=1 $(PDF_FILE)
+		make SECOND_RUN=1 texpdf
+
+# create a zip file with the only the PDF as its contents
+.PHONY:		texdist
+texdist:	texfinal
 		@if [ ! -z "$(FINAL_PDF_NAME)" ] ; then \
 			echo "copy $(PDF_FILE) -> $(FINAL_PDF_NAME)..." ; \
 			cp $(PDF_FILE) "$(FINAL_PDF_NAME)" ; \
 		fi
-
-# compile the final version and show in Preview
-.PHONY:		texfinalshow
-texfinalshow:
-		make SECOND_RUN=1 texshowpdf
-
-# create the directory and PDF file to zip for the `texdist' target
-$(DISTDIR):	texfinal
-		mkdir -p $(DISTDIR)
-		cp $(PDF_FILE) $(DISTDIR)
-
-# create a zip file with the only the PDF as its contents
-.PHONY:		texdist
-texdist:	$(DISTZIP)
-
-# create the distribution zip
-$(DISTZIP):	$(DISTDIR) final
-		zip -r $(DISTZIP) $(DISTDIR)
 
 # a one pass compile and show (will flub refs and bibliography)
 .PHONY:		texshowquick
 texshowquick:
 		make PROJ_MODULES= SECOND_RUN= texshowpdf
 
+# compile the final version and show in Preview
+.PHONY:		texfinalshow
+texfinalshow:	texfinal texshowpdf
+
 # compile and display the file using a simple open (MacOS or alias out)
 .PHONY:		texshowpdf
-texshowpdf:	$(PDF_FILE)
+texshowpdf:	texpdf
 		open $(PDF_FILE)
 
 # show and reposition the Preview.app window (under MacOS)
 .PHONY:		texreposition
-texreposition:	$(PDF_FILE)
+texreposition:	texpdf
 		open $(PDF_FILE)
 		osascript $(SHOWPREV_BIN) $(PDF_FILE) $(PREV_LOC)
 
@@ -178,3 +167,8 @@ texexport:	pdf
 texshowexport:	texexport
 		make -C $(EXPORT_DIR)
 		open $(EXPORT_DIR)/$(TEX).pdf
+
+# present a slide deck
+.PHONY:		texpresent
+texpresent:
+		/usr/bin/python $(PRESENT_BIN) $(PDF_FILE)

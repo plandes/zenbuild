@@ -7,7 +7,10 @@ include $(BUILD_MK_DIR)/tex.mk
 build:		texpdf
 
 .PHONY:		deploy
-deploy:		texfinal
+deploy:		texdist
 
 .PHONY:		show
 show:		texreposition
+
+.PHONY:		present
+present:	texpresent
