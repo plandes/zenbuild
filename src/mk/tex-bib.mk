@@ -2,11 +2,11 @@
 
 BIBTEX=		BSTINPUTS=$(TIPATHSTR) bibtex
 BIB_FILE ?=	$(TEX).bib
-BBL_FILE=	$(MTARG)/$(TEX).bbl
+BBL_FILE=	$(LAT_COMP_PATH)/$(TEX).bbl
 COMP_DEPS +=	$(BBL_FILE)
 TEX_INIT_RUN = 	1
 
 $(BBL_FILE):	$(BIB_FILE)
-		cp $(BIB_FILE) $(MTARG)
+		cp $(BIB_FILE) $(LAT_COMP_PATH)
 		@echo "running bibtex..."
-		( cd $(MTARG) ; $(BIBTEX) $(TEX) $(QUIET) )
+		( cd $(LAT_COMP_PATH) ; $(BIBTEX) $(TEX) $(QUIET) )

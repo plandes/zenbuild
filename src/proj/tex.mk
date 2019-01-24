@@ -4,10 +4,13 @@
 include $(BUILD_MK_DIR)/tex.mk
 
 .PHONY:		compile
-build:		texpdf
+compile:	texpdf
 
-.PHONY:		deploy
-deploy:		texdist
+.PHONY:		package
+package:	texpackage
+
+.PHONY:		install
+install:	texinstall
 
 .PHONY:		show
 show:		texreposition

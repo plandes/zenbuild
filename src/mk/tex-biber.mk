@@ -2,15 +2,15 @@
 
 BIBER=		BSTINPUTS=$(TIPATHSTR) biber
 BIB_FILE ?=	$(TEX).bib
-BBL_FILE=	$(MTARG)/$(TEX).bbl
+BBL_FILE=	$(LAT_COMP_PATH)/$(TEX).bbl
 COMP_DEPS +=	$(BBL_FILE)
 TEX_INIT_RUN = 	1
 
 
 $(BBL_FILE):	$(BIB_FILE)
-		cp $(BIB_FILE) $(MTARG)
+		cp $(BIB_FILE) $(LAT_COMP_PATH)
 		@echo "running biber..."
-		( cd $(MTARG) ; $(BIBER) $(TEX) $(QUIET) )
+		( cd $(LAT_COMP_PATH) ; $(BIBER) $(TEX) $(QUIET) )
 
 .PHONY:		cleanbib
 cleanbib:

@@ -11,11 +11,21 @@ PYTHON_BIN ?=	/usr/bin/python
 nullstr=
 space=		$(nullstr) $(nullstring)
 TIPATH +=	$(BUILD_SRC_DIR)/sty $(abspath ./sty)
-TIPATH_MTARG=	$(MTARG) $(TIPATH)
+LAT_COMP_PATH=	$(MTARG)/lat
+TIPATH_MTARG=	$(LAT_COMP_PATH) $(TIPATH)
 TIPATHSTR=	$(subst $(space),:,$(TIPATH_MTARG))
 # trailing colon needed
 TPATH=		TEXINPUTS=$(TIPATHSTR):
-LATEX_BIN ?=	$(TPATH) pdflatex -output-directory $(MTARG)
+PDFLAT_ARGS +=	
+LATEX_BIN ?=	$(TPATH) pdflatex $(PDFLAT_ARGS) -output-directory $(LAT_COMP_PATH)
+
+# package
+PKG_DIR=	$(MTARG)/pkg
+PKG_FINAL_DIR ?= $(PKG_DIR)/$(FINAL_NAME)
+ADD_CLEAN_ALL += $(PKG_DIR)
+
+# install/distribution
+INSTALL_DIR ?=	$(HOME)/Desktop
 
 # export
 EXPORT_DIR ?=	$(MTARG)/export
@@ -26,15 +36,15 @@ IMG_DIR=	$(abspath ../img)
 GRAFFLE_DIR=	$(abspath ../graffle)
 
 # file deps
-VECEPS=		$(addprefix $(MTARG)/,$(notdir $(wildcard $(VEC_DIR)/*)))
-IMAGES=		$(addprefix $(MTARG)/,$(notdir $(wildcard $(IMG_DIR)/*)))
-GRAFFLES=	$(addprefix $(MTARG)/,$(notdir $(wildcard $(GRAFFLE_DIR)/*)))
+VECEPS=		$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(VEC_DIR)/*)))
+IMAGES=		$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(IMG_DIR)/*)))
+GRAFFLES=	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(GRAFFLE_DIR)/*)))
 
 # files
-TEX_FILE=	$(MTARG)/$(TEX).tex
-PDF_FILE=	$(MTARG)/$(TEX).pdf
-MTARG_FILE=	$(MTARG)/mtarg.txt
-PRERUN_FILE=	$(MTARG)/prerun.txt
+TEX_FILE=	$(LAT_COMP_PATH)/$(TEX).tex
+PDF_FILE=	$(LAT_COMP_PATH)/$(TEX).pdf
+MTARG_FILE=	$(LAT_COMP_PATH)/mtarg.txt
+PRERUN_FILE=	$(LAT_COMP_PATH)/prerun.txt
 
 # dependencies
 COMP_DEPS +=	$(MTARG_FILE) $(TEX_FILE) $(VECEPS) $(IMAGES) $(GRAFFLES) $(PRERUN_FILE)
@@ -64,13 +74,13 @@ latexinfo:
 
 # shortgap for dependency marker (with the exception of the .tex file) for now
 $(MTARG_FILE):
-		mkdir -p $(MTARG)
+		mkdir -p $(LAT_COMP_PATH)
 		date >> $(MTARG_FILE)
 
 # compile all OmniGraffle files
 %.graffle:	$(MTARG_FILE)
 		cp -r $(GRAFFLE_DIR)/$(@F) $@
-		osascript $(GRAF_BIN) $@ $(MTARG)
+		osascript $(GRAF_BIN) $@ $(LAT_COMP_PATH)
 
 # copy over all vector .eps static files
 %.eps:		$(VEC_DIR)/$(@F) $(MTARG_FILE)
@@ -87,7 +97,7 @@ $(MTARG_FILE):
 # recompile even when editing .sty files (make proper dependencies?)
 .PHONY:		force
 texforce:	$(COMP_DEPS)
-		( cd $(MTARG) ; $(LATEX_BIN) $(TEX).tex $(QUIET) )
+		( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex $(QUIET) )
 
 # force recompile and snow
 .PHONY:		forceshow
@@ -98,13 +108,14 @@ $(PRERUN_FILE):
 		@echo "init run: $(TEX_INIT_RUN)"
 		@if [ ! -z "$(TEX_INIT_RUN)" ] ; then \
 			echo "starting latex pre-start run..." ; \
-			( cd $(MTARG) ; $(LATEX_BIN) $(TEX).tex $(QUIET) ) ; \
+			echo $(LATEX_BIN) $(TEX).tex $(QUIET) ; \
+			( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex $(QUIET) ) ; \
 			date >> $(PRERUN_FILE) ; \
 		fi
 
 # top level dependency (add sty files as dependencies later?)
 $(TEX_FILE):	$(TEX).tex
-		cp $(TEX).tex $(MTARG)
+		cp $(TEX).tex $(LAT_COMP_PATH)
 
 # build the PDF
 .PHONY:		texpdf
@@ -113,40 +124,33 @@ texpdf:		$(PDF_FILE)
 # should be able to put $(COMP_DEPS) as a dependency.  However, given the *.mk
 # file proccessing order, it completely skips the module make files
 $(PDF_FILE):	$(COMP_DEPS)
+		@echo "generating $(PDF_FILE)"
 		make $(COMP_DEPS)
 		@echo "latex first compile..."
-		( cd $(MTARG) ; $(LATEX_BIN) $(TEX).tex $(QUIET) )
+		( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex $(QUIET) )
 		@if [ ! -z "$(SECOND_RUN)" ] ; then \
 			echo "starting latex compile second run..." ; \
-			( cd $(MTARG) ; $(LATEX_BIN) $(TEX).tex $(QUIET) ) ; \
+			( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex $(QUIET) ) ; \
 		fi
 
-# final version: compile twice for refs and bibliography then copy to desktop
+# final version: compile twice for refs and bibliography
 .PHONY:		texfinal
 texfinal:
 		make SECOND_RUN=1 texpdf
-
-# create a zip file with the only the PDF as its contents
-.PHONY:		texdist
-texdist:	texfinal
-		@if [ ! -z "$(FINAL_PDF_NAME)" ] ; then \
-			echo "copy $(PDF_FILE) -> $(FINAL_PDF_NAME)..." ; \
-			cp $(PDF_FILE) "$(FINAL_PDF_NAME)" ; \
-		fi
 
 # compile and display the file using a simple open (MacOS or alias out)
 .PHONY:		texshowpdf
 texshowpdf:	texpdf
 		open $(PDF_FILE)
 
-# compile the final version and show in Preview
-.PHONY:		texfinalshow
-texfinalshow:	texfinal texshowpdf
-
 # a one pass compile and show (will flub refs and bibliography)
 .PHONY:		texshowquick
 texshowquick:
 		make PROJ_MODULES= SECOND_RUN= texshowpdf
+
+# compile the final version and show in Preview
+.PHONY:		texfinalshow
+texfinalshow:	texfinal texshowpdf
 
 # show and reposition the Preview.app window (under MacOS)
 .PHONY:		texreposition
@@ -159,17 +163,41 @@ texreposition:	texpdf
 texexport:	pdf
 		mkdir -p $(EXPORT_DIR)
 		cp $(wildcard $(TEX).tex $(BIB_FILE) $(BBL_FILE)) $(EXPORT_DIR)
-		cp $(wildcard $(MTARG)/*.eps $(MTARG)/*.png $(MTARG)/*.jpg $(MTARG)/*.gif) $(EXPORT_DIR)
+		cp $(wildcard $(LAT_COMP_PATH)/*.eps $(LAT_COMP_PATH)/*.png $(LAT_COMP_PATH)/*.jpg $(LAT_COMP_PATH)/*.gif) $(EXPORT_DIR)
 		cp $(wildcard $(addsuffix /*,$(TIPATH))) $(EXPORT_DIR)
 		cp $(BUILD_SRC_DIR)/template/tex-export-makefile $(EXPORT_DIR)/makefile
 
-# create no dependency and show file
-.PHONY:		texshowexport
-texshowexport:	texexport
-		make -C $(EXPORT_DIR)
-		open $(EXPORT_DIR)/$(TEX).pdf
+# create the presentation form of the slides
+.PHONY:		texpresentpdf
+texpresentpdf:
+		make PDFLAT_ARGS="'\def\ispresentation{1} \input{$(TEX).tex}'" \
+			SECOND_RUN=1 texpdf
+
+# create a zip file with the only the PDF as its contents
+.PHONY:		texpackage
+texpackage:	$(PKG_FINAL_DIR)
+
+# package directory target generates both slides versions or default paper/report
+$(PKG_FINAL_DIR):
+		make clean
+		mkdir -p $(PKG_FINAL_DIR)
+		make texfinal
+		@if [ -z "$(SLIDES)" ] ; then \
+			cp $(PDF_FILE) $(PKG_FINAL_DIR)/$(FINAL_NAME).pdf ; \
+		else \
+			cp $(PDF_FILE) $(PKG_FINAL_DIR)/$(FINAL_NAME)-slides.pdf ; \
+			rm -rf $(LAT_COMP_PATH) ; \
+			make texpresentpdf ; \
+			cp $(PDF_FILE) $(PKG_FINAL_DIR)/$(FINAL_NAME)-presenetation.pdf ; \
+		fi
 
 # present a slide deck
 .PHONY:		texpresent
-texpresent:	texfinal
-		$(PYTHON_BIN) $(PRESENT_BIN) $(PDF_FILE)
+texpresent:	texpackage
+		@echo "NOTE!: uncheck mirror mode: Sys Prefs > Display > Arragenemnt"
+		$(PYTHON_BIN) $(PRESENT_BIN) $(PKG_FINAL_DIR)/$(FINAL_NAME)-presenetation.pdf
+
+.PHONY:		texinstall
+texinstall:	texpackage
+		( cd $(PKG_DIR) ; zip -r $(FINAL_NAME).zip $(FINAL_NAME) )
+		cp $(PKG_DIR)/$(FINAL_NAME)/* $(PKG_DIR)/$(FINAL_NAME).zip $(INSTALL_DIR)
