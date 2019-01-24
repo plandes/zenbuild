@@ -1,8 +1,9 @@
 on showPreview(filename, x, y, width, height)
     log "update preview"
     tell application "Preview"
-        log "opening file: " & filename
-       	 open filename
+         -- disable for now since command line open is faster under Mojave
+         -- log "opening file: " & filename
+       	 -- open filename
 	 activate
 	 log "set screen bounds: x=" & x & ", y=" & y & ", width=" & width & ", height=" & height
     	 set theBounds to {x, y, width, height}

@@ -161,6 +161,7 @@ texshowpdf:	$(PDF_FILE)
 # show and reposition the Preview.app window (under MacOS)
 .PHONY:		texreposition
 texreposition:	$(PDF_FILE)
+		open $(PDF_FILE)
 		osascript $(SHOWPREV_BIN) $(PDF_FILE) $(PREV_LOC)
 
 # create a no dependency (from zenbuild) directory with files to recreate PDF
