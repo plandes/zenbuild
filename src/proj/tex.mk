@@ -12,6 +12,9 @@ package:	texpackage
 .PHONY:		install
 install:	texinstall
 
+.PHONY:		dist
+dist:		texinstall
+
 .PHONY:		export
 export:		texexport
 

@@ -111,3 +111,12 @@
 \newcommand{\zzprintindex}[1][section]{
   \zzsecaddtoc{#1}{Index}{spec:index}{false}%
   \printindex}
+
+% always use long acronyms
+% https://tex.stackexchange.com/questions/411625/acro-package-always-use-long-form-for-defined-acronym
+% \newcommand{\zzalwayslongacro}{
+% \ExplSyntaxOn
+% \cs_set_eq:NN \acro_use:n \acro_long:n
+% \cs_set_eq:NN \acro_short:n \acro_long:n
+% \cs_set_eq:NN \acro_alt:n \acro_long:n
+% \ExplSyntaxOff}
