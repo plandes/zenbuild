@@ -9,11 +9,14 @@ OM_INSTALL ?=		install
 # build config
 OM_DOC_DIR ?=		$(MTARG)/doc
 OM_HTML_DIR ?=		$(OM_DOC_DIR)/html
-OM_SHOW_DIR ?=		$(OM_HTML_DIR)/*
+OM_SHOW_DIR ?=		$(OM_HTML_DIR).html
 
 # export function for output formt
 OM_EXPORT_FUNC_HTML ?=	org-html-export-to-html
-OM_EXPORT_EVAL ?=	"t"
+# use Bootstrap compatible HTML Back-End for Org instead of default emacs
+OM_EXPORT_FUNC_HTML =	org-twbs-export-to-html
+# load default setup and force Orgmode initialization with `org-mode' call
+OM_EXPORT_EVAL =	"(progn (load \"~/.emacs\") (with-temp-buffer (org-mode)))"
 OM_EXPORT_FUNCS +=	$(OM_EXPORT_FUNC_HTML)
 
 # org files
