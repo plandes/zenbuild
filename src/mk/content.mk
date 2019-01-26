@@ -30,7 +30,7 @@ cntsite:		$(CNT_DEP_TARGS)
 				mkdir -pv $(CNT_STAGE_DIR) ; \
 			fi
 			@if [ -d "$(CNT_SITE_DIR)" ] ; then \
-				cp -rRL $(CNT_SITE_DIR) $(CNT_STAGE_DIR) ; \
+				cp -rL $(CNT_SITE_DIR) $(CNT_STAGE_DIR) ; \
 			fi
 
 # mount the volume on OSX in order to copy

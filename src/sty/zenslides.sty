@@ -88,3 +88,12 @@
 \newcommand{\zzfootcite}[2][]{\footnote{\zzcitelong{#2}~\cite[#1]{#2}}}
 \newcommand{\zzfootciteauthor}[1]{\zzciteauthorcite{#1}\zzfootcite{#1}}
 \newcommand{\zzfootciteshort}[1]{\zzciteshortcite{#1}\zzfootcite{#1}}
+
+%% presentation
+\ifdefined\ispresentation%
+  % used by Presentation.app with \zsnote
+  \usepackage[draft]{pdfcomment}
+  \newcommand{\zsnote}[1]{\marginnote{\pdfcomment[icon=note]{#1}}}
+\else
+  \newcommand{\zsnote}[1]{\note[item]{#1}}
+\fi
