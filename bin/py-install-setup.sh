@@ -10,3 +10,8 @@ echo "yeah, you really have to provide password (each time); this stores it with
 for i in $PYPI_URLS ; do
     python -m keyring set $i zensols
 done
+
+# install certifications on OSX
+if [[ "$OSTYPE" == "darwin"* ]] ; then
+    /Applications/Python\ 3.6/Install\ Certificates.command
+fi
