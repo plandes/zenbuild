@@ -36,7 +36,8 @@ IMG_DIR=	$(abspath ../img)
 GRAFFLE_DIR=	$(abspath ../graffle)
 
 # file deps
-VECEPS=		$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(VEC_DIR)/*)))
+VECEPS=		$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(VEC_DIR)/*.eps)))
+VECPDF=		$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(VEC_DIR)/*.pdf)))
 IMAGES=		$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(IMG_DIR)/*)))
 GRAFFLES=	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(GRAFFLE_DIR)/*)))
 
@@ -47,7 +48,7 @@ MTARG_FILE=	$(LAT_COMP_PATH)/mtarg.txt
 PRERUN_FILE=	$(LAT_COMP_PATH)/prerun.txt
 
 # dependencies
-COMP_DEPS +=	$(MTARG_FILE) $(TEX_FILE) $(VECEPS) $(IMAGES) $(GRAFFLES) $(PRERUN_FILE)
+COMP_DEPS +=	$(MTARG_FILE) $(TEX_FILE) $(VECEPS) $(VECPDF) $(IMAGES) $(GRAFFLES) $(PRERUN_FILE)
 
 # compiles faster in Emacs avoiding fontification of verbose output
 QUIET ?=	> /dev/null
@@ -68,6 +69,7 @@ latexinfo:
 		@echo "tex-file: $(TEX).tex"
 		@echo "t-path: $(TIPATH)"
 		@echo "vec-paths: $(VECEPS)"
+		@echo "pdf-paths: $(VECPDF)"
 		@echo "graffles: $(GRAFFLES)"
 		@echo "biber-file: $(BBL_FILE)"
 		@echo "deps: $(COMP_DEPS)"
@@ -84,6 +86,10 @@ $(MTARG_FILE):
 
 # copy over all vector .eps static files
 %.eps:		$(VEC_DIR)/$(@F) $(MTARG_FILE)
+		cp $(VEC_DIR)/$(@F) $@
+
+# copy over all vector .pdf static files
+%.pdf:		$(VEC_DIR)/$(@F) $(MTARG_FILE)
 		cp $(VEC_DIR)/$(@F) $@
 
 # copy over all raster .png static files
