@@ -21,5 +21,8 @@ export:		texexport
 .PHONY:		show
 show:		texreposition
 
+.PHONY:		open
+open:		texshowpdf
+
 .PHONY:		present
 present:	texpresent
