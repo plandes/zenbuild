@@ -5,6 +5,7 @@ CNT_DOC_URL ?=		https://example.com/webdavroot
 CNT_SITE_DIR ?=		./site
 CNT_STAGE_DIR ?=	$(MTARG)
 CNT_INST_DIR ?=		
+CNT_SRC_STAGE_DIR ?=	$(CNT_STAGE_DIR)
 CNT_DEP_TARGS +=
 CNT_DEPLOY_URL ?=	https://example.com/site/index.html
 
@@ -41,7 +42,7 @@ cntmount:
 # generate the site and copy as dry run for the rsync copy
 .PHONY:			cntdeploydry
 cntdeploydry:		cntmount $(CNT_DEP_TARGS)
-			rsync -rltpgoDuv -n --delete $(CNT_STAGE_DIR) $(CNT_INST_DIR) || true
+			rsync -rltpgoDuv -n --delete $(CNT_SRC_STAGE_DIR) $(CNT_INST_DIR) || true
 
 
 # generate the site and copy it to the mounted volume that has the destination
@@ -51,7 +52,7 @@ cntdeploy:		cntsite cntmount
 				echo "no install directory defined" ; \
 				exit 1 ; \
 			fi
-			rsync -rltpgoDuv --delete $(CNT_STAGE_DIR) $(CNT_INST_DIR) || true
+			rsync -rltpgoDuv --delete $(CNT_SRC_STAGE_DIR) $(CNT_INST_DIR) || true
 
 # create, deploy the site, then browse to it
 .PHONY:			cntrun
