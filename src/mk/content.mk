@@ -33,9 +33,10 @@ copysite:
 				mkdir -pv $(CNT_STAGE_DIR) ; \
 			fi
 			@if [ -d "$(CNT_SITE_DIR)" ] ; then \
-				echo "copying $(CNT_SITE_DIR) -> $(CNT_STAGE_DIR)" ; \
-				cp -rL $(CNT_SITE_DIR) $(CNT_STAGE_DIR) ; \
+				mkdir -pv $(CNT_SITE_DIR) ; \
 			fi
+			echo "copying $(CNT_SITE_DIR) -> $(CNT_STAGE_DIR)"
+			rsync -auv $(CNT_SITE_DIR) $(CNT_STAGE_DIR) || true
 
 .PHONY:			cntsite
 cntsite:		$(CNT_DEP_TARGS) copysite $(CNT_DEPLOY_DEP_TARGS)
@@ -49,7 +50,7 @@ cntmount:
 # generate the site and copy as dry run for the rsync copy
 .PHONY:			cntdeploydry
 cntdeploydry:		cntmount cntsite
-			rsync -rltpgoDuv -n --delete $(CNT_SRC_STAGE_DIR) $(CNT_INST_DIR) || true
+			rsync -auv -n --delete $(CNT_SRC_STAGE_DIR) $(CNT_INST_DIR) || true
 
 
 # generate the site and copy it to the mounted volume that has the destination
@@ -59,7 +60,7 @@ cntdeploy:		cntmount cntsite cntsite
 				echo "no install directory defined" ; \
 				exit 1 ; \
 			fi
-			rsync -rltpgoDuv --delete $(CNT_SRC_STAGE_DIR) $(CNT_INST_DIR) || true
+			rsync -auv --delete $(CNT_SRC_STAGE_DIR) $(CNT_INST_DIR) || true
 
 # create, deploy the site, then browse to it
 .PHONY:			cntshow
