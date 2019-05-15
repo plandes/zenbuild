@@ -6,7 +6,9 @@ CNT_SITE_DIR ?=		./site
 CNT_STAGE_DIR ?=	$(MTARG)
 CNT_INST_DIR ?=		
 CNT_SRC_STAGE_DIR ?=	$(CNT_STAGE_DIR)
+CNT_CONTENT_DIR ?=	$(CNT_STAGE_DIR)/$(CNT_SITE_DIR)
 CNT_DEP_TARGS +=
+CNT_DEPLOY_DEP_TARGS +=
 CNT_DEPLOY_URL ?=	https://example.com/site/index.html
 
 # module config
@@ -25,14 +27,19 @@ cntinfo:
 
 
 # generate the content site by making the target dir and copying contents
-.PHONY:			cntsite
-cntsite:		$(CNT_DEP_TARGS)
+.PHONY:			copysite
+copysite:
 			@if [ ! -d "$(CNT_STAGE_DIR)" ] ; then \
 				mkdir -pv $(CNT_STAGE_DIR) ; \
 			fi
 			@if [ -d "$(CNT_SITE_DIR)" ] ; then \
+				echo "copying $(CNT_SITE_DIR) -> $(CNT_STAGE_DIR)" ; \
 				cp -rL $(CNT_SITE_DIR) $(CNT_STAGE_DIR) ; \
 			fi
+
+.PHONY:			cntsite
+cntsite:		$(CNT_DEP_TARGS) copysite $(CNT_DEPLOY_DEP_TARGS)
+
 
 # mount the volume on OSX in order to copy
 .PHONY:			cntmount
@@ -41,13 +48,13 @@ cntmount:
 
 # generate the site and copy as dry run for the rsync copy
 .PHONY:			cntdeploydry
-cntdeploydry:		cntmount $(CNT_DEP_TARGS)
+cntdeploydry:		cntmount cntsite
 			rsync -rltpgoDuv -n --delete $(CNT_SRC_STAGE_DIR) $(CNT_INST_DIR) || true
 
 
 # generate the site and copy it to the mounted volume that has the destination
 .PHONY:			cntdeploy
-cntdeploy:		cntsite cntmount
+cntdeploy:		cntsite cntsite
 			@if [ -z "$(CNT_INST_DIR)" ] ; then \
 				echo "no install directory defined" ; \
 				exit 1 ; \

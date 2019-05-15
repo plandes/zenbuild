@@ -1,7 +1,7 @@
 ## makefile automates website files/documents
 
 # the source repository directory that has content to copy to the site
-CNT_SRC_STAGE_DIR ?=	$(CNT_STAGE_DIR)/$(CNT_SITE_DIR)/
+CNT_SRC_STAGE_DIR ?=	$(CNT_CONTENT_DIR)/
 
 ## include content modules
 include $(BUILD_MK_DIR)/content.mk
