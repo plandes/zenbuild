@@ -6,7 +6,7 @@ CNT_SITE_DIR ?=		./site
 CNT_STAGE_DIR ?=	$(MTARG)
 CNT_INST_DIR ?=		
 CNT_SRC_STAGE_DIR ?=	$(CNT_STAGE_DIR)
-CNT_CONTENT_DIR ?=	$(CNT_STAGE_DIR)/$(CNT_SITE_DIR)
+CNT_CONTENT_DIR ?=	$(abspath $(CNT_STAGE_DIR)/$(CNT_SITE_DIR))
 CNT_DEP_TARGS +=
 CNT_DEPLOY_DEP_TARGS +=
 CNT_DEPLOY_URL ?=	https://example.com/site/index.html
@@ -54,7 +54,7 @@ cntdeploydry:		cntmount cntsite
 
 # generate the site and copy it to the mounted volume that has the destination
 .PHONY:			cntdeploy
-cntdeploy:		cntsite cntsite
+cntdeploy:		cntmount cntsite cntsite
 			@if [ -z "$(CNT_INST_DIR)" ] ; then \
 				echo "no install directory defined" ; \
 				exit 1 ; \
@@ -62,8 +62,8 @@ cntdeploy:		cntsite cntsite
 			rsync -rltpgoDuv --delete $(CNT_SRC_STAGE_DIR) $(CNT_INST_DIR) || true
 
 # create, deploy the site, then browse to it
-.PHONY:			cntrun
-cntrun:			cntdeploy
+.PHONY:			cntshow
+cntshow:		cntdeploy
 			open $(CNT_DEPLOY_URL)
 			osascript -e 'tell application "Emacs" to activate'
 
