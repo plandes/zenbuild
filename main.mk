@@ -8,6 +8,9 @@ BUILD_BIN_DIR :=	$(BUILD_HOME_DIR)/bin
 BUILD_MK_DIR :=		$(BUILD_SRC_DIR)/mk
 
 # to be included
+PROJ_LOCAL_MKS =	$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_LCOAL_MODULES)))
+
+# to be included
 PROJ_MKS =		$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_MODULES) clean git))
 
 # executables
@@ -21,6 +24,7 @@ MTARG ?=		$(abspath ./target)
 all:			info
 
 ## includes
+include $(PROJ_LOCAL_MKS)
 include $(BUILD_SRC_DIR)/proj/$(PROJ_TYPE).mk
 include $(PROJ_MKS)
 

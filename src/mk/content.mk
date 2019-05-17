@@ -41,7 +41,6 @@ copysite:
 .PHONY:			cntsite
 cntsite:		$(CNT_DEP_TARGS) copysite $(CNT_DEPLOY_DEP_TARGS)
 
-
 # mount the volume on OSX in order to copy
 .PHONY:			cntmount
 cntmount:
@@ -55,7 +54,7 @@ cntdeploydry:		cntmount cntsite
 
 # generate the site and copy it to the mounted volume that has the destination
 .PHONY:			cntdeploy
-cntdeploy:		cntmount cntsite cntsite
+cntdeploy:		cntmount cntsite
 			@if [ -z "$(CNT_INST_DIR)" ] ; then \
 				echo "no install directory defined" ; \
 				exit 1 ; \
