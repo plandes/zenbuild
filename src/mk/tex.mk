@@ -20,7 +20,7 @@ PDFLAT_ARGS +=
 LATEX_BIN ?=	$(TPATH) pdflatex $(PDFLAT_ARGS) -output-directory $(LAT_COMP_PATH)
 
 # package
-PKG_DIR=	$(MTARG)/pkg
+PKG_DIR ?=	$(MTARG)/pkg
 PKG_FINAL_DIR ?= $(PKG_DIR)/$(FINAL_NAME)
 ADD_CLEAN_ALL += $(PKG_DIR)
 
@@ -31,9 +31,9 @@ INSTALL_DIR ?=	$(HOME)/Desktop
 EXPORT_DIR ?=	$(MTARG)/export
 
 # paths
-VEC_DIR=	$(abspath ../vec)
-IMG_DIR=	$(abspath ../img)
-GRAFFLE_DIR=	$(abspath ../graffle)
+VEC_DIR ?=	$(abspath ../vec)
+IMG_DIR ?=	$(abspath ../img)
+GRAFFLE_DIR ?=	$(abspath ../graffle)
 
 # file deps
 VECEPS=		$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(VEC_DIR)/*.eps)))
