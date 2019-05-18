@@ -1,6 +1,7 @@
 ## make include file to create README.md files from notes
 
-# markdown
+OM_MD_FILE_NAME ?=	README.md
+
 OM_MD_EXPORT_EVAL =	$(subst README,$(OM_MD_FILE_NAME),$(subst FILE,$(CNT_SITE_NAME),"\
 (progn (load \"~/.emacs\")\
   (with-temp-buffer (org-mode)\
