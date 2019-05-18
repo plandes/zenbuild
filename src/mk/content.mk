@@ -3,6 +3,7 @@
 
 CNT_DOC_URL ?=		https://example.com/webdavroot
 CNT_SITE_DIR ?=		./site
+CNT_SITE_OBJS +=	$(CNT_SITE_DIR)
 CNT_STAGE_DIR ?=	$(MTARG)
 CNT_INST_DIR ?=		
 CNT_SRC_STAGE_DIR ?=	$(CNT_STAGE_DIR)
@@ -35,8 +36,10 @@ copysite:
 			@if [ -d "$(CNT_SITE_DIR)" ] ; then \
 				mkdir -pv $(CNT_SITE_DIR) ; \
 			fi
-			echo "copying $(CNT_SITE_DIR) -> $(CNT_STAGE_DIR)"
-			rsync -auv $(CNT_SITE_DIR) $(CNT_STAGE_DIR) || true
+			@for i in $(CNT_SITE_OBJS) ; do \
+				echo "copying $(CNT_SITE_DIR) -> $(CNT_STAGE_DIR)" ; \
+				rsync -auv --exclude .DS_Store $$i $(CNT_STAGE_DIR) || true ; \
+			done
 
 .PHONY:			cntsite
 cntsite:		$(CNT_DEP_TARGS) copysite $(CNT_DEPLOY_DEP_TARGS)
