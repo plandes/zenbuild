@@ -19,6 +19,10 @@ show:			package cntshow
 .PHONY:			deploy
 deploy:			cntdeploy
 
+# deploy to an secondary (external) site
+.PHONY:			externalsite
+externalsite:		cntextdeploy
+
 # deploy and direct a browser to the deployed site
 .PHONY:			run
 run:			cntrun
