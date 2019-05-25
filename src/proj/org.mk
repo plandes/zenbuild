@@ -9,7 +9,7 @@ CNT_SITE_DIR ?=		./content
 # content staging directory where all files copied before deploy
 CNT_STAGE_DIR ?=	$(OM_HTML_DIR)/
 # used for `orgmode-show'
-OM_SHOW_DIR ?=		$(OM_HTML_DIR)/*.html
+OM_SHOW_FILES ?=	$(OM_HTML_DIR)/*.html
 
 ## include org mode and content modules
 include $(BUILD_MK_DIR)/orgmode-doc.mk
@@ -22,7 +22,7 @@ package:		cntsite
 
 # make the locally site and direct a browser to it
 .PHONY:			show
-show:			package orgmode-show
+show:			package cntshowlocal
 
 # deploy the site to the webserver
 .PHONY:			deploy

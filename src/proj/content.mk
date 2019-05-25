@@ -13,7 +13,7 @@ package:		cntsite
 
 # make the locally site and direct a browser to it
 .PHONY:			show
-show:			package cntshow
+show:			package cntshowlocal
 
 # deploy the site to the webserver
 .PHONY:			deploy

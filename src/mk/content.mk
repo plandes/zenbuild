@@ -64,9 +64,13 @@ cntdeploy:		cntmount cntsite
 			fi
 			rsync -auv --delete $(CNT_SRC_STAGE_DIR) $(CNT_INST_DIR) || true
 
+.PHONY:			cntshowlocal
+cntshowlocal:		cntsite
+			open $(CNT_INST_DIR)/$(CNT_HTML_FILE)
+
 # create, deploy the site, then browse to it
-.PHONY:			cntshow
-cntshow:		cntdeploy
+.PHONY:			cntshowremote
+cntshowremote:		cntdeploy
 			open $(CNT_DEPLOY_URL)
 			osascript -e 'tell application "Emacs" to activate'
 
