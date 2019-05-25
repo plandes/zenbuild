@@ -70,6 +70,7 @@ latexinfo:
 		@echo "t-path: $(TIPATH)"
 		@echo "vec-paths: $(VECEPS)"
 		@echo "pdf-paths: $(VECPDF)"
+		@echo "pkg-final-dir: $(PKG_FINAL_DIR)"
 		@echo "graffles: $(GRAFFLES)"
 		@echo "biber-file: $(BBL_FILE)"
 		@echo "deps: $(COMP_DEPS)"
@@ -188,7 +189,6 @@ texpackage:	$(PKG_FINAL_DIR)
 
 # package directory target generates both slides versions or default paper/report
 $(PKG_FINAL_DIR):
-		make clean
 		mkdir -p $(PKG_FINAL_DIR)
 		make texfinal
 		@if [ -z "$(SLIDES)" ] ; then \
