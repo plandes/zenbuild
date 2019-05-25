@@ -1,16 +1,28 @@
 ## make include file for content distribution projects
 ## PL 12/08/2018
 
+# URL to deploy content
 CNT_DOC_URL ?=		https://example.com/webdavroot
+# where source static content lives
 CNT_SITE_DIR ?=		./site
+# objects to build during site package
 CNT_SITE_OBJS +=	$(CNT_SITE_DIR)
+# site build directory on package
 CNT_STAGE_DIR ?=	$(MTARG)
+# directory on the host to deploy (used as target with rsync)
 CNT_INST_DIR ?=		
+# source directory to use for copy with rsync
 CNT_SRC_STAGE_DIR ?=	$(CNT_STAGE_DIR)
+# where the site content lives (used by orgmode builds)
 CNT_CONTENT_DIR ?=	$(abspath $(CNT_STAGE_DIR)/$(CNT_SITE_DIR))
+# additional dependencies to build before copying the site
 CNT_DEP_TARGS +=
+# additional dependencies to build after copying the site
 CNT_DEPLOY_DEP_TARGS +=
+# the URL to point the browser on a make remote show
 CNT_DEPLOY_URL ?=	https://example.com/site/index.html
+# default show target to show
+CNT_SHOW_TARG ?=	cntshowremote
 
 # module config
 INFO_TARGETS +=		cntinfo
@@ -22,6 +34,7 @@ cntinfo:
 			@echo "cnt-doc-url: $(CNT_DOC_URL)"
 			@echo "cnt-site-dir: $(CNT_SITE_DIR)"
 			@echo "cnt-stage-dir: $(CNT_STAGE_DIR)"
+			@echo "cnt-content-dir: $(CNT_CONTENT_DIR)"
 			@echo "cnt-inst-dir: $(CNT_INST_DIR)"
 			@echo "cnt-dep-targs: $(CNT_DEP_TARGS)"
 			@echo "cnt-deploy-url: $(CNT_DEPLOY_URL)"
@@ -64,9 +77,8 @@ cntdeploy:		cntmount cntsite
 			fi
 			rsync -auv --delete $(CNT_SRC_STAGE_DIR) $(CNT_INST_DIR) || true
 
-.PHONY:			cntshowlocal
-cntshowlocal:		cntsite
-			open $(CNT_INST_DIR)/$(CNT_HTML_FILE)
+.PHONY:			cntshow
+cntshow:		$(CNT_SHOW_TARG)
 
 # create, deploy the site, then browse to it
 .PHONY:			cntshowremote
