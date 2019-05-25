@@ -14,6 +14,8 @@
 % make links dark blue (ACL color)
 \definecolor{darkblue}{rgb}{0, 0, 0.5}
 
+\providecommand{\zzhrefcolor}{darkblue}
+
 % use the draft keyword to find hanging citations (or links) when given the
 % "pdflatex ... levels ..." error
 \@ifpackageloaded{hyperref}{}{%
@@ -23,9 +25,9 @@
   bookmarks,
   linktocpage,
   colorlinks=true,
-  linkcolor=darkblue,
-  urlcolor=darkblue,
-  citecolor=darkblue,
+  linkcolor=\zzhrefcolor,
+  urlcolor=\zzhrefcolor,
+  citecolor=\zzhrefcolor,
   pdftitle={\doctitle}, pdfauthor={\theauthor}, pdfsubject={\doctype}
 ]
 {hyperref}
