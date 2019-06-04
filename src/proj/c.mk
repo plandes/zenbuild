@@ -10,7 +10,7 @@ CFLAGS ?=		-I$(INC_DIR)
 
 # build setup
 CPROG_BIN ?=		$(MTARG)/$(CPROG)
-CPROG_INST_DIR ?=	./inst
+CPROG_INST_DIR ?=	$(APP_INST_DIR)
 
 # objects
 OBJ_NAMES =		$(patsubst %.c,%.o,$(notdir $(wildcard $(SRC_DIR)/*.c)))

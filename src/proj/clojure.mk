@@ -88,6 +88,10 @@ uber:		$(UBER_JAR)
 cleanuber:
 		rm -f $(LIB_JAR) $(UBER_JAR)
 
+.PHONY:		installuber
+installuber:	$(UBER_JAR)
+		cp $(UBER_JAR) $(APP_INST_DIR)
+
 .PHONY: 	deploy
 deploy:		checkver
 		$(DEPLOY_CMD)

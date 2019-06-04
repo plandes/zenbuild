@@ -19,6 +19,7 @@ AWSENV=			$(BUILD_BIN_DIR)/awsenv
 # build defaults
 PROJ_TYPE ?=		default
 MTARG ?=		$(abspath ./target)
+APP_INST_DIR ?=		./inst
 
 ## targets
 all:			info
