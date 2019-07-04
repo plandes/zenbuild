@@ -7,7 +7,7 @@
 PYTHON_BIN ?=		python
 PYTHON_BIN_ARGS ?=	
 PYTHON_TEST_ARGS ?=	
-PIP_BIN ?=		pip
+PIP_BIN ?=		$(PYTHON_BIN) -m pip
 
 # python path
 PY_SRC ?=		src/python
