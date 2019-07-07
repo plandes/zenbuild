@@ -55,7 +55,7 @@ cntcopysite:
 			done
 
 .PHONY:			cntsite
-cntsite:		$(CNT_DEP_TARGS) copysite $(CNT_DEPLOY_DEP_TARGS)
+cntsite:		$(CNT_DEP_TARGS) cntcopysite $(CNT_DEPLOY_DEP_TARGS)
 
 # mount the volume on OSX in order to copy
 .PHONY:			cntmount

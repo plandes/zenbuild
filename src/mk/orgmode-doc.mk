@@ -4,8 +4,8 @@
 ## includes
 include $(BUILD_MK_DIR)/emacs.mk
 
-# binaries
-OM_ORG_SWITCHES +=	$(EMACS_SWITCHES)
+# Emacs config
+OM_EMACS_SWITCHES +=	$(EMACS_SWITCHES)
 OM_INSTALL ?=		install
 
 # build config
