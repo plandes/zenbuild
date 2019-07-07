@@ -36,12 +36,12 @@ PYPI_SIGN ?=		pypiuser@example.com
 # build
 ADD_CLEAN +=		$(PY_COMPILED) $(PY_CACHE)
 ADD_CLEAN_ALL +=	$(PY_FLYMAKE)
-INFO_TARGETS +=		pythoninfo
+INFO_TARGETS +=		pyinfo
 
 
 # target
-.PHONY: pythoninfo
-pythoninfo:
+.PHONY: pyinfo
+pyinfo:
 	@echo "interpreter: $(PYTHON_BIN)"
 	@echo "py-src: $(PY_SRC)"
 	@echo "py-test: $(PY_SRC_TEST)"

@@ -3,29 +3,29 @@
 ## includes
 include $(BUILD_MK_DIR)/python.mk
 
-.PHONY:	run
+.PHONY:		run
 run:		pyrun
 
-.PHONY:	help
+.PHONY:		help
 help:		pyhelp
 
-.PHONY:	test
+.PHONY:		test
 test:		pytest
 
-.PHONY:	package
+.PHONY:		package
 package:	pypackage
 
-.PHONY:	deps
+.PHONY:		deps
 deps:		pydeps
 
-.PHONY: install
+.PHONY:		install
 install:	pyinstall
 
-.PHONY:	uninstall
+.PHONY:		uninstall
 uninstall:	pyuninstall
 
-.PHONY:	reinstall
+.PHONY:		reinstall
 reinstall:	uninstall install
 
-.PHONY:	deploy
+.PHONY:		deploy
 deploy:		pydist

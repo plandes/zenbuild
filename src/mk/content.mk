@@ -41,8 +41,8 @@ cntinfo:
 
 
 # generate the content site by making the target dir and copying contents
-.PHONY:			copysite
-copysite:
+.PHONY:			cntcopysite
+cntcopysite:
 			@if [ ! -d "$(CNT_STAGE_DIR)" ] ; then \
 				mkdir -pv $(CNT_STAGE_DIR) ; \
 			fi

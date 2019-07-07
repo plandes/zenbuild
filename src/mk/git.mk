@@ -1,5 +1,7 @@
 ## git functionality
 
+# git binary
+GIT_BIN ?=	git
 # see bin/py-install-setup.sh
 GTAGUTIL ?=	zenpybuild
 # default git rmeote
@@ -21,16 +23,16 @@ gitinfo:
 
 .PHONY: gitinit
 gitinit:
-	git init .
-	git add -A :/
-	git commit -am 'initial commit'
+	$(GIT_BIN) init .
+	$(GIT_BIN) add -A :/
+	$(GIT_BIN) commit -am 'initial commit'
 	$(GTAGUTIL) create -m 'initial release'
 
 .PHONY:	gitreinit
 gitreinit:
 	rm -fr .git .gitmodules zenbuild
-	git init .
-	git submodule add https://github.com/plandes/zenbuild
+	$(GIT_BIN) init .
+	$(GIT_BIN) submodule add https://github.com/plandes/zenbuild
 	make gitinit
 
 .PHONY: gittag
@@ -39,15 +41,20 @@ gittag:
 
 .PHONY: forcetag
 forcetag:
-	git add -A :/
-	git commit -am 'none' || echo "not able to commit"
+	$(GIT_BIN) add -A :/
+	$(GIT_BIN) commit -am 'none' || echo "not able to commit"
 	$(GTAGUTIL) recreate
+
+.PHONY:	gitgithubpush
+gitgithubpush:
+	@echo "pushing to github"
+	$(GIT_BIN) push github
 
 .PHONY: forcepush
 forcepush:
-	git push
-	git push --tags --force
+	$(GIT_BIN) push
+	$(GIT_BIN) push --tags --force
 
 .PHONY: newtag
 newtag:
-	$(GTAGUTIL) create -m '`git log -1 --pretty=%B`'
+	$(GTAGUTIL) create -m '`$(GIT_BIN) log -1 --pretty=%B`'
