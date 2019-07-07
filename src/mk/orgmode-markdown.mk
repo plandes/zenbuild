@@ -18,5 +18,5 @@ ADD_CLEAN_ALL +=	$(OM_MD_FILE_NAME)
 orgmode-markdown:	$(OM_MD_FILE_NAME)
 
 $(OM_MD_FILE_NAME):
-	        	$(OM_EMACS_BIN) $< $(OM_EMACS_SWITCHES) --batch \
+	        	$(EMACS_BIN) $< $(OM_EMACS_SWITCHES) --batch \
 			 	--eval $(OM_MD_EXPORT_EVAL) --kill

@@ -1,9 +1,11 @@
 ## make include file for Emacs Org projects
 ## PL 12/08/2018
 
+## includes
+include $(BUILD_MK_DIR)/emacs.mk
+
 # binaries
-OM_EMACS_BIN ?=		emacs
-OM_ORG_SWITCHES +=	--no-window-system
+OM_ORG_SWITCHES +=	$(EMACS_SWITCHES)
 OM_INSTALL ?=		install
 
 # build config
@@ -47,8 +49,8 @@ $(OM_HTML_DIR):
 # use emacs org html export to genereate the files
 %.html: %.org
 			@for f in $(OM_EXPORT_FUNCS) ; do \
-		        	echo $(OM_EMACS_BIN) $< $(OM_EMACS_SWITCHES) --batch --eval $(OM_EXPORT_EVAL) -f $$f --kill ; \
-		        	$(OM_EMACS_BIN) $< $(OM_EMACS_SWITCHES) --batch --eval $(OM_EXPORT_EVAL) -f $$f --kill ; \
+		        	echo $(EMACS_BIN) $< $(OM_EMACS_SWITCHES) --batch --eval $(OM_EXPORT_EVAL) -f $$f --kill ; \
+		        	$(EMACS_BIN) $< $(OM_EMACS_SWITCHES) --batch --eval $(OM_EXPORT_EVAL) -f $$f --kill ; \
 			done
 
 $(OM_HTML_DIR)/%.html:	%.html
