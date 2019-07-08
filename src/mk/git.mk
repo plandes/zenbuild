@@ -30,10 +30,12 @@ gitinit:
 
 .PHONY:	gitreinit
 gitreinit:
+	$(eval GIT_REMOTE:=$(shell git remote -v | head -1 | awk '{print "git remote add " $$1 " " $$2}'))
 	rm -fr .git .gitmodules zenbuild
 	$(GIT_BIN) init .
 	$(GIT_BIN) submodule add https://github.com/plandes/zenbuild
 	make gitinit
+	$(GIT_REMOTE)
 
 .PHONY: gittag
 gittag:
