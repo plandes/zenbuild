@@ -20,8 +20,8 @@ list:		eldistfiles
 .PHONY:		lint
 lint:		ellint
 
-.PHONY:		doc
-doc:		eldoc
+.PHONY:		docs
+docs:		eldoc
 
 .PHONY:		package
 package:	elpackage
