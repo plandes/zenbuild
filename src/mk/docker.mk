@@ -1,9 +1,10 @@
 ## docker makefile include
 
 # must declare these these
-#DOCKER_IMG_NAME=
-#DOCKER_BUILD_OBJS=
-#DOCKER_CONTAINER=
+#DOCKER_IMG_NAME =
+#DOCKER_BUILD_OBJS =
+#DOCKER_BUILD_ARGS = --build-arg var_name=${VARIABLE_NAME}
+#DOCKER_CONTAINER =
 
 # docker config
 DOCKER_CMD ?=		docker
@@ -32,7 +33,7 @@ dockercheckver:
 .PHONY: dockerbuild
 dockerbuild:	$(DOCKER_BUILD_OBJS)
 	$(DOCKER_CMD) rmi $(DOCKER_IMG) || true
-	$(DOCKER_CMD) build -t $(DOCKER_IMG) .
+	$(DOCKER_CMD) build $(DOCKER_BUILD_ARGS) -t $(DOCKER_IMG) .
 	$(DOCKER_CMD) tag $(DOCKER_IMG) $(DOCKER_IMG):$(DOCKER_VERSION)
 
 .PHONY: dockerbuildnocache
