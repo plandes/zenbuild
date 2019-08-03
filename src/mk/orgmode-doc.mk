@@ -33,10 +33,10 @@ ADD_OM_DEPS +=
 # info
 .PHONY:			orgmodeinfo
 orgmodeinfo:
-			@echo "doc-dir: $(OM_DOC_DIR)"
-			@echo "html-dir: $(OM_HTML_DIR)"
-			@echo "html-files: $(OM_HTML_FILES)"
-			@echo "export-funcs: $(OM_EXPORT_FUNCS)"
+			@echo "om-doc-dir: $(OM_DOC_DIR)"
+			@echo "om-html-dir: $(OM_HTML_DIR)"
+			@echo "om-html-files: $(OM_HTML_FILES)"
+			@echo "om-export-funcs: $(OM_EXPORT_FUNCS)"
 
 # install documentation
 .PHONY:			orgmode-html
