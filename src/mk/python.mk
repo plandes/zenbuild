@@ -82,6 +82,11 @@ pytest:	$(PY_TEST_DEPS)
 			$(PYTHON_TEST_ARGS) -m unittest $$i ; \
 	done
 
+# run tests in a virtual environment
+.PHONY:	pytestvirtual
+pytestvirtual:
+	make "PROJ_LOCAL_MODULES+=python-virtual" pytest
+
 # run python clis
 .PHONY:	pyrun
 pyrun:	$(PY_RUN_DEPS)

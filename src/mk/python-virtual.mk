@@ -24,6 +24,7 @@ pyvrinfo:
 
 # virtual environment target
 $(PY_VRENV_DIR):
+			@echo "creating virtual environment in $(PY_VRENV_DIR)"
 			$(PY_VRENV_BIN) $(PY_VRENV_DIR)
 
 .PHONY:			virtualenv
