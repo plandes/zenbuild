@@ -13,8 +13,8 @@ PIP_BIN ?=		$(PYTHON_BIN) -m pip
 PY_SRC ?=		src/python
 PY_SRC_CLI ?=		src/bin
 PY_SRC_TEST ?=		test/python
-PY_SRC_TEST_FILTER ?=	$(wildcard $(PY_SRC_TEST)/*_flymake.py) $(wildcard $(PY_SRC_TEST)/__init__.py)
-PY_SRC_TEST_PKGS ?=	$(basename $(notdir $(filter-out $(PY_SRC_TEST_FILTER),$(wildcard $(PY_SRC_TEST)/*.py))))
+PY_SRC_TEST_FILTER ?=	$(wildcard $(PY_SRC_TEST)/*_flymake.py)
+PY_SRC_TEST_PKGS ?=	$(basename $(notdir $(filter-out $(PY_SRC_TEST_FILTER),$(wildcard $(PY_SRC_TEST)/test_*.py))))
 PY_COMPILED +=		$(shell find $(PY_SRC) -name \*.pyc -type f)
 PY_FLYMAKE +=		$(shell find $(PY_SRC) -name \*_flymake.py -type f)
 PY_CACHE +=		$(shell find $(PY_SRC) $(PY_SRC_TEST) -type d -name __pycache__)
@@ -39,7 +39,7 @@ ADD_CLEAN_ALL +=	$(PY_FLYMAKE)
 INFO_TARGETS +=		pyinfo
 
 
-# target
+# targets
 .PHONY: pyinfo
 pyinfo:
 	@echo "interpreter: $(PYTHON_BIN)"
