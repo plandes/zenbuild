@@ -7,8 +7,9 @@ BUILD_SRC_DIR :=	$(BUILD_HOME_DIR)/src
 BUILD_BIN_DIR :=	$(BUILD_HOME_DIR)/bin
 BUILD_MK_DIR :=		$(BUILD_SRC_DIR)/mk
 
-# to be included
-PROJ_LOCAL_MKS =	$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_LCOAL_MODULES)))
+# to be included (PROJ_LOCAL_MODULES include variables needed to be defined
+# before targets)
+PROJ_LOCAL_MKS =	$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_LOCAL_MODULES)))
 
 # to be included
 PROJ_MKS =		$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_MODULES) clean git))

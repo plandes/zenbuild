@@ -15,6 +15,8 @@ PY_SRC_CLI ?=		src/bin
 PY_SRC_TEST ?=		test/python
 PY_SRC_TEST_FILTER ?=	$(wildcard $(PY_SRC_TEST)/*_flymake.py)
 PY_SRC_TEST_PKGS ?=	$(basename $(notdir $(filter-out $(PY_SRC_TEST_FILTER),$(wildcard $(PY_SRC_TEST)/test_*.py))))
+PY_TEST_DEPS +=
+PY_RUN_DEPS +=
 PY_COMPILED +=		$(shell find $(PY_SRC) -name \*.pyc -type f)
 PY_FLYMAKE +=		$(shell find $(PY_SRC) -name \*_flymake.py -type f)
 PY_CACHE +=		$(shell find $(PY_SRC) $(PY_SRC_TEST) -type d -name __pycache__)
@@ -72,7 +74,8 @@ pydeps:
 
 # run python tests
 .PHONY:	pytest
-pytest:
+pytest:	$(PY_TEST_DEPS)
+	echo $(PY_TEST_DEPS)
 	@for i in $(PY_SRC_TEST_PKGS) ; do \
 		echo "testing $$i" ; \
 		PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) $(PYTHON_BIN) \
@@ -81,7 +84,7 @@ pytest:
 
 # run python clis
 .PHONY:	pyrun
-pyrun:
+pyrun:	$(PY_RUN_DEPS)
 	@for i in $(PY_SRC_CLI)/* ; do \
 		echo "running $$i" ; \
 		PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) $$i $(PYTHON_BIN_ARGS) ; \
