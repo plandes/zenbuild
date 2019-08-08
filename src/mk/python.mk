@@ -75,7 +75,6 @@ pydeps:
 # run python tests
 .PHONY:	pytest
 pytest:	$(PY_TEST_DEPS)
-	echo $(PY_TEST_DEPS)
 	@for i in $(PY_SRC_TEST_PKGS) ; do \
 		echo "testing $$i" ; \
 		PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) $(PYTHON_BIN) \
@@ -113,6 +112,10 @@ $(MTARG_PYDIST_ATFC):	$(MTARG_PYDIST_BDIR)
 .PHONY:	pyinstall
 pyinstall:	pytest pypackage
 	$(PIP_BIN) install $(MTARG_PYDIST_DIR)/*.whl
+
+.PHONY:	pyinstallnotest
+pyinstallnotest:
+	make "PY_SRC_TEST_PKGS=" "PY_TEST_DEPS=" pyinstall
 
 # create a pip distribution and upload it
 .PHONY:	pydist
