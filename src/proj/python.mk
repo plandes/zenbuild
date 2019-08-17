@@ -27,5 +27,11 @@ uninstall:	pyuninstall
 .PHONY:		reinstall
 reinstall:	uninstall install
 
+.PHONY:		installnotest
+installnotest:	uninstall pyinstallnotest
+
+.PHONY:		reinstallnotest
+reinstallnotest:	uninstall pyinstallnotest
+
 .PHONY:		deploy
 deploy:		pydist
