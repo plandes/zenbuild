@@ -23,8 +23,8 @@
 % ex: \zzdefnamedclassacro[long]{nlp}{NLP}{natural language processing}{abbrev}
 \newcommand{\zzdefnamedclassacro}[7][default]{%
 \DeclareAcronym{#2}{
-  short=#3,
-  long=#4,
+  short={#3},
+  long={#4},
   first-style=#1,
   class=#5,
   short-indefinite=#6,
@@ -73,8 +73,20 @@
 %\zzdefexpandclassacro{#1}{#2}{#3}{def}{a}{a}
 \newcommand{\zzdefdef}[3]{%
 \DeclareAcronym{#1}{
-  short=#2,
-  long=#3,
+  short={#2},
+  long={#3},
+  first-long-format=\normalfont,
+  class=def
+}%
+\zzexpandacrocmd{#1}{#2}{#3}}
+
+% define a intro definition (contains an intro text)
+% ex: \zzdefintrodef{role}{role}{proponent vs.\@ opponent}{A proponent to an argument}
+\newcommand{\zzdefintrodef}[4]{%
+\DeclareAcronym{#1}{
+  short={#2},
+  long={#3},
+  extra={\xmakefirstuc{#3}.  {#4}},
   first-long-format=\normalfont,
   class=def
 }%

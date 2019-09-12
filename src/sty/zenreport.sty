@@ -12,12 +12,20 @@
 \usepackage[inline]{enumitem}
 \usepackage{zenacademic}
 
-%% intro page styles
-\newcommand{\zrreportinit}{%
-  \zssingletitledef
-  \title{{\bf \doclongtitle}\\\doctype}
+\newcommand{\zrreportcmds}{%
   \newcommand{\zrsec}[1]{\section*{##1}}
-  \newcommand{\zrsubsec}[1]{\subsection*{##1}}}
+  \newcommand{\zrsubsec}[1]{\subsection*{##1}}
+  \newcommand{\zrsubsubsec}[1]{\subsubsection*{##1}}}
+
+%% intro page styles
+\newcommand{\zrreportempty}{%
+  \title{{\bf \doclongtitle}\\\doctype}
+  \zrreportcmds}
+
+\newcommand{\zrreportinit}{%
+  \zssingletitledef%
+  \title{{\bf \doclongtitle}\\\doctype}
+  \zrreportcmds}
 
 \newcommand{\zrreportinitacademic}{%
   \author{\theauthor\ (\theauthoremail)}
@@ -25,8 +33,20 @@
   \makeatletter
   \patchcmd{\@maketitle}{\LARGE \@title}{\fontsize{16}{19.2}\selectfont{\bf\@title}}{}{}
   \makeatother
-  \newcommand{\zrsec}[1]{\subsection*{##1}}
-  \newcommand{\zrsubsec}[1]{\subsubsection*{##1}}}
+  \zrreportcmds}
+
+\newcommand{\zrreporttwoauthor}[2]{%
+  \author{
+    \theauthor\\\texttt{\theauthoremail}
+    \and
+    #1\\\texttt{#2}
+  }
+  \title{\doclongtitle\\\large\doctype}
+  \date{}
+  \makeatletter
+  \patchcmd{\@maketitle}{\LARGE \@title}{\fontsize{16}{19.2}\selectfont{\bf\@title}}{}{}
+  \makeatother
+  \zrreportcmds}
 
 \newcommand{\zrreptitle}{%
   \maketitle
