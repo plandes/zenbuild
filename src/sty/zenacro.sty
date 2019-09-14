@@ -4,17 +4,58 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenacro}[5/06/2018 Acronyms]
+\RequirePackage{kvoptions}
+\DeclareBoolOption{usesidenotes}
+\ProcessKeyvalOptions*
 
 \usepackage{acro}
-\acsetup{first-long-format=\itshape,hyperref=false,tooltip=true,index=true,page-style=plain,pages=first}
+\acsetup{
+  first-long-format=\itshape,
+  hyperref=true,
+  tooltip=true,
+  index=true,
+  page-style=plain,
+  pages=first,
+  only-used=true}%
 % add index entries for each acro
 \usepackage{makeidx}
 % uppercase first letter or each word command
 \usepackage{mfirstuc}
 % hyperlink URLs
 \usepackage{zenhref}
-% \zzsecaddtoc
+% section macros
 \usepackage{zensec}
+
+%\newcommand{\zzalink}[1]{\href{ac:#1}{#1}}
+
+\ifzenacro@usesidenotes
+  \usepackage{sidenotes}
+  \usepackage[top=.8in, bottom=1in, left=1in, right=1.5in, heightrounded,
+    marginparwidth=1.5in, marginparsep=3mm]{geometry}
+  %\renewcommand\thesidenote{\roman{sidenote}}
+  \renewcommand\thesidenote{}
+  % sidenotes first-style definition
+  \DeclareAcroFirstStyle{sidenote}{note}{
+    note-command = \sidenote{#1},
+    reversed = true
+  }
+  \newcommand{\zzacrofirststyle}{sidenote}
+  \newcommand{\zzacrolong}[2]{{\bf #1} (#2)}
+  \newcommand{\zzacrowhlong}[2]{{\bf #1}, which #2}
+\else
+  \DeclareAcroFirstStyle{firstdef}{inline}{
+    brackets = false,
+    reversed = true
+  }
+  \newcommand{\zzacrofirststyle}{firstdef}
+  \newcommand{\zzacrolong}[2]{{(#2)}}
+  \newcommand{\zzacrowhlong}[2]{\unskip, which is {#2}}
+  % \newcommand{\zzacrolong}[2]{{#2 (#1)}}
+  % \newcommand{\zzacrowhlong}[2]{, which #2}
+\fi
+\DeclareAcroFirstStyle{nobrack}{inline}{
+  brackets = false
+}
 
 %% acronym commands
 
@@ -64,7 +105,7 @@
 \zzdefexpandclassacro[long]{#1}{#2}{#2}{term}{a}{a}}
 
 % define a term (first occurrence is italic)
-% ex: \zzdefacroterm{corpus}
+% ex: \zzdefacrotermfalse{corpus}
 \newcommand{\zzdefacroterm}[1]{%
 \zzdefexpandclassacro[long]{#1}{#1}{#1}{term}{a}{a}}
 
@@ -75,6 +116,7 @@
 \DeclareAcronym{#1}{
   short={#2},
   long={#3},
+  first-style=nobrack,
   first-long-format=\normalfont,
   class=def
 }%
@@ -82,15 +124,21 @@
 
 % define a intro definition (contains an intro text)
 % ex: \zzdefintrodef{role}{role}{proponent vs.\@ opponent}{A proponent to an argument}
+% ex: Defined as yada \someacro. -> Defined as yaha (long text)
+% ex: Defined as yada, \someacrowh. -> Defined as yaha, which long text
 \newcommand{\zzdefintrodef}[4]{%
 \DeclareAcronym{#1}{
   short={#2},
-  long={#3},
-  extra={\xmakefirstuc{#3}.  {#4}},
+  short-plural-form={#2},
+  long={\zzacrolong{#2}{#3}},%{{\bf #2} (#3)},
+  long-plural-form={\zzacrowhlong{#2}{#3}},%{{\bf #2}, which #3},
+  list={\xmakefirstuc{#3}.  {#4}},
   first-long-format=\normalfont,
+  first-style=\zzacrofirststyle,
   class=def
 }%
-\zzexpandacrocmd{#1}{#2}{#3}}
+\expandafter\newcommand\csname #1\endcsname{\ac{#1}}%
+\expandafter\newcommand\csname #1wh\endcsname{\acp{#1}}}
 
 % define an URL as a hyperlink in a footnote
 % first-style = default | empty | square | short | long | reversed | footnote | sidenote | footnote-reversed|sidenote-reversed
@@ -98,7 +146,7 @@
 %     creates command \idebatecorp
 \newcommand{\zzdefurlacro}[3]{%
 \DeclareAcronym{#1}{
-  short=#2,
+  short={#2},
   long=\zzhref{#3},
   short-format=\normalfont,
   long-format=\normalfont,
