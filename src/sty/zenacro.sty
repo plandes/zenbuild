@@ -26,34 +26,30 @@
 % section macros
 \usepackage{zensec}
 
-%\newcommand{\zzalink}[1]{\href{ac:#1}{#1}}
-
 \ifzenacro@usesidenotes
   \usepackage{sidenotes}
   \usepackage[top=.8in, bottom=1in, left=1in, right=1.5in, heightrounded,
     marginparwidth=1.5in, marginparsep=3mm]{geometry}
-  %\renewcommand\thesidenote{\roman{sidenote}}
   \renewcommand\thesidenote{}
   % sidenotes first-style definition
-  \DeclareAcroFirstStyle{sidenote}{note}{
+  \DeclareAcroFirstStyle{zzsidenote}{note}{
     note-command = \sidenote{#1},
     reversed = true
   }
-  \newcommand{\zzacrofirststyle}{sidenote}
+  % looks like a bug preventing side note hyperrefs for the `which' case
+  \newcommand{\zzacrofirststyle}{zzsidenote}
   \newcommand{\zzacrolong}[2]{{\bf #1} (#2)}
-  \newcommand{\zzacrowhlong}[2]{{\bf #1}, which #2}
+  \newcommand{\zzacrowhlong}[2]{{\bf #1}, which {#2}}
 \else
-  \DeclareAcroFirstStyle{firstdef}{inline}{
+  \DeclareAcroFirstStyle{zzfirstdef}{inline}{
     brackets = false,
     reversed = true
   }
-  \newcommand{\zzacrofirststyle}{firstdef}
+  \newcommand{\zzacrofirststyle}{zzfirstdef}
   \newcommand{\zzacrolong}[2]{{(#2)}}
   \newcommand{\zzacrowhlong}[2]{\unskip, which is {#2}}
-  % \newcommand{\zzacrolong}[2]{{#2 (#1)}}
-  % \newcommand{\zzacrowhlong}[2]{, which #2}
 \fi
-\DeclareAcroFirstStyle{nobrack}{inline}{
+\DeclareAcroFirstStyle{zznobrack}{inline}{
   brackets = false
 }
 
@@ -116,7 +112,7 @@
 \DeclareAcronym{#1}{
   short={#2},
   long={#3},
-  first-style=nobrack,
+  first-style=zznobrack,
   first-long-format=\normalfont,
   class=def
 }%
@@ -130,15 +126,15 @@
 \DeclareAcronym{#1}{
   short={#2},
   short-plural-form={#2},
-  long={\zzacrolong{#2}{#3}},%{{\bf #2} (#3)},
-  long-plural-form={\zzacrowhlong{#2}{#3}},%{{\bf #2}, which #3},
+  long={\zzacrolong{#2}{#3}},
+  long-plural-form={\zzacrowhlong{#2}{#3}},
   list={\xmakefirstuc{#3}.  {#4}},
   first-long-format=\normalfont,
   first-style=\zzacrofirststyle,
   class=def
 }%
 \expandafter\newcommand\csname #1\endcsname{\ac{#1}}%
-\expandafter\newcommand\csname #1wh\endcsname{\acp{#1}}}
+\expandafter\newcommand\csname #1which\endcsname{\acp{#1}}}
 
 % define an URL as a hyperlink in a footnote
 % first-style = default | empty | square | short | long | reversed | footnote | sidenote | footnote-reversed|sidenote-reversed
