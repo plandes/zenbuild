@@ -74,18 +74,17 @@
 
 
 \newcommand{\zrrpage}{%
+% format date
+\usepackage[en-US]{datetime2}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
-\usepackage{datetime}
-\newdateformat{usvardate}{%
-\dayofweekname{\THEDAY}{\THEMONTH}{\THEYEAR}, \monthname[\THEMONTH] \ordinal{DAY}, \THEYEAR} 
 % used in maketitle
-\date{\usvardate\today}
+\date{\today}
 
 %% headers
 \providecommand{\zrrleftfooter}{Proprietary and Confidential}
-\providecommand{\zrrrightfooter}{}
+\providecommand{\zrrrightfooter}{\theorganization}
 
 % no header (line width=0 and height of header=0) at top
 \renewcommand{\headrulewidth}{0pt}
@@ -94,7 +93,7 @@
 \lhead{}
 \chead{}
 \rhead{}
-\lfoot{\footnotesize \usvardate\today\\\zrrrightfooter}
+\lfoot{\footnotesize \date\today\\\zrrrightfooter}
 \cfoot{}
 \rfoot{\footnotesize Page \thepage \\\zrrleftfooter}%
 }
