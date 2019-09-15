@@ -1,4 +1,6 @@
 # make module for creating latex tables from CSV files
+# to use, add the following to the make file:
+# PROJ_LOCAL_MODULES= tex-table
 # 9/15/2019
 
 # the script to generate the latex table
@@ -8,7 +10,6 @@ TEX_TAB_DIR ?=	$(abspath ../table)
 # all table definitions
 TEX_TAB_DEFS +=	$(wildcard $(TEX_TAB_DIR)/*.json)
 TEX_TAB_STYS =	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(patsubst %.json,%-tab.sty,$(TEX_TAB_DEFS))))
-TEX_INIT_RUN = 	1
 
 # build
 INFO_TARGETS +=	textabinfo
