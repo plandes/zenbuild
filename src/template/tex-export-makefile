@@ -38,4 +38,5 @@ $(PDF_FILE):	$(TEX_FILE)
 		$(LATEX_BIN) $(TEX).tex
 
 clean:
-		rm *.pdf
+		rm -f *.pdf *.out *.aux *.log *.bbl *.bcf *.blg \
+			*.upa *.upb *.xml zenbiber
