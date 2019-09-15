@@ -15,3 +15,6 @@ done
 if [[ "$OSTYPE" == "darwin"* ]] ; then
     /Applications/Python\ 3.6/Install\ Certificates.command
 fi
+
+# needed for python utililty scripts
+pip install -r requirements.txt 

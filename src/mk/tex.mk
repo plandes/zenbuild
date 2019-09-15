@@ -48,7 +48,8 @@ MTARG_FILE=	$(LAT_COMP_PATH)/mtarg.txt
 PRERUN_FILE=	$(LAT_COMP_PATH)/prerun.txt
 
 # dependencies
-COMP_DEPS +=	$(MTARG_FILE) $(TEX_FILE) $(VECEPS) $(VECPDF) $(IMAGES) $(GRAFFLES) $(PRERUN_FILE)
+PRE_COMP_DEPS +=$(VECEPS) $(VECPDF) $(IMAGES) $(GRAFFLES)
+COMP_DEPS +=	$(MTARG_FILE) $(TEX_FILE) $(PRE_COMP_DEPS) $(PRERUN_FILE)
 
 # compiles faster in Emacs avoiding fontification of verbose output
 QUIET ?=	> /dev/null
@@ -60,12 +61,12 @@ PREV_SIZE ?=	{1400, 1600}
 # invokes a pre run
 TEX_INIT_RUN =
 # build
-INFO_TARGETS +=	latexinfo
+INFO_TARGETS +=	texinfo
 
 
 ## targets
-.PHONY:	latexinfo
-latexinfo:
+.PHONY:	texinfo
+texinfo:
 		@echo "tex-file: $(TEX).tex"
 		@echo "t-path: $(TIPATH)"
 		@echo "vec-paths: $(VECEPS)"
@@ -73,7 +74,7 @@ latexinfo:
 		@echo "pkg-final-dir: $(PKG_FINAL_DIR)"
 		@echo "graffles: $(GRAFFLES)"
 		@echo "biber-file: $(BBL_FILE)"
-		@echo "deps: $(COMP_DEPS)"
+		@echo "comp-deps: $(COMP_DEPS)"
 
 # shortgap for dependency marker (with the exception of the .tex file) for now
 $(MTARG_FILE):

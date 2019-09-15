@@ -1,0 +1,4 @@
+tabulate==0.8.3
+pandas=>0.23.4
+plac=>0.9.6
+zensols.actioncli=>1.0.17
