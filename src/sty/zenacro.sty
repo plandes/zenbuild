@@ -38,16 +38,17 @@
   }
   % looks like a bug preventing side note hyperrefs for the `which' case
   \newcommand{\zzacrofirststyle}{zzsidenote}
-  \newcommand{\zzacrolong}[2]{{\bf #1} (#2)}
-  \newcommand{\zzacrowhlong}[2]{{\bf #1}, which {#2}}
+  \newcommand{\zzacrolong}[3]{{\bf #2} (#2)}
+  \newcommand{\zzacrowhlong}[3]{{\bf #2}, which {#3}}
 \else
   \DeclareAcroFirstStyle{zzfirstdef}{inline}{
     brackets = false,
-    reversed = true
+    reversed = true,
+    only-long = true
   }
   \newcommand{\zzacrofirststyle}{zzfirstdef}
-  \newcommand{\zzacrolong}[2]{{(#2)}}
-  \newcommand{\zzacrowhlong}[2]{\unskip, which is {#2}}
+  \newcommand{\zzacrolong}[3]{{\hyperlink{#1}{#2} (#3)}}
+  \newcommand{\zzacrowhlong}[3]{\hyperlink{#1}{#2}, which is {#3}}
 \fi
 \DeclareAcroFirstStyle{zznobrack}{inline}{
   brackets = false,
@@ -106,7 +107,8 @@
 \newcommand{\zzdefacroterm}[1]{%
 \zzdefexpandclassacro[long]{#1}{#1}{#1}{term}{a}{a}}
 
-% define a definition
+% define a definition (no long version, only creates a definition in the def
+% table)
 % ex: \zzdefdef{role}{role}{proponent vs.\@ opponent}
 %\zzdefexpandclassacro{#1}{#2}{#3}{def}{a}{a}
 \newcommand{\zzdefdef}[3]{%
@@ -123,19 +125,29 @@
 % ex: \zzdefintrodef{role}{role}{proponent vs.\@ opponent}{A proponent to an argument}
 % ex: Defined as yada \someacro. -> Defined as yaha (long text)
 % ex: Defined as yada, \someacrowh. -> Defined as yaha, which long text
-\newcommand{\zzdefintrodef}[4]{%
+% Important: this is not usable with first form as a plural.
+\newcommand{\zzdefintropluraldef}[5]{%
 \DeclareAcronym{#1}{
   short={#2},
-  short-plural-form={#2},
-  long={\zzacrolong{#2}{#3}},
-  long-plural-form={\zzacrowhlong{#2}{#3}},
-  list={\xmakefirstuc{#3}.  {#4}},
+  short-plural-form={\hyperlink{#1}{#2}},
+  alt={#3},
+  long={\zzacrolong{#1}{#2}{#4}},
+  long-plural-form={\zzacrowhlong{#1}{#2}{#4}},
+  list={\xmakefirstuc{#4}.  {#5}},
   first-long-format=\normalfont,
   first-style=\zzacrofirststyle,
   class=def
 }%
 \expandafter\newcommand\csname #1\endcsname{\ac{#1}}%
-\expandafter\newcommand\csname #1which\endcsname{\acp{#1}}}
+\expandafter\newcommand\csname #1which\endcsname{\acp{#1}}%
+\expandafter\newcommand\csname #1s\endcsname{\aca{#1}}}
+
+% define a intro definition (contains an intro text)
+% ex: \zzdefintrodef{role}{role}{proponent vs.\@ opponent}{A proponent to an argument}
+% ex: Defined as yada \someacro. -> Defined as yaha (long text)
+% ex: Defined as yada, \someacrowh. -> Defined as yaha, which long text
+% Important: this is not usable with first form as a plural.
+\newcommand{\zzdefintrodef}[4]{\zzdefintropluraldef{#1}{#2}{#2s}{#3}{#4}}
 
 % define an URL as a hyperlink in a footnote
 % first-style = default | empty | square | short | long | reversed | footnote | sidenote | footnote-reversed|sidenote-reversed
