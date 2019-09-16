@@ -2,7 +2,6 @@
 # created: 01/27/2011
 
 ## stuff to include in a makefile.in
-GRAF_BIN ?=	$(BUILD_BIN_DIR)/exportgraffle.scpt
 SHOWPREV_BIN ?=	$(BUILD_BIN_DIR)/showpreview.scpt
 PRESENT_BIN ?=	/Applications/Presentation.app/Contents/MacOS/presentation.py
 PYTHON_BIN ?=	/usr/bin/python
@@ -33,13 +32,11 @@ EXPORT_DIR ?=	$(MTARG)/export
 # paths
 VEC_DIR ?=	$(abspath ../vec)
 IMG_DIR ?=	$(abspath ../img)
-GRAFFLE_DIR ?=	$(abspath ../graffle)
 
 # file deps
 VECEPS=		$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(VEC_DIR)/*.eps)))
 VECPDF=		$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(VEC_DIR)/*.pdf)))
 IMAGES=		$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(IMG_DIR)/*)))
-GRAFFLES=	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(GRAFFLE_DIR)/*)))
 
 # files
 TEX_FILE=	$(LAT_COMP_PATH)/$(TEX).tex
@@ -48,7 +45,7 @@ MTARG_FILE=	$(LAT_COMP_PATH)/mtarg.txt
 PRERUN_FILE=	$(LAT_COMP_PATH)/prerun.txt
 
 # dependencies
-PRE_COMP_DEPS +=$(VECEPS) $(VECPDF) $(IMAGES) $(GRAFFLES)
+PRE_COMP_DEPS +=$(VECEPS) $(VECPDF) $(IMAGES)
 COMP_DEPS +=	$(MTARG_FILE) $(TEX_FILE) $(PRE_COMP_DEPS) $(PRERUN_FILE)
 
 # compiles faster in Emacs avoiding fontification of verbose output
@@ -72,7 +69,6 @@ texinfo:
 		@echo "vec-paths: $(VECEPS)"
 		@echo "pdf-paths: $(VECPDF)"
 		@echo "pkg-final-dir: $(PKG_FINAL_DIR)"
-		@echo "graffles: $(GRAFFLES)"
 		@echo "biber-file: $(BBL_FILE)"
 		@echo "comp-deps: $(COMP_DEPS)"
 
@@ -80,11 +76,6 @@ texinfo:
 $(MTARG_FILE):
 		mkdir -p $(LAT_COMP_PATH)
 		date >> $(MTARG_FILE)
-
-# compile all OmniGraffle files
-%.graffle:	$(MTARG_FILE)
-		cp -r $(GRAFFLE_DIR)/$(@F) $@
-		osascript $(GRAF_BIN) $@ $(LAT_COMP_PATH)
 
 # copy over all vector .eps static files
 %.eps:		$(VEC_DIR)/$(@F) $(MTARG_FILE)
