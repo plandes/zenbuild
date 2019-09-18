@@ -6,10 +6,10 @@
 # the script to generate the latex table
 TEX_TAB_BIN ?=	$(BUILD_BIN_DIR)/mklatextbl.py
 # where JSON table definitions live
-TEX_TAB_DIR ?=	$(abspath ../table)
+TEX_TAB_DIR ?=	$(TEX_CONF_DIR)
 # all table definitions
-TEX_TAB_DEFS +=	$(wildcard $(TEX_TAB_DIR)/*.json)
-TEX_TAB_STYS =	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(patsubst %.json,%-tab.sty,$(TEX_TAB_DEFS))))
+TEX_TAB_DEFS +=	$(wildcard $(TEX_TAB_DIR)/*-table.yml)
+TEX_TAB_STYS =	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(patsubst %.yml,%.sty,$(TEX_TAB_DEFS))))
 
 # build
 INFO_TARGETS +=	textabinfo
@@ -21,5 +21,5 @@ textabinfo:
 		@echo "tex-tab-defs: $(TEX_TAB_DEFS)"
 		@echo "tex-tab-stys: $(TEX_TAB_STYS)"
 
-%-tab.sty:	$(TEX_TAB_DIR)/$(@F) $(MTARG_FILE)
-		$(TEX_TAB_BIN) $(TEX_TAB_DIR)/$(*F).json $(@D)/$(*F)-tab.sty
+%-table.sty:	$(TEX_TAB_DIR)/$(@F) $(MTARG_FILE)
+		$(TEX_TAB_BIN) $(TEX_TAB_DIR)/$(*F)-table.yml $(@D)/$(*F)-table.sty

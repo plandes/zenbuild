@@ -3,6 +3,7 @@
 import sys
 import logging
 import json
+import yaml
 import re
 from pathlib import Path
 from datetime import datetime
@@ -107,7 +108,7 @@ class CsvToLatexTable(object):
     def _write_header(self):
         date = datetime.now().strftime('%Y/%m/%d')
         self.writer.write("""\\NeedsTeXFormat{LaTeX2e}
-\\ProvidesPackage{%(package_name)s-tab}[%(date)s Tables]
+\\ProvidesPackage{%(package_name)s}[%(date)s Tables]
 
 """  % {'date': date, 'package_name': self.package_name})
 
@@ -119,12 +120,12 @@ class CsvToLatexTable(object):
         df = table.dataframe
         data = it.chain([df.columns], map(lambda x: x[1].tolist(), df.iterrows()))
         lines = tabulate(data, tablefmt='latex_raw', headers='firstrow').split('\n')
-        writer.write('\\newcommand{\\%(tabname)s}{%%\n' % table.params)
+        writer.write('\n\\newcommand{\\%(tabname)s}{%%\n' % table.params)
         writer.write(table.header)
         writer.write('\n')
         for l in lines[1:-1]:
             writer.write(l + '\n')
-        writer.write('\\end{%s}}' % table.latex_environment)
+        writer.write('\\end{%s}}\n' % table.latex_environment)
 
     def write(self):
         self._write_header()
@@ -134,8 +135,8 @@ class CsvToLatexTable(object):
 
 
 class TableFileManager(object):
-    FILE_NAME_REGEX = re.compile(r'(.+)\.json')
-    PACKAGE_FORMAT = '{name}-tab'
+    FILE_NAME_REGEX = re.compile(r'(.+)\.yml')
+    PACKAGE_FORMAT = '{name}'
 
     def __init__(self, table_path: Path):
         self.table_path = table_path
@@ -146,7 +147,7 @@ class TableFileManager(object):
         fname = self.table_path.name
         m = self.FILE_NAME_REGEX.match(fname)
         if m is None:
-            raise ValueError(f'does not appear to be a JSON file: {fname}')
+            raise ValueError(f'does not appear to be a YAML file: {fname}')
         return self.PACKAGE_FORMAT.format(**{'name': m.group(1)})
 
     @property
@@ -154,20 +155,22 @@ class TableFileManager(object):
         logger.info(f'reading table definitions file {self.table_path}')
         tables = []
         with open(self.table_path) as f:
-            tdefs = json.load(f)
-        for td in tdefs:
+            content = f.read()
+        tdefs = yaml.load(content, yaml.FullLoader)
+        for name, td in tdefs.items():
             if 'type' in td:
                 cls_name = td['type'].capitalize() + 'Table'
                 del td['type']
             else:
                 cls_name = 'Table'
             cls = globals()[cls_name]
+            td['name'] = name
             tables.append(cls(**td))
         return tables
 
 
 @plac.annotations(
-    table_path=('The table definitions JSON path location.',
+    table_path=('The table definitions YAML path location.',
                 'positional', None, str),
     output_file=('The output file .sty file.', 'positional', None, str))
 def write_latex_table(table_path, output_file):

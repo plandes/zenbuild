@@ -6,8 +6,8 @@
 
 # script to generate EPS from OmniGraffle files
 TEX_GRF_BIN ?=	$(BUILD_BIN_DIR)/exportgraffle.scpt
-TEX_GRF_DIR ?=	$(abspath ../graffle)
-TEX_GRF_FILES=	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(TEX_GRF_DIR)/*)))
+TEX_GRF_DIR ?=	$(TEX_IMG_DIR)
+TEX_GRF_FILES=	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(TEX_GRF_DIR)/*.graffle)))
 
 # build
 INFO_TARGETS +=	texgraffleinfo

@@ -30,13 +30,14 @@ INSTALL_DIR ?=	$(HOME)/Desktop
 EXPORT_DIR ?=	$(MTARG)/export
 
 # paths
-VEC_DIR ?=	$(abspath ../vec)
-IMG_DIR ?=	$(abspath ../img)
+TEX_IMG_DIR ?=	$(abspath ../image)
+TEX_CONF_DIR ?=	$(abspath ../config)
 
 # file deps
-VECEPS=		$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(VEC_DIR)/*.eps)))
-VECPDF=		$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(VEC_DIR)/*.pdf)))
-IMAGES=		$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(IMG_DIR)/*)))
+TEX_IMG_EPS=	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.eps)))
+TEX_IMG_PNG=	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.png)))
+TEX_IMG_JPG=	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.jpg)))
+TEX_IMAGES=	$(TEX_IMG_EPS) $(TEX_IMG_PNG) $(TEX_IMG_JPG)
 
 # files
 TEX_FILE=	$(LAT_COMP_PATH)/$(TEX).tex
@@ -45,7 +46,7 @@ MTARG_FILE=	$(LAT_COMP_PATH)/mtarg.txt
 PRERUN_FILE=	$(LAT_COMP_PATH)/prerun.txt
 
 # dependencies
-PRE_COMP_DEPS +=$(VECEPS) $(VECPDF) $(IMAGES)
+PRE_COMP_DEPS +=$(TEX_IMAGES)
 COMP_DEPS +=	$(MTARG_FILE) $(TEX_FILE) $(PRE_COMP_DEPS) $(PRERUN_FILE)
 
 # compiles faster in Emacs avoiding fontification of verbose output
@@ -66,8 +67,8 @@ INFO_TARGETS +=	texinfo
 texinfo:
 		@echo "tex-file: $(TEX).tex"
 		@echo "t-path: $(TIPATH)"
-		@echo "vec-paths: $(VECEPS)"
-		@echo "pdf-paths: $(VECPDF)"
+		@echo "vec-paths: $(TEX_VEC_PS)"
+		@echo "pdf-paths: $(TEX_VEC_PDF)"
 		@echo "pkg-final-dir: $(PKG_FINAL_DIR)"
 		@echo "biber-file: $(BBL_FILE)"
 		@echo "comp-deps: $(COMP_DEPS)"
@@ -78,20 +79,20 @@ $(MTARG_FILE):
 		date >> $(MTARG_FILE)
 
 # copy over all vector .eps static files
-%.eps:		$(VEC_DIR)/$(@F) $(MTARG_FILE)
-		cp $(VEC_DIR)/$(@F) $@
+%.eps:		$(TEX_IMG_DIR)/$(@F) $(MTARG_FILE)
+		cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all vector .pdf static files
-%.pdf:		$(VEC_DIR)/$(@F) $(MTARG_FILE)
-		cp $(VEC_DIR)/$(@F) $@
+%.pdf:		$(TEX_IMG_DIR)/$(@F) $(MTARG_FILE)
+		cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all raster .png static files
 %.png:
-		@cp $(IMG_DIR)/$(@F) $@
+		@cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all raster .jpg static files
 %.jpg:
-		@cp $(IMG_DIR)/$(@F) $@
+		@cp $(TEX_IMG_DIR)/$(@F) $@
 
 # recompile even when editing .sty files (make proper dependencies?)
 .PHONY:		force
