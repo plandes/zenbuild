@@ -110,7 +110,6 @@
 % define a definition (no long version, only creates a definition in the def
 % table)
 % ex: \zzdefdef{role}{role}{proponent vs.\@ opponent}
-%\zzdefexpandclassacro{#1}{#2}{#3}{def}{a}{a}
 \newcommand{\zzdefdef}[3]{%
 \DeclareAcronym{#1}{
   short={#2},
@@ -148,6 +147,19 @@
 % ex: Defined as yada, \someacrowh. -> Defined as yaha, which long text
 % Important: this is not usable with first form as a plural.
 \newcommand{\zzdefintrodef}[4]{\zzdefintropluraldef{#1}{#2}{#2s}{#3}{#4}}
+
+% define an intro definition (just like \zzdefintrodef) but as a typical acro
+% with a short and long form
+% ex: \zzdefintrodef{cpt}{CPT}{conditional probability table}{Each node in the...}
+\newcommand{\zzdefintroacrodef}[4]{%
+\DeclareAcronym{#1}{
+  short={#2},
+  long={#3},
+  first-long-format=\normalfont,
+  list={#4},
+  class=def
+}%
+\zzexpandacrocmd{#1}{#2}{#3}}
 
 % NOTE: leaves bad links in the main body text, use \zznoteref instead
 % define an URL as a hyperlink in a footnote
