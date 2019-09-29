@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import sys
 import logging
-import json
 import yaml
 import re
 from pathlib import Path
