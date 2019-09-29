@@ -137,10 +137,3 @@ $(MTARG_WHEEL_DIR):	$(MTARG_PYDIST_ATFC)
 .PHONY:	pyuninstall
 pyuninstall:	clean
 	yes | $(PIP_BIN) uninstall `$(PYTHON_BIN) $(PY_SRC)/setup.py --name` || true
-
-# install Emacs elpy dependeicies
-.PHONY:	pyelpydeps
-pyelpydeps:
-	for i in jedi flake8 autopep8 yapf ; do \
-		$(PIP_BIN) install $$i ; \
-	done

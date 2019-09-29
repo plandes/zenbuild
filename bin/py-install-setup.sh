@@ -2,7 +2,13 @@
 
 PYPI_URLS="https://test.pypi.org/legacy/ https://upload.pypi.org/legacy/"
 
+echo "installing libraries for Python deployments"
 for i in setuptools twine wheel keyring ; do
+    pip install -U $i
+done
+
+echo "installing libraries for development with Emacs Elpy"
+for i in jedi flake8 autopep8 yapf importmagic ; do
     pip install -U $i
 done
 
@@ -12,9 +18,9 @@ for i in $PYPI_URLS ; do
 done
 
 # install certifications on OSX
-if [[ "$OSTYPE" == "darwin"* ]] ; then
-    /Applications/Python\ 3.6/Install\ Certificates.command
-fi
+# if [[ "$OSTYPE" == "darwin"* ]] ; then
+#     /Applications/Python\ 3.6/Install\ Certificates.command
+# fi
 
 # needed for python utililty scripts
 pip install -r requirements.txt 
