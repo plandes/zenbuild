@@ -36,3 +36,11 @@
 \usepackage{hypcap}
 
 \newcommand{\zzhref}[1]{\href{#1}{#1}}
+
+\newcommand{\zzfootref}[3]{%
+  \expandafter\newcommand\csname #1\endcsname{{\href{#3}{#2}}\footnote{\href{#3}{#3}}}}
+
+% https://tex.stackexchange.com/questions/118182/selectively-turn-off-hyperref-links-for-citations
+\newcommand*{\zznolink}[1]{%
+  {\protect\NoHyper#1\protect\endNoHyper}%
+}

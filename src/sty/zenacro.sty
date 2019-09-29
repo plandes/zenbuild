@@ -149,13 +149,14 @@
 % Important: this is not usable with first form as a plural.
 \newcommand{\zzdefintrodef}[4]{\zzdefintropluraldef{#1}{#2}{#2s}{#3}{#4}}
 
+% NOTE: leaves bad links in the main body text, use \zznoteref instead
 % define an URL as a hyperlink in a footnote
 % first-style = default | empty | square | short | long | reversed | footnote | sidenote | footnote-reversed|sidenote-reversed
 % ex: \zzdefurlacro{idebatecorp}{idebate corpus}{https://idebate.org/debatabase}
 %     creates command \idebatecorp
 \newcommand{\zzdefurlacro}[3]{%
 \DeclareAcronym{#1}{
-  short={#2},
+  short={\zznolink{#2}},
   long=\zzhref{#3},
   short-format=\normalfont,
   long-format=\normalfont,
