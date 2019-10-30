@@ -117,7 +117,8 @@ class CsvToLatexTable(object):
     def _write_table(self, table):
         writer = self.writer
         df = table.dataframe
-        data = it.chain([df.columns], map(lambda x: x[1].tolist(), df.iterrows()))
+        cols = [tuple(map(lambda c: f'\\textbf{{{c}}}', df.columns))]
+        data = it.chain(cols, map(lambda x: x[1].tolist(), df.iterrows()))
         lines = tabulate(data, tablefmt='latex_raw', headers='firstrow').split('\n')
         writer.write('\n\\newcommand{\\%(tabname)s}{%%\n' % table.params)
         writer.write(table.header)
