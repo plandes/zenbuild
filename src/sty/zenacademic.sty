@@ -102,14 +102,8 @@
   \providecommand{\zzciteshort}{\zzciteshortcite}
   \providecommand{\zzciteauthor}{\zzciteauthorcite}}
 
-\newcommand{\zzadddefbiblatexstyle}[2][numeric]{%
-  \usepackage[style=#1,citestyle=#1,backend=biber]{biblatex}
-  \usepackage{csquotes}
-  \addbibresource{#2}
-  \zzaddcommands}
-
-\newcommand{\zzaddbiblatexstylesep}[3]{%
-  \usepackage[natbib=true,maxcitenames=1,backref,style=#1,citestyle=#2,backend=biber]{biblatex}
+\newcommand{\zzaddbiblatexstylefull}[2]{%
+  \usepackage[natbib=true,maxcitenames=1,backref,#1,backend=biber]{biblatex}
   \usepackage{csquotes}
   \AtEveryBibitem{
     \clearfield{urlyear}
@@ -117,9 +111,10 @@
       \clearfield{url}
     }
   }
-  \addbibresource{#3}
+  \addbibresource{#2}
   \zzaddcommands}
 
+\newcommand{\zzaddbiblatexstylesep}[3]{\zzaddbiblatexstylefull{style=#1,citestyle=#2}{#3}}
 \newcommand{\zzaddbiblatexstyle}[2][numeric]{\zzaddbiblatexstylesep{#1}{#1}{#2}}
 
 \newcommand{\zzprintbibliography}[1][section]{%
