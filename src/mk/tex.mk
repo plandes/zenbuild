@@ -66,12 +66,13 @@ INFO_TARGETS +=	texinfo
 .PHONY:	texinfo
 texinfo:
 		@echo "tex-file: $(TEX).tex"
-		@echo "t-path: $(TIPATH)"
+		@echo "tipath: $(TIPATH)"
 		@echo "vec-paths: $(TEX_VEC_PS)"
 		@echo "pdf-paths: $(TEX_VEC_PDF)"
 		@echo "pkg-final-dir: $(PKG_FINAL_DIR)"
 		@echo "biber-file: $(BBL_FILE)"
 		@echo "comp-deps: $(COMP_DEPS)"
+		@echo "pdf-file: $(PDF_FILE)"
 
 # shortgap for dependency marker (with the exception of the .tex file) for now
 $(MTARG_FILE):
