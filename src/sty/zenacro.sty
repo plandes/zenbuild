@@ -5,7 +5,9 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenacro}[5/06/2018 Acronyms]
 \RequirePackage{kvoptions}
+
 \DeclareBoolOption{usesidenotes}
+\DeclareBoolOption{nouseindex}
 \ProcessKeyvalOptions*
 
 \usepackage{acro}
@@ -17,8 +19,12 @@
   page-style=plain,
   pages=first,
   only-used=true}%
+
+\ifzenacro@nouseindex
+\else
 % add index entries for each acro
 \usepackage{makeidx}
+\fi
 % uppercase first letter or each word command
 \usepackage{mfirstuc}
 % hyperlink URLs

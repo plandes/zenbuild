@@ -15,7 +15,7 @@ TIPATH_MTARG=	$(LAT_COMP_PATH) $(TIPATH)
 TIPATHSTR=	$(subst $(space),:,$(TIPATH_MTARG))
 # trailing colon needed
 TPATH=		TEXINPUTS=$(TIPATHSTR):
-PDFLAT_ARGS +=	
+PDFLAT_ARGS +=
 LATEX_BIN ?=	$(TPATH) pdflatex $(PDFLAT_ARGS) -output-directory $(LAT_COMP_PATH)
 
 # package
@@ -49,8 +49,15 @@ PRERUN_FILE=	$(LAT_COMP_PATH)/prerun.txt
 PRE_COMP_DEPS +=$(TEX_IMAGES)
 COMP_DEPS +=	$(MTARG_FILE) $(TEX_FILE) $(PRE_COMP_DEPS) $(PRERUN_FILE)
 
-# compiles faster in Emacs avoiding fontification of verbose output
-QUIET ?=	> /dev/null
+# control verbosity
+TEX_QUIET ?=	1
+ifeq ($(TEX_QUIET),1)
+# https://tex.stackexchange.com/questions/1191/reducing-the-console-output-of-latex
+PDFLAT_ARGS +=	-interaction batchmode
+endif
+
+# no output at all (faster in Emacs avoiding)
+#QUIET ?=	> /dev/null
 
 # default position of Preview.app
 PREV_POS ?=	{1500, 0}
@@ -98,7 +105,7 @@ $(MTARG_FILE):
 # recompile even when editing .sty files (make proper dependencies?)
 .PHONY:		force
 texforce:	$(COMP_DEPS)
-		( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex $(QUIET) )
+		( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex )
 
 # force recompile and snow
 .PHONY:		forceshow
@@ -109,8 +116,8 @@ $(PRERUN_FILE):
 		@echo "init run: $(TEX_INIT_RUN)"
 		@if [ ! -z "$(TEX_INIT_RUN)" ] ; then \
 			echo "starting latex pre-start run..." ; \
-			echo $(LATEX_BIN) $(TEX).tex $(QUIET) ; \
-			( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex $(QUIET) ) ; \
+			echo $(LATEX_BIN) $(TEX).tex ; \
+			( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex ) ; \
 			date >> $(PRERUN_FILE) ; \
 		fi
 
@@ -128,10 +135,10 @@ $(PDF_FILE):	$(COMP_DEPS)
 		@echo "generating $(PDF_FILE)"
 		make $(COMP_DEPS)
 		@echo "latex first compile..."
-		( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex $(QUIET) )
+		( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex )
 		@if [ ! -z "$(SECOND_RUN)" ] ; then \
 			echo "starting latex compile second run..." ; \
-			( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex $(QUIET) ) ; \
+			( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex ) ; \
 		fi
 
 # final version: compile twice for refs and bibliography
