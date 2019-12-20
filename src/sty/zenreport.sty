@@ -28,7 +28,7 @@
   \zrreportcmds}
 
 \newcommand{\zrreportinitacademic}{%
-  \author{\theauthor\ (\theauthoremail)}
+  \author{\theauthor\\\texttt{\theauthoremail}}
   \title{\doclongtitle\\\large\doctype}
   \makeatletter
   \patchcmd{\@maketitle}{\LARGE \@title}{\fontsize{16}{19.2}\selectfont{\bf\@title}}{}{}
