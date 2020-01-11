@@ -212,5 +212,4 @@ texpresent:	texpackage
 
 .PHONY:		texinstall
 texinstall:	texpackage
-		( cd $(PKG_DIR) ; zip -r $(FINAL_NAME).zip $(FINAL_NAME) )
 		cp $(PKG_DIR)/$(FINAL_NAME)/* $(PKG_DIR)/$(FINAL_NAME).zip $(INSTALL_DIR)

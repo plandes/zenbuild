@@ -1,6 +1,6 @@
 # make module for creating biber (new) style bibliographies in latex
 
-BIBER=		BSTINPUTS=$(TIPATHSTR) biber
+BIBER ?=	BSTINPUTS=$(TIPATHSTR) biber
 BIB_FILE ?=	$(TEX).bib
 BBL_FILE=	$(LAT_COMP_PATH)/$(TEX).bbl
 COMP_DEPS +=	$(BBL_FILE)
