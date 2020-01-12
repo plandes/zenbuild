@@ -18,13 +18,16 @@ TPATH=		TEXINPUTS=$(TIPATHSTR):
 PDFLAT_ARGS +=
 LATEX_BIN ?=	$(TPATH) pdflatex $(PDFLAT_ARGS) -output-directory $(LAT_COMP_PATH)
 
+# install/distribution
+INSTALL_DIR ?=	$(HOME)/Desktop
+INSTALL_PDF ?=	$(INSTALL_DIR)/$(FINAL_NAME).pdf
+INSTALL_ZIP ?=	$(INSTALL_DIR)/$(FINAL_NAME).zip
+
 # package
 PKG_DIR ?=	$(MTARG)/pkg
 PKG_FINAL_DIR ?= $(PKG_DIR)/$(FINAL_NAME)
-ADD_CLEAN_ALL += $(PKG_DIR)
-
-# install/distribution
-INSTALL_DIR ?=	$(HOME)/Desktop
+TEX_PKG_ADD +=
+ADD_CLEAN_ALL += $(PKG_DIR) $(INSTALL_PDF) $(INSTALL_ZIP)
 
 # export
 EXPORT_DIR ?=	$(MTARG)/export
@@ -189,7 +192,7 @@ texpresentpdf:
 
 # create a zip file with the only the PDF as its contents
 .PHONY:		texpackage
-texpackage:	$(PKG_FINAL_DIR)
+texpackage:	$(PKG_FINAL_DIR) $(TEX_PKG_ADD)
 
 # package directory target generates both slides versions or default paper/report
 $(PKG_FINAL_DIR):
@@ -212,4 +215,11 @@ texpresent:	texpackage
 
 .PHONY:		texinstall
 texinstall:	texpackage
-		cp $(PKG_DIR)/$(FINAL_NAME)/* $(PKG_DIR)/$(FINAL_NAME).zip $(INSTALL_DIR)
+		@if [ `ls $(PKG_DIR)/$(FINAL_NAME) | wc -l` -gt 1 ] ; then \
+			echo "installing zip of all resources..." ; \
+			( cd $(PKG_DIR) ; zip -r $(FINAL_NAME).zip $(FINAL_NAME) ) ; \
+			cp $(PKG_DIR)/$(FINAL_NAME).zip $(INSTALL_ZIP) ; \
+		else \
+			echo "installing just PDF" ; \
+			cp $(PKG_DIR)/$(FINAL_NAME)/$(FINAL_NAME).pdf $(INSTALL_PDF) ; \
+		fi
