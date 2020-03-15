@@ -11,6 +11,7 @@ DOCKER_CMD ?=		docker
 DOCKER_CMP_CMD ?=	docker-compose
 DOCKER_USER ?=		$(GITUSER)
 DOCKER_CONTAINER ?=	$(shell grep container_name docker-compose.yml | awk '{print $$2}')
+DOCKER_PREFIX ?=	.
 DOCKER_IMG_NAME ?=	$(DOCKER_CONTAINER)
 DOCKER_IMG=		$(DOCKER_USER)/$(DOCKER_IMG_NAME)
 DOCKER_VERSION ?=	snapshot
@@ -33,7 +34,7 @@ dockercheckver:
 .PHONY: dockerbuild
 dockerbuild:	$(DOCKER_BUILD_OBJS)
 	$(DOCKER_CMD) rmi $(DOCKER_IMG) || true
-	$(DOCKER_CMD) build $(DOCKER_BUILD_ARGS) -t $(DOCKER_IMG) .
+	$(DOCKER_CMD) build $(DOCKER_BUILD_ARGS) -t $(DOCKER_IMG) $(DOCKER_PREFIX)
 	$(DOCKER_CMD) tag $(DOCKER_IMG) $(DOCKER_IMG):$(DOCKER_VERSION)
 
 .PHONY: dockerbuildnocache

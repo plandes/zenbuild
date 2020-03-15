@@ -6,6 +6,7 @@ ASBIN_DIR ?=	src/asbin
 
 # app assemble (maven plugin
 AS_DIR=		$(MTARG)/appassembler
+ASBIN_NAME ?=	setupenv
 DIST_DIR=	$(if $(DIST_PREFIX),$(DIST_PREFIX)/$(APP_NAME_REF),target/dist/$(APP_NAME_REF))
 DIST_BIN_DNAME=	bin
 DIST_BIN_DIR=	$(DIST_DIR)/$(DIST_BIN_DNAME)
