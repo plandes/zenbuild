@@ -50,7 +50,6 @@ pyinfo:
 	@echo "py-test-pkgs: $(PY_SRC_TEST_PKGS)"
 	@echo "py-dist-atfc: $(MTARG_PYDIST_ATFC)"
 	@echo "py-dist-res: $(MTARG_PYDIST_RES)"
-	@echo "clean: $(ADD_CLEAN)"
 
 $(MTARG_PYDIST_BDIR):
 	@echo "building dist in $(MTARG_PYDIST_BDIR)"
