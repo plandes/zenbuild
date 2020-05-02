@@ -13,8 +13,7 @@ PIP_BIN ?=		$(PYTHON_BIN) -m pip
 PY_SRC ?=		src/python
 PY_SRC_CLI ?=		src/bin
 PY_SRC_TEST ?=		test/python
-PY_SRC_TEST_FILTER ?=	$(wildcard $(PY_SRC_TEST)/*_flymake.py)
-PY_SRC_TEST_PKGS ?=	$(basename $(notdir $(filter-out $(PY_SRC_TEST_FILTER),$(wildcard $(PY_SRC_TEST)/test_*.py))))
+PY_SRC_TEST_PAT ?=	'test_*.py'
 PY_TEST_DEPS +=
 PY_RUN_DEPS +=
 PY_COMPILED +=		$(shell find $(PY_SRC) -name \*.pyc -type f)
@@ -47,7 +46,7 @@ pyinfo:
 	@echo "interpreter: $(PYTHON_BIN)"
 	@echo "py-src: $(PY_SRC)"
 	@echo "py-test: $(PY_SRC_TEST)"
-	@echo "py-test-pkgs: $(PY_SRC_TEST_PKGS)"
+	@echo "py-test-test-pat: $(PY_SRC_TEST_PAT)"
 	@echo "py-dist-atfc: $(MTARG_PYDIST_ATFC)"
 	@echo "py-dist-res: $(MTARG_PYDIST_RES)"
 
@@ -74,11 +73,9 @@ pydeps:
 # run python tests
 .PHONY:	pytest
 pytest:	$(PY_TEST_DEPS)
-	@for i in $(PY_SRC_TEST_PKGS) ; do \
-		echo "testing $$i" ; \
-		PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) $(PYTHON_BIN) \
-			$(PYTHON_TEST_ARGS) -m unittest $$i ; \
-	done
+	@PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) $(PYTHON_BIN) \
+		$(PYTHON_TEST_ARGS) -m unittest discover \
+		-s $(PY_SRC_TEST) -p $(PY_SRC_TEST_PAT) -v
 
 # run tests in a virtual environment
 .PHONY:	pytestvirtual
@@ -90,7 +87,8 @@ pytestvirtual:
 pyrun:	$(PY_RUN_DEPS)
 	@for i in $(PY_SRC_CLI)/* ; do \
 		echo "running $$i" ; \
-		PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) $$i $(PYTHON_BIN_ARGS) ; \
+		PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) \
+			$$i $(PYTHON_BIN_ARGS) ; \
 	done
 
 # display the command line help usage
@@ -114,7 +112,7 @@ pyinstall:	pytest pypackage
 
 .PHONY:	pyinstallnotest
 pyinstallnotest:
-	make "PY_SRC_TEST_PKGS=" "PY_TEST_DEPS=" pyinstall
+	make "PY_SRC_TEST_PAT=NONE" "PY_TEST_DEPS=" pyinstall
 
 # create a pip distribution and upload it
 .PHONY:	pydist
