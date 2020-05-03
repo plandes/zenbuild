@@ -7,6 +7,7 @@
 PYTHON_BIN ?=		python
 PYTHON_BIN_ARGS ?=	
 PYTHON_TEST_ARGS ?=	
+PYTHON_TEST_ENV ?=
 PIP_BIN ?=		$(PYTHON_BIN) -m pip
 
 # python path
@@ -73,8 +74,9 @@ pydeps:
 # run python tests
 .PHONY:	pytest
 pytest:	$(PY_TEST_DEPS)
-	@PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) $(PYTHON_BIN) \
-		$(PYTHON_TEST_ARGS) -m unittest discover \
+	@echo "running test starting at $(PY_SRC_TEST)"
+	@PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) $(PYTHON_TEST_ENV) \
+		$(PYTHON_BIN) $(PYTHON_TEST_ARGS) -m unittest discover \
 		-s $(PY_SRC_TEST) -p $(PY_SRC_TEST_PAT) -v
 
 # run tests in a virtual environment
