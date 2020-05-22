@@ -42,99 +42,100 @@ INFO_TARGETS +=		pyinfo
 
 
 # targets
-.PHONY: pyinfo
+.PHONY:			pyinfo
 pyinfo:
-	@echo "interpreter: $(PYTHON_BIN)"
-	@echo "py-src: $(PY_SRC)"
-	@echo "py-test: $(PY_SRC_TEST)"
-	@echo "py-test-test-pat: $(PY_SRC_TEST_PAT)"
-	@echo "py-dist-atfc: $(MTARG_PYDIST_ATFC)"
-	@echo "py-dist-res: $(MTARG_PYDIST_RES)"
+			@echo "interpreter: $(PYTHON_BIN)"
+			@echo "py-src: $(PY_SRC)"
+			@echo "py-test: $(PY_SRC_TEST)"
+			@echo "py-test-test-pat: $(PY_SRC_TEST_PAT)"
+			@echo "py-dist-atfc: $(MTARG_PYDIST_ATFC)"
+			@echo "py-dist-res: $(MTARG_PYDIST_RES)"
 
+# build
 $(MTARG_PYDIST_BDIR):
-	@echo "building dist in $(MTARG_PYDIST_BDIR)"
-	mkdir -p $(MTARG_PYDIST_BDIR)
-	cp -r $(PY_SRC)/* $(MTARG_PYDIST_BDIR)
-	@for i in $(PY_RESOURCES) ; do \
-		if [ -e $$i ] ; then \
-			mkdir -p $(MTARG_PYDIST_RES) ; \
-			echo "copying resource $$i -> $(MTARG_PYDIST_RES)" ; \
-			cp -r $$i $(MTARG_PYDIST_RES) ; \
-		fi ; \
-	done
-	[ -f README.md ] && cp README.md $(MTARG_PYDIST_BDIR) || true
-	[ -f LICENSE ] && cp LICENSE $(MTARG_PYDIST_BDIR)/LICENSE.txt || true
-	find $(MTARG_PYDIST_BDIR) -name \*_flymake.py -exec rm {} \;
+			@echo "building dist in $(MTARG_PYDIST_BDIR)"
+			mkdir -p $(MTARG_PYDIST_BDIR)
+			cp -r $(PY_SRC)/* $(MTARG_PYDIST_BDIR)
+			@for i in $(PY_RESOURCES) ; do \
+			    if [ -e $$i ] ; then \
+			        mkdir -p $(MTARG_PYDIST_RES) ; \
+				echo "copying resource $$i -> $(MTARG_PYDIST_RES)" ; \
+				cp -r $$i $(MTARG_PYDIST_RES) ; \
+			    fi ; \
+			done
+			[ -f README.md ] && cp README.md $(MTARG_PYDIST_BDIR) || true
+			[ -f LICENSE ] && cp LICENSE $(MTARG_PYDIST_BDIR)/LICENSE.txt || true
+			find $(MTARG_PYDIST_BDIR) -name \*_flymake.py -exec rm {} \;
 
 # install deps
-.PHONY:	pydeps
+.PHONY:			pydeps
 pydeps:
-	$(PIP_BIN) install -r $(PY_SRC)/requirements.txt
+			$(PIP_BIN) install -r $(PY_SRC)/requirements.txt
 
 # run python tests
-.PHONY:	pytest
-pytest:	$(PY_TEST_DEPS)
-	@echo "running test starting at $(PY_SRC_TEST)"
-	@echo "python version:"
-	@$(PYTHON_BIN) --version
-	PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) $(PYTHON_TEST_ENV) \
-		$(PYTHON_BIN) $(PYTHON_TEST_ARGS) -m unittest discover \
-		-s $(PY_SRC_TEST) -p $(PY_SRC_TEST_PAT) -v
+.PHONY:			pytest
+pytest:			$(PY_TEST_DEPS)
+			@echo "test: $(PY_SRC_TEST)"
+			@echo "version: `$(PYTHON_BIN) --version`"
+			@echo "args: -s $(PY_SRC_TEST) -p $(PY_SRC_TEST_PAT)"
+			@PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) $(PYTHON_TEST_ENV) \
+				$(PYTHON_BIN) $(PYTHON_TEST_ARGS) -m unittest discover \
+				-s $(PY_SRC_TEST) -p $(PY_SRC_TEST_PAT) -v
 
 # run tests in a virtual environment
-.PHONY:	pytestvirtual
+.PHONY:			pytestvirtual
 pytestvirtual:
-	make "PROJ_LOCAL_MODULES+=python-virtual" pytest
+			make "PROJ_LOCAL_MODULES+=python-virtual" pytest
 
 # run python clis
-.PHONY:	pyrun
-pyrun:	$(PY_RUN_DEPS)
-	@for i in $(PY_SRC_CLI)/* ; do \
-		echo "running $$i" ; \
-		PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) \
-			$$i $(PYTHON_BIN_ARGS) ; \
-	done
+.PHONY:			pyrun
+pyrun:			$(PY_RUN_DEPS)
+			@for i in $(PY_SRC_CLI)/* ; do \
+				echo "running $$i" ; \
+				PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) \
+					$$i $(PYTHON_BIN_ARGS) ; \
+			done
 
 # display the command line help usage
-.PHONY:	pyhelp
+.PHONY:			pyhelp
 pyhelp:
-	make PYTHON_BIN_ARGS='--help' pyrun
+			make PYTHON_BIN_ARGS='--help' pyrun
 
 # package by creating the egg and wheel distribution binaries
-.PHONY:	pypackage
-pypackage:	$(MTARG_PYDIST_ATFC)
+.PHONY:			pypackage
+pypackage:		$(MTARG_PYDIST_ATFC)
 $(MTARG_PYDIST_ATFC):	$(MTARG_PYDIST_BDIR)
-	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py bdist_egg )
-	( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py bdist_wheel )
-	cp $(MTARG_PYDIST_ATFC)/* $(MTARG_PYDIST_DIR)
-	@echo "create egg in $(MTARG_PYDIST_DIR)"
+			( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py bdist_egg )
+			( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py bdist_wheel )
+			cp $(MTARG_PYDIST_ATFC)/* $(MTARG_PYDIST_DIR)
+			@echo "create egg in $(MTARG_PYDIST_DIR)"
 
 # install the library locally
-.PHONY:	pyinstall
-pyinstall:	pytest pypackage
-	$(PIP_BIN) install $(MTARG_PYDIST_DIR)/*.whl
+.PHONY:			pyinstall
+pyinstall:		pytest pypackage
+			$(PIP_BIN) install $(MTARG_PYDIST_DIR)/*.whl
 
-.PHONY:	pyinstallnotest
+.PHONY:			pyinstallnotest
 pyinstallnotest:
-	make "PY_SRC_TEST_PAT=NONE" "PY_TEST_DEPS=" pyinstall
+			make "PY_SRC_TEST_PAT=NONE" "PY_TEST_DEPS=" pyinstall
 
 # create a pip distribution and upload it
-.PHONY:	pydist
-pydist:	$(MTARG_PYDIST_ATFC)
-	@for url in $(PYPI_TEST_URL) $(PYPI_NON_TEST_URL) ; do \
-		$(PYTHON_BIN) -m twine upload \
-			--sign-with $(PYPI_SIGN) --username $(PYPI_USER) \
-			--repository-url $$url $(MTARG_PYDIST_ATFC)/* ; \
-	done
+.PHONY:			pydist
+pydist:			$(MTARG_PYDIST_ATFC)
+			@for url in $(PYPI_TEST_URL) $(PYPI_NON_TEST_URL) ; do \
+			    $(PYTHON_BIN) -m twine upload \
+				--sign-with $(PYPI_SIGN) --username $(PYPI_USER) \
+				--repository-url $$url $(MTARG_PYDIST_ATFC)/* ; \
+			done
 
 # create wheel and its dependencies
-.PHONY:	pywheel
-pywheel:$(MTARG_WHEEL_DIR)
+.PHONY:			pywheel
+pywheel:		$(MTARG_WHEEL_DIR)
 $(MTARG_WHEEL_DIR):	$(MTARG_PYDIST_ATFC)
-	mkdir -p $(MTARG_WHEEL_DIR)
-	$(PIP_BIN) wheel --wheel-dir=$(MTARG_WHEEL_DIR) $(MTARG_PYDIST_ATFC)/*.whl
+			mkdir -p $(MTARG_WHEEL_DIR)
+			$(PIP_BIN) wheel --wheel-dir=$(MTARG_WHEEL_DIR) $(MTARG_PYDIST_ATFC)/*.whl
 
 # uninstall locally
-.PHONY:	pyuninstall
-pyuninstall:	clean
-	yes | $(PIP_BIN) uninstall `$(PYTHON_BIN) $(PY_SRC)/setup.py --name` || true
+.PHONY:			pyuninstall
+pyuninstall:		clean
+			yes | $(PIP_BIN) uninstall `$(PYTHON_BIN) $(PY_SRC)/setup.py --name` || true
