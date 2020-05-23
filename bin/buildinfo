@@ -16,6 +16,8 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+DEBUG = False
+
 
 @dataclass
 class BuildInfoFetcher(object):
@@ -148,8 +150,9 @@ and``setup.py`` module metadata."""
     try:
         BuildInfoFetcher(path, format)(attribs)
     except Exception as e:
-        import traceback
-        traceback.print_exc()
+        if DEBUG:
+            import traceback
+            traceback.print_exc()
         logger.error(e)
         sys.exit(1)
 
