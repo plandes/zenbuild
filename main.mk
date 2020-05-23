@@ -12,7 +12,7 @@ BUILD_MK_DIR :=		$(BUILD_SRC_DIR)/mk
 PROJ_LOCAL_MKS =	$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_LOCAL_MODULES)))
 
 # to be included
-PROJ_MKS =		$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_MODULES) clean git))
+PROJ_MKS =		$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_MODULES) clean))
 
 # executables
 AWSENV=			$(BUILD_BIN_DIR)/awsenv

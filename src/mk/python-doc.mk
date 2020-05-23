@@ -1,8 +1,13 @@
 ## make include file for creating Python documentation
 ## PL 5/21/2020
 
+
 ## includes
+# this requires PROJ_MODULES=git
 include $(BUILD_MK_DIR)/git-doc.mk
+
+
+## python doc
 
 # sphinx binaries
 PY_DOC_SPHINX_BIN ?=	sphinx-build
@@ -17,20 +22,14 @@ PY_DOC_SETUP ?=		./src/doc
 PY_DOC_SOURCE ?=	$(PY_DOC_DIR)/src
 PY_DOC_BUILD ?=		$(GIT_DOC_SRC_DIR)
 
-# build
+
+## build
 INFO_TARGETS +=		pydocinfo
 
 
-.PHONY:			pydocmeta
-pydocmeta:		$(PY_DOC_META)
-
-$(PY_DOC_META):
-			mkdir -p $(MTARG)
-			$(GTAGUTIL) write -f json > $(PY_DOC_META)
-
 .PHONY:			pydocinfo
 pydocinfo:
-			@echo "py-sphinx-bin:  $(PY_DOC_SPHINX_BIN)"
+			@echo "py-sphinx-bin: $(PY_DOC_SPHINX_BIN)"
 
 .PHONY:			pydocclean
 pydocclean:
@@ -48,7 +47,7 @@ $(PY_DOC_SOURCE):	pydocclean
 .PHONY:			pydochtml
 pydochtml:		$(PY_DOC_BUILD)
 
-$(PY_DOC_BUILD):	$(PY_DOC_SOURCE) $(PY_DOC_META)
+$(PY_DOC_BUILD):	$(PY_DOC_SOURCE)
 			PYTHONPATH=$(PY_SRC) $(PY_DOC_SPHINX_APIDOC) \
 				-fT --implicit-namespaces \
 				-o $(PY_DOC_SOURCE)/api $(PY_SRC)/zensols

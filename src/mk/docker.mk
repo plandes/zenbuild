@@ -9,7 +9,7 @@
 # docker config
 DOCKER_CMD ?=		docker
 DOCKER_CMP_CMD ?=	docker-compose
-DOCKER_USER ?=		$(GITUSER)
+DOCKER_USER ?=		$(GIT_USER)
 DOCKER_CONTAINER ?=	$(shell grep container_name docker-compose.yml | awk '{print $$2}')
 DOCKER_PREFIX ?=	.
 DOCKER_IMG_NAME ?=	$(DOCKER_CONTAINER)
@@ -49,7 +49,7 @@ dockerpush:	dockerbuild
 
 .PHONY:	dockerinstall
 dockerinstall:	dockercheckver
-	make DOCKER_VERSION=$(GITVER) dockerbuild
+	make DOCKER_VERSION=$(GIT_VER) dockerbuild
 
 .PHONY: dockerrm
 dockerrm:	dockerrmi

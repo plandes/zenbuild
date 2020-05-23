@@ -18,7 +18,7 @@ reldeploy:	relpackage relupload
 
 .PHONY:	relupload
 relupload:
-		ghrelease -r $(GITUSER)/$(GITPROJ) -p $(REL_BIN_DIR)/*
+		ghrelease -r $(GIT_USER)/$(GIT_PROJ) -p $(REL_BIN_DIR)/*
 
 .PHONY:	relpackage
 relpackage:	$(REL_BIN_DIR)

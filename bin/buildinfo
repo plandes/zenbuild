@@ -1,0 +1,160 @@
+#!/usr/bin/env python
+
+"""Command line program to access build information.
+
+"""
+__author__ = 'Paul Landes'
+
+from typing import List, Dict, Union, Iterable, Tuple
+from dataclasses import dataclass
+import logging
+import re
+import sys
+import json
+import plac
+from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class BuildInfoFetcher(object):
+    """This class uses the project confgiuration and git metadata to output
+    confgiuration useful for executing build.  The build information is created
+    as a JSON file using ``SetupUtil`` and persisting it to disk for subsequent
+    fast retrieval.
+
+    :param path: points to somewhere in the temporary ``target`` directory
+
+    :param format: indicates how to format the output
+
+    :py:meth:`zensols.pybuild.SetupUtil`
+
+    """
+    TYPE_STRICT = False
+    ATTTR_REGEX = re.compile(r'^([^\[]+?)?(?:\[([0-9]+?)\])?$')
+    KEY_REGEX = re.compile(r'\[([0-9]+?)\]_?')
+
+    path: Path
+    format: str
+
+    def _assert_build_info(self):
+        """Create the build info JSON file by using ``SetupUtil`` instance's
+        ``to_json`` method.
+
+        :py:function:`zensols.pybuild.SetupUtil.to_json`
+
+        """
+        if not self.path.exists():
+            from zensols.pybuild import SetupUtil
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            su = SetupUtil.source()
+            with open(self.path, 'w') as f:
+                su.to_json(writer=f)
+
+    @property
+    def build_info(self) -> Dict[str, Union[str, dict]]:
+        """Return the build information tree of dicts.  If the JSON file of the data
+        does not exist, then create it.
+
+        :py:meth:`BuildInfoFetcher._assert_build_info`
+        """
+        self._assert_build_info()
+        if not hasattr(self, '_build_info'):
+            with open(self.path) as f:
+                self._build_info = json.load(f)
+        return self._build_info
+
+    def _get_attrib_by_path(self, attrib_path: List[str], binfo: dict) -> \
+            Union[str, dict]:
+        """Recursively traverse the build information tree using path
+        ``attrib_path``.  Return the data in tree, usually a string.
+
+        """
+        if len(attrib_path) > 0:
+            name = attrib_path.pop(0)
+            # single dot case
+            if len(name) == 0:
+                binfo = self._get_attrib_by_path(attrib_path, binfo)
+            else:
+                name, index = self.ATTTR_REGEX.match(name).groups()
+                if name is not None:
+                    binfo = binfo.get(name)
+                if binfo is not None:
+                    if index is not None:
+                        binfo = binfo[int(index)]
+                    binfo = self._get_attrib_by_path(attrib_path, binfo)
+        return binfo
+
+    def _get_attrib(self, attrib_path: str, binfo: dict) -> str:
+        """Return a value with dotted jq like path ``attrib_path`` for an attribute
+        treating ``binfo`` as a tree data structure.
+
+        """
+
+        apath = attrib_path.split('.')
+        return self._get_attrib_by_path(apath, binfo)
+
+    def get_attribs(self, attribs: List[str]) -> Iterable[Tuple[str, str]]:
+        """Return an iterable of attriubtes as (name, value) tuples.
+
+        """
+        binfo = self.build_info
+        for attrib in attribs:
+            val = self._get_attrib(attrib, binfo)
+            if self.TYPE_STRICT and not isinstance(val, str):
+                raise ValueError(f'wrong value found for attribute: {attrib}')
+            if val is not None:
+                yield ((attrib, val))
+            else:
+                raise ValueError(f'no such attribute: {attrib}')
+
+    def _format_key(self, k: str) -> str:
+        """Format a key from the dot path information.
+
+        """
+        if k[0] == '.':
+            k = k[1:]
+        k = k.replace('.', '_')
+        k = k.upper()
+        k = re.sub(self.KEY_REGEX, '', k)
+        return k
+
+    def __call__(self, attribs: List[str]):
+        """Print out attribute ``attribs`` key values one per line.
+
+        """
+        fmt = self.format
+        for k, v in self.get_attribs(attribs):
+            if fmt == 'shell' or fmt == 'make':
+                k = self._format_key(k)
+                if fmt == 'shell':
+                    v = f'export {k} = "{v}"'
+                else:
+                    v = f'{k} = {v}'
+            print(v)
+
+
+@plac.annotations(
+    path=plac.Annotation('The path to the JSON build.json blob.', type=Path),
+    format=plac.Annotation('The format of the output',
+                           'option', 'f', str, ['val', 'make', 'shell']),
+    attribs=plac.Annotation('Path to the data desired', type=str))
+def main(path: Path, format: str = 'val', *attribs: List[str]):
+    """Access build information made available the git and setuptools metdaata.
+This accesses uses ``zensols.pybuild.SetupUtil`` to access the git metadata
+and``setup.py`` module metadata."""
+    logger.info(f'parsing {path} using format {format}')
+    try:
+        BuildInfoFetcher(path, format)(attribs)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        logger.error(e)
+        sys.exit(1)
+
+
+if __name__ == '__main__':
+    logging.basicConfig(
+        level=logging.WARNING, format='buildinfo: %(levelname)s: %(message)s')
+    plac.call(main)

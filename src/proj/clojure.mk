@@ -107,9 +107,9 @@ run:
 clojureinfo:
 		@echo "version: $(VER)"
 		@echo "comp-deps: $(COMP_DEPS)"
-		@echo "git-project: $(GITPROJ)"
-		@echo "remote: $(GITREMOTE)"
-		@echo "user: $(GITUSER)"
+		@echo "git-project: $(GIT_PROJ)"
+		@echo "remote: $(GIT_REMOTE)"
+		@echo "user: $(GIT_USER)"
 		@echo "jar: $(LIB_JAR)"
 		@echo "uberjar: $(UBER_JAR)"
 		@echo "app-script: $(APP_SNAME_REF)"
@@ -163,7 +163,7 @@ docs:		$(DOC_DST_DIR)
 # https://github.com/weavejester/codox/wiki/Deploying-to-GitHub-Pages
 $(DOC_DST_DIR):
 		rm -rf $(DOC_DST_DIR) && mkdir -p $(DOC_DST_DIR)
-		git clone https://github.com/$(GITUSER)/$(GITPROJ).git $(DOC_DST_DIR)
+		git clone https://github.com/$(GIT_USER)/$(GIT_PROJ).git $(DOC_DST_DIR)
 		git update-ref -d refs/heads/gh-pages 
 		( cd $(DOC_DST_DIR) ; \
 		  git symbolic-ref HEAD refs/heads/gh-pages ; \
@@ -175,7 +175,7 @@ $(DOC_DST_DIR):
 
 .PHONY: pushdocs
 pushdocs:	checkver $(DOC_DST_DIR)
-		git push $(GITREMOTE) --mirror
+		git push $(GIT_REMOTE) --mirror
 		( cd $(DOC_DST_DIR) ; \
 		  git add . ; \
 		  git commit -am "new doc push" ; \
