@@ -3,7 +3,12 @@
 PYPI_URLS="https://test.pypi.org/legacy/ https://upload.pypi.org/legacy/"
 
 echo "installing libraries for Python deployments"
-for i in setuptools twine wheel keyring sphinx sphinx-rtd-theme ; do
+for i in setuptools twine wheel keyring ; do
+    pip install -U $i
+done
+
+echo "installing libraries for Python documentation"
+for i in sphinx sphinx-rtd-theme recommonmark ; do
     pip install -U $i
 done
 
