@@ -64,16 +64,11 @@ gitinit:
 .PHONY:		gitreinit
 gitreinit:
 		$(eval GIT_REMOTE_CMD:=git remote add $(GIT_REMOTE_NAME) $(GIT_REMOTE_URL))
-#		rm -fr .git .gitmodules zenbuild
-#		$(GIT_BIN) init .
-#		$(GIT_BIN) submodule add $(GIT_BUILD_REPO)
-#		make gitinit
+		rm -fr .git .gitmodules zenbuild
+		$(GIT_BIN) init .
+		$(GIT_BIN) submodule add $(GIT_BUILD_REPO)
+		make gitinit
 		echo $(GIT_REMOTE_CMD)
-
-.PHONY: 	gittag
-gittag:
-		$(GIT_BUILD_BIN) create || \
-			echo "gittag installed? see bin/py-install-setup.sh"
 
 .PHONY: 	gitforcetag
 gitforcetag:
@@ -91,6 +86,10 @@ gitforcepush:
 		$(GIT_BIN) push
 		$(GIT_BIN) push --tags --force
 
-.PHONY: 	gitnewtag
-gitnewtag:
-		$(GIT_BUILD_BIN) create -m '`$(GIT_BIN) log -1 --pretty=%B`'
+.PHONY: 	gitmktag
+gitmktag:
+		$(GIT_BUILD_BIN) create -m `$(GIT_BIN) log -1 --pretty=%B`
+
+.PHONY: 	gitrmtag
+gitrmtag:
+		$(GIT_BUILD_BIN) del

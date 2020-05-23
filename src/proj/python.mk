@@ -33,5 +33,8 @@ installnotest:	uninstall pyinstallnotest
 .PHONY:		reinstallnotest
 reinstallnotest:	uninstall pyinstallnotest
 
+.PHONY:		docs
+docs:		pydochtml
+
 .PHONY:		deploy
 deploy:		pydist
