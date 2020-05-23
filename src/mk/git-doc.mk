@@ -28,9 +28,16 @@ gitdocinfo:
 gitdocbuild:		$(GIT_DOC_DST_DIR)
 
 # https://github.com/weavejester/codox/wiki/Deploying-to-GitHub-Pages
-$(GIT_DOC_DST_DIR):	$(GIT_DOC_SRC_DIR)
+$(GIT_DOC_DST_DIR):	gitdocinfo $(GIT_DOC_SRC_DIR)
+
+			@echo "git-remote: $(GITREMOTE)"
+			@echo "git-user: $(GITUSER)"
+			@echo "git-proj: $(GITPROJ)"
+
 			rm -rf $(GIT_DOC_DST_DIR) && mkdir -p $(GIT_DOC_DST_DIR)
-			git clone https://github.com/$(GITUSER)/$(GITPROJ).git $(GIT_DOC_DST_DIR)
+			echo git clone https://github.com/$(GITUSER)/$(GITPROJ).git $(GIT_DOC_DST_DIR)
+
+tmp:
 			git update-ref -d refs/heads/gh-pages 
 			( cd $(GIT_DOC_DST_DIR) ; \
 			  git symbolic-ref HEAD refs/heads/gh-pages ; \

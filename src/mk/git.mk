@@ -20,6 +20,7 @@ INFO_TARGETS +=	gitinfo
 gitinfo:
 	@echo "git-user: $(GITUSER)"
 	@echo "git-version: $(GITVER)"
+	@echo "git-proj: $(GITPROJ)"
 
 .PHONY: gitinit
 gitinit:

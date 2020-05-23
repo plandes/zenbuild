@@ -46,7 +46,9 @@ $(PY_DOC_SOURCE):	pydocclean
 			[ -d "test" ] && cp -r test $(PY_DOC_SOURCE)
 
 .PHONY:			pydochtml
-pydochtml:		$(PY_DOC_SOURCE) $(PY_DOC_META)
+pydochtml:		$(PY_DOC_BUILD)
+
+$(PY_DOC_BUILD):	$(PY_DOC_SOURCE) $(PY_DOC_META)
 			PYTHONPATH=$(PY_SRC) $(PY_DOC_SPHINX_APIDOC) \
 				-fT --implicit-namespaces \
 				-o $(PY_DOC_SOURCE)/api $(PY_SRC)/zensols
