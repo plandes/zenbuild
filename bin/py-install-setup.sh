@@ -8,7 +8,7 @@ for i in setuptools twine wheel keyring ; do
 done
 
 echo "installing libraries for Python documentation"
-for i in sphinx sphinx-rtd-theme recommonmark jq ; do
+for i in sphinx sphinx-rtd-theme recommonmark ; do
     pip install -U $i
 done
 
