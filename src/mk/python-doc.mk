@@ -38,8 +38,6 @@ include $(BUILD_MK_DIR)/git-doc.mk
 pydocinfo:
 			@echo "py-sphinx-bin: $(PY_DOC_SPHINX_BIN)"
 
-tmp:	$(PY_DOC_SOURCE)
-
 $(PY_DOC_SOURCE):	$(PY_DOC_SOURCE_DEPS)
 			mkdir -p $(PY_DOC_SOURCE)
 			cp -r $(PY_DOC_SETUP)/* $(PY_DOC_SOURCE)
@@ -48,8 +46,8 @@ $(PY_DOC_SOURCE):	$(PY_DOC_SOURCE_DEPS)
 			[ -f LICENSE.md ] && cp LICENSE.md $(PY_DOC_SOURCE) || true
 			[ -d doc ] && cp -r doc $(PY_DOC_SOURCE) || true
 			[ -d "test" ] && cp -r test $(PY_DOC_SOURCE) || true
-			$(PY_DOC_TOPDOC_BIN) $(GIT_BUILD_INFO) src/doc/top.rst \
-				$(PY_DOC_SOURCE)/top.rst
+			$(PY_DOC_TOPDOC_BIN) $(GIT_BUILD_INFO) \
+				$(PY_DOC_SETUP)/top.rst $(PY_DOC_SOURCE)/top.rst
 
 .PHONY:			pydochtml
 pydochtml:		$(PY_DOC_BUILD_HTML)
