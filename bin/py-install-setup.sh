@@ -1,6 +1,8 @@
 #!/bin/sh
 
+
 PYPI_URLS="https://test.pypi.org/legacy/ https://upload.pypi.org/legacy/"
+
 
 echo "installing libraries for Python deployments"
 for i in setuptools twine wheel keyring ; do
