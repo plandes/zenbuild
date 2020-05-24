@@ -4,9 +4,10 @@
 
 ## python doc
 
-# sphinx binaries
+# executables
 PY_DOC_SPHINX_BIN ?=	sphinx-build
 PY_DOC_SPHINX_APIDOC ?=	sphinx-apidoc
+PY_DOC_TOPDOC_BIN ?=	$(BUILD_BIN_DIR)/pytopdoc.py
 
 # doc paths
 PY_DOC_DIR ?=		$(MTARG)/doc
@@ -33,6 +34,8 @@ include $(BUILD_MK_DIR)/git-doc.mk
 pydocinfo:
 			@echo "py-sphinx-bin: $(PY_DOC_SPHINX_BIN)"
 
+tmp:			$(PY_DOC_SOURCE)
+
 $(PY_DOC_SOURCE):
 			mkdir -p $(PY_DOC_SOURCE)
 			cp -r $(PY_DOC_SETUP)/* $(PY_DOC_SOURCE)
@@ -41,6 +44,8 @@ $(PY_DOC_SOURCE):
 			[ -f LICENSE.md ] && cp LICENSE.md $(PY_DOC_SOURCE) || true
 			cp -r doc $(PY_DOC_SOURCE)
 			[ -d "test" ] && cp -r test $(PY_DOC_SOURCE)
+			$(PY_DOC_TOPDOC_BIN) . src/doc/top.rst \
+				$(PY_DOC_SOURCE)/top.rst
 
 .PHONY:			pydochtml
 pydochtml:		$(PY_DOC_BUILD)
