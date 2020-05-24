@@ -8,8 +8,8 @@ __author__ = 'Paul Landes'
 import sys
 import logging
 import plac
+import json
 from pathlib import Path
-from zensols.pybuild import SetupUtil
 
 logger = logging.getLogger()
 
@@ -17,15 +17,16 @@ DEBUG = True
 
 
 @plac.annotations(
-    root=('The project\'s root directory', 'positional', None, Path),
+    build_info=('The path the build info file (probably target/build.json)',
+                'positional', None, Path),
     template=('The input .rst template to use as a template', 'positional',
               None, Path),
     output=('The output file name.', 'positional', None, Path))
-def main(root: Path, template: Path, output: Path):
+def main(build_info: Path, template: Path, output: Path):
     """Create a top level Sphinx documentation .rst file."""
     try:
-        su = SetupUtil.source(root)
-        info = su.get_info()
+        with open(build_info) as f:
+            info = json.load(f)
         logger.info(f'using project root: {info["root_path"]}')
         long_desc = info['description']
         short_desc = info['short_description']
@@ -46,5 +47,6 @@ def main(root: Path, template: Path, output: Path):
 
 if __name__ == '__main__':
     logging.basicConfig(
-        level=logging.INFO, format='pytopdoc.py: %(levelname)s: %(message)s')
+        level=logging.DEBUG if DEBUG else logging.INFO,
+        format='pytopdoc.py: %(levelname)s: %(message)s')
     plac.call(main)
