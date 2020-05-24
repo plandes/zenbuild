@@ -36,6 +36,7 @@ class BuildInfoFetcher(object):
     TYPE_STRICT = False
     ATTTR_REGEX = re.compile(r'^([^\[]+?)?(?:\[([0-9]+?)\])?$')
     KEY_REGEX = re.compile(r'\[([0-9]+?)\]_?')
+    ROBUST_ATTRIBS = False
 
     path: Path
     format: str
@@ -84,7 +85,14 @@ class BuildInfoFetcher(object):
                     binfo = binfo.get(name)
                 if binfo is not None:
                     if index is not None:
-                        binfo = binfo[int(index)]
+                        index = int(index)
+                        if index >= len(binfo):
+                            if self.ROBUST_ATTRIBS:
+                                binfo = None
+                            else:
+                                raise ValueError(f'no attriubte at index {index}')
+                        else:
+                            binfo = binfo[index]
                     binfo = self._get_attrib_by_path(attrib_path, binfo)
         return binfo
 
@@ -103,7 +111,11 @@ class BuildInfoFetcher(object):
         """
         binfo = self.build_info
         for attrib in attribs:
-            val = self._get_attrib(attrib, binfo)
+            try:
+                val = self._get_attrib(attrib, binfo)
+            except Exception as e:
+                logger.error(f'could not get attribute {attrib}: {e}')
+                raise e
             if self.TYPE_STRICT and not isinstance(val, str):
                 raise ValueError(f'wrong value found for attribute: {attrib}')
             if val is not None:
@@ -159,5 +171,6 @@ and``setup.py`` module metadata."""
 
 if __name__ == '__main__':
     logging.basicConfig(
-        level=logging.WARNING, format='buildinfo: %(levelname)s: %(message)s')
+        level=logging.DEBUG if DEBUG else logging.WARNING,
+        format='buildinfo: %(levelname)s: %(message)s')
     plac.call(main)
