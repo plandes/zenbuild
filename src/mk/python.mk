@@ -78,8 +78,8 @@ pytest:			$(PY_TEST_DEPS)
 			@echo "test: $(PY_SRC_TEST)"
 			@echo "version: `$(PYTHON_BIN) --version`"
 			@echo "args: -s $(PY_SRC_TEST) -p $(PY_SRC_TEST_PAT)"
-			if [ -d "$(PY_SRC_TEST)" ] ; then \
-				@PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) $(PYTHON_TEST_ENV) \
+			@if [ -d "$(PY_SRC_TEST)" ] ; then \
+				PYTHONPATH=$(PY_SRC):$(PY_SRC_TEST) $(PYTHON_TEST_ENV) \
 					$(PYTHON_BIN) $(PYTHON_TEST_ARGS) -m unittest discover \
 					-s $(PY_SRC_TEST) -p $(PY_SRC_TEST_PAT) -v ; \
 			fi
