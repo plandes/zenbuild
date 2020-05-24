@@ -14,9 +14,12 @@ PY_DOC_DIR ?=		$(MTARG)/doc
 PY_DOC_SETUP ?=		./src/doc
 PY_DOC_SOURCE ?=	$(PY_DOC_DIR)/src
 PY_DOC_BUILD ?=		$(PY_DOC_DIR)/build
+PY_DOC_BUILD_API ?=	$(PY_DOC_SOURCE)/api
+PY_DOC_BUILD_HTML ?=	$(PY_DOC_BUILD)/html
+PY_DOC_BUILD_PDF ?=	$(PY_DOC_BUILD)/pdf
 
 # git-doc config
-GIT_DOC_SRC_DIR =	$(PY_DOC_BUILD)/html
+GIT_DOC_SRC_DIR =	$(PY_DOC_BUILD_HTML)
 
 
 ## build
@@ -48,19 +51,25 @@ $(PY_DOC_SOURCE):
 				$(PY_DOC_SOURCE)/top.rst
 
 .PHONY:			pydochtml
-pydochtml:		$(PY_DOC_BUILD)
+pydochtml:		$(PY_DOC_BUILD_HTML)
 
-# satistfy git-doc target GIT_DOC_SRC_DIR
-$(PY_DOC_BUILD)/html:	$(PY_DOC_BUILD)
+.PHONY:			pydocpdf
+pydocpdf:		$(PY_DOC_BUILD_PDF)
 
-$(PY_DOC_BUILD):	$(PY_DOC_SOURCE)
+$(PY_DOC_BUILD_API):	$(PY_DOC_SOURCE)
 			PYTHONPATH=$(PY_SRC) $(PY_DOC_SPHINX_APIDOC) \
 				-fT --implicit-namespaces \
-				-o $(PY_DOC_SOURCE)/api $(PY_SRC)/zensols
+				-o $(PY_DOC_BUILD_API) $(PY_SRC)/zensols
+
+$(PY_DOC_BUILD_HTML):	$(PY_DOC_BUILD_API)
 			$(PY_DOC_SPHINX_BIN) -M html \
 				"$(PY_DOC_SOURCE)" "$(PY_DOC_BUILD)"
-			touch $(PY_DOC_BUILD)/html/.nojekyll
+			touch $(PY_DOC_BUILD_HTML)/.nojekyll
+
+$(PY_DOC_BUILD_PDF):	$(PY_DOC_BUILD_API)
+			$(PY_DOC_SPHINX_BIN) -M pdf \
+				"$(PY_DOC_SOURCE)" "$(PY_DOC_BUILD)"
 
 .PHONY:			pydocshow
 pydocshow:		pydochtml
-			open $(PY_DOC_BUILD)/html/index.html
+			open $(PY_DOC_BUILD_HTML)/index.html
