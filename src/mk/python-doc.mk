@@ -44,6 +44,7 @@ $(PY_DOC_SOURCE):	$(PY_DOC_SOURCE_DEPS)
 			cp README.md $(PY_DOC_SOURCE)/index.md
 			[ -f CHANGELOG.md ] && cp CHANGELOG.md $(PY_DOC_SOURCE) || true
 			[ -f LICENSE.md ] && cp LICENSE.md $(PY_DOC_SOURCE) || true
+			[ -f CONTRIBUTING.md ] && cp CONTRIBUTING.md $(PY_DOC_SOURCE) || true
 			[ -d doc ] && cp -r doc $(PY_DOC_SOURCE) || true
 			[ -d "test" ] && cp -r test $(PY_DOC_SOURCE) || true
 			$(PY_DOC_TOPDOC_BIN) $(GIT_BUILD_INFO) \
