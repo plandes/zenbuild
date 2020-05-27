@@ -10,6 +10,10 @@ PYTHON_TEST_ARGS ?=
 PYTHON_TEST_ENV ?=
 PIP_BIN ?=		$(PYTHON_BIN) -m pip
 
+# cli
+PY_CLI_CLASS ?=		ConfAppCommandLine
+PY_MOD_CMD =		PY_CLI_MOD=$(shell $(GIT_BUILD_ATTR) .name)
+
 # python path
 PY_SRC ?=		src/python
 PY_SRC_CLI ?=		src/bin
@@ -97,6 +101,17 @@ pyrun:			$(PY_RUN_DEPS)
 				PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) \
 					$$i $(PYTHON_BIN_ARGS) ; \
 			done
+
+# run the command line directory (assume standard CLI zensols.util boilerplate)
+.PHONY:			pycli
+pycli:
+			$(eval $(PY_MOD_CMD))
+			@echo "run: $(PY_CLI_MOD).$(PY_CLI_CLASS) with $(PYTHON_BIN_ARGS)"
+			@PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) -c \
+				"from $(PY_CLI_MOD) import $(PY_CLI_CLASS); \
+				$(PY_CLI_CLASS)().invoke( \
+				'$(PYTHON_BIN_ARGS)'.split())"
+
 
 # display the command line help usage
 .PHONY:			pyhelp
