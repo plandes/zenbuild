@@ -18,6 +18,8 @@ PY_DOC_BUILD ?=		$(PY_DOC_DIR)/build
 PY_DOC_BUILD_API ?=	$(PY_DOC_SOURCE)/api
 PY_DOC_BUILD_HTML ?=	$(PY_DOC_BUILD)/html
 PY_DOC_BUILD_PDF ?=	$(PY_DOC_BUILD)/pdf
+# HTML deps; add targets to copy static content that ends up on github.io
+PY_DOC_BUILD_HTML_DEPS += $(PY_DOC_BUILD_API)
 
 # git-doc config
 GIT_DOC_SRC_DIR =	$(PY_DOC_BUILD_HTML)
@@ -61,7 +63,7 @@ $(PY_DOC_BUILD_API):	$(PY_DOC_SOURCE)
 				-fT --implicit-namespaces \
 				-o $(PY_DOC_BUILD_API) $(PY_SRC)/zensols
 
-$(PY_DOC_BUILD_HTML):	$(PY_DOC_BUILD_API)
+$(PY_DOC_BUILD_HTML):	$(PY_DOC_BUILD_HTML_DEPS)
 			$(PY_DOC_SPHINX_BIN) -M html \
 				"$(PY_DOC_SOURCE)" "$(PY_DOC_BUILD)"
 			touch $(PY_DOC_BUILD_HTML)/.nojekyll

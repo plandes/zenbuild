@@ -57,4 +57,7 @@ gitdocdeploy:		$(GIT_DOC_PUSH_DEPS)
 			( cd $(GIT_DOC_DST_DIR) ; \
 			  git add . ; \
 			  git commit -am "new doc push" ; \
-			  git push -u origin gh-pages )
+			  git push -u origin gh-pages ; \
+			  sleep 2 ; \
+			  git commit --allow-empty -m "trigger rebuild" ; \
+			  git push )
