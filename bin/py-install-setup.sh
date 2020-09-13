@@ -10,7 +10,7 @@ for i in setuptools twine wheel keyring ; do
 done
 
 echo "installing libraries for Python documentation"
-for i in sphinx sphinx-rtd-theme recommonmark rst2pdf ; do
+for i in sphinx sphinx-rtd-theme recommonmark rst2pdf sphinx-autodoc-typehints ; do
     pip install -U $i
 done
 
