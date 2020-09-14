@@ -37,6 +37,7 @@ class BuildInfoFetcher(object):
     KEY_REGEX = re.compile(r'\[([0-9]+?)\]_?')
 
     path: Path
+    rel_setup_path: Path
     format: str
     exist_strict: bool = field(default=False)
     index_strict: bool = field(default=False)
@@ -52,7 +53,10 @@ class BuildInfoFetcher(object):
         if not self.path.exists():
             from zensols.pybuild import SetupUtil
             self.path.parent.mkdir(parents=True, exist_ok=True)
-            su = SetupUtil.source()
+            if not self.rel_setup_path.exists():
+                raise OSError('configuration file does not ' +
+                              f'exist: {self.rel_setup_path}')
+            su = SetupUtil.source(rel_setup_path=self.rel_setup_path)
             with open(self.path, 'w') as f:
                 su.to_json(writer=f)
 
@@ -153,16 +157,19 @@ class BuildInfoFetcher(object):
 @plac.annotations(
     path=plac.Annotation('The path to the JSON build.json blob.', type=Path),
     strict=plac.Annotation('Be strict and exit on failures', 'flag', 's'),
+    setup=plac.Annotation('The path to the setup.py file.', 'option', 'p',
+                          type=Path),
     format=plac.Annotation('The format of the output',
                            'option', 'f', str, ['val', 'make', 'shell']),
     attribs=plac.Annotation('Path to the JSON data desired', type=str))
-def main(path: Path, strict: bool, format: str = 'val', *attribs: List[str]):
+def main(path: Path, strict: bool, setup: Path = Path('src/python/setup.py'),
+         format: str = 'val', *attribs: List[str]):
     """Access build information made available the git and setuptools metdaata.
 This accesses uses ``zensols.pybuild.SetupUtil`` to access the git metadata
 and``setup.py`` module metadata."""
     logger.info(f'parsing {path} using format {format}')
     try:
-        fetcher = BuildInfoFetcher(path, format, strict, strict, strict)
+        fetcher = BuildInfoFetcher(path, setup, format, strict, strict, strict)
         fetcher(attribs)
     except Exception as e:
         if DEBUG:

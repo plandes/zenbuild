@@ -26,7 +26,7 @@ $(PY_CONF_ENV_FILE):
 			mkdir -p $(PY_CONF_ENV_DIR)
 			@echo "source build for Python module name"
 			$(eval $(PY_MOD_CMD))
-			@echo "$(PY_CLI_MOD).$(PY_CLI_CLASS) with $(PYTHON_BIN_ARGS) env"
+			@echo "calling: $(PY_CLI_MOD).$(PY_CLI_CLASS) with $(PYTHON_BIN_ARGS) env"
 			@PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) -c \
 				"from $(PY_CLI_MOD) import $(PY_CLI_CLASS); \
 				$(PY_CLI_CLASS)().invoke( \
