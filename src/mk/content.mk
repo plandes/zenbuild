@@ -60,7 +60,12 @@ cntsite:		$(CNT_DEP_TARGS) cntcopysite $(CNT_DEPLOY_DEP_TARGS)
 # mount the volume on OSX in order to copy
 .PHONY:			cntmount
 cntmount:
-			osascript -e 'tell application "Finder" to mount volume "$(CNT_DOC_URL)"'
+			@ if [ -z "$(CNT_DOC_URL)" ] ; then \
+				echo "CNT_DOC_URL not set, skipping mount" ; \
+			else \
+				echo "mounting $(CNT_DOC_URL)..." ; \
+				osascript -e 'tell application "Finder" to mount volume "$(CNT_DOC_URL)"' ; \
+			fi
 
 # generate the site and copy as dry run for the rsync copy
 .PHONY:			cntdeploydry
