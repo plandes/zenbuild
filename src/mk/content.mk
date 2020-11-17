@@ -3,6 +3,8 @@
 
 # URL to deploy content
 CNT_DOC_URL ?=		https://example.com/webdavroot
+# if provided, the mount is skipped if the directory is found
+CNT_MOUNT_CHECK_DIR ?=
 # where source static content lives
 CNT_SITE_DIR ?=		./site
 # objects to build during site package
@@ -23,6 +25,9 @@ CNT_DEPLOY_DEP_TARGS +=
 CNT_DEPLOY_URL ?=	https://example.com/site/index.html
 # default show target to show
 CNT_SHOW_TARG ?=	cntshowremote
+# default rsync options: stage and deploy respectively
+CNT_RSYNC_OPTS ?=	-auv
+CNT_RSYNC_DEP_OPTS ?=	$(CNT_RSYNC_OPTS) --copy-links --delete $(CNT_SRC_STAGE_DIR)
 
 # module config
 INFO_TARGETS +=		cntinfo
@@ -51,7 +56,7 @@ cntcopysite:
 			fi
 			@for i in $(CNT_SITE_OBJS) ; do \
 				echo "copying $(CNT_SITE_DIR) -> $(CNT_STAGE_DIR)" ; \
-				rsync -auv --exclude .DS_Store $$i $(CNT_STAGE_DIR) || true ; \
+				rsync $(CNT_RSYNC_OPTS) --exclude .DS_Store $$i $(CNT_STAGE_DIR) || true ; \
 			done
 
 .PHONY:			cntsite
@@ -60,17 +65,22 @@ cntsite:		$(CNT_DEP_TARGS) cntcopysite $(CNT_DEPLOY_DEP_TARGS)
 # mount the volume on OSX in order to copy
 .PHONY:			cntmount
 cntmount:
-			@ if [ -z "$(CNT_DOC_URL)" ] ; then \
+			@if [ -z "$(CNT_DOC_URL)" ] ; then \
 				echo "CNT_DOC_URL not set, skipping mount" ; \
 			else \
-				echo "mounting $(CNT_DOC_URL)..." ; \
-				osascript -e 'tell application "Finder" to mount volume "$(CNT_DOC_URL)"' ; \
+				echo "checking $(CNT_MOUNT_CHECK_DIR)" ; \
+				if [ ! -z "$(CNT_MOUNT_CHECK_DIR)" -a -d "$(CNT_MOUNT_CHECK_DIR)" ] ; then \
+					echo "already mounted: $(CNT_MOUNT_CHECK_DIR)" ; \
+				else \
+					echo "mounting $(CNT_DOC_URL)..." ; \
+					osascript -e 'tell application "Finder" to mount volume "$(CNT_DOC_URL)"' ; \
+				fi \
 			fi
 
 # generate the site and copy as dry run for the rsync copy
 .PHONY:			cntdeploydry
 cntdeploydry:		cntmount cntsite
-			rsync -auv -n --delete $(CNT_SRC_STAGE_DIR) $(CNT_INST_DIR) || true
+			rsync $(CNT_RSYNC_DEP_OPTS) -n $(CNT_INST_DIR) || true
 
 
 # generate the site and copy it to the mounted volume that has the destination
@@ -80,7 +90,7 @@ cntdeploy:		cntmount cntsite
 				echo "no install directory defined" ; \
 				exit 1 ; \
 			fi
-			rsync -auv --delete $(CNT_SRC_STAGE_DIR) $(CNT_INST_DIR) || true
+			rsync $(CNT_RSYNC_DEP_OPTS) $(CNT_INST_DIR) || true
 
 .PHONY:			cntshow
 cntshow:		$(CNT_SHOW_TARG)
