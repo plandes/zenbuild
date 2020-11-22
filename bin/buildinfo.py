@@ -33,12 +33,13 @@ class BuildInfoFetcher(object):
     :py:meth:`zensols.pybuild.SetupUtil`
 
     """
+    DEFAULT_SETUP = Path('src/python/setup.py')
     ATTTR_REGEX = re.compile(r'^([^\[]+?)?(?:\[([0-9]+?)\])?$')
     KEY_REGEX = re.compile(r'\[([0-9]+?)\]_?')
 
     path: Path
-    rel_setup_path: Path
-    format: str
+    rel_setup_path: Path = field(default=DEFAULT_SETUP)
+    format: str = field(default='val')
     exist_strict: bool = field(default=False)
     index_strict: bool = field(default=False)
     type_strict: bool = field(default=False)
@@ -57,6 +58,7 @@ class BuildInfoFetcher(object):
                 raise OSError('configuration file does not ' +
                               f'exist: {self.rel_setup_path}')
             su = SetupUtil.source(rel_setup_path=self.rel_setup_path)
+            logger.info(f'saving build info to {self.path}')
             with open(self.path, 'w') as f:
                 su.to_json(writer=f)
 
@@ -68,6 +70,7 @@ class BuildInfoFetcher(object):
         :py:meth:`BuildInfoFetcher._assert_build_info`
         """
         self._assert_build_info()
+        logger.info(f'loading build info from {self.path}')
         if not hasattr(self, '_build_info'):
             with open(self.path) as f:
                 self._build_info = json.load(f)
@@ -106,7 +109,6 @@ class BuildInfoFetcher(object):
         treating ``binfo`` as a tree data structure.
 
         """
-
         apath = attrib_path.split('.')
         return self._get_attrib_by_path(apath, binfo)
 
@@ -162,7 +164,8 @@ class BuildInfoFetcher(object):
     format=plac.Annotation('The format of the output',
                            'option', 'f', str, ['val', 'make', 'shell']),
     attribs=plac.Annotation('Path to the JSON data desired', type=str))
-def main(path: Path, strict: bool, setup: Path = Path('src/python/setup.py'),
+def main(path: Path, strict: bool,
+         setup: Path = BuildInfoFetcher.DEFAULT_SETUP,
          format: str = 'val', *attribs: List[str]):
     """Access build information made available the git and setuptools metdaata.
 This accesses uses ``zensols.pybuild.SetupUtil`` to access the git metadata

@@ -17,7 +17,7 @@ GIT_BIN ?=		git
 # see bin/py-install-setup.sh
 GIT_BUILD_BIN ?=	zenpybuild
 # script to quickly access the build json blob
-GIT_BUILD_INFO_BIN ?=	$(BUILD_BIN_DIR)/buildinfo
+GIT_BUILD_INFO_BIN ?=	$(BUILD_BIN_DIR)/buildinfo.py
 # get a build attribute
 GIT_BUILD_ATTR ?=	$(GIT_BUILD_INFO_BIN) $(GIT_BUILD_INFO)
 
