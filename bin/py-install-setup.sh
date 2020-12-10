@@ -19,7 +19,13 @@ for i in jedi flake8 autopep8 yapf importmagic ; do
     pip install -U $i
 done
 
+echo "installing jupyter and widgets for notebook web interface"
+for i in notebook ipywidgets ; do
+    pip install -U $i
+done
+
 echo "yeah, you really have to provide password (each time); this stores it with keyring"
+echo "on linux or if you don't want to store a password, press <RET> several times"
 for i in $PYPI_URLS ; do
     python -m keyring set $i zensols
 done
