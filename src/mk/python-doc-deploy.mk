@@ -23,8 +23,11 @@ CNT_INST_DIR ?=		$(CNT_MNT_DIR)/$(CNT_SITE_ROOT)/$(PY_DOC_DPLY_PATH)apidoc
 PY_DOC_DOC_META_PATH ?=	$(BUILD_BIN_DIR)/docmeta.py
 # the path on the mounted volume path (CNT_INST_DIR) to rsync to
 PY_DOC_DPLY_PATH ?=	$(CNT_SITE_NAME)
-#
+# constructed metadata info file from build.json
 PY_DOC_META_INFO ?=	$(CNT_INST_DIR)/meta.json
+#
+PY_DOC_CONF_ASUPS +=	-u $(ZENBUILD_DOC_SERVER)
+
 
 ## build
 
@@ -34,6 +37,10 @@ CNT_DEPLOY_DEP_TARGS +=	pydocdeploymv
 
 # module config
 INFO_TARGETS +=		pydocdeployinfo
+
+ifneq ($(ZENBUILD_DOC_USER),)
+PY_DOC_CONF_ASUPS += -a $(ZENBUILD_DOC_USER)
+endif
 
 
 ## includes
@@ -46,10 +53,16 @@ pydocdeployinfo:
 			@echo "cnt-mount-check-dir: $(CNT_MOUNT_CHECK_DIR)"
 			@echo "cnt-deploy-path: $(PY_DOC_DPLY_PATH)"
 
+.PHONY:			pydocdeploysrc
+pydocdeploysrc:
+			make PY_DOC_CONF_ARGS_SUP="$(PY_DOC_CONF_ASUPS)" pydocsrc
+
+.PHONY:			pydocdeployhtml
+pydocdeployhtml:
+			make PY_DOC_CONF_ARGS_SUP="$(PY_DOC_CONF_ASUPS)" pydochtml
 
 .PHONY:			pydocdeploy
-pydocdeploy:		pydochtml cntdeploy
-			@echo rsync -auv -n --delete $(CNT_SRC_STAGE_DIR) $(CNT_INST_DIR)
+pydocdeploy:		pydocdeployhtml cntdeploy
 
 .PHONY:			pydocdeploymv
 pydocdeploymv:

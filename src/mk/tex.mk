@@ -178,7 +178,7 @@ texexport:	texpdf
 			$(LAT_COMP_PATH)/*.jpg $(LAT_COMP_PATH)/*.gif \
 			$(LAT_COMP_PATH)/*.sty) $(EXPORT_DIR)
 		cp $(wildcard $(addsuffix /*,$(TIPATH))) $(EXPORT_DIR)
-		cp $(BUILD_SRC_DIR)/template/tex-export-makefile $(EXPORT_DIR)/makefile
+		cp $(BUILD_SRC_DIR)/template/tex/export-makefile $(EXPORT_DIR)/makefile
 		if [ ! -z "$(BIBER)" ] ; then \
 			touch $(EXPORT_DIR)/zenbiber ; \
 		fi

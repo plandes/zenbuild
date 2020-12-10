@@ -43,9 +43,7 @@ class DocMetadataAPI(object):
     def attributes(self) -> Dict[str, str]:
         logger.debug(f'loading attributes')
         attrs = '.project .build.tag .description .short_description'.split()
-        attrs = self.fetcher.get_attribs(attrs)
-        attrs = tuple(map(lambda a: (a[0][1:], a[1]), attrs))
-        return dict(attrs)
+        return self.fetcher.get_attrib_dict(attrs)
 
     def save(self) -> Dict[str, str]:
         attrs = self.attributes

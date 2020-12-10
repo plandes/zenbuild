@@ -130,6 +130,16 @@ class BuildInfoFetcher(object):
             elif self.exist_strict:
                 raise ValueError(f'no such attribute: {attrib}')
 
+    def get_attrib_dict(self, attribs: Tuple[str]) -> Dict[str, str]:
+        """Return a set key attributes as a dict where keys are ``attribs``.
+
+        :see: :meth:`get_attribs`
+
+        """
+        attrs = self.get_attribs(attribs)
+        attrs = tuple(map(lambda a: (a[0][1:], a[1]), attrs))
+        return dict(attrs)
+
     def _format_key(self, k: str) -> str:
         """Format a key from the dot path information.
 
