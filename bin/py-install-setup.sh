@@ -14,8 +14,8 @@ for i in sphinx sphinx-rtd-theme recommonmark rst2pdf sphinx-autodoc-typehints ;
     pip install -U $i
 done
 
-echo "installing libraries for development with Emacs Elpy"
-for i in jedi flake8 autopep8 yapf importmagic ; do
+echo "installing libraries for development with Emacs Elpy, virtualenv for jedi"
+for i in jedi flake8 autopep8 yapf importmagic virtualenv ; do
     pip install -U $i
 done
 
