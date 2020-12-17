@@ -21,6 +21,20 @@ ADD_CLEAN +=		$(EL_OBJECTS) $(EL_ELPA_FILE) $(EL_DOC_DIR) $(EL_DIST_DIR)
 ADD_CLEAN_ALL +=	.cask
 INFO_TARGETS +=		elinfo
 
+# package-lint
+# A space-separated list of required package names
+EL_NEEDED_PACKAGES ?=	package-lint
+
+EL_INIT ?= "(progn \
+  (require 'package) \
+  (push '(\"melpa\" . \"https://melpa.org/packages/\") package-archives) \
+  (package-initialize) \
+  (dolist (pkg '(${EL_NEEDED_PACKAGES})) \
+    (unless (package-installed-p pkg) \
+      (unless (assoc pkg package-archive-contents) \
+        (package-refresh-contents)) \
+      (package-install pkg) \
+      (require pkg))))"
 
 ## targets
 .PHONY: 		elinfo
@@ -65,9 +79,9 @@ eltest:			elbuild ellint
 ellint:			eldeps
 			@echo "running package lint"
 	        	@$(EL_CASK_BIN) emacs $$i $(EL_EMACS_SWITCHES) --batch \
-				-eval "(require 'package-lint)"\
-				-f package-lint-batch-and-exit $(EL_FILES) \
-				|| true
+				-eval $(EL_INIT) \
+				-f package-lint-batch-and-exit $(EL_FILES)
+			@echo "package lint successful"
 
 # docs
 $(EL_DOC_DIR):
