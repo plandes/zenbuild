@@ -26,16 +26,24 @@ INFO_TARGETS +=		elinfo
 EL_NEEDED_PACKAGES ?=	package-lint
 
 # code to evaluate to download and install package-lint for target ellint
-EL_INIT ?= "(progn \
-  (require 'package) \
-  (push '(\"melpa\" . \"https://melpa.org/packages/\") package-archives) \
-  (package-initialize) \
-  (dolist (pkg '(${EL_NEEDED_PACKAGES})) \
-    (unless (package-installed-p pkg) \
-      (unless (assoc pkg package-archive-contents) \
-        (package-refresh-contents)) \
-      (package-install pkg) \
-      (require pkg))))"
+EL_INIT_INSTALL = "(progn \
+   (require 'package) \
+   (push '(\"melpa\" . \"https://melpa.org/packages/\") package-archives) \
+   (package-initialize) \
+   (dolist (pkg '(${EL_NEEDED_PACKAGES})) \
+     (unless (package-installed-p pkg) \
+       (unless (assoc pkg package-archive-contents) \
+         (package-refresh-contents)) \
+       (package-install pkg) \
+       (require pkg))))"
+
+# instead of installing, assume Cask has installed package dependencies
+# the second path element is the Emacs version dependency in the package file
+EL_INIT_CASK = "(progn \
+    (setq package-user-dir (car (file-expand-wildcards \".cask/*/elpa\"))) \
+    (require 'package-lint))"
+
+EL_INIT ?= $(EL_INIT_CASK)
 
 ## targets
 .PHONY: 		elinfo
@@ -64,13 +72,20 @@ $(EL_ELPA_FILE):
 .PHONY:			eldeps
 eldeps:			$(EL_ELPA_FILE)
 
+# clean compiled Emacs Lisp files, which is useful for forcing recompilation to
+# get byte compiled warnings/errors
+.PHONY:			elcleancompiled
+elcleancompiled:
+			rm -f $(EL_OBJECTS)
+
+
 # build/compile
 .PHONY:			elbuild
 elbuild:		$(EL_ELPA_FILE) $(EL_OBJECTS)
 
 # run unit tests
 .PHONY:			eltest
-eltest:			elbuild ellint
+eltest:			elcleancompiled elbuild ellint
 			@if [ -d test ] ; then \
 				$(EL_CASK_BIN) exec ert-runner -L $(EL_LISP_DIR) ; \
 			fi
