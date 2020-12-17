@@ -25,6 +25,7 @@ INFO_TARGETS +=		elinfo
 # A space-separated list of required package names
 EL_NEEDED_PACKAGES ?=	package-lint
 
+# code to evaluate to download and install package-lint for target ellint
 EL_INIT ?= "(progn \
   (require 'package) \
   (push '(\"melpa\" . \"https://melpa.org/packages/\") package-archives) \
