@@ -55,7 +55,7 @@ elbuild:		$(EL_ELPA_FILE) $(EL_OBJECTS)
 
 # run unit tests
 .PHONY:			eltest
-eltest:			elbuild
+eltest:			elbuild ellint
 			@if [ -d test ] ; then \
 				$(EL_CASK_BIN) exec ert-runner -L $(EL_LISP_DIR) ; \
 			fi
