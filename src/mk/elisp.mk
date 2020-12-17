@@ -25,7 +25,7 @@ INFO_TARGETS +=		elinfo
 # A space-separated list of required package names
 EL_NEEDED_PACKAGES ?=	package-lint
 
-# code to evaluate to download and install package-lint for target ellint
+# evaluate to download and install package-lint
 EL_INIT_INSTALL = "(progn \
    (require 'package) \
    (push '(\"melpa\" . \"https://melpa.org/packages/\") package-archives) \
@@ -40,10 +40,22 @@ EL_INIT_INSTALL = "(progn \
 # instead of installing, assume Cask has installed package dependencies
 # the second path element is the Emacs version dependency in the package file
 EL_INIT_CASK = "(progn \
-    (setq package-user-dir (car (file-expand-wildcards \".cask/*/elpa\"))) \
+    (setq package-user-dir (car (file-expand-wildcards \".cask/*/elpa\" t))) \
+    (message \"Using package directory: %s\" package-user-dir) \
+    (package-initialize) \
+    (require 'package) \
+    (setq package-selected-packages '(package-lint choice-program)) \
+    (message \"Selected packages: %s\" package-selected-packages) \
+    (message (with-output-to-string \
+               (with-current-buffer standard-output \
+                 (describe-package-1 'package-lint)))) \
+    (message \"Installed: %S\" (featurep 'choice-program)) \
     (require 'package-lint))"
 
-EL_INIT ?= $(EL_INIT_CASK)
+# evaluate on target 'ellint'
+EL_INIT ?= 		$(EL_INIT_INSTALL)
+#EL_INIT ?= 		$(EL_INIT_CASK)
+
 
 ## targets
 .PHONY: 		elinfo
