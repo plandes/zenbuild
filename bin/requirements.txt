@@ -2,4 +2,4 @@ PyYAML==5.1
 tabulate==0.8.3
 pandas>=0.23.4
 plac>=0.9.6
-zensols.util>=1.2.5
+zensols.util>=1.3.0
