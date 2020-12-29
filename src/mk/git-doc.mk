@@ -39,7 +39,7 @@ gitdocbuild:		$(GIT_DOC_DST_DIR)
 # prepare the documents using GIT_DOC_SRC_DIR to trigger the doc build
 $(GIT_DOC_DST_DIR):	$(GIT_DOC_SRC_DIR)
 			rm -rf $(GIT_DOC_DST_DIR) && mkdir -p $(GIT_DOC_DST_DIR)
-			git clone https://github.com/$(GIT_USER)/$(GIT_PROJ).git \
+			git clone git@github.com:$(GIT_USER)/$(GIT_PROJ).git \
 				$(GIT_DOC_DST_DIR)
 			( cd $(GIT_DOC_DST_DIR) ; \
 			  git update-ref -d refs/heads/gh-pages ; \
