@@ -15,7 +15,8 @@ PY_CLI_CLASS ?=		ConfAppCommandLine
 PY_MOD_CMD =		PY_CLI_MOD=$(shell $(GIT_BUILD_ATTR) .name)
 
 # dependencies
-PY_DEP_DEPS +=
+PY_DEP_PRE_DEPS +=
+PY_DEP_POST_DEPS +=
 
 # python path
 PY_SRC ?=		src/python
@@ -80,7 +81,7 @@ pydepsreqs:
 			$(PIP_BIN) install -r $(PY_SRC)/requirements.txt
 
 .PHONY:			pydeps
-pydeps:			pydepsreqs $(PY_DEP_DEPS)
+pydeps:			$(PY_DEP_PRE_DEPS) pydepsreqs $(PY_DEP_POST_DEPS)
 
 # run python tests
 .PHONY:			pytest
