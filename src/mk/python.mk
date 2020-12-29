@@ -14,6 +14,9 @@ PIP_BIN ?=		$(PYTHON_BIN) -m pip
 PY_CLI_CLASS ?=		ConfAppCommandLine
 PY_MOD_CMD =		PY_CLI_MOD=$(shell $(GIT_BUILD_ATTR) .name)
 
+# dependencies
+PY_DEP_DEPS +=
+
 # python path
 PY_SRC ?=		src/python
 PY_SRC_CLI ?=		src/bin
@@ -72,9 +75,12 @@ $(MTARG_PYDIST_BDIR):
 			find $(MTARG_PYDIST_BDIR) -name \*_flymake.py -exec rm {} \;
 
 # install deps
-.PHONY:			pydeps
-pydeps:
+.PHONY:			pydepsreqs
+pydepsreqs:
 			$(PIP_BIN) install -r $(PY_SRC)/requirements.txt
+
+.PHONY:			pydeps
+pydeps:			pydepsreqs $(PY_DEP_DEPS)
 
 # run python tests
 .PHONY:			pytest
