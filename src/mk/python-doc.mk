@@ -66,9 +66,11 @@ pydochtml:		$(PY_DOC_BUILD_HTML)
 pydocpdf:		$(PY_DOC_BUILD_PDF)
 
 $(PY_DOC_BUILD_API):	$(PY_DOC_SOURCE)
+			$(eval SDIR=$(shell find $(PY_SRC) -maxdepth 1 -mindepth 1 -type d))
+			@echo "using source directory $(CODE_DIR)"
 			PYTHONPATH=$(PY_SRC) $(PY_DOC_SPHINX_APIDOC) \
 				-fT --implicit-namespaces \
-				-o $(PY_DOC_BUILD_API) $(PY_SRC)/zensols
+				-o $(PY_DOC_BUILD_API) $(SDIR)
 
 $(PY_DOC_BUILD_HTML):	$(PY_DOC_BUILD_HTML_DEPS)
 			$(PY_DOC_SPHINX_BIN) -M html \
