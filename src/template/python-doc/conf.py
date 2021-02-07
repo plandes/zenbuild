@@ -41,6 +41,12 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
 
+    # inheritance diagrams
+    # 'sphinx.ext.graphviz',
+    # 'sphinx.ext.inheritance_diagram',
+    'btd.sphinx.graphviz',
+    'btd.sphinx.inheritance_diagram',
+
     # markdown
     'recommonmark',
     # auto-generate section labels.
@@ -55,6 +61,9 @@ autodoc_default_options = {
     # Add __init__ methods (see functions maybe_skip_member and setup)
     'special-members': True,
 }
+
+# make more readable
+inheritance_graph_attrs = dict(rankdir="TB", size='""')
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

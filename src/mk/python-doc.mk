@@ -23,6 +23,7 @@ PY_DOC_BUILD_HTML_DEPS += $(PY_DOC_BUILD_API)
 # doc configuration
 PY_DOC_CONF_BIN ?=	$(BUILD_BIN_DIR)/pyconfdoc.py
 PY_DOC_CONF_TMPLT ?=	$(BUILD_SRC_DIR)/template/python-doc
+PY_DOC_CONF_TMPLT_A ?=	$(BUILD_SRC_DIR)/template/sphinx-apidoc
 PY_DOC_CONF_ARGS_SUP ?=
 PY_DOC_CONF_ARGS +=	$(GIT_BUILD_INFO) $(PY_DOC_CONF_SRC) $(PY_DOC_CONF_TMPLT) \
 			$(PY_DOC_SOURCE) $(PY_DOC_CONF_ARGS_SUP)
@@ -70,6 +71,7 @@ $(PY_DOC_BUILD_API):	$(PY_DOC_SOURCE)
 			@echo "using source directory $(CODE_DIR)"
 			PYTHONPATH=$(PY_SRC) $(PY_DOC_SPHINX_APIDOC) \
 				-fT --implicit-namespaces \
+				--templatedir $(PY_DOC_CONF_TMPLT_A) \
 				-o $(PY_DOC_BUILD_API) $(SDIR)
 
 $(PY_DOC_BUILD_HTML):	$(PY_DOC_BUILD_HTML_DEPS)

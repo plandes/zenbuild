@@ -3,6 +3,12 @@
 
 PYPI_URLS="https://test.pypi.org/legacy/ https://upload.pypi.org/legacy/"
 
+which dot > /dev/null 2>&1
+if [ $? != 0 ] ; then
+    echo "must install graphviz: brew install graphviz"
+    exit 1
+fi
+
 
 echo "installing libraries for Python deployments"
 for i in setuptools twine wheel keyring ; do
@@ -11,7 +17,9 @@ done
 
 echo "installing libraries for Python documentation"
 # pin sphinx version since 3.4 has error: search page freezes
-for i in 'sphinx==3.3.1' sphinx-rtd-theme recommonmark rst2pdf sphinx-autodoc-typehints ; do
+for i in 'sphinx==3.3.1' sphinx-rtd-theme recommonmark rst2pdf \
+			 sphinx-autodoc-typehints \
+			 btd.sphinx.graphviz btd.sphinx.inheritance_diagram ; do
     pip install -U $i
 done
 

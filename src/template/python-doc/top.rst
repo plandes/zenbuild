@@ -1,7 +1,3 @@
-DeepZensols Natural Language Processing
-=======================================
-Deep learning utility library for natural language processing that aids in feature engineering and embedding layers.
-
 .. toctree::
    :maxdepth: 2
    :glob:
