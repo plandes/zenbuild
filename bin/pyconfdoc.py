@@ -32,6 +32,8 @@ class DocConfigurer(object):
             ['python', 'https://docs.python.org/3']],
         'numpy': [
             ['numpy', 'https://numpy.org/doc/stable/']],
+        'sklearn': [
+            ['sklearn', 'http://scikit-learn.org/stable']],
         'pandas': [
             ['pandas', 'https://pandas.pydata.org/pandas-docs/stable']],
         'torch': [
