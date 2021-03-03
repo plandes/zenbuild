@@ -56,6 +56,7 @@ gitinfo:
 
 .PHONY: 	gitinit
 gitinit:
+		[ -d .git ] && rm -fr .git
 		$(GIT_BIN) init .
 		$(GIT_BIN) add -A :/
 		$(GIT_BIN) commit -am 'initial commit'
