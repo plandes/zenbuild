@@ -20,15 +20,15 @@ pycliinfo:
 # display the command line help usage
 .PHONY:			pyhelp
 pyhelp:			$(PY_RUN_DEPS)
-			@make "PYTHON_BIN_ARGS=--help" pycli
+			@make "PY_CLI_ARGS=--help" pycli
 
 # run python clis
 .PHONY:			pycli
 pycli:
 			$(eval $(PY_CLI_MOD_CMD))
 			@if [ $(PY_CLI_DEBUG) == 1 ] ; then \
-				echo "calling: $(PY_CLI_MOD).main with $(PYTHON_BIN_ARGS)" ; \
+				echo "calling: $(PY_CLI_MOD).main with $(PY_CLI_ARGS)" ; \
 			fi
 			@PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) -c \
 			 	"from $(PY_CLI_MOD) import main; \
-			 	main('$(PYTHON_BIN_ARGS)'.split())"
+			 	main('$(PY_CLI_ARGS)'.split())"
