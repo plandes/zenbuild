@@ -26,7 +26,7 @@ pyenv:			$(PY_CONF_ENV_FILE)
 $(PY_CONF_ENV_FILE):
 			mkdir -p $(PY_CONF_ENV_DIR)
 			@echo "source build for Python module name"
-			$(eval PYTHON_BIN_ARGS += export --exportformat \
+			$(eval PYTHON_BIN_ARGS += export --expfmt \
 				make --output $(PY_CONF_ENV_FILE))
 			$(eval $(PY_CLI_MOD_CMD))
 			@if [ $(PY_CLI_DEBUG) == 1 ] ; then \
