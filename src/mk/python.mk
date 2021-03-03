@@ -5,14 +5,9 @@
 
 # python
 PYTHON_BIN ?=		python
-PYTHON_BIN_ARGS ?=	
 PYTHON_TEST_ARGS ?=	
 PYTHON_TEST_ENV ?=
 PIP_BIN ?=		$(PYTHON_BIN) -m pip
-
-# cli
-PY_CLI_CLASS ?=		ConfAppCommandLine
-PY_MOD_CMD =		PY_CLI_MOD=$(shell $(GIT_BUILD_ATTR) .name)
 
 # dependencies
 PY_DEP_PRE_DEPS +=
@@ -20,11 +15,9 @@ PY_DEP_POST_DEPS +=
 
 # python path
 PY_SRC ?=		src/python
-PY_SRC_CLI ?=		src/bin
 PY_SRC_TEST ?=		test/python
 PY_SRC_TEST_PAT ?=	'test_*.py'
 PY_TEST_DEPS +=
-PY_RUN_DEPS +=
 PY_COMPILED +=		$(shell find $(PY_SRC) -name \*.pyc -type f)
 PY_FLYMAKE +=		$(shell find $(PY_SRC) -name \*_flymake.py -type f)
 PY_CACHE +=		$(shell find $(PY_SRC) $(PY_SRC_TEST) -type d -name __pycache__)
@@ -83,7 +76,7 @@ pydepsreqs:
 .PHONY:			pydeps
 pydeps:			$(PY_DEP_PRE_DEPS) pydepsreqs $(PY_DEP_POST_DEPS)
 
-# run python tests
+# execute python tests
 .PHONY:			pytest
 pytest:			$(PY_TEST_DEPS)
 			@echo "test: $(PY_SRC_TEST)"
@@ -95,35 +88,10 @@ pytest:			$(PY_TEST_DEPS)
 					-s $(PY_SRC_TEST) -p $(PY_SRC_TEST_PAT) -v ; \
 			fi
 
-# run tests in a virtual environment
+# execute tests in a virtual environment
 .PHONY:			pytestvirtual
 pytestvirtual:
 			make "PROJ_LOCAL_MODULES+=python-virtual" pytest
-
-# run python clis
-.PHONY:			pyrun
-pyrun:			$(PY_RUN_DEPS)
-			@for i in $(PY_SRC_CLI)/* ; do \
-				echo "running $$i" ; \
-				PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) \
-					$$i $(PYTHON_BIN_ARGS) ; \
-			done
-
-# run the command line directory (assume standard CLI zensols.util boilerplate)
-.PHONY:			pycli
-pycli:
-			$(eval $(PY_MOD_CMD))
-			@echo "run: $(PY_CLI_MOD).$(PY_CLI_CLASS) with $(PYTHON_BIN_ARGS)"
-			@PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) -c \
-				"from $(PY_CLI_MOD) import $(PY_CLI_CLASS); \
-				$(PY_CLI_CLASS)().invoke( \
-				'$(PYTHON_BIN_ARGS)'.split())"
-
-
-# display the command line help usage
-.PHONY:			pyhelp
-pyhelp:
-			make PYTHON_BIN_ARGS='--help' pyrun
 
 # package by creating the egg and wheel distribution binaries
 .PHONY:			pypackage

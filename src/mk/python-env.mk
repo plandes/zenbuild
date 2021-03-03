@@ -2,9 +2,9 @@
 
 # This creates build environment make configuration file from the zensols
 # Python application configuration file.  The command line module needs an
-# `env` action that prints out the environment in make syntax.
+# `export` action that prints out the environment in make syntax.
 
-## PL 5/25/2020
+## PROJ_MODULES needs to have python-cli.mk in the list before this include
 
 
 # environment
@@ -14,6 +14,7 @@ PY_CONF_ENV_FILE =	$(PY_CONF_ENV_DIR)/env.mk
 # this actually works with GNU make; it knows to include it after it is created
 # even though it complains about it on the first pass
 include $(PY_CONF_ENV_FILE)
+
 
 ## python
 
@@ -25,15 +26,20 @@ pyenv:			$(PY_CONF_ENV_FILE)
 $(PY_CONF_ENV_FILE):
 			mkdir -p $(PY_CONF_ENV_DIR)
 			@echo "source build for Python module name"
-			$(eval $(PY_MOD_CMD))
-			@echo "calling: $(PY_CLI_MOD).$(PY_CLI_CLASS) with $(PYTHON_BIN_ARGS) env"
+			$(eval PYTHON_BIN_ARGS += export --exportformat \
+				make --output $(PY_CONF_ENV_FILE))
+			$(eval $(PY_CLI_MOD_CMD))
+			@if [ $(PY_CLI_DEBUG) == 1 ] ; then \
+				echo "calling: $(PY_CLI_MOD).main with $(PYTHON_BIN_ARGS)" ; \
+			fi
 			@PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) -c \
-				"from $(PY_CLI_MOD) import $(PY_CLI_CLASS); \
-				$(PY_CLI_CLASS)().invoke( \
-				'$(PYTHON_BIN_ARGS) env'.split())" \
-				> $(PY_CONF_ENV_FILE)
+			 	"from $(PY_CLI_MOD) import main; \
+			 	main('$(PYTHON_BIN_ARGS)'.split())" \
 
 # display the contents of the make include
 .PHONY:			pyenvshow
 pyenvshow:		$(PY_CONF_ENV_FILE)
-			cat $(PY_CONF_ENV_FILE)
+			@if [ $(PY_CLI_DEBUG) == 1 ] ; then \
+				echo "file: $(PY_CONF_ENV_FILE)" ; \
+			fi
+			@cat $(PY_CONF_ENV_FILE)
