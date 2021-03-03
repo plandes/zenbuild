@@ -12,6 +12,7 @@ INFO_TARGETS +=		pycliinfo
 
 ## targets
 
+# information
 .PHONY:			pycliinfo
 pycliinfo:
 			@echo "py-cli-mod-cmd: $(PY_CLI_MOD_CMD)"

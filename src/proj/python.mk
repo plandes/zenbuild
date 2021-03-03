@@ -4,7 +4,7 @@
 include $(BUILD_MK_DIR)/python.mk
 
 .PHONY:		run
-run:		pyclirun
+run:		pycli
 
 .PHONY:		help
 help:		pyhelp
