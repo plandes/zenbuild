@@ -19,7 +19,7 @@ pycliinfo:
 # display the command line help usage
 .PHONY:			pyhelp
 pyhelp:			$(PY_RUN_DEPS)
-			make "PYTHON_BIN_ARGS=--help" pycli
+			@make "PYTHON_BIN_ARGS=--help" pycli
 
 # run python clis
 .PHONY:			pycli
