@@ -8,7 +8,7 @@ PYTHON_BIN ?=		python
 PYTHON_TEST_ARGS ?=	
 PYTHON_TEST_ENV ?=
 PIP_BIN ?=		$(PYTHON_BIN) -m pip
-PIP_ARGS +=		-r $(PY_SRC)/requirements.txt
+PIP_ARGS +=
 
 # dependencies
 PY_DEP_PRE_DEPS +=
@@ -72,7 +72,7 @@ $(MTARG_PYDIST_BDIR):
 # install deps
 .PHONY:			pydepsreqs
 pydepsreqs:
-			$(PIP_BIN) install $(PIP_ARGS)
+			$(PIP_BIN) install $(PIP_ARGS) -r $(PY_SRC)/requirements.txt
 
 .PHONY:			pydeps
 pydeps:			$(PY_DEP_PRE_DEPS) pydepsreqs $(PY_DEP_POST_DEPS)
@@ -106,7 +106,7 @@ $(MTARG_PYDIST_ATFC):	$(MTARG_PYDIST_BDIR)
 # install the library locally
 .PHONY:			pyinstall
 pyinstall:		pytest pypackage
-			$(PIP_BIN) install $(MTARG_PYDIST_DIR)/*.whl
+			$(PIP_BIN) install $(PIP_ARGS) $(MTARG_PYDIST_DIR)/*.whl
 
 .PHONY:			pyinstallnotest
 pyinstallnotest:
