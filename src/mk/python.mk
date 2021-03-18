@@ -69,6 +69,11 @@ $(MTARG_PYDIST_BDIR):
 			[ -f LICENSE ] && cp LICENSE $(MTARG_PYDIST_BDIR)/LICENSE.txt || true
 			find $(MTARG_PYDIST_BDIR) -name \*_flymake.py -exec rm {} \;
 
+# dry run for pip install
+.PHONY:			pydeppeek
+pydeppeek:
+			pip-sync --dry-run $(PY_SRC)/requirements.txt || true
+
 # install deps
 .PHONY:			pydepsreqs
 pydepsreqs:
