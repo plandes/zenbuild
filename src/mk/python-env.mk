@@ -27,7 +27,7 @@ $(PY_CONF_ENV_FILE):
 			mkdir -p $(PY_CONF_ENV_DIR)
 			@echo "source build for Python module name"
 			$(eval PY_CLI_ARGS += export --expfmt \
-				make --output $(PY_CONF_ENV_FILE))
+				make --expoutput $(PY_CONF_ENV_FILE))
 			$(eval $(PY_CLI_MOD_CMD))
 			@if [ $(PY_CLI_DEBUG) == 1 ] ; then \
 				echo "calling: $(PY_CLI_MOD).main with $(PY_CLI_ARGS)" ; \
