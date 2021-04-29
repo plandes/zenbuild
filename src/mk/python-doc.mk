@@ -10,6 +10,7 @@ PY_DOC_SPHINX_APIDOC ?=	sphinx-apidoc
 
 # doc paths
 PY_DOC_DIR ?=		$(MTARG)/doc
+PY_DOC_MD_SRC ?=	./doc
 PY_DOC_CONF_SRC ?=	./src/doc
 PY_DOC_SOURCE_DEPS +=	
 PY_DOC_SOURCE ?=	$(PY_DOC_DIR)/src
@@ -56,7 +57,7 @@ $(PY_DOC_SOURCE):	$(PY_DOC_SOURCE_DEPS)
 			[ -f CHANGELOG.md ] && cp CHANGELOG.md $(PY_DOC_SOURCE) || true
 			[ -f LICENSE.md ] && cp LICENSE.md $(PY_DOC_SOURCE) || true
 			[ -f CONTRIBUTING.md ] && cp CONTRIBUTING.md $(PY_DOC_SOURCE) || true
-			[ -d doc ] && cp -r doc $(PY_DOC_SOURCE) || true
+			[ -d $(PY_DOC_MD_SRC) ] && cp -r $(PY_DOC_MD_SRC) $(PY_DOC_SOURCE)/doc || true
 			[ -d "test" ] && cp -r test $(PY_DOC_SOURCE) || true
 			$(PY_DOC_CONF_BIN) $(PY_DOC_CONF_ARGS)
 
