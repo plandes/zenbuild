@@ -57,10 +57,9 @@ TEX_QUIET ?=	1
 ifeq ($(TEX_QUIET),1)
 # https://tex.stackexchange.com/questions/1191/reducing-the-console-output-of-latex
 PDFLAT_ARGS +=	-interaction batchmode
+# no output at all
+QUIET ?=	> /dev/null
 endif
-
-# no output at all (faster in Emacs avoiding)
-#QUIET ?=	> /dev/null
 
 # default position of Preview.app
 PREV_POS ?=	{1500, 0}
@@ -144,6 +143,11 @@ $(PDF_FILE):	$(COMP_DEPS)
 			( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex ) ; \
 		fi
 
+# "debug" the compilation process by not adding quiet flags to pdflatex
+.PHONY:		texdebug
+texdebug:
+		make TEX_QUIET=0 texpdf
+
 # final version: compile twice for refs and bibliography
 .PHONY:		texfinal
 texfinal:
@@ -213,6 +217,8 @@ texpresent:	texpackage
 		@echo "NOTE!: uncheck mirror mode: Sys Prefs > Display > Arragenemnt"
 		$(PYTHON_BIN) $(PRESENT_BIN) $(PKG_FINAL_DIR)/$(FINAL_NAME)-presenetation.pdf
 
+# create final version, compress if mulitple files, then cpoy to install
+# location
 .PHONY:		texinstall
 texinstall:	texpackage
 		@if [ `ls $(PKG_DIR)/$(FINAL_NAME) | wc -l` -gt 1 ] ; then \
