@@ -5,7 +5,7 @@
 # guesing the python package to put the resources (so that when unzipped
 # accessible by pkg_resources), which works on a zensols python boilerplate
 # template
-PY_PKG_DIR=		$(shell cat ./src/python/setup.py | \
+PY_PKG_DIR=		$(shell cat $(PY_SRC)/setup.py | \
 			  grep package_names | \
 			  sed 's/.*=\(.*\),/\1/' | \
 			  python -c "import sys ; print('/'.join(eval(sys.stdin.read())))")
