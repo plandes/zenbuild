@@ -5,7 +5,11 @@
 # guesing the python package to put the resources (so that when unzipped
 # accessible by pkg_resources), which works on a zensols python boilerplate
 # template
-PY_PKG_DIR=		$(shell ls $(PY_SRC)/ | tail -1)/$(shell ls $(PY_SRC)/*/ | tail -1)
+#PY_PKG_DIR=		$(shell ls $(PY_SRC)/ | tail -1)/$(shell ls $(PY_SRC)/*/ | tail -1)
+PY_PKG_DIR=		$(shell cat ./src/python/setup.py | \
+			  grep package_names | \
+			  sed 's/.*=\(.*\),/\1/' | \
+			  python -c "import sys ; print('/'.join(eval(sys.stdin.read())))")
 
 # where to copy the resources that is zipped up by setup tools
 MTARG_PYDIST_RES=	$(MTARG_PYDIST_BDIR)/$(PY_PKG_DIR)
