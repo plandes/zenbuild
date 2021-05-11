@@ -1,4 +1,4 @@
-PyYAML==5.1
+PyYAML==5.4
 tabulate==0.8.3
 pandas>=0.23.4
 plac>=0.9.6
