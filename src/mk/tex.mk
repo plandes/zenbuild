@@ -24,15 +24,16 @@ INSTALL_PDF ?=	$(INSTALL_DIR)/$(FINAL_NAME).pdf
 INSTALL_ZIP ?=	$(INSTALL_DIR)/$(FINAL_NAME).zip
 
 # paths
+TEX_CACHE_DIR ?= $(abspath ../cache)
 TEX_IMG_DIR ?=	$(abspath ../image)
-TEX_IMGC_DIR ?=	$(abspath ../cache/image)
+TEX_IMGC_DIR ?=	$(TEX_CACHE_DIR)/image
 TEX_CONF_DIR ?=	$(abspath ../config)
 
 # package
 PKG_DIR ?=	$(MTARG)/pkg
 PKG_FINAL_DIR ?= $(PKG_DIR)/$(FINAL_NAME)
 TEX_PKG_ADD +=
-ADD_CLEAN_ALL += $(PKG_DIR) $(INSTALL_PDF) $(INSTALL_ZIP) $(TEX_IMGC_DIR)
+ADD_CLEAN_ALL += $(PKG_DIR) $(INSTALL_PDF) $(INSTALL_ZIP) $(TEX_CACHE_DIR)
 
 # export
 EXPORT_DIR ?=	$(MTARG)/export
