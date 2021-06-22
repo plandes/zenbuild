@@ -155,7 +155,8 @@ texdebug:
 # final version: compile twice for refs and bibliography
 .PHONY:		texfinal
 texfinal:
-		make SECOND_RUN=1 texpdf
+		make PDFLAT_ARGS="'\def\isfinal{1} \input{$(TEX).tex}'" \
+			SECOND_RUN=1 texpdf
 
 # compile and display the file using a simple open (MacOS or alias out)
 .PHONY:		texshowpdf
