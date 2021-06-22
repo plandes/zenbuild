@@ -11,7 +11,7 @@
 ## build
 
 # all .eps -> .pdf
-TEX_IMG_PDF=	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(patsubst %.eps,%.pdf,$(wildcard $(TEX_IMG_DIR)/*.eps))))
+TEX_IMG_PDF=	$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(patsubst %.eps,%.pdf,$(wildcard $(TEX_IMG_DIR)/*.eps))))
 # add PDF dependencies from 
 PRE_COMP_DEPS +=$(TEX_IMG_PDF)
 # information target
