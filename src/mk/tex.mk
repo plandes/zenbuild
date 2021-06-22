@@ -23,23 +23,24 @@ INSTALL_DIR ?=	$(HOME)/Desktop
 INSTALL_PDF ?=	$(INSTALL_DIR)/$(FINAL_NAME).pdf
 INSTALL_ZIP ?=	$(INSTALL_DIR)/$(FINAL_NAME).zip
 
+# paths
+TEX_IMG_DIR ?=	$(abspath ../image)
+TEX_IMGC_DIR ?=	$(abspath ../cache/image)
+TEX_CONF_DIR ?=	$(abspath ../config)
+
 # package
 PKG_DIR ?=	$(MTARG)/pkg
 PKG_FINAL_DIR ?= $(PKG_DIR)/$(FINAL_NAME)
 TEX_PKG_ADD +=
-ADD_CLEAN_ALL += $(PKG_DIR) $(INSTALL_PDF) $(INSTALL_ZIP)
+ADD_CLEAN_ALL += $(PKG_DIR) $(INSTALL_PDF) $(INSTALL_ZIP) $(TEX_IMGC_DIR)
 
 # export
 EXPORT_DIR ?=	$(MTARG)/export
 
-# paths
-TEX_IMG_DIR ?=	$(abspath ../image)
-TEX_CONF_DIR ?=	$(abspath ../config)
-
 # file deps
-TEX_IMG_EPS=	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.eps)))
-TEX_IMG_PNG=	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.png)))
-TEX_IMG_JPG=	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.jpg)))
+TEX_IMG_EPS=	$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.eps)))
+TEX_IMG_PNG=	$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.png)))
+TEX_IMG_JPG=	$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.jpg)))
 TEX_IMAGES=	$(TEX_IMG_EPS) $(TEX_IMG_PNG) $(TEX_IMG_JPG)
 
 # files
@@ -86,6 +87,7 @@ texinfo:
 # shortgap for dependency marker (with the exception of the .tex file) for now
 $(MTARG_FILE):
 		mkdir -p $(LAT_COMP_PATH)
+		mkdir -p $(TEX_IMGC_DIR)
 		date >> $(MTARG_FILE)
 
 # copy over all vector .eps static files
@@ -117,6 +119,8 @@ texforceshow:	force texshowpdf
 $(PRERUN_FILE):
 		@echo "init run: $(TEX_INIT_RUN)"
 		@if [ ! -z "$(TEX_INIT_RUN)" ] ; then \
+			echo "copying images $(TEX_IMGC_DIR) -> $(LAT_COMP_PATH)" ; \
+			cp $(TEX_IMGC_DIR)/* $(LAT_COMP_PATH) ; \
 			echo "starting latex pre-start run..." ; \
 			echo $(LATEX_BIN) $(TEX).tex ; \
 			( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex ) ; \
