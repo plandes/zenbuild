@@ -169,15 +169,6 @@ $(PDF_FILE):	$(COMP_DEPS)
 texdebug:
 		make TEX_QUIET=0 texpdf
 
-# final version: compile twice for refs and bibliography
-.PHONY:		texfinal
-texfinal:
-		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
-			echo "run number $$i" ; \
-			make PDFLAT_ARGS="'\def\isfinal{1} \input{$(TEX).tex}'" \
-				texforce ; \
-		done	
-
 # compile and display the file using a simple open (MacOS or alias out)
 .PHONY:		texshowpdf
 texshowpdf:	texpdf
@@ -213,11 +204,23 @@ texexport:	texpdf
 		fi
 		@echo "exported stand-alone build to $(EXPORT_DIR)"
 
+# final version: compile twice for refs and bibliography
+.PHONY:		texfinal
+texfinal:
+		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
+			echo "run number $$i" ; \
+			make PDFLAT_ARGS="'\def\isfinal{1} \input{$(TEX).tex}'" \
+				texforce ; \
+		done
+
 # create the presentation form of the slides
 .PHONY:		texpresentpdf
 texpresentpdf:
-		make PDFLAT_ARGS="'\def\ispresentation{1} \input{$(TEX).tex}'" \
-			SECOND_RUN=1 texpdf
+		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
+			echo "run number $$i" ; \
+			make PDFLAT_ARGS="'\def\isfinal{1} \def\ispresentation{1} \input{$(TEX).tex}'" \
+				texforce ; \
+		done
 
 # create a zip file with the only the PDF as its contents
 .PHONY:		texpackage
