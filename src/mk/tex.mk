@@ -72,7 +72,6 @@ TEX_INIT_RUN =
 # build
 INFO_TARGETS +=	texinfo
 
-
 ## targets
 .PHONY:	texinfo
 texinfo:
@@ -115,6 +114,15 @@ texforce:	$(COMP_DEPS)
 # force recompile and snow
 .PHONY:		forceshow
 texforceshow:	force texshowpdf
+
+# run three times when running from scratch and indicated to do so with
+# SECOND_RUN_INIT, otherwise reference links are question marks and a manual
+# forced run would otherwise be necessary
+ifeq ($(SECOND_RUN_INIT),1)
+  ifneq (,$(PRERUN_FILE))
+    SECOND_RUN=1
+  endif
+endif
 
 # run latex before resolving module targets (see tex-bib*.mk, tex-index.mk)
 $(PRERUN_FILE):
