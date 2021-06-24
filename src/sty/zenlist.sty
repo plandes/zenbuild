@@ -88,6 +88,13 @@ Let:
 {\begin{zzdefinitiontype}{#1}{\bf}{.1cm}{0in}}
 {\end{zzdefinitiontype}}
 
+%% ex:
+% \begin{zztypedefinition}{01234567890}{\bf}{.3cm}
+% \item[key item] define...
+\newenvironment{zztypedefinition}[3]
+{\begin{zzdefinitiontype}{#1}{#2}{#3}{0in}}
+{\end{zzdefinitiontype}}
+
 % horizontal enumerate (inline list) with letters: a) one b) two...
 \newenvironment{zzpackedinline}[1][\alph*\upshape)]
 {\begin{enumerate*}[label=#1]}
