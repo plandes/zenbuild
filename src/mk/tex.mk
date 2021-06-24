@@ -69,8 +69,23 @@ PREV_SIZE ?=	{1400, 1600}
 
 # invokes a pre run
 TEX_INIT_RUN =
+
+# number of times to run when creating final (i.e. installed) PDF
+TEX_FINAL_RUNS ?= 2
+
 # build
 INFO_TARGETS +=	texinfo
+
+
+# run three times when running from scratch and indicated to do so with
+# SECOND_RUN_INIT, otherwise reference links are question marks and a manual
+# forced run would otherwise be necessary
+ifeq ($(SECOND_RUN_INIT),1)
+  ifneq (,$(PRERUN_FILE))
+    SECOND_RUN=1
+  endif
+endif
+
 
 ## targets
 .PHONY:	texinfo
@@ -109,20 +124,13 @@ $(MTARG_FILE):
 # recompile even when editing .sty files (make proper dependencies?)
 .PHONY:		force
 texforce:	$(COMP_DEPS)
+		@echo "forcing make"
+		make $(COMP_DEPS)
 		( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex )
 
 # force recompile and snow
 .PHONY:		forceshow
 texforceshow:	force texshowpdf
-
-# run three times when running from scratch and indicated to do so with
-# SECOND_RUN_INIT, otherwise reference links are question marks and a manual
-# forced run would otherwise be necessary
-ifeq ($(SECOND_RUN_INIT),1)
-  ifneq (,$(PRERUN_FILE))
-    SECOND_RUN=1
-  endif
-endif
 
 # run latex before resolving module targets (see tex-bib*.mk, tex-index.mk)
 $(PRERUN_FILE):
@@ -164,8 +172,11 @@ texdebug:
 # final version: compile twice for refs and bibliography
 .PHONY:		texfinal
 texfinal:
-		make PDFLAT_ARGS="'\def\isfinal{1} \input{$(TEX).tex}'" \
-			SECOND_RUN=1 texpdf
+		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
+			echo "run number $$i" ; \
+			make PDFLAT_ARGS="'\def\isfinal{1} \input{$(TEX).tex}'" \
+				texforce ; \
+		done	
 
 # compile and display the file using a simple open (MacOS or alias out)
 .PHONY:		texshowpdf
