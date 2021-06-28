@@ -33,10 +33,12 @@ TEX_CONF_DIR ?=	$(abspath ../config)
 PKG_DIR ?=	$(MTARG)/pkg
 PKG_FINAL_DIR ?= $(PKG_DIR)/$(FINAL_NAME)
 TEX_PKG_ADD +=
-ADD_CLEAN_ALL += $(PKG_DIR) $(INSTALL_PDF) $(INSTALL_ZIP) $(TEX_CACHE_DIR)
 
 # export
-EXPORT_DIR ?=	$(MTARG)/export
+TEX_EXPORT_DIR ?=	$(MTARG)/export
+TEX_EXPORT_ZIP_DIR ?=	$(notdir $(TEX_EXPORT_DIR))
+TEX_EXPORT_ZIP ?=	$(FINAL_NAME)-export.zip
+TEX_EXPORT_INST_ZIP ?=	$(INSTALL_DIR)/$(TEX_EXPORT_ZIP)
 
 # file deps
 TEX_IMG_EPS=	$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.eps)))
@@ -74,6 +76,7 @@ TEX_INIT_RUN =
 TEX_FINAL_RUNS ?= 2
 
 # build
+ADD_CLEAN_ALL += $(PKG_DIR) $(INSTALL_PDF) $(INSTALL_ZIP) $(TEX_CACHE_DIR) $(TEX_EXPORT_INST_ZIP)
 INFO_TARGETS +=	texinfo
 
 
@@ -148,10 +151,6 @@ $(PRERUN_FILE):
 $(TEX_FILE):	$(TEX).tex
 		cp $(TEX).tex $(LAT_COMP_PATH)
 
-# build the PDF
-.PHONY:		texpdf
-texpdf:		$(PDF_FILE)
-
 # should be able to put $(COMP_DEPS) as a dependency.  However, given the *.mk
 # file proccessing order, it completely skips the module make files
 $(PDF_FILE):	$(COMP_DEPS)
@@ -164,10 +163,15 @@ $(PDF_FILE):	$(COMP_DEPS)
 			( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex ) ; \
 		fi
 
+# build the PDF
+.PHONY:		texpdf
+texpdf:		$(PDF_FILE)
+
+
 # "debug" the compilation process by not adding quiet flags to pdflatex
 .PHONY:		texdebug
 texdebug:
-		make TEX_QUIET=0 texpdf
+		make TEX_QUIET=0 texforce
 
 # compile and display the file using a simple open (MacOS or alias out)
 .PHONY:		texshowpdf
@@ -188,21 +192,6 @@ texfinalshow:	texfinal texshowpdf
 texreposition:	texpdf
 		open $(PDF_FILE)
 		osascript $(SHOWPREV_BIN) $(PDF_FILE) $(PREV_LOC)
-
-# create a no dependency (from zenbuild) directory with files to recreate PDF
-.PHONY:		texexport
-texexport:	texpdf
-		mkdir -p $(EXPORT_DIR)
-		cp $(wildcard $(TEX).tex $(BIB_FILE) $(BBL_FILE)) $(EXPORT_DIR)
-		cp $(wildcard $(LAT_COMP_PATH)/*.eps $(LAT_COMP_PATH)/*.png \
-			$(LAT_COMP_PATH)/*.jpg $(LAT_COMP_PATH)/*.gif \
-			$(LAT_COMP_PATH)/*.sty) $(EXPORT_DIR)
-		cp $(wildcard $(addsuffix /*,$(TIPATH))) $(EXPORT_DIR)
-		cp $(BUILD_SRC_DIR)/template/tex/export-makefile $(EXPORT_DIR)/makefile
-		if [ ! -z "$(BIBER)" ] ; then \
-			touch $(EXPORT_DIR)/zenbiber ; \
-		fi
-		@echo "exported stand-alone build to $(EXPORT_DIR)"
 
 # final version: compile twice for refs and bibliography
 .PHONY:		texfinal
@@ -257,3 +246,21 @@ texinstall:	texpackage
 			echo "installing just PDF" ; \
 			cp $(PKG_DIR)/$(FINAL_NAME)/$(FINAL_NAME).pdf $(INSTALL_PDF) ; \
 		fi
+
+# create a no dependency (from zenbuild) directory with files to recreate PDF
+.PHONY:		texexport
+texexport:	texinstall
+		mkdir -p $(TEX_EXPORT_DIR)
+		cp $(wildcard $(TEX).tex $(BIB_FILE) $(BBL_FILE)) $(TEX_EXPORT_DIR)
+		cp $(wildcard $(LAT_COMP_PATH)/*.eps $(LAT_COMP_PATH)/*.png \
+			$(LAT_COMP_PATH)/*.jpg $(LAT_COMP_PATH)/*.gif \
+			$(LAT_COMP_PATH)/*.sty) $(TEX_EXPORT_DIR)
+		cp $(wildcard $(addsuffix /*,$(TIPATH))) $(TEX_EXPORT_DIR)
+		cp $(BUILD_SRC_DIR)/template/tex/export-makefile $(TEX_EXPORT_DIR)/makefile
+		if [ ! -z "$(BIBER)" ] ; then \
+			touch $(TEX_EXPORT_DIR)/zenbiber ; \
+		fi
+		( cd $(TEX_EXPORT_DIR)/.. ; \
+			zip -r $(TEX_EXPORT_ZIP) $(TEX_EXPORT_ZIP_DIR) ; \
+			cp $(TEX_EXPORT_ZIP) $(TEX_EXPORT_INST_ZIP) )
+		@echo "exported stand-alone build to $(TEX_EXPORT_INST_ZIP)"
