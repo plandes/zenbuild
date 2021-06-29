@@ -9,5 +9,4 @@ ADD_CLEAN_ALL +=	$(BIB_FILE)
 
 $(BIB_FILE):		$(BIB_MASTER_FILE)
 			@echo "running bibstract on $(BIB_FILE)..."
-			@echo "rc: $(BIBSTRACTRC)"
-			$(BIBSTRACT) export -t $(BIBSTRACT_TEX_PATH) > $(BIB_FILE)
+			$(BIBSTRACT) export $(BIBSTRACT_TEX_PATH) > $(BIB_FILE)
