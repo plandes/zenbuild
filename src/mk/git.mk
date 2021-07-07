@@ -67,8 +67,10 @@ gitreinit:
 		$(eval GIT_REMOTE_CMD:=git remote add $(GIT_REMOTE_NAME) $(GIT_REMOTE_URL))
 		rm -fr .git .gitmodules zenbuild
 		$(GIT_BIN) init .
+		$(GIT_BIN) add -A :/
 		$(GIT_BIN) submodule add $(GIT_BUILD_REPO)
-		make gitinit
+		$(GIT_BIN) commit -am 'initial commit'
+		$(GIT_BUILD_BIN) create -m 'initial release'
 		echo $(GIT_REMOTE_CMD)
 
 .PHONY: 	gitforcetag
