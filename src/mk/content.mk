@@ -56,7 +56,11 @@ cntcopysite:
 			fi
 			@for i in $(CNT_SITE_OBJS) ; do \
 				echo "copying $(CNT_SITE_DIR) -> $(CNT_STAGE_DIR)" ; \
-				rsync $(CNT_RSYNC_OPTS) --exclude .DS_Store $$i $(CNT_STAGE_DIR) || true ; \
+				if [ ! -e $$i ] ; then \
+					echo "warning: missing path $$i--skipping..." ; \
+				else \
+					rsync $(CNT_RSYNC_OPTS) --exclude .DS_Store $$i $(CNT_STAGE_DIR) || true ; \
+				fi ; \
 			done
 
 .PHONY:			cntsite
