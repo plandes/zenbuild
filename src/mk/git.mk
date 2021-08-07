@@ -91,7 +91,7 @@ gitforcepush:
 
 .PHONY: 	gitmktag
 gitmktag:
-		$(GIT_BUILD_BIN) create -m `$(GIT_BIN) log -1 --pretty=%B`
+		$(GIT_BUILD_BIN) create -m "`$(GIT_BIN) log -1 --pretty=%B`"
 
 .PHONY: 	gitrmtag
 gitrmtag:
