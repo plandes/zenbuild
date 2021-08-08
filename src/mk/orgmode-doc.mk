@@ -39,7 +39,7 @@ orgmodeinfo:
 
 # install documentation
 .PHONY:			orgmode-html
-orgmode-html:		$(OM_HTML_DIR) $(OM_HTML_FILES)	$(ADD_OM_DEPS)
+orgmode-html:		$(OM_HTML_DIR) $(OM_HTML_FILES) $(ADD_OM_DEPS)
 
 # create the HTML documetnation dir
 $(OM_HTML_DIR):
