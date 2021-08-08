@@ -38,8 +38,8 @@ orgmodeinfo:
 			@echo "om-export-funcs: $(OM_EXPORT_FUNCS)"
 
 # install documentation
-.PHONY:			orgmode-html
-orgmode-html:		$(OM_HTML_DIR) $(OM_HTML_FILES) $(ADD_OM_DEPS)
+.PHONY:			orgmode-doc-html
+orgmode-doc-html:	$(OM_HTML_DIR) $(OM_HTML_FILES) $(ADD_OM_DEPS)
 
 # create the HTML documetnation dir
 $(OM_HTML_DIR):
@@ -56,8 +56,8 @@ $(OM_HTML_DIR)/%.html:	%.html
 			$(OM_INSTALL) -v -m 644 -t $(OM_HTML_DIR) $<
 
 # generate the HTML and browse to the file
-.PHONY:			orgmode-show
-orgmode-show:		orgmode-html
+.PHONY:			orgmode-doc-show
+orgmode-doc-show:	orgmode-doc-html
 			@for i in $(OM_SHOW_FILES) ; do \
 				open $$i ; \
 			done
