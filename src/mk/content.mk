@@ -26,8 +26,8 @@ CNT_DEPLOY_URL ?=	https://example.com/site/index.html
 # default show target to show
 CNT_SHOW_TARG ?=	cntshowremote
 # default rsync options: stage and deploy respectively
-CNT_RSYNC_OPTS ?=	-auv
-CNT_RSYNC_DEP_OPTS ?=	$(CNT_RSYNC_OPTS) --copy-links --delete $(CNT_SRC_STAGE_DIR)
+CNT_RSYNC_OPTS ?=	-auv --copy-links
+CNT_RSYNC_DEP_OPTS ?=	$(CNT_RSYNC_OPTS) --delete $(CNT_SRC_STAGE_DIR)
 
 # module config
 INFO_TARGETS +=		cntinfo
