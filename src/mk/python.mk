@@ -86,7 +86,7 @@ pydeps:			$(PY_DEP_PRE_DEPS) pydepsreqs $(PY_DEP_POST_DEPS)
 .PHONY:			pydeptree
 pydeptree:
 			$(eval proj-name=$(shell $(GIT_BUILD_ATTR) .name))
-			$(PYTHON) johnnydep $(proj-name)
+			$(PYTHON_BIN) -m johnnydep $(proj-name)
 
 # execute python tests
 .PHONY:			pytest

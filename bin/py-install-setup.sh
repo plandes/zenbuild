@@ -16,7 +16,7 @@ fi
 
 
 echo "installing libraries for Python deployments"
-for i in setuptools twine wheel keyring pip-tools ; do
+for i in setuptools twine wheel keyring pip-tools johnnydep ; do
     pip install -U $i
 done
 
