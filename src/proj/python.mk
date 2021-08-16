@@ -18,6 +18,9 @@ package:	pypackage
 .PHONY:		deps
 deps:		pydeps
 
+.PHONY:		deptree
+deptree:	pydeptree
+
 .PHONY:		install
 install:	pyinstall
 

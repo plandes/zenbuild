@@ -82,6 +82,12 @@ pydepsreqs:
 .PHONY:			pydeps
 pydeps:			$(PY_DEP_PRE_DEPS) pydepsreqs $(PY_DEP_POST_DEPS)
 
+# show a dependency tree (inclusion of PROJ_MODULES=git needed)
+.PHONY:			pydeptree
+pydeptree:
+			$(eval proj-name=$(shell $(GIT_BUILD_ATTR) .name))
+			$(PYTHON) johnnydep $(proj-name)
+
 # execute python tests
 .PHONY:			pytest
 pytest:			$(PY_TEST_DEPS)
