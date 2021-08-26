@@ -31,6 +31,10 @@ show:			package $(OM_SHOW_TARG)
 .PHONY:			deploy
 deploy:			cntdeploy
 
+# longer, but safer deploy to the server
+.PHONY:			redeploy
+redeploy:		clean cntdeploy
+
 # deploy and direct a browser to the deployed site
 .PHONY:			run
 run:			cntrun
