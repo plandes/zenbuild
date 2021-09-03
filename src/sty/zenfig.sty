@@ -33,6 +33,7 @@
 \end{figure*}}
 
 % raster version with a an extension
+% \zzfigurerast{\columnwidth}{loss-snapshot}{png}{Validation and Training Loss}
 \providecommand{\zzfigurerast}[4]{
 \begin{figure}[h!]
 \begin{center}
@@ -40,8 +41,18 @@
 \end{center}
 \caption{#4}
 \label{fig:#2}
-\end{figure}
-\end{frame}}
+\end{figure}}
+
+% raster version with a an extension two column
+% \zzfigurerast{\textwidth}{loss-snapshot}{png}{Validation and Training Loss}
+\providecommand{\zzfigurerasttc}[4]{
+\begin{figure*}[h!]
+\begin{center}
+\includegraphics[width=#1]{#2.#3}
+\end{center}
+\caption{#4}
+\label{fig:#2}
+\end{figure*}}
 \else
 \newcommand{\zzfigdisabled}[1]{{\it Figures disabled (#1).}}
 \providecommand{\zzfigure}[4][h!]{<\zzfigdisabled{#3}>\label{fig:#3}}
