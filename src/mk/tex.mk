@@ -7,21 +7,21 @@ TEX_PRESENT_BIN ?=	/Applications/Presentation.app/Contents/MacOS/presentation.py
 TEX_PYTHON_BIN ?=	/usr/bin/python
 
 ## everything else shouldn't need modifying paths
-nullstr=
-space=			$(nullstr) $(nullstring)
+TEX_nullstr=
+TEX_space=		$(TEX_nullstr) $(TEX_nullstr)
 TEX_PATH +=		$(BUILD_SRC_DIR)/sty $(abspath ./sty)
-TEX_LAT_PATH=		$(MTARG)/lat
-TEX_PATH_MTARG=		$(TEX_LAT_PATH) $(TEX_PATH)
-TEX_PATHSTR=		$(subst $(space),:,$(TEX_PATH_MTARG))
+TEX_LAT_PATH =		$(MTARG)/lat
+TEX_PATH_MTARG =	$(TEX_LAT_PATH) $(TEX_PATH)
+TEX_PATHSTR =		$(subst $(TEX_space),:,$(TEX_PATH_MTARG))
 # trailing colon needed
-TEX_TPATH=		TEXINPUTS=$(TEX_PATHSTR):
+TEX_TPATH =		TEXINPUTS=$(TEX_PATHSTR):
 TEX_PDFLAT_ARGS +=
 TEX_LATEX_CMD ?=	$(TEX_TPATH) pdflatex -output-directory $(TEX_LAT_PATH) $(TEX_PDFLAT_ARGS)
 
 # install/distribution
-TEX_INSTALL_DIR ?=		$(HOME)/Desktop
-TEX_INSTALL_PDF ?=		$(TEX_INSTALL_DIR)/$(FINAL_NAME).pdf
-TEX_INSTALL_ZIP ?=		$(TEX_INSTALL_DIR)/$(FINAL_NAME).zip
+TEX_INSTALL_DIR ?=	$(HOME)/Desktop
+TEX_INSTALL_PDF ?=	$(TEX_INSTALL_DIR)/$(FINAL_NAME).pdf
+TEX_INSTALL_ZIP ?=	$(TEX_INSTALL_DIR)/$(FINAL_NAME).zip
 
 # paths
 TEX_CACHE_DIR ?= 	$(abspath ../cache)
@@ -41,28 +41,28 @@ TEX_EXPORT_ZIP ?=	$(FINAL_NAME)-export.zip
 TEX_EXPORT_INST_ZIP ?=	$(TEX_INSTALL_DIR)/$(TEX_EXPORT_ZIP)
 
 # file deps
-TEX_IMG_EPS=		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.eps)))
-TEX_IMG_PNG=		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.png)))
-TEX_IMG_JPG=		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.jpg)))
-TEX_IMAGES=		$(TEX_IMG_EPS) $(TEX_IMG_PNG) $(TEX_IMG_JPG)
+TEX_IMG_EPS =		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.eps)))
+TEX_IMG_PNG =		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.png)))
+TEX_IMG_JPG =		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.jpg)))
+TEX_IMAGES =		$(TEX_IMG_EPS) $(TEX_IMG_PNG) $(TEX_IMG_JPG)
 
 # files
-TEX_LATEX_FILE=		$(TEX_LAT_PATH)/$(TEX).tex
-TEX_PDF_FILE=		$(TEX_LAT_PATH)/$(TEX).pdf
-MTARG_FILE=		$(TEX_LAT_PATH)/mtarg.txt
-PRERUN_FILE=		$(TEX_LAT_PATH)/prerun.txt
+TEX_LATEX_FILE =	$(TEX_LAT_PATH)/$(TEX).tex
+TEX_PDF_FILE =		$(TEX_LAT_PATH)/$(TEX).pdf
+TEX_MTARG_FILE =	$(TEX_LAT_PATH)/mtarg.txt
+TEX_PRERUN_FILE =	$(TEX_LAT_PATH)/prerun.txt
 
 # dependencies
-PRE_COMP_DEPS +=	$(TEX_IMAGES)
-COMP_DEPS +=		$(MTARG_FILE) $(TEX_LATEX_FILE) $(PRE_COMP_DEPS) $(PRERUN_FILE)
+TEX_PRE_COMP_DEPS +=	$(TEX_IMAGES)
+COMP_DEPS +=		$(TEX_MTARG_FILE) $(TEX_LATEX_FILE) $(TEX_PRE_COMP_DEPS) $(TEX_PRERUN_FILE)
 
 # control verbosity
-TEX_QUIET ?=	1
+TEX_QUIET ?=		1
 ifeq ($(TEX_QUIET),1)
 # https://tex.stackexchange.com/questions/1191/reducing-the-console-output-of-latex
 TEX_PDFLAT_ARGS +=	-interaction batchmode
 # no output at all
-QUIET ?=	> /dev/null
+TEX_QUIET_REDIR ?=	> /dev/null
 endif
 
 # default init commands
@@ -70,8 +70,8 @@ TEX_LATEX_INIT_CMD ?=	\newif\ifisfinal
 TEX_PDFLAT_ARGS +=	'$(TEX_LATEX_INIT_CMD) \input{$(TEX).tex}'
 
 # default position of Preview.app
-PREV_POS ?=	{1500, 0}
-PREV_SIZE ?=	{1400, 1600}
+TEX_PREV_POS ?=		{1500, 0}
+TEX_PREV_SIZE ?=	{1400, 1600}
 
 # invokes a pre run
 TEX_INIT_RUN =
@@ -88,7 +88,7 @@ INFO_TARGETS +=	texinfo
 # SECOND_RUN_INIT, otherwise reference links are question marks and a manual
 # forced run would otherwise be necessary
 ifeq ($(SECOND_RUN_INIT),1)
-  ifneq (,$(PRERUN_FILE))
+  ifneq (,$(TEX_PRERUN_FILE))
     SECOND_RUN=1
   endif
 endif
@@ -107,17 +107,17 @@ texinfo:
 		@echo "pdf-file: $(TEX_PDF_FILE)"
 
 # shortgap for dependency marker (with the exception of the .tex file) for now
-$(MTARG_FILE):
+$(TEX_MTARG_FILE):
 		mkdir -p $(TEX_LAT_PATH)
 		mkdir -p $(TEX_IMGC_DIR)
-		date >> $(MTARG_FILE)
+		date >> $(TEX_MTARG_FILE)
 
 # copy over all vector .eps static files
-%.eps:		$(TEX_IMG_DIR)/$(@F) $(MTARG_FILE)
+%.eps:		$(TEX_IMG_DIR)/$(@F) $(TEX_MTARG_FILE)
 		cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all vector .pdf static files
-%.pdf:		$(TEX_IMG_DIR)/$(@F) $(MTARG_FILE)
+%.pdf:		$(TEX_IMG_DIR)/$(@F) $(TEX_MTARG_FILE)
 		cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all raster .png static files
@@ -140,7 +140,7 @@ texforce:	$(COMP_DEPS)
 texforceshow:	force texshowpdf
 
 # run latex before resolving module targets (see tex-bib*.mk, tex-index.mk)
-$(PRERUN_FILE):
+$(TEX_PRERUN_FILE):
 		@echo "init run: $(TEX_INIT_RUN)"
 		@if [ ! -z "$(TEX_INIT_RUN)" ] ; then \
 			echo "copying images $(TEX_IMGC_DIR) -> $(TEX_LAT_PATH)" ; \
@@ -148,7 +148,7 @@ $(PRERUN_FILE):
 			echo "starting latex pre-start run..." ; \
 			echo $(TEX_LATEX_CMD) ; \
 			( cd $(TEX_LAT_PATH) ; $(TEX_LATEX_CMD) ) ; \
-			date >> $(PRERUN_FILE) ; \
+			date >> $(TEX_PRERUN_FILE) ; \
 		fi
 
 # top level dependency (add sty files as dependencies later?)

@@ -8,4 +8,4 @@ TEX_INIT_RUN = 	1
 
 $(IDX_FILE):	$(TEX).tex
 		@echo "running $(MAKEIDX_BIN)..."
-		( cd $(TEX_LAT_PATH) ; $(MAKEIDX_BIN) $(TEX).idx $(QUIET) )
+		( cd $(TEX_LAT_PATH) ; $(MAKEIDX_BIN) $(TEX).idx $(TEX_QUIET_REDIR) )

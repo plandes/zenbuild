@@ -10,7 +10,7 @@ TEX_INIT_RUN = 	1
 $(BBL_FILE):	$(BIB_FILE)
 		cp $(BIB_FILE) $(TEX_LAT_PATH)
 		@echo "running biber..."
-		( cd $(TEX_LAT_PATH) ; $(BIBER) $(TEX) $(QUIET) )
+		( cd $(TEX_LAT_PATH) ; $(BIBER) $(TEX) $(TEX_QUIET_REDIR) )
 
 .PHONY:		cleanbib
 cleanbib:

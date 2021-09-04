@@ -13,7 +13,7 @@
 # all .eps -> .pdf
 TEX_IMG_PDF=	$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(patsubst %.eps,%.pdf,$(wildcard $(TEX_IMG_DIR)/*.eps))))
 # add PDF dependencies from 
-PRE_COMP_DEPS +=$(TEX_IMG_PDF)
+TEX_PRE_COMP_DEPS +=$(TEX_IMG_PDF)
 # information target
 INFO_TARGETS +=	tex-eps-pdf-info
 
@@ -24,7 +24,7 @@ tex-eps-pdf-info:
 		@echo "pdf: $(TEX_IMG_PDF)"
 
 # copy over all vector .pdf static files
-%.pdf:		$(TEX_IMG_DIR)/$(@F) $(MTARG_FILE)
+%.pdf:		$(TEX_IMG_DIR)/$(@F) $(TEX_MTARG_FILE)
 		$(eval DST_EPS=$(patsubst %.pdf,%.eps,$(TEX_IMG_DIR)/$(@F)))
 		@echo "$(DST_EPS) -> $@"
 		convert $(DST_EPS) $@

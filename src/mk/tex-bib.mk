@@ -10,4 +10,4 @@ TEX_INIT_RUN = 	1
 $(BBL_FILE):	$(BIB_FILE)
 		cp $(BIB_FILE) $(TEX_LAT_PATH)
 		@echo "running bibtex..."
-		( cd $(TEX_LAT_PATH) ; $(BIBTEX) $(TEX) $(QUIET) )
+		( cd $(TEX_LAT_PATH) ; $(BIBTEX) $(TEX) $(TEX_QUIET_REDIR) )
