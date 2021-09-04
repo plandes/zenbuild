@@ -15,8 +15,10 @@ TIPATH_MTARG=	$(LAT_COMP_PATH) $(TIPATH)
 TIPATHSTR=	$(subst $(space),:,$(TIPATH_MTARG))
 # trailing colon needed
 TPATH=		TEXINPUTS=$(TIPATHSTR):
-PDFLAT_ARGS +=
-LATEX_BIN ?=	$(TPATH) pdflatex $(PDFLAT_ARGS) -output-directory $(LAT_COMP_PATH)
+TEX_PDFLAT_ARGS +=
+LATEX_BIN ?=	$(TPATH) pdflatex -output-directory $(LAT_COMP_PATH) $(TEX_PDFLAT_ARGS)
+TEX_LATEX_CMD ?= $(LATEX_BIN)
+# $(TEX).tex
 
 # install/distribution
 INSTALL_DIR ?=	$(HOME)/Desktop
@@ -60,10 +62,14 @@ COMP_DEPS +=	$(MTARG_FILE) $(TEX_FILE) $(PRE_COMP_DEPS) $(PRERUN_FILE)
 TEX_QUIET ?=	1
 ifeq ($(TEX_QUIET),1)
 # https://tex.stackexchange.com/questions/1191/reducing-the-console-output-of-latex
-PDFLAT_ARGS +=	-interaction batchmode
+TEX_PDFLAT_ARGS +=	-interaction batchmode
 # no output at all
 QUIET ?=	> /dev/null
 endif
+
+# default init commands
+TEX_LATEX_INIT_CMD ?=	\newif\ifisfinal
+TEX_PDFLAT_ARGS +=	'$(TEX_LATEX_INIT_CMD) \input{$(TEX).tex}'
 
 # default position of Preview.app
 PREV_POS ?=	{1500, 0}
@@ -129,7 +135,7 @@ $(MTARG_FILE):
 texforce:	$(COMP_DEPS)
 		@echo "forcing make"
 		make $(COMP_DEPS)
-		( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex )
+		( cd $(LAT_COMP_PATH) ; $(TEX_LATEX_CMD) )
 
 # force recompile and snow
 .PHONY:		forceshow
@@ -142,8 +148,8 @@ $(PRERUN_FILE):
 			echo "copying images $(TEX_IMGC_DIR) -> $(LAT_COMP_PATH)" ; \
 			cp $(TEX_IMGC_DIR)/* $(LAT_COMP_PATH) ; \
 			echo "starting latex pre-start run..." ; \
-			echo $(LATEX_BIN) $(TEX).tex ; \
-			( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex ) ; \
+			echo $(TEX_LATEX_CMD) ; \
+			( cd $(LAT_COMP_PATH) ; $(TEX_LATEX_CMD) ) ; \
 			date >> $(PRERUN_FILE) ; \
 		fi
 
@@ -157,15 +163,15 @@ $(PDF_FILE):	$(COMP_DEPS)
 		@echo "generating $(PDF_FILE)"
 		make $(COMP_DEPS)
 		@echo "latex first compile..."
-		( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex )
+		( cd $(LAT_COMP_PATH) ; $(TEX_LATEX_CMD) )
 		@if [ ! -z "$(SECOND_RUN)" ] ; then \
 			echo "starting latex compile second run..." ; \
-			( cd $(LAT_COMP_PATH) ; $(LATEX_BIN) $(TEX).tex ) ; \
+			( cd $(LAT_COMP_PATH) ; $(TEX_LATEX_CMD) ) ; \
 		fi
 
 # build the PDF
-.PHONY:		texpdf
-texpdf:		$(PDF_FILE)
+.PHONY:		texcompile
+texcompile:	$(PDF_FILE)
 
 
 # "debug" the compilation process by not adding quiet flags to pdflatex
@@ -198,8 +204,7 @@ texreposition:	texpdf
 texfinal:
 		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
 			echo "run number $$i" ; \
-			make PDFLAT_ARGS="'\def\isfinal{1} \input{$(TEX).tex}'" \
-				texforce ; \
+			make TEX_LATEX_INIT_CMD="\isfinaltrue" texforce ; \
 		done
 
 # create the presentation form of the slides
@@ -207,7 +212,7 @@ texfinal:
 texpresentpdf:
 		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
 			echo "run number $$i" ; \
-			make PDFLAT_ARGS="'\def\isfinal{1} \def\ispresentation{1} \input{$(TEX).tex}'" \
+			make TEX_PDFLAT_ARGS="\isfinaltrue \def\ispresentation{1}" \
 				texforce ; \
 		done
 

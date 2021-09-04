@@ -3,13 +3,17 @@
 ## includes
 include $(BUILD_MK_DIR)/tex.mk
 
-# re-compile quickly (for references, use `package`)
-.PHONY:		compile
-compile:	texpdf
-
 # run to find issues otherwise dropped
 .PHONY:		debug
 debug:		texdebug
+
+# re-compile quickly (for references, use `package`)
+.PHONY:		compile
+compile:	texcompile
+
+# final version (i.e. don't add blind submission)
+.PHONY:		final
+final:		texfinal
 
 # create a final output version, which invokes the second run if needed
 # (i.e. for refernces)
