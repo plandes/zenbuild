@@ -9,7 +9,7 @@ TEX_TAB_BIN ?=	$(BUILD_BIN_DIR)/mklatextbl.py
 TEX_TAB_DIR ?=	$(TEX_CONF_DIR)
 # all table definitions
 TEX_TAB_DEFS +=	$(wildcard $(TEX_TAB_DIR)/*-table.yml)
-TEX_TAB_STYS =	$(addprefix $(LAT_COMP_PATH)/,$(notdir $(patsubst %.yml,%.sty,$(TEX_TAB_DEFS))))
+TEX_TAB_STYS =	$(addprefix $(TEX_LAT_PATH)/,$(notdir $(patsubst %.yml,%.sty,$(TEX_TAB_DEFS))))
 
 # build
 INFO_TARGETS +=	textabinfo

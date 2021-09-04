@@ -3,30 +3,30 @@
 # https://github.com/plandes/zenbuild
 
 # binaries
-LATEX_BIN =	pdflatex
+TEX_LATEX_CMD =	pdflatex
 BIBTEX=		bibtex
 BIBER=		biber
 BIB_FILE=	$(wildcard *.bib)
 
 # files
 TEX=		$(basename $(wildcard *.tex))
-TEX_FILE=	$(TEX).tex
-PDF_FILE=	$(TEX).pdf
+TEX_LATEX_FILE=	$(TEX).tex
+TEX_PDF_FILE=	$(TEX).pdf
 
 all:		pdf
 
 .PHONY:		info
 info:
 		@echo "name: $(TEX)"
-		@echo "tex: $(TEX_FILE)"
-		@echo "pdf: $(PDF_FILE)"
+		@echo "tex: $(TEX_LATEX_FILE)"
+		@echo "pdf: $(TEX_PDF_FILE)"
 		@echo "bib-file: $(BIB_FILE)"
 
 .PHONY:		pdf
-pdf:		$(PDF_FILE)
+pdf:		$(TEX_PDF_FILE)
 
-$(PDF_FILE):	$(TEX_FILE)
-		$(LATEX_BIN) $(TEX).tex
+$(TEX_PDF_FILE):	$(TEX_LATEX_FILE)
+		$(TEX_LATEX_CMD) $(TEX).tex
 		if [ ! -z "$BIB_FILE" ] ; then \
 			if [ -f zenbiber ] ; then \
 				$(BIBER) $(TEX) ; \
@@ -34,8 +34,8 @@ $(PDF_FILE):	$(TEX_FILE)
 				$(BIBTEX) $(TEX) ; \
 			fi \
 		fi
-		$(LATEX_BIN) $(TEX).tex
-		$(LATEX_BIN) $(TEX).tex
+		$(TEX_LATEX_CMD) $(TEX).tex
+		$(TEX_LATEX_CMD) $(TEX).tex
 
 clean:
 		rm -f *.pdf *.out *.aux *.log *.bbl *.bcf *.blg \
