@@ -222,7 +222,7 @@ texpackage:	$(TEX_PKG_FINAL_DIR) $(TEX_PKG_ADD)
 $(TEX_PKG_FINAL_DIR):
 		mkdir -p $(TEX_PKG_FINAL_DIR)
 		make texfinal
-		@if [ -z "$(SLIDES)" ] ; then \
+		@if [ -z "$(TEX_SLIDES)" ] ; then \
 			cp $(TEX_PDF_FILE) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME).pdf ; \
 		else \
 			cp $(TEX_PDF_FILE) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME)-slides.pdf ; \
