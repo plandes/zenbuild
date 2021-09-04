@@ -237,7 +237,7 @@ texpresent:	texpackage
 		@echo "NOTE!: uncheck mirror mode: Sys Prefs > Display > Arragenemnt"
 		$(TEX_PYTHON_BIN) $(TEX_PRESENT_BIN) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME)-presenetation.pdf
 
-# create final version, compress if mulitple files, then cpoy to install
+# create final version, compress if mulitple files, then copy to install
 # location
 .PHONY:		texinstall
 texinstall:	texpackage
