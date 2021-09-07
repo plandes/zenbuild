@@ -9,9 +9,10 @@ BIBER=		biber
 BIB_FILE=	$(wildcard *.bib)
 
 # files
-TEX=		$(basename $(wildcard *.tex))
+TEX=		{{TEX_FILE_NAME}}
 TEX_LATEX_FILE=	$(TEX).tex
 TEX_PDF_FILE=	$(TEX).pdf
+TEX_FINAL_RUNS ={{TEX_FINAL_RUNS}}
 
 all:		pdf
 
@@ -27,15 +28,16 @@ pdf:		$(TEX_PDF_FILE)
 
 $(TEX_PDF_FILE):	$(TEX_LATEX_FILE)
 		$(TEX_LATEX_CMD) $(TEX).tex
-		if [ ! -z "$BIB_FILE" ] ; then \
+		if [ -f "$(BIB_FILE)" ] ; then \
 			if [ -f zenbiber ] ; then \
 				$(BIBER) $(TEX) ; \
 			else \
 				$(BIBTEX) $(TEX) ; \
 			fi \
 		fi
-		$(TEX_LATEX_CMD) $(TEX).tex
-		$(TEX_LATEX_CMD) $(TEX).tex
+		for i in `seq $(TEX_FINAL_RUNS)` ; do \
+			$(TEX_LATEX_CMD) $(TEX).tex ; \
+		done
 
 clean:
 		rm -f *.pdf *.out *.aux *.log *.bbl *.bcf *.blg \

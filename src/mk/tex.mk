@@ -34,12 +34,6 @@ TEX_PKG_DIR ?=		$(MTARG)/pkg
 TEX_PKG_FINAL_DIR ?= 	$(TEX_PKG_DIR)/$(FINAL_NAME)
 TEX_PKG_ADD +=
 
-# export
-TEX_EXPORT_DIR ?=	$(MTARG)/export
-TEX_EXPORT_ZIP_DIR ?=	$(notdir $(TEX_EXPORT_DIR))
-TEX_EXPORT_ZIP ?=	$(FINAL_NAME)-export.zip
-TEX_EXPORT_INST_ZIP ?=	$(TEX_INSTALL_DIR)/$(TEX_EXPORT_ZIP)
-
 # file deps
 TEX_IMG_EPS =		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.eps)))
 TEX_IMG_PNG =		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.png)))
@@ -80,7 +74,7 @@ TEX_INIT_RUN =
 TEX_FINAL_RUNS ?= 2
 
 # build
-ADD_CLEAN_ALL += $(TEX_PKG_DIR) $(TEX_INSTALL_PDF) $(TEX_INSTALL_ZIP) $(TEX_CACHE_DIR) $(TEX_EXPORT_INST_ZIP)
+ADD_CLEAN_ALL += $(TEX_PKG_DIR) $(TEX_INSTALL_PDF) $(TEX_INSTALL_ZIP) $(TEX_CACHE_DIR)
 INFO_TARGETS +=	texinfo
 
 
@@ -249,21 +243,3 @@ texinstall:	texpackage
 			echo "installing just PDF" ; \
 			cp $(TEX_PKG_DIR)/$(FINAL_NAME)/$(FINAL_NAME).pdf $(TEX_INSTALL_PDF) ; \
 		fi
-
-# create a no dependency (from zenbuild) directory with files to recreate PDF
-.PHONY:		texexport
-texexport:	texinstall
-		mkdir -p $(TEX_EXPORT_DIR)
-		cp $(wildcard $(TEX).tex $(BIB_FILE) $(BBL_FILE)) $(TEX_EXPORT_DIR)
-		cp $(wildcard $(TEX_LAT_PATH)/*.eps $(TEX_LAT_PATH)/*.png \
-			$(TEX_LAT_PATH)/*.jpg $(TEX_LAT_PATH)/*.gif \
-			$(TEX_LAT_PATH)/*.sty) $(TEX_EXPORT_DIR)
-		cp $(wildcard $(addsuffix /*,$(TEX_PATH))) $(TEX_EXPORT_DIR)
-		cp $(BUILD_SRC_DIR)/template/tex/export-makefile $(TEX_EXPORT_DIR)/makefile
-		if [ ! -z "$(BIBER)" ] ; then \
-			touch $(TEX_EXPORT_DIR)/zenbiber ; \
-		fi
-		( cd $(TEX_EXPORT_DIR)/.. ; \
-			zip -r $(TEX_EXPORT_ZIP) $(TEX_EXPORT_ZIP_DIR) ; \
-			cp $(TEX_EXPORT_ZIP) $(TEX_EXPORT_INST_ZIP) )
-		@echo "exported stand-alone build to $(TEX_EXPORT_INST_ZIP)"
