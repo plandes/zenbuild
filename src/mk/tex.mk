@@ -122,6 +122,10 @@ $(TEX_MTARG_FILE):
 %.jpg:
 		@cp $(TEX_IMG_DIR)/$(@F) $@
 
+.PHONY:		texversion
+texversion:
+		( cd /Library/TeX/Root && pwd -P )
+
 # recompile even when editing .sty files (make proper dependencies?)
 .PHONY:		force
 texforce:	$(COMP_DEPS)
@@ -142,6 +146,9 @@ $(TEX_PRERUN_FILE):
 			echo "starting latex pre-start run..." ; \
 			echo $(TEX_LATEX_CMD) ; \
 			( cd $(TEX_LAT_PATH) ; $(TEX_LATEX_CMD) ) ; \
+			if [ $$? != 0 ] ; then \
+				exit 1 ; \
+			fi ; \
 			date >> $(TEX_PRERUN_FILE) ; \
 		fi
 
@@ -197,6 +204,9 @@ texfinal:
 		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
 			echo "run number $$i" ; \
 			make TEX_LATEX_INIT_CMD="\newif\ifisfinal\isfinaltrue" texforce ; \
+			if [ $$? != 0 ] ; then \
+				exit 1 ; \
+			fi ; \
 		done
 
 # create the presentation form of the slides
@@ -206,6 +216,9 @@ texpresentpdf:
 			echo "run number $$i" ; \
 			make TEX_PDFLAT_ARGS="\newif\ifisfinal\isfinaltrue \def\ispresentation{1}" \
 				texforce ; \
+			if [ $$? != 0 ] ; then \
+				exit 1 ; \
+			fi ; \
 		done
 
 # create a zip file with the only the PDF as its contents
