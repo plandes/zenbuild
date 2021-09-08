@@ -19,6 +19,10 @@ show:			package cntshow
 .PHONY:			deploy
 deploy:			cntdeploy
 
+# longer, but safer deploy to the server
+.PHONY:			redeploy
+redeploy:		clean cntdeploy
+
 # deploy to an secondary (external) site
 .PHONY:			externalsite
 externalsite:		cntextdeploy
