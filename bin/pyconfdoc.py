@@ -20,7 +20,7 @@ from keychain import Keychain
 
 logger = logging.getLogger()
 
-DEBUG = True
+DEBUG = False
 
 
 @dataclass
@@ -73,7 +73,7 @@ class DocConfigurer(object):
     @property
     def attributes(self) -> Dict[str, str]:
         if not hasattr(self, '_attr'):
-            logger.debug(f'loading attributes')
+            logger.debug('loading attributes')
             attrs = '.root_path .project .author .build.tag .url .name .user .description .short_description'.split()
             attrs = self.fetcher.get_attrib_dict(attrs)
             pmatch = self.PACKAGE_REGEX.match(attrs['name'])
