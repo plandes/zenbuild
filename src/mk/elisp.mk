@@ -15,6 +15,8 @@ EL_FILES +=		$(wildcard $(EL_LISP_DIR)/*.el)
 EL_OBJECTS +=		$(EL_FILES:.el=.elc)
 EL_DIST_DIR ?=		dist
 EL_EMACS_SWITCHES +=	-q
+# set to skip package lint
+EL_SKIP_LINT ?=
 
 # build environment
 ADD_CLEAN +=		$(EL_OBJECTS) $(EL_ELPA_FILE) $(EL_DOC_DIR) $(EL_DIST_DIR)
@@ -105,11 +107,15 @@ eltest:			elcleancompiled elbuild ellint
 # lint
 .PHONY:			ellint
 ellint:			eldeps
-			@echo "running package lint"
-	        	@$(EL_CASK_BIN) emacs $$i $(EL_EMACS_SWITCHES) --batch \
-				-eval $(EL_INIT) \
-				-f package-lint-batch-and-exit $(EL_FILES)
-			@echo "package lint successful"
+			@if [ -z "$(EL_SKIP_LINT)" ] ; then \
+				echo "running package lint" ; \
+		        	$(EL_CASK_BIN) emacs $$i $(EL_EMACS_SWITCHES) --batch \
+					-eval $(EL_INIT) \
+					-f package-lint-batch-and-exit $(EL_FILES) ; \
+				echo "package lint successful" ; \
+			else \
+				echo "skipping package lint" ; \
+			fi
 
 # docs
 $(EL_DOC_DIR):
