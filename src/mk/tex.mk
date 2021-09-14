@@ -214,7 +214,7 @@ texfinal:
 texpresentpdf:
 		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
 			echo "run number $$i" ; \
-			make TEX_PDFLAT_ARGS="\newif\ifisfinal\isfinaltrue \def\ispresentation{1}" \
+			make TEX_LATEX_INIT_CMD="\newif\ifisfinal\isfinaltrue \def\ispresentation{1}" \
 				texforce ; \
 			if [ $$? != 0 ] ; then \
 				exit 1 ; \
