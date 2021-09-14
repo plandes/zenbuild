@@ -13,7 +13,6 @@
 
 % make links dark blue (ACL color)
 \definecolor{darkblue}{rgb}{0, 0, 0.5}
-
 \providecommand{\zzhrefcolor}{darkblue}
 
 % use the draft keyword to find hanging citations (or links) when given the
@@ -36,7 +35,7 @@
 }
 
 % enable href commands without using the href package
-\newcommand{\zznohrefinit}{\newcommand{\href}[2]{##2}}
+\newcommand{\zznohrefdisable}{\newcommand{\href}[2]{##2}}
 
 \newcommand{\zzhref}[1]{\href{#1}{#1}}
 

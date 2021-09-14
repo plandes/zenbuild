@@ -20,6 +20,16 @@
   pages=first,
   only-used=true}%
 
+% override acro setting to _not_ produce links or hover over
+\newcommand{\zzacrodisablelinks}{%
+\acsetup{
+  % no italics on acronyms
+  first-long-format=\textnormal,
+  % turn off hyperlinks/tool tip since no list of acronyms/definitions
+  hyperref=false,
+  tooltip=false,
+}}
+
 \ifzenacro@nouseindex
 \else
 % add index entries for each acro
