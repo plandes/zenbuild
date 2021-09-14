@@ -20,7 +20,9 @@
   pages=first,
   only-used=true}%
 
-% override acro setting to _not_ produce links or hover over
+% override acro setting to _not_ produce links or hover over; this is useful
+% for when commands like \zzprintdefs are not used which make links useless and
+% gives strange behavior in Preview
 \newcommand{\zzacrodisablelinks}{%
 \acsetup{
   % no italics on acronyms
