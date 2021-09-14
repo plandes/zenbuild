@@ -5,10 +5,10 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenhref}[2018/05/06 Hyperlinks]
 
+% add imports and config, which is optional for conferences that don't use it
+% like AAAI
+\newcommand{\zzhrefinit}{%
 \usepackage{url}
-
-
-%% -- Command
 \usepackage{xcolor}
 
 % make links dark blue (ACL color)
@@ -32,8 +32,11 @@
 ]
 {hyperref}
 }
-
 \usepackage{hypcap}
+}
+
+% enable href commands without using the href package
+\newcommand{\zznohrefinit}{\newcommand{\href}[2]{##2}}
 
 \newcommand{\zzhref}[1]{\href{#1}{#1}}
 
