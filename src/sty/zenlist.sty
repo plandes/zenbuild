@@ -103,6 +103,6 @@ Let:
 
 % horizontal itemize inline comma separated list
 % usage: \begin{zzitemizeinline} or \begin{zzitemizeinline}[,]
-\newenvironment{zzitemizeinline}[1][,]
-{\begin{itemize*}[label={}, itemjoin={#1}, itemjoin*={, and}]}
+\newenvironment{zzitemizeinline}[1][,\ ]
+{\begin{itemize*}[label={}, itemjoin={#1}, itemjoin*={, and\ }, afterlabel={}]}
 {\end{itemize*}}
