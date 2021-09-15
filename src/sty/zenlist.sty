@@ -96,6 +96,13 @@ Let:
 {\end{zzdefinitiontype}}
 
 % horizontal enumerate (inline list) with letters: a) one b) two...
+% usage: \begin{zzpackedinline} or \begin{zzpackedinline}[\Alph]
 \newenvironment{zzpackedinline}[1][\alph*\upshape)]
 {\begin{enumerate*}[label=#1]}
 {\end{enumerate*}}
+
+% horizontal itemize inline comma separated list
+% usage: \begin{zzpackediteminline} or \begin{zzpackediteminline}[,]
+\newenvironment{zzpackediteminline}[1][,]
+{\begin{itemize*}[label={}, itemjoin={#1}, itemjoin*={, and}]}
+{\end{itemize*}}
