@@ -1,6 +1,15 @@
 # Paul Landes - 6/20/2018
 # export version makefile
 # https://github.com/plandes/zenbuild
+#
+# To build you need:
+#   - Latex2e
+#   - pdflatex
+#   - either bibtex or biber if `zenbiber` is present
+#   - GNU make
+
+
+## setup
 
 # binaries
 TEX_LATEX_CMD =	pdflatex
@@ -14,8 +23,13 @@ TEX_LATEX_FILE=	$(TEX).tex
 TEX_PDF_FILE=	$(TEX).pdf
 TEX_FINAL_RUNS ={{TEX_FINAL_RUNS}}
 
+
+## targets
+
+# default target
 all:		pdf
 
+# build information
 .PHONY:		info
 info:
 		@echo "name: $(TEX)"
@@ -23,6 +37,7 @@ info:
 		@echo "pdf: $(TEX_PDF_FILE)"
 		@echo "bib-file: $(BIB_FILE)"
 
+# build the PDF file
 .PHONY:		pdf
 pdf:		$(TEX_PDF_FILE)
 
@@ -39,6 +54,7 @@ $(TEX_PDF_FILE):	$(TEX_LATEX_FILE)
 			$(TEX_LATEX_CMD) $(TEX).tex ; \
 		done
 
+# clean a used build
 clean:
 		rm -f *.pdf *.out *.aux *.log *.bbl *.bcf *.blg \
-			*.upa *.upb *.xml zenbiber
+			*.upa *.upb *.xml
