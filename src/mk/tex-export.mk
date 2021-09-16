@@ -15,7 +15,7 @@ TEX_EXPORT_INST_ZIP ?=	$(TEX_INSTALL_DIR)/$(TEX_EXPORT_ZIP)
 # clean unused image files not needed in the latex file
 #TEX_EXPORT_DEPS +=	texexportimgclean
 
-# include PDF in zip
+# include PDF with all compiled derived objects in zip
 TEX_EXPORT_ADD_PDF ?=
 
 # build
