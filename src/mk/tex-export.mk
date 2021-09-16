@@ -5,7 +5,7 @@
 ## environment
 #
 # bin
-TEX_EXPORT_IMG_CLEAN=	$(BUILD_BIN_DIR)/cleanlateximg.py
+TEX_EXPORT_IMG_CLEAN=	$(BUILD_BIN_DIR)/cleanlatex.py
 
 # export
 TEX_EXPORT_DIR ?=	$(MTARG)/export
@@ -14,6 +14,9 @@ TEX_EXPORT_ZIP ?=	$(FINAL_NAME).zip
 TEX_EXPORT_INST_ZIP ?=	$(TEX_INSTALL_DIR)/$(TEX_EXPORT_ZIP)
 # clean unused image files not needed in the latex file
 #TEX_EXPORT_DEPS +=	texexportimgclean
+
+# include PDF in zip
+TEX_EXPORT_ADD_PDF ?=
 
 # build
 ADD_CLEAN_ALL +=	$(TEX_EXPORT_INST_ZIP)
@@ -53,7 +56,11 @@ texexportprep:	texinstall
 .PHONY:		texexportimgclean
 texexportimgclean:
 		@echo "cleaning superfluous image files"
-		$(TEX_EXPORT_IMG_CLEAN) $(TEX).tex $(TEX_EXPORT_DIR)
+		$(TEX_EXPORT_IMG_CLEAN) $(TEX_EXPORT_DIR)
+		@if [ ! -z "$(TEX_EXPORT_ADD_PDF)" ] ; then \
+			echo "compiling PDF to include in distribution" ; \
+			make -C $(TEX_EXPORT_DIR) ; \
+		fi
 
 # renaming any bib files to final name (useful for arXiv submissions)
 .PHONY:		texexportbibrename
