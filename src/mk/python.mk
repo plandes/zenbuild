@@ -143,3 +143,8 @@ $(MTARG_WHEEL_DIR):	$(MTARG_PYDIST_ATFC)
 .PHONY:			pyuninstall
 pyuninstall:		clean
 			yes | $(PIP_BIN) uninstall `$(PYTHON_BIN) $(PY_SRC)/setup.py --name` || true
+
+# clean up cached compiled source files
+.PHONY:			pycleancache
+pycleancache:
+			find . -type d -name __pycache__ -prune -exec rm -r {} \;
