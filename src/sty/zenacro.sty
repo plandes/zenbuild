@@ -20,6 +20,9 @@
   pages=first,
   only-used=true}%
 
+% we're not breaking a URL, we're breaking on words
+\newcommand{\zzexpandacrowrap}[1]{\sloppy{#1}}
+
 % override acro setting to _not_ produce links or hover over; this is useful
 % for when commands like \zzprintdefs are not used which make links useless and
 % gives strange behavior in Preview
@@ -30,7 +33,10 @@
   % turn off hyperlinks/tool tip since no list of acronyms/definitions
   hyperref=false,
   tooltip=false,
-}}
+}
+% no need for sloppy when not using hyperref
+\expandafter\renewcommand\csname zzexpandacrowrap\endcsname[1]{##1}%
+}
 
 \ifzenacro@nouseindex
 \else
@@ -91,11 +97,11 @@
 % expand acro name into several commands with cap and plural forms:
 % \<name>, \<names> (plural), \<namecap> (capital), \<namescap> (plural capital)
 \newcommand{\zzexpandacrocmd}[3]{%
-\expandafter\newcommand\csname #1\endcsname{\ac{#1}}%
-\expandafter\newcommand\csname #1s\endcsname{\acp{#1}}%
+\expandafter\newcommand\csname #1\endcsname{\zzexpandacrowrap{\ac{#1}}}%
+\expandafter\newcommand\csname #1s\endcsname{\zzexpandacrowrap{\acp{#1}}}%
 \expandafter\newcommand\csname #1capw\endcsname{\capitalisewords{#3}}%
-\expandafter\newcommand\csname #1cap\endcsname{\Acl{#1}}%
-\expandafter\newcommand\csname #1scap\endcsname{\Aclp{#1}}}
+\expandafter\newcommand\csname #1cap\endcsname{\zzexpandacrowrap{\Acl{#1}}}%
+\expandafter\newcommand\csname #1scap\endcsname{\zzexpandacrowrap{\Aclp{#1}}}}
 
 % ex: \zzdefnamedacro[long]{nlp}{NLP}{natural language processing}
 %     creates command \nlp
