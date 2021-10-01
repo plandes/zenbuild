@@ -61,7 +61,8 @@ endif
 
 # default init commands
 TEX_LATEX_INIT_CMD ?=	\newif\ifisfinal
-TEX_PDFLAT_ARGS +=	'$(TEX_LATEX_INIT_CMD) \input{$(TEX).tex}'
+TEX_LATEX_INIT_ADD ?=
+TEX_PDFLAT_ARGS +=	'$(TEX_LATEX_INIT_CMD) $(TEX_LATEX_INIT_ADD) \input{$(TEX).tex}'
 
 # default position of Preview.app
 TEX_PREV_POS ?=		{1500, 0}
