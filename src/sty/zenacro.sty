@@ -138,8 +138,26 @@
 }%
 \zzexpandacrocmd{#1}{#2}{#3}}
 
+
+% like \zzdefdef but define a separate plural version as well; the first form
+% is always singular
+%
+% ex: \zzdefpluraldef{ds}{discharge summary}{discharge summaries}{%
+\newcommand{\zzdefpluraldef}[4]{%
+\DeclareAcronym{#1}{
+  short={#2},
+  short-plural-form={#3},
+  long={\xmakefirstuc{#4}.},
+  first-style=zznobrack,
+  first-long-format=\normalfont,
+  class=def
+}%
+\zzexpandacrocmd{#1}{#2}{#3}}
+
+
+
 % define a intro definition (contains an intro text)
-% ex: \zzdefintrodef{role}{role}{proponent vs.\@ opponent}{A proponent to an argument}
+% ex: \zzdefintropluraldef{hprop}{property}{properties}{an entity's data value}{These...
 % ex: Defined as yada \someacro. -> Defined as yaha (long text)
 % ex: Defined as yada, \someacrowh. -> Defined as yaha, which long text
 % Important: this is not usable with first form as a plural.
