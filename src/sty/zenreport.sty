@@ -84,8 +84,8 @@
 \date{\today}
 
 %% headers
-\providecommand{\zrrleftfooter}{Proprietary and Confidential}
-\providecommand{\zrrrightfooter}{\theorganization}
+\providecommand{\zrrleftfooter}{\theorganization}
+\providecommand{\zrrrightfooter}{Proprietary and Confidential}
 
 % no header (line width=0 and height of header=0) at top
 \renewcommand{\headrulewidth}{0pt}
@@ -94,9 +94,9 @@
 \lhead{}
 \chead{}
 \rhead{}
-\lfoot{\footnotesize \date\today\\\zrrrightfooter}
+\lfoot{\footnotesize \date\today\\\zrrleftfooter}
 \cfoot{}
-\rfoot{\footnotesize Page \thepage \\\zrrleftfooter}%
+\rfoot{\footnotesize Page \thepage \\\zrrrightfooter}%
 }
 
 \newcommand{\zrrtitle}{%
