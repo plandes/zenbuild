@@ -102,6 +102,16 @@
   \providecommand{\zzciteshort}{\zzciteshortcite}
   \providecommand{\zzciteauthor}{\zzciteauthorcite}}
 
+\newcommand{\zzciteaddparens}{%
+  % put parenthesis around citations by redefining \cite
+  % important: this has been tested with biblatex, but not bibtex
+  \DeclareCiteCommand{\cite}[\mkbibparens]
+    {\usebibmacro{prenote}}
+    {\usebibmacro{citeindex}%
+     \printtext[bibhyperref]{\usebibmacro{cite}}}
+    {\multicitedelim}
+    {\usebibmacro{postnote}}}
+
 \newcommand{\zzaddbiblatexstylefull}[2]{%
   \usepackage[natbib=true,maxcitenames=1,backref,#1,backend=biber]{biblatex}
   \usepackage{csquotes}
