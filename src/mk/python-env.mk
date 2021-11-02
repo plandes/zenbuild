@@ -26,15 +26,17 @@ pyenv:			$(PY_CONF_ENV_FILE)
 $(PY_CONF_ENV_FILE):
 			mkdir -p $(PY_CONF_ENV_DIR)
 			@echo "source build for Python module name"
-			$(eval PY_CLI_ARGS += export --expfmt \
-				make --expoutput $(PY_CONF_ENV_FILE))
+			$(eval PY_CLI_ARGS=_ export $(PY_CLI_ARGS) --expfmt \
+				make --expout $(PY_CONF_ENV_FILE))
 			$(eval $(PY_CLI_MOD_CMD))
-			@if [ $(PY_CLI_DEBUG) == 1 ] ; then \
-				echo "calling: $(PY_CLI_MOD).main with $(PY_CLI_ARGS)" ; \
-			fi
-			@PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) -c \
-			 	"from $(PY_CLI_MOD) import main; \
-			 	main('$(PY_CLI_ARGS)'.split())" \
+			$(eval PY_CLI_CMD="from $(PY_CLI_MOD) import main; main('$(PY_CLI_ARGS)'.split())")
+#			@if [ $(PY_CLI_DEBUG) == 1 ] ; then \
+#				echo "calling: '$(PY_CLI_CMD)'" ; \
+#			fi
+			PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) -c $(PY_CLI_CMD)
+#			@PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) -c \
+#			 	"from $(PY_CLI_MOD) import main; \
+#			 	main('$(PY_CLI_ARGS)'.split())"
 
 # display the contents of the make include
 .PHONY:			pyenvshow
