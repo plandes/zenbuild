@@ -30,13 +30,10 @@ $(PY_CONF_ENV_FILE):
 				make --expout $(PY_CONF_ENV_FILE))
 			$(eval $(PY_CLI_MOD_CMD))
 			$(eval PY_CLI_CMD="from $(PY_CLI_MOD) import main; main('$(PY_CLI_ARGS)'.split())")
-#			@if [ $(PY_CLI_DEBUG) == 1 ] ; then \
-#				echo "calling: '$(PY_CLI_CMD)'" ; \
-#			fi
-			PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) -c $(PY_CLI_CMD)
-#			@PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) -c \
-#			 	"from $(PY_CLI_MOD) import main; \
-#			 	main('$(PY_CLI_ARGS)'.split())"
+			@if [ $(PY_CLI_DEBUG) == 1 ] ; then \
+				echo calling: $(PY_CLI_CMD) ; \
+			fi
+			@PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) -c $(PY_CLI_CMD)
 
 # display the contents of the make include
 .PHONY:			pyenvshow
