@@ -26,10 +26,12 @@ pyenv:			$(PY_CONF_ENV_FILE)
 $(PY_CONF_ENV_FILE):
 			mkdir -p $(PY_CONF_ENV_DIR)
 			@echo "source build for Python module name"
-			$(eval PY_CLI_ARGS=_ export $(PY_CLI_ARGS) --expfmt \
+			$(eval PY_CLI_ARGS=export $(PY_CLI_ARGS) --expfmt \
 				make --expout $(PY_CONF_ENV_FILE))
 			$(eval $(PY_CLI_MOD_CMD))
-			$(eval PY_CLI_CMD="from $(PY_CLI_MOD) import main; main('$(PY_CLI_ARGS)'.split())")
+			$(eval PY_CLI_CMD=\
+				"from $(PY_CLI_MOD) import main; \
+				 main('mkentry $(PY_CLI_ARGS)'.split())")
 			@if [ $(PY_CLI_DEBUG) == 1 ] ; then \
 				echo calling: $(PY_CLI_CMD) ; \
 			fi

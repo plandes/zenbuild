@@ -26,9 +26,10 @@ pyhelp:			$(PY_RUN_DEPS)
 .PHONY:			pycli
 pycli:
 			$(eval $(PY_CLI_MOD_CMD))
+			$(eval PY_CLI_CMD=\
+				"from $(PY_CLI_MOD) import main; \
+				 main('mkentry $(PY_CLI_ARGS)'.split())")
 			@if [ $(PY_CLI_DEBUG) == 1 ] ; then \
-				echo "calling: $(PY_CLI_MOD).main with $(PY_CLI_ARGS)" ; \
+				echo calling: $(PY_CLI_CMD) ; \
 			fi
-			@PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) -c \
-			 	"from $(PY_CLI_MOD) import main; \
-			 	main('$(PY_CLI_ARGS)'.split())"
+			@PYTHONPATH=$(PYTHONPATH):$(PY_SRC) $(PYTHON_BIN) -c $(PY_CLI_CMD)
