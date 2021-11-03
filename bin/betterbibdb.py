@@ -4,10 +4,11 @@ from typing import Tuple, Any, Dict
 from dataclasses import dataclass
 from io import StringIO
 import sys
-import os
 import json
-from zensols.config import DictionaryConfig, ConfigurableError
-from zensols.cli import ApplicationFactory
+from sqlite3 import OperationalError
+from zensols.config import ConfigurableError
+from zensols.cli import ApplicationFactory as CliApplicationFactory
+from zensols.cli import ApplicationError
 from zensols.db import DbPersister
 
 
@@ -23,19 +24,27 @@ class_name = zensols.cli.ConfigurationImporter
 class_name = zensols.db.SqliteConnectionManager
 db_file = path: ${default:data_dir}/better-bibtex.sqlite
 
+[import]
+sections = list: imp_env
+
+[imp_env]
+type = environment
+section_name = env
+includes = set: HOME
+
 [db_persister]
 class_name = zensols.db.bean.DbPersister
 conn_manager = instance: sqlite_conn_manager
 
 [app]
-class_name = betterbibdb.App
+class_name = betterbibdb.Application
 sql = select data from 'better-bibtex' where name = 'better-bibtex.citekey'
 persister = instance: db_persister
 """
 
 
 @dataclass
-class App(object):
+class Application(object):
     """Map Zotero keys to BetterBibtex citekeys.
 
     """
@@ -79,21 +88,28 @@ class App(object):
                 print(format.format(**entry))
 
 
-@dataclass
-class BBApplicationFactory(ApplicationFactory):
+class ApplicationFactory(CliApplicationFactory):
+    def __init__(self, *args, **kwargs):
+        super().__init__(
+            package_resource='zensols.zotsite',
+            app_config_resource=StringIO(CONFIG))
+
     def _handle_error(self, ex: Exception):
-        super()._handle_error(ex)
         if isinstance(ex, ConfigurableError):
             print("""
 This configuration needs a 'default' section with option entry 'data_dir'
 that points to the directory where the zotero SQLite files live.  The file can
 be the same as the Zotsite configuration file and looks for the ZOTSITERC
 environment variable.""", file=sys.stderr)
+        elif isinstance(ex, OperationalError):
+            ex = ApplicationError(f'Could not access Zotero DB: {ex}')
+        elif isinstance(ex, BrokenPipeError):
+            # don't print the broken pipe error when pipe programs like head
+            sys.stderr.close()
+            sys.exit(0)
+        super()._handle_error(ex)
 
 
 if (__name__ == '__main__'):
-    cli = BBApplicationFactory(
-        package_resource='zensols.zotsite',
-        app_config_resource=StringIO(CONFIG),
-        children_configs=(DictionaryConfig({'env': os.environ}),))
-    cli.invoke()
+    cli = ApplicationFactory.create_harness()
+    cli.run()

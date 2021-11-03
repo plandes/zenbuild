@@ -51,10 +51,14 @@ BETTERBIBID-PROGRAM is the program that reads the BetterBibtex database."
   (unless (file-exists-p betterbibid-program)
     (error "Missing BetterBibtex ID mapping script: %s"
 	   betterbibid-program))
-  (let ((cmd (format "%s -f '(\"{libraryID}_{itemKey}\" . \"{citekey}\")' -k all"
-		     betterbibid-program)))
+  (let ((cmd (list betterbibid-program "-f"
+		   "(\"{libraryID}_{itemKey}\" . \"{citekey}\")"
+		   "-k" "all")))
     (with-temp-buffer
-      (shell-command cmd (current-buffer))
+      (unless (eq 0 (apply 'call-process (car cmd) nil (current-buffer)
+			   zb-org-better-bibtex-debug
+			   (cdr cmd)))
+	(error "Could not get better bibtex IDs: %s" (buffer-string)))
       (goto-char (point-min))
       (insert "(")
       (goto-char (point-max))
@@ -91,10 +95,11 @@ INFO is optional information about the export process."
   (when zb-org-better-bibtex-debug
     (message "Remapping %s" text))
   (let ((prev-link text)
-					;(text (string-trim text))
 	(regex "^<a href=\"//select/items/\\(.*?\\)\">\\(.*\\)</a>\\([ ]*\\)$")
 	(host-url (getenv "CNT_SITE_SERV"))
 	(bb-ids (zb-org-get-better-bibtex-ids)))
+    (unless bb-ids
+      (message "Warning: no better bibtex IDs found"))
     (when zb-org-better-bibtex-debug
       (message "Recomposing link %s using %d mappings" text (length bb-ids)))
     (if (null (string-match regex text))
@@ -147,7 +152,7 @@ files, that if matches, is excluded from the list of files to copy."
 	(setq bb-ids (zb-org-get-better-bibtex-ids better-bibtex-program))
       (setq zb-org-better-bibtex-enabled nil))
     (when zb-org-better-bibtex-debug
-      (message "BetterBibtex mapping (prog=%s, enable=%S): %d"
+      (message "BetterBibtex mapping (prog=%s, enable=%S, link count=%d)"
 	       better-bibtex-program
 	       zb-org-better-bibtex-enabled
 	       (length bb-ids))))
