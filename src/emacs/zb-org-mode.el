@@ -51,7 +51,7 @@ BETTERBIBID-PROGRAM is the program that reads the BetterBibtex database."
   (unless (file-exists-p betterbibid-program)
     (error "Missing BetterBibtex ID mapping script: %s"
 	   betterbibid-program))
-  (let ((cmd (list betterbibid-program "-f"
+  (let ((cmd (list "python" betterbibid-program "-f"
 		   "(\"{libraryID}_{itemKey}\" . \"{citekey}\")"
 		   "-k" "all")))
     (with-temp-buffer
