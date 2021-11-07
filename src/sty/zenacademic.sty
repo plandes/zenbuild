@@ -131,6 +131,13 @@
   \zzsecaddtoc{#1}{References}{spec:refs}{false}%
   \printbibliography}
 
+
+%% natlib
+\newcommand{\zzaddcommandsnatlib}{%
+  \providecommand{\zzciteauthorcite}[1]{\citeauthor{##1}}%
+}
+
+
 
 %% commands
 
