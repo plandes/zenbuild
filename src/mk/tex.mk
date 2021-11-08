@@ -128,7 +128,7 @@ texversion:
 		( cd /Library/TeX/Root && pwd -P )
 
 # recompile even when editing .sty files (make proper dependencies?)
-.PHONY:		force
+.PHONY:		texforce
 texforce:	$(COMP_DEPS)
 		@echo "forcing make"
 		make $(COMP_DEPS)
