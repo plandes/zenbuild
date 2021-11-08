@@ -46,9 +46,14 @@ TEX_PDF_FILE =		$(TEX_LAT_PATH)/$(TEX).pdf
 TEX_MTARG_FILE =	$(TEX_LAT_PATH)/mtarg.txt
 TEX_PRERUN_FILE =	$(TEX_LAT_PATH)/prerun.txt
 
+# additional tex files
+TEX_ADD_LATEX_FILES +=
+TEX_ADD_LATEX_DEPS =	$(addprefix $(TEX_LAT_PATH)/,$(TEX_ADD_LATEX_FILES))
+
 # dependencies
 TEX_PRE_COMP_DEPS +=	$(TEX_IMAGES)
-COMP_DEPS +=		$(TEX_MTARG_FILE) $(TEX_LATEX_FILE) $(TEX_PRE_COMP_DEPS) $(TEX_PRERUN_FILE)
+COMP_DEPS +=		$(TEX_MTARG_FILE) $(TEX_LATEX_FILE) $(TEX_ADD_LATEX_DEPS) \
+				$(TEX_PRE_COMP_DEPS) $(TEX_PRERUN_FILE)
 
 # control verbosity
 TEX_QUIET ?=		1
@@ -107,13 +112,18 @@ $(TEX_MTARG_FILE):
 		mkdir -p $(TEX_IMGC_DIR)
 		date >> $(TEX_MTARG_FILE)
 
+# copy over included latex source files
+$(TEX_LAT_PATH)/%.tex:		%.tex
+		@mkdir -p $(TEX_LAT_PATH)/$(*D)
+		@cp $< $@
+
 # copy over all vector .eps static files
 %.eps:		$(TEX_IMG_DIR)/$(@F) $(TEX_MTARG_FILE)
-		cp $(TEX_IMG_DIR)/$(@F) $@
+		@cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all vector .pdf static files
 %.pdf:		$(TEX_IMG_DIR)/$(@F) $(TEX_MTARG_FILE)
-		cp $(TEX_IMG_DIR)/$(@F) $@
+		@cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all raster .png static files
 %.png:
