@@ -35,8 +35,10 @@
   tooltip=false,
 }
 % no need for sloppy when not using hyperref
-\expandafter\renewcommand\csname zzexpandacrowrap\endcsname[1]{##1}%
-}
+\expandafter\renewcommand\csname zzexpandacrowrap\endcsname[1]{##1}
+% disable hyperlink creation
+\renewcommand{\zzacrolong}[3]{{##2 (##3)}}
+\renewcommand{\zzacrowhlong}[3]{##2, which is {##3}}}
 
 \ifzenacro@nouseindex
 \else
