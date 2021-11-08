@@ -11,6 +11,10 @@ debug:		texdebug
 .PHONY:		compile
 compile:	texcompile
 
+# force compile
+.PHONY:		force
+force:		texforce
+
 # final version (i.e. don't add blind submission)
 .PHONY:		final
 final:		texfinal

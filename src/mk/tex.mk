@@ -136,7 +136,7 @@ texforce:	$(COMP_DEPS)
 
 # force recompile and snow
 .PHONY:		forceshow
-texforceshow:	force texshowpdf
+texforceshow:	texforce texshowpdf
 
 # run latex before resolving module targets (see tex-bib*.mk, tex-index.mk)
 $(TEX_PRERUN_FILE):
