@@ -20,6 +20,8 @@
   pages=first,
   only-used=true}%
 
+\newcommand{\zzacroshortlink}[1]{#1}
+
 % we're not breaking a URL, we're breaking on words
 \newcommand{\zzexpandacrowrap}[1]{\sloppy{#1}}
 
@@ -49,6 +51,7 @@
 \usepackage{mfirstuc}
 % hyperlink URLs
 \usepackage{zenhref}
+\providecommand{\zzacrolinkcolor}{darkblue}
 % section macros
 \usepackage{zensec}
 
@@ -81,6 +84,27 @@
   only-short = true
 }
 
+% to `disable' hyper link colors, use \zzacrolonglinkcolor and
+% \zzacroshortlinkcolor in the preamble, optionally providing a replacement
+% color
+\newcommand{\zzacrolonglinkcolor}[1][black]{%
+\let\oldac\ac
+\renewcommand*\ac[1]{\textcolor{#1}{\oldac{##1}}}
+\let\oldacp\acp
+\renewcommand*\acp[1]{\textcolor{#1}{\oldacp{##1}}}
+\let\oldAcl\Acl
+\renewcommand*\Acl[1]{\textcolor{#1}{\oldAcl{##1}}}
+\let\oldAc\Ac
+\renewcommand*\Ac[1]{\textcolor{#1}{\oldAc{##1}}}
+\let\oldAclp\Aclp
+\renewcommand*\Aclp[1]{\textcolor{#1}{\oldAclp{##1}}}
+\ifzenacro@usesidenotes
+\else
+\renewcommand{\zzacrolong}[3]{{\hyperlink{##1}{\textcolor{#1}{##2}} (##3)}}}
+\newcommand{\zzacroshortlinkcolor}[1][black]{%
+  \renewcommand{\zzacroshortlink}[1]{\textcolor{#1}{##1}}}
+
+
 %% acronym commands
 
 % define an acronym
@@ -88,7 +112,7 @@
 % ex: \zzdefnamedclassacro[long]{nlp}{NLP}{natural language processing}{abbrev}
 \newcommand{\zzdefnamedclassacro}[7][default]{%
 \DeclareAcronym{#2}{
-  short={#3},
+  short={\zzacroshortlink{#3}},
   long={#4},
   first-style=#1,
   class=#5,
@@ -139,7 +163,7 @@
 % ex: \zzdefdef{role}{role}{proponent vs.\@ opponent}
 \newcommand{\zzdefdef}[3]{%
 \DeclareAcronym{#1}{
-  short={#2},
+  short={\zzacroshortlink{#2}},
   long={\xmakefirstuc{#3}.},
   first-style=zznobrack,
   first-long-format=\normalfont,
@@ -154,8 +178,8 @@
 % ex: \zzdefpluraldef{ds}{discharge summary}{discharge summaries}{%
 \newcommand{\zzdefpluraldef}[4]{%
 \DeclareAcronym{#1}{
-  short={#2},
-  short-plural-form={#3},
+  short={\zzacroshortlink{#2}},
+  short-plural-form={\zzacroshortlink{#3}},
   long={\xmakefirstuc{#4}.},
   first-style=zznobrack,
   first-long-format=\normalfont,
@@ -172,8 +196,8 @@
 % Important: this is not usable with first form as a plural.
 \newcommand{\zzdefintropluraldef}[5]{%
 \DeclareAcronym{#1}{
-  short={#2},
-  short-plural-form={\hyperlink{#1}{#2}},
+  short={\zzacroshortlink{#2}},
+  short-plural-form={\zzacroshortlink{\hyperlink{#1}{#2}}},
   alt={#3},
   long={\zzacrolong{#1}{#2}{#4}},
   long-plural-form={\zzacrowhlong{#1}{#2}{#4}},
@@ -198,7 +222,7 @@
 % ex: \zzdefintrodef{cpt}{CPT}{conditional probability table}{Each node in the...}
 \newcommand{\zzdefintroacrodef}[4]{%
 \DeclareAcronym{#1}{
-  short={#2},
+  short={\zzacroshortlink{#2}},
   long={#3},
   first-long-format=\normalfont,
   list={#4},
