@@ -97,12 +97,12 @@
 \let\oldAc\Ac
 \renewcommand*\Ac[1]{\textcolor{#1}{\oldAc{##1}}}
 \let\oldAclp\Aclp
-\renewcommand*\Aclp[1]{\textcolor{#1}{\oldAclp{##1}}}
+\renewcommand*\Aclp[1]{\textcolor{#1}{\oldAclp{##1}}}}
+\newcommand{\zzacroshortlinkcolor}[1][black]{%
+  \renewcommand{\zzacroshortlink}[1]{\textcolor{#1}{##1}}
 \ifzenacro@usesidenotes
 \else
 \renewcommand{\zzacrolong}[3]{{\hyperlink{##1}{\textcolor{#1}{##2}} (##3)}}}
-\newcommand{\zzacroshortlinkcolor}[1][black]{%
-  \renewcommand{\zzacroshortlink}[1]{\textcolor{#1}{##1}}}
 
 
 %% acronym commands
