@@ -144,10 +144,6 @@ texforce:	$(COMP_DEPS)
 		make $(COMP_DEPS)
 		( cd $(TEX_LAT_PATH) ; $(TEX_LATEX_CMD) )
 
-# force recompile and snow
-.PHONY:		forceshow
-texforceshow:	texforce texshowpdf
-
 # run latex before resolving module targets (see tex-bib*.mk, tex-index.mk)
 $(TEX_PRERUN_FILE):
 		@echo "init run: $(TEX_INIT_RUN)"
@@ -190,22 +186,18 @@ texdebug:
 		make TEX_QUIET=0 texforce
 
 # compile and display the file using a simple open (MacOS or alias out)
-.PHONY:		texshowpdf
-texshowpdf:	texcompile
+.PHONY:		texopen
+texopen:	texcompile
 		open $(TEX_PDF_FILE)
 
 # a one pass compile and show (will flub refs and bibliography)
-.PHONY:		texshowquick
-texshowquick:
-		make PROJ_MODULES= SECOND_RUN= texshowpdf
-
-# compile the final version and show in Preview
-.PHONY:		texfinalshow
-texfinalshow:	texfinal texshowpdf
+.PHONY:		texreopen
+texreopen:	texforce
+		osascript -e 'tell application "Preview" to activate'
 
 # show and reposition the Preview.app window (under MacOS)
-.PHONY:		texreposition
-texreposition:	texcompile
+.PHONY:		texshow
+texshow:	texcompile
 		open $(TEX_PDF_FILE)
 		osascript $(TEX_SHOWPREV_BIN) $(TEX_PDF_FILE) $(PREV_LOC)
 

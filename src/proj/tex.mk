@@ -42,8 +42,8 @@ export:		texexport
 
 # build use macOS Preview.app to display in a specified lcoation
 .PHONY:		show
-show:		texreposition
+show:		texshow
 
 # like show, but no reposition
 .PHONY:		open
-open:		texshowpdf
+open:		texopen
