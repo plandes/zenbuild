@@ -197,7 +197,7 @@ texreopen:	texforce
 
 # show and reposition the Preview.app window (under MacOS)
 .PHONY:		texshow
-texshow:	texcompile
+texshow:	texforce
 		open $(TEX_PDF_FILE)
 		osascript $(TEX_SHOWPREV_BIN) $(TEX_PDF_FILE) $(PREV_LOC)
 
