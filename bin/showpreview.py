@@ -140,7 +140,8 @@ class Application(object):
     """Probe screen and set the preview applicatin extends.
 
     """
-    CLI_META = {'option_excludes': {'smng'}}
+    CLI_META = {'option_excludes': {'smng'},
+                'mnemonic_overrides': {'config': {'option_includes': set()}}}
 
     smng: ScreenManager = field()
     """Detects and controls the screen."""
