@@ -20,6 +20,11 @@ for i in setuptools twine wheel keyring pip-tools johnnydep ; do
     pip install -U $i
 done
 
+if [ $(uname -s) == "Darwin" ] ; then
+    echo "installing macOS libraries"
+    pip install -U applescript
+fi
+
 echo "installing libraries for Python documentation"
 # pin sphinx version since 3.4 has error: search page freezes
 for i in 'sphinx==3.3.1' sphinx-rtd-theme recommonmark rst2pdf \

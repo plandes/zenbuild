@@ -2,7 +2,8 @@
 # created: 01/27/2011
 
 ## to include in a makefile.in
-TEX_SHOWPREV_BIN ?=	$(BUILD_BIN_DIR)/showpreview.scpt
+TEX_SHOWPREV_BIN ?=	$(BUILD_BIN_DIR)/showpreview.py
+TEX_SHOWPREV_ARGS ?=	resize
 TEX_PRESENT_BIN ?=	/Applications/Presentation.app/Contents/MacOS/presentation.py
 TEX_PYTHON_BIN ?=	/usr/bin/python
 
@@ -199,7 +200,7 @@ texreopen:	texforce
 .PHONY:		texshow
 texshow:	texforce
 		open $(TEX_PDF_FILE)
-		osascript $(TEX_SHOWPREV_BIN) $(TEX_PDF_FILE) $(PREV_LOC)
+		$(TEX_SHOWPREV_BIN) $(TEX_SHOWPREV_ARGS)
 
 # final version: compile twice for refs and bibliography
 .PHONY:		texfinal
