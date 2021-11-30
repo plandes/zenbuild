@@ -3,7 +3,7 @@
 
 ## to include in a makefile.in
 TEX_SHOWPREV_BIN ?=	$(BUILD_BIN_DIR)/showpreview.py
-TEX_SHOWPREV_ARGS ?=	resize
+TEX_SHOWPREV_ARGS ?=	resize $(TEX_PDF_FILE)
 TEX_PRESENT_BIN ?=	/Applications/Presentation.app/Contents/MacOS/presentation.py
 TEX_PYTHON_BIN ?=	/usr/bin/python
 
@@ -199,7 +199,6 @@ texreopen:	texforce
 # show and reposition the Preview.app window (under MacOS)
 .PHONY:		texshow
 texshow:	texforce
-		open $(TEX_PDF_FILE)
 		$(TEX_SHOWPREV_BIN) $(TEX_SHOWPREV_ARGS)
 
 # final version: compile twice for refs and bibliography

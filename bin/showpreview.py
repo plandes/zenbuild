@@ -4,6 +4,7 @@ from typing import Dict, Sequence
 from dataclasses import dataclass, field
 from io import StringIO
 import logging
+from pathlib import Path
 import re
 import applescript as aps
 from zensols.persist import persisted
@@ -11,7 +12,6 @@ from zensols.config import ConfigFactory, Dictable
 from zensols.cli import CliHarness, ApplicationError
 
 logger = logging.getLogger(__name__)
-
 
 CONFIG = """
 [cli]
@@ -42,14 +42,15 @@ smng = instance: screen_manager
 """
 
 SHOW_PREVIEW_FUNC = """
-on showPreview(x, y, width, height)
-    log "update preview"
+on showPreview(filename, x, y, width, height)
+    set posixFile to POSIX file filename
+    tell application "Finder" to open posixFile
+    delay 0.1
     tell application "Preview"
          activate
          set theBounds to {x, y, width, height}
          set the bounds of the window 1 to theBounds
     end tell
-    log "zoom reset via system events"
     tell application "System Events"
          tell process "Preview"
                  click menu item "Single Page" of menu "View" of menu bar 1
@@ -119,20 +120,20 @@ class ScreenManager(object):
         width, height = bounds[2:]
         return Size(width, height)
 
-    def resize(self, size: Size):
-        logger.info(f'resizing to {size}')
+    def resize(self, file_name: Path, size: Size):
+        logger.info(f'resizing {file_name.name} to {size}')
         cmd = (SHOW_PREVIEW_FUNC + '\n' +
-               f'showPreview(0, 0, {size.width}, {size.height})')
+               f'showPreview("{file_name}", 0, 0, {size.width}, {size.height})')
         self._exec(cmd)
 
-    def detect_and_resize(self):
+    def detect_and_resize(self, file_name: Path):
         screen: Size = self.screen_size
         display: Display = self.displays_by_size.get(screen)
         logger.debug(f'screen size: {screen} -> {display}')
         if display is None:
             raise ApplicationError(f'No display entry for bounds: {screen}')
         logger.debug(f'detected display {display}')
-        self.resize(display.target)
+        self.resize(file_name, display.target)
 
 
 @dataclass
@@ -158,18 +159,20 @@ class Application(object):
             print(f'{n}:')
             dsp.write(1)
 
-    def resize(self):
+    def resize(self, file_name: Path):
         """Set the preview application frame location and size.  If the width and
         height are not given, it uses the (optional) configuration file values.
 
+        :param file_name: the file to show in the preview application
+
         """
         if self.width is None and self.height is None:
-            self.smng.detect_and_resize()
+            self.smng.detect_and_resize(file_name)
         elif self.width is not None or self.height is not None:
             raise ApplicationError(
                 'Both width and height are expected when either is given')
         else:
-            self.smng.resize(Size(self.width, self.height))
+            self.smng.resize(file_name, Size(self.width, self.height))
 
 
 if (__name__ == '__main__'):
