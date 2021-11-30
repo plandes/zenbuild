@@ -99,8 +99,14 @@
   {\bibhyperref{\printnames{labelname} \printfield{year}}}
   {\multicitedelim}
   {}%
+  \DeclareCiteCommand{\zzciteyearcite}
+  {}
+  {\bibhyperref{\printfield{year}}}
+  {\multicitedelim}
+  {}%
   \providecommand{\zzciteshort}{\zzciteshortcite}
-  \providecommand{\zzciteauthor}{\zzciteauthorcite}}
+  \providecommand{\zzciteauthor}{\zzciteauthorcite}
+  \providecommand{\zzciteyear}{\zzciteyearcite}}
 
 \newcommand{\zzciteaddparens}{%
   % put parenthesis around citations by redefining \cite
@@ -134,7 +140,8 @@
 
 %% natlib
 \newcommand{\zzaddcommandsnatlib}{%
-  \providecommand{\zzciteauthorcite}[1]{\citeauthor{##1}}%
+  \providecommand{\zzciteauthor}[1]{\citeauthor{##1}}%
+  \providecommand{\zzciteyear}[1]{\citeauthor{##1}}%
 }
 
 
