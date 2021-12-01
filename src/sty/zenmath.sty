@@ -3,10 +3,10 @@
 %%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{zenmath}[5/06/2018 Algoritms]
+\ProvidesPackage{zenmath}[5/06/2018 Math notation]
 
-
-%% -- math
+
+%% -- Math
 %% https://en.wikibooks.org/wiki/LaTeX/Algorithms
 \providecommand{\zzalgoconfig}{linesnumbered,lined,boxed,commentsnumbered}
 
@@ -171,3 +171,20 @@
 \newcommand{\zzlikelihoodfn}{P(\td \g \theta)}
 \newcommand{\zzlikelihoodest}{\hat{\theta}_{\text{MLE}}}
 \newcommand{\zzmapfn}{\hat{\theta}_{\text{map}}}
+
+
+% -- Complexity
+\newcommand{\optsym}{\mathcal{O}}
+\newcommand{\bigoh}[1]{\ensuremath{\optsym(#1)}}
+\newcommand{\bigtheta}[1]{\ensuremath{\Theta(#1)}}
+\newcommand{\bigomega}[1]{\ensuremath{\Omega(#1)}}
+\newcommand{\optsol}[1]{\optsym(#1)}
+\newcommand{\reduces}{\ensuremath{\leq_p}}
+\newcommand{\NPsp}{\ensuremath{\mathcal{NP}}}
+\newcommand{\Psp}{\ensuremath{\mathcal{P}}}
+\newcommand{\npc}{\textit{NP-complete}}
+
+% -- Algorithms
+\newenvironment{algocase}%
+{\begin{enumerate}[label=(\roman*)]}%
+{\end{enumerate}}
