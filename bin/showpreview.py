@@ -72,10 +72,16 @@ class Size(Dictable):
 
 
 @dataclass(eq=True, unsafe_hash=True)
+class Extent(Size):
+    x: int = field(default=0)
+    y: int = field(default=0)
+
+
+@dataclass(eq=True, unsafe_hash=True)
 class Display(Size):
     _DICTABLE_WRITE_EXCLUDES = {'name'}
     name: str
-    target: Size
+    target: Extent
 
     def __str__(self):
         return super().__str__() + f' ({self.name})'
@@ -101,7 +107,7 @@ class ScreenManager(object):
     @persisted('_displays')
     def displays(self) -> Dict[str, Size]:
         def map_display(name: str) -> Display:
-            targ = Size(**fac(f'{name}_target').asdict())
+            targ = Extent(**fac(f'{name}_target').asdict())
             return Display(**fac(name).asdict() |
                            {'name': name, 'target': targ})
 
@@ -120,10 +126,11 @@ class ScreenManager(object):
         width, height = bounds[2:]
         return Size(width, height)
 
-    def resize(self, file_name: Path, size: Size):
-        logger.info(f'resizing {file_name.name} to {size}')
-        cmd = (SHOW_PREVIEW_FUNC + '\n' +
-               f'showPreview("{file_name}", 0, 0, {size.width}, {size.height})')
+    def resize(self, file_name: Path, extent: Extent):
+        logger.info(f'resizing {file_name.name} to {extent}')
+        fn = (f'showPreview("{file_name}", {extent.x}, {extent.y}, ' +
+              f'{extent.width}, {extent.height})')
+        cmd = (SHOW_PREVIEW_FUNC + '\n' + fn)
         self._exec(cmd)
 
     def detect_and_resize(self, file_name: Path):
