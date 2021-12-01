@@ -88,6 +88,11 @@ pydeptree:
 			$(eval proj-name=$(shell $(GIT_BUILD_ATTR) .name))
 			$(PYTHON_BIN) -m johnnydep $(proj-name)
 
+# show conflicts in dependencies
+.PHONY:			pydoctor
+pydoctor:
+			$(PYTHON_BIN) -m pip check
+
 # execute python tests
 .PHONY:			pytest
 pytest:			$(PY_TEST_DEPS)
