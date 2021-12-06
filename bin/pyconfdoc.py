@@ -16,7 +16,7 @@ import shutil
 import plac
 from pathlib import Path
 from buildinfo import BuildInfoFetcher
-from keychain import Keychain
+from zensols.config.keychain import Keychain
 
 logger = logging.getLogger()
 
