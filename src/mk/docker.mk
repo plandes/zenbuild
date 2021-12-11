@@ -16,6 +16,7 @@ DOCKER_IMG_NAME ?=	$(DOCKER_CONTAINER)
 DOCKER_IMG=		$(DOCKER_USER)/$(DOCKER_IMG_NAME)
 DOCKER_VERSION ?=	snapshot
 DOCKER_UP_DEPS ?=	dockerbuild
+DOCKER_CMP_UP_ARGS ?=
 
 INFO_TARGETS +=		dockerinfo
 
@@ -71,7 +72,7 @@ dockerrmzombie:
 
 .PHONY:		dockerup
 dockerup:	$(DOCKER_UP_DEPS)
-		$(DOCKER_CMP_CMD) up -d
+		$(DOCKER_CMP_CMD) up -d $(DOCKER_CMP_UP_ARGS)
 
 .PHONY:		dockerdown
 dockerdown:
