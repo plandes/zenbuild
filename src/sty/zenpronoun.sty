@@ -1,0 +1,19 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zenpronoun}[1/09/2022 Collective or first person references]
+\RequirePackage{kvoptions}
+\DeclareBoolOption{firstperson}
+\ProcessKeyvalOptions*
+
+\ifzenpronoun@firstperson
+  \newcommand{\my}{my}
+  \newcommand{\My}{My}
+  \newcommand{\mine}{mine}
+  \newcommand{\ii}{I}
+  \newcommand{\Ii}{I}
+\else
+  \newcommand{\my}{our}
+  \newcommand{\My}{Our}
+  \newcommand{\mine}{ours}
+  \newcommand{\ii}{we}
+  \newcommand{\Ii}{We}
+\fi
