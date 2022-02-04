@@ -4,6 +4,7 @@ BIB_FILE ?=		$(TEX).bib
 BIB_MASTER_FILE ?=
 BIBSTRACT_TEX_PATH ?=	..
 BIBSTRACT ?=		bibstract
+BIBSTRACT_ARGS ?=	export
 COMP_DEPS +=		$(BIB_FILE)
 ADD_CLEAN_ALL +=	$(BIB_FILE)
 
@@ -16,4 +17,4 @@ texcleanbibstract:
 
 $(BIB_FILE):		$(BIB_MASTER_FILE)
 			@echo "running bibstract on $(BIB_FILE)..."
-			$(BIBSTRACT) export $(BIBSTRACT_TEX_PATH) > $(BIB_FILE)
+			$(BIBSTRACT) $(BIBSTRACT_ARGS) $(BIBSTRACT_TEX_PATH) > $(BIB_FILE)
