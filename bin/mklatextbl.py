@@ -7,12 +7,13 @@ file.
 """
 __author__ = 'Paul Landes'
 
-from typing import Dict, List
+from typing import Dict, List, Sequence
 from dataclasses import dataclass, field
 import sys
 import logging
 import yaml
 import re
+from itertools import chain
 from io import TextIOWrapper
 from pathlib import Path
 from datetime import datetime
@@ -23,6 +24,7 @@ import pandas as pd
 from zensols.persist import persisted
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class Table(object):
@@ -52,8 +54,15 @@ class Table(object):
             tiny
 
     """
+    uses: Sequence[str] = field(default=('zentable',))
+    """Comma separated list of packages to use."""
+
     single_column: bool = field(default=False)
     """Makes the table one column wide in a two column."""
+
+    def __post_init__(self):
+        if isinstance(self.uses, str):
+            self.uses = re.split(r'\s*,\s*', self.uses)
 
     @property
     def latex_environment(self) -> str:
@@ -159,6 +168,8 @@ class CsvToLatexTable(object):
 \\ProvidesPackage{%(package_name)s}[%(date)s Tables]
 
 """  % {'date': date, 'package_name': self.package_name})
+        for use in chain.from_iterable(map(lambda t: t.uses, self.tables)):
+            self.writer.write(f'\\usepackage{{{use}}}\n')
 
     def _write_footer(self):
         pass
