@@ -8,6 +8,7 @@ file.
 __author__ = 'Paul Landes'
 
 from typing import Dict, List
+from dataclasses import dataclass, field
 import sys
 import logging
 import yaml
@@ -23,22 +24,22 @@ from zensols.persist import persisted
 
 logger = logging.getLogger(__name__)
 
-
+@dataclass
 class Table(object):
     """Generates a Zensols styled Latex table from a CSV file.
 
     """
-    def __init__(self, path, name, caption, size='normalsize'):
-        """Initialize a table.
+    path: str = field()
+    """The path to the CSV file to make a latex table."""
 
-        :param path: the path to the CSV file to make a latex table
+    name: str = field()
+    """The name of the table, also used as the label."""
 
-        :param name: the name of the table, also used as the label
+    caption: str = field()
+    """The human readable string used to the caption in the table."""
 
-        :param caption: the human readable string used to the caption in the
-                        table
-
-        :param size: the size of the table, and one of:
+    size: str = field(default='normalsize')
+    """The size of the table, and one of::
             Huge
             huge
             LARGE
@@ -50,18 +51,19 @@ class Table(object):
             scriptsize
             tiny
 
-        """
-        self.path = path
-        self.name = name
-        self.caption = caption
-        self.size = size
+    """
+    single_column: bool = field(default=False)
+    """Makes the table one column wide in a two column."""
 
     @property
     def latex_environment(self) -> str:
         """Return the latex environment for the table.
 
         """
-        return 'zztabletcol'
+        if self.single_column:
+            return 'zztable'
+        else:
+            return 'zztabletcol'
 
     @property
     def columns(self) -> str:
