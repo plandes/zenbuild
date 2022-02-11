@@ -33,24 +33,24 @@
 \end{figure*}}
 
 % raster version with a an extension
-% \zzfigurerast{\columnwidth}{loss-snapshot}{png}{Validation and Training Loss}
-\providecommand{\zzfigurerast}[4]{
+% \zzfigurerast{\columnwidth}{loss-snapshot.png}{Validation and Training Loss}
+\providecommand{\zzfigurerast}[3]{
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=#1]{#2.#3}
+\includegraphics[width=#1]{#2}
 \end{center}
-\caption{#4}
+\caption{#3}
 \label{fig:#2}
 \end{figure}}
 
 % raster version with a an extension two column
-% \zzfigurerast{\textwidth}{loss-snapshot}{png}{Validation and Training Loss}
-\providecommand{\zzfigurerasttc}[4]{
+% \zzfigurerast{\textwidth}{loss-snapshot.png}{Validation and Training Loss}
+\providecommand{\zzfigurerasttc}[3]{
 \begin{figure*}[h!]
 \begin{center}
-\includegraphics[width=#1]{#2.#3}
+\includegraphics[width=#1]{#2}
 \end{center}
-\caption{#4}
+\caption{#3}
 \label{fig:#2}
 \end{figure*}}
 \else
