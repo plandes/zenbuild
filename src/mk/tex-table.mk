@@ -22,7 +22,10 @@ textabinfo:
 		@echo "tex-tab-stys: $(TEX_TAB_STYS)"
 
 .PHONY:		textab
-textab:		$(TEX_TAB_STYS)
+textab:
+		@echo "recreating $(TEX_TAB_STYS)"
+		rm -f $(TEX_TAB_STYS)
+		make $(TEX_TAB_STYS)
 
 %-table.sty:	$(TEX_TAB_DIR)/$(@F) $(TEX_MTARG_FILE)
 		$(TEX_TAB_BIN) $(TEX_TAB_DIR)/$(*F)-table.yml $(@D)/$(*F)-table.sty
