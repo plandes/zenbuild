@@ -7,7 +7,7 @@ file.
 """
 __author__ = 'Paul Landes'
 
-from typing import Dict, List, Sequence
+from typing import Dict, List, Sequence, Set, Union
 from dataclasses import dataclass, field
 import sys
 import logging
@@ -60,9 +60,14 @@ class Table(object):
     single_column: bool = field(default=False)
     """Makes the table one column wide in a two column."""
 
+    hlines: Union[Sequence[Set[int]]] = field(default_factory=set)
+    """Indexes of rows to put horizontal line breaks."""
+
     def __post_init__(self):
         if isinstance(self.uses, str):
             self.uses = re.split(r'\s*,\s*', self.uses)
+        if isinstance(self.hlines, (tuple, list)):
+            self.hlines = set(self.hlines)
 
     @property
     def latex_environment(self) -> str:
@@ -183,8 +188,10 @@ class CsvToLatexTable(object):
         writer.write('\n\\newcommand{\\%(tabname)s}{%%\n' % table.params)
         writer.write(table.header)
         writer.write('\n')
-        for l in lines[1:-1]:
-            writer.write(l + '\n')
+        for lix, ln in enumerate(lines[1:-1]):
+            writer.write(ln + '\n')
+            if (lix - 2) in table.hlines:
+                writer.write('\\hline  \n')
         writer.write('\\end{%s}}\n' % table.latex_environment)
 
     def write(self):
@@ -248,7 +255,7 @@ def write_latex_table(table_path, output_file):
     files to create tables from and their metadata is given as a YAML
     configuration file."""
     logging.basicConfig(level=logging.INFO,
-                        format='mklatextbl: %(levelname)s: %(message)s')
+                        format='mklatextbl: %(message)s')
     mng = TableFileManager(Path(table_path))
     logger.info(f'preparing package {mng.package_name}')
     with open(output_file, 'w') as f:
