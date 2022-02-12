@@ -12,7 +12,7 @@
 %% -- style
 % ex:
 % \zzfigure{\textwidth}{filename}{the caption}
-% \zzfigure[t]{\textwidth}{filename}{the caption} % put at top (H=force right here)
+% ex: \zzfigure[t]{\textwidth}{filename}{the caption} % put at top (H=force right here)
 \providecommand{\zzfigure}[4][h!]{%
 \begin{figure}[#1]
 \begin{center}
@@ -32,9 +32,20 @@
 \label{fig:#2}
 \end{figure*}}
 
+% same as \zzfigurect but provides a first argument for placement
+% ex: \zzfiguretcp{t}{some-graphic}{Some description}
+\providecommand{\zzfiguretcp}[4][\textwidth]{%
+\begin{figure*}[#2]
+\begin{center}
+\includegraphics[width=#1]{#3.eps}
+\end{center}
+\caption{#4}
+\label{fig:#3}
+\end{figure*}}
+
 % raster version with a an extension; split of name and extension for refs
-% \zzfigurerast{\columnwidth}{loss-snapshot}{png}{Validation and Training Loss}
-\providecommand{\zzfigurerast}[4]{
+% ex: \zzfigurerast{\columnwidth}{loss-snapshot}{png}{Validation and Training Loss}
+\providecommand{\zzfigurerast}[4]{%
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=#1]{#2.#3}
@@ -44,14 +55,24 @@
 \end{figure}}
 
 % raster version with a an extension two column
-% \zzfigurerast{\textwidth}{loss-snapshot}{png}{Validation and Training Loss}
-\providecommand{\zzfigurerasttc}[4]{
+% ex: \zzfigurerast{\textwidth}{loss-snapshot}{png}{Validation and Training Loss}
+\providecommand{\zzfigurerasttc}[4]{%
 \begin{figure*}[h!]
 \begin{center}
 \includegraphics[width=#1]{#2.#3}
 \end{center}
 \caption{#4}
 \label{fig:#2}
+\end{figure*}}
+
+% like \zzfigurerasttc but provides a first argument for placement
+\providecommand{\zzfigurerasttcp}[5]{%
+\begin{figure*}[#2]
+\begin{center}
+\includegraphics[width=#1]{#3.#4}
+\end{center}
+\caption{#5}
+\label{fig:#3}
 \end{figure*}}
 \else
 \newcommand{\zzfigdisabled}[1]{{\it Figures disabled (#1).}}
