@@ -40,6 +40,9 @@ class Table(object):
     caption: str = field()
     """The human readable string used to the caption in the table."""
 
+    placement: str = field(default=None)
+    """The placement of the table."""
+
     size: str = field(default='normalsize')
     """The size of the table, and one of::
             Huge
@@ -94,9 +97,11 @@ class Table(object):
         """Return the parameters used for creating the table.
 
         """
+        placement = '' if self.placement is None else f'[{self.placement}]'
         return {'tabname': self.name,
                 'latex_environment': self.latex_environment,
                 'caption': self.caption,
+                'placement': placement,
                 'columns': self.columns,
                 'size': self.size}
 
@@ -105,7 +110,7 @@ class Table(object):
         """Return the Latex environment header.
 
         """
-        return """\\begin{%(latex_environment)s}{%(tabname)s}%%
+        return """\\begin{%(latex_environment)s}%(placement)s{%(tabname)s}%%
 {%(caption)s}{\\%(size)s}{%(columns)s}""" % self.params
 
     @property

@@ -29,14 +29,14 @@
 
 %% basic table
 % ex: \begin{zztable}{results}{Results}{\small}{|l|l}
-\newenvironment{zztable}[4]%
+\newenvironment{zztable}[5][ht]%
 {%
-\newcommand{\zzbasictablecap}{#2}
-\newcommand{\zzbasictablelab}{tab:#1}
-\begin{table}[ht]
-#3
+\newcommand{\zzbasictablecap}{#3}
+\newcommand{\zzbasictablelab}{tab:#2}
+\begin{table}[#1]
+#4
 \begin{center}
-\begin{tabular}{#4}
+\begin{tabular}{#5}
 }%
 {%
 \end{tabular}
