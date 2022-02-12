@@ -66,11 +66,16 @@ class Table(object):
     hlines: Union[Sequence[Set[int]]] = field(default_factory=set)
     """Indexes of rows to put horizontal line breaks."""
 
+    double_hlines: Union[Sequence[Set[int]]] = field(default_factory=set)
+    """Indexes of rows to put double horizontal line breaks."""
+
     def __post_init__(self):
         if isinstance(self.uses, str):
             self.uses = re.split(r'\s*,\s*', self.uses)
         if isinstance(self.hlines, (tuple, list)):
             self.hlines = set(self.hlines)
+        if isinstance(self.double_hlines, (tuple, list)):
+            self.double_hlines = set(self.double_hlines)
 
     @property
     def latex_environment(self) -> str:
@@ -197,6 +202,8 @@ class CsvToLatexTable(object):
             writer.write(ln + '\n')
             if (lix - 2) in table.hlines:
                 writer.write('\\hline  \n')
+            if (lix - 2) in table.double_hlines:
+                writer.write('\\hline \\hline \n')
         writer.write('\\end{%s}}\n' % table.latex_environment)
 
     def write(self):
