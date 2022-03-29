@@ -6,7 +6,7 @@ BIBSTRACT ?=		bibstract
 ifdef BIBSTRACT_EXPORT_ALL
 BIBSTRACT_SPACE :=	$(subst ,, )
 # add entire tex path in colon syntax
-BIBSTRACT_TEX_PATH ?=	$(subst $(BIBSTRACT_SPACE),:,$(TEX_PATH))
+BIBSTRACT_TEX_PATH ?=	$(subst $(BIBSTRACT_SPACE),:,$(TEX_PATH)):.
 BIBSTRACT_ARGS ?=	exportall
 else
 BIBSTRACT_TEX_PATH ?=	..
@@ -24,4 +24,4 @@ texcleanbibstract:
 
 $(BIB_FILE):		$(BIB_MASTER_FILE)
 			@echo "running bibstract on $(BIB_FILE)..."
-			$(BIBSTRACT) $(BIBSTRACT_ARGS) $(BIBSTRACT_TEX_PATH) > $(BIB_FILE)
+			$(BIBSTRACT) $(BIBSTRACT_ARGS) $(BIBSTRACT_TEX_PATH) --output $(BIB_FILE)
