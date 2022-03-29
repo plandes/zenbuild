@@ -69,6 +69,9 @@ class Table(object):
     double_hlines: Union[Sequence[Set[int]]] = field(default_factory=set)
     """Indexes of rows to put double horizontal line breaks."""
 
+    percent_column_names: Sequence[str] = field(default=())
+    """Column names that have a percent sign to be escaped."""
+
     def __post_init__(self):
         if isinstance(self.uses, str):
             self.uses = re.split(r'\s*,\s*', self.uses)
@@ -124,19 +127,21 @@ class Table(object):
         """Return the pandas Dataframe that holds the CSV data.
 
         """
-        return pd.read_csv(self.path)
+        df = pd.read_csv(self.path)
+        for col in self.percent_column_names:
+            df[col] = df[col].apply(lambda s: s.replace('%', '\\%'))
+        return df
 
     def __str__(self):
         return f'{self.name}: env={self.latex_environment}, size={self.size}'
 
 
+@dataclass
 class SlackTable(Table):
     """An instance of the table that fills up space based on the widest column.
 
     """
-    def __init__(self, *args, slack_col=0, **kwargs):
-        super(SlackTable, self).__init__(*args, **kwargs)
-        self.slack_col = slack_col
+    slack_col: int = field(default=0)
 
     @property
     def latex_environment(self):
@@ -144,8 +149,11 @@ class SlackTable(Table):
 
     @property
     def header(self):
-        return """\\begin{%(latex_environment)s}[\\textwidth]{h}{%(tabname)s}{%(caption)s}%%
-{\\%(size)s}{%(columns)s}""" % self.params
+        params = self.params
+        width = '\\columnwidth' if self.single_column else '\\textwidth'
+        params['width'] = width
+        return """\\begin{%(latex_environment)s}[%(width)s]{h}{%(tabname)s}{%(caption)s}%%
+{\\%(size)s}{%(columns)s}""" % params
 
     @property
     def columns(self):
