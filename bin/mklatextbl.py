@@ -20,7 +20,7 @@ Example::
 """
 __author__ = 'Paul Landes'
 
-from typing import Dict, List, Sequence, Set, Union
+from typing import Dict, List, Sequence, Set, Union, Tuple
 from dataclasses import dataclass, field
 import sys
 import logging
@@ -85,6 +85,29 @@ class Table(object):
     percent_column_names: Sequence[str] = field(default=())
     """Column names that have a percent sign to be escaped."""
 
+    read_kwargs: Dict[str, str] = field(default_factory=dict)
+    """Keyword arguments used in the :meth:`~pandas.read_csv` call when reading the
+    CSV file.
+
+    """
+    write_kwargs: Dict[str, str] = field(default_factory=dict)
+    """Keyword arguments used in the :meth:`~tabulate.tabulate` call when writing
+    the table.
+
+    """
+    replace_nan: str = field(default=None)
+    """Replace NaN values with a the value of this field as :meth:`tabulate` is not
+    using the missing value due to some bug I assume.
+
+    """
+    blank_columns: List[int] = field(default=())
+    """A list of column indexes to set to the empty string (i.e. 0th to fixed the
+    ``Unnamed: 0`` issues).
+
+    """
+    bold_cells: List[Tuple[int, int]] = field(default=())
+    """
+    """
     def __post_init__(self):
         if isinstance(self.uses, str):
             self.uses = re.split(r'\s*,\s*', self.uses)
@@ -140,7 +163,7 @@ class Table(object):
         """Return the pandas Dataframe that holds the CSV data.
 
         """
-        df = pd.read_csv(self.path)
+        df = pd.read_csv(self.path, **self.read_kwargs)
         for col in self.percent_column_names:
             df[col] = df[col].apply(lambda s: s.replace('%', '\\%'))
         return df
@@ -212,10 +235,22 @@ class CsvToLatexTable(object):
 
     def _write_table(self, table):
         writer = self.writer
-        df = table.dataframe
+        df: pd.DataFrame = table.dataframe
+        if table.replace_nan is not None:
+            df = df.fillna(table.replace_nan)
+        if len(table.blank_columns) > 0:
+            cols = df.columns.to_list()
+            for i in table.blank_columns:
+                cols[i] = ''
+            df.columns = cols
+        if len(table.bold_cells) > 0:
+            for r, c in table.bold_cells:
+                df.iloc[r, c] = '\\textbf{' + str(df.iloc[r, c]) + '}'
         cols = [tuple(map(lambda c: f'\\textbf{{{c}}}', df.columns))]
         data = it.chain(cols, map(lambda x: x[1].tolist(), df.iterrows()))
-        lines = tabulate(data, tablefmt='latex_raw', headers='firstrow').split('\n')
+        params = dict(tablefmt='latex_raw', headers='firstrow')
+        params.update(table.write_kwargs)
+        lines = tabulate(data, **params).split('\n')
         writer.write('\n\\newcommand{\\%(tabname)s}{%%\n' % table.params)
         writer.write(table.header)
         writer.write('\n')
