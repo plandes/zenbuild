@@ -137,11 +137,21 @@ class Table(object):
         return cols
 
     @property
+    def is_placement_variable(self) -> bool:
+        return self.placement == 'VAR'
+
+    @property
     def params(self) -> Dict[str, str]:
         """Return the parameters used for creating the table.
 
         """
-        placement = '' if self.placement is None else f'[{self.placement}]'
+        #placement = '' if self.placement is None else f'[{self.placement}]'
+        if self.placement is None:
+            placement = ''
+        elif self.is_placement_variable:
+            placement = '[#1]'
+        else:
+            placement = f'[{self.placement}]'
         return {'tabname': self.name,
                 'latex_environment': self.latex_environment,
                 'caption': self.caption,
@@ -251,7 +261,9 @@ class CsvToLatexTable(object):
         params = dict(tablefmt='latex_raw', headers='firstrow')
         params.update(table.write_kwargs)
         lines = tabulate(data, **params).split('\n')
-        writer.write('\n\\newcommand{\\%(tabname)s}{%%\n' % table.params)
+        params = dict(table.params)
+        params['cvars'] = '[1]' if table.is_placement_variable else ''
+        writer.write('\n\\newcommand{\\%(tabname)s}%(cvars)s{%%\n' % params)
         writer.write(table.header)
         writer.write('\n')
         for lix, ln in enumerate(lines[1:-1]):
