@@ -56,6 +56,9 @@ class Table(object):
     placement: str = field(default=None)
     """The placement of the table."""
 
+    placement_number: int = field(default=1)
+    """The number of the placement argument to pass in the Latex command."""
+
     size: str = field(default='normalsize')
     """The size of the table, and one of::
             Huge
@@ -106,8 +109,8 @@ class Table(object):
 
     """
     bold_cells: List[Tuple[int, int]] = field(default=())
-    """
-    """
+    """A list of row/column cells to bold."""
+
     def __post_init__(self):
         if isinstance(self.uses, str):
             self.uses = re.split(r'\s*,\s*', self.uses)
@@ -140,22 +143,27 @@ class Table(object):
     def is_placement_variable(self) -> bool:
         return self.placement == 'VAR'
 
+    def _placement_param(self, add_brackets: bool = True) -> str:
+        if self.placement is None:
+            placement = ''
+        elif self.is_placement_variable:
+            arg_num = self.placement_number
+            placement = f'#{arg_num}'
+        else:
+            placement = self.placement
+        if add_brackets and len(placement) > 0:
+            placement = f'[{placement}]'
+        return placement
+
     @property
     def params(self) -> Dict[str, str]:
         """Return the parameters used for creating the table.
 
         """
-        #placement = '' if self.placement is None else f'[{self.placement}]'
-        if self.placement is None:
-            placement = ''
-        elif self.is_placement_variable:
-            placement = '[#1]'
-        else:
-            placement = f'[{self.placement}]'
         return {'tabname': self.name,
                 'latex_environment': self.latex_environment,
                 'caption': self.caption,
-                'placement': placement,
+                'placement': self._placement_param(),
                 'columns': self.columns,
                 'size': self.size}
 
@@ -188,6 +196,7 @@ class SlackTable(Table):
 
     """
     slack_col: int = field(default=0)
+    """Which column elastically grows or shrinks to make the table fit."""
 
     @property
     def latex_environment(self):
@@ -198,7 +207,8 @@ class SlackTable(Table):
         params = self.params
         width = '\\columnwidth' if self.single_column else '\\textwidth'
         params['width'] = width
-        return """\\begin{%(latex_environment)s}[%(width)s]{h}{%(tabname)s}{%(caption)s}%%
+        params['placement'] = self._placement_param(False)
+        return """\\begin{%(latex_environment)s}[%(width)s]{%(placement)s}{%(tabname)s}{%(caption)s}%%
 {\\%(size)s}{%(columns)s}""" % params
 
     @property
