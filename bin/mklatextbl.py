@@ -76,7 +76,7 @@ class Table(object):
     uses: Sequence[str] = field(default=('zentable',))
     """Comma separated list of packages to use."""
 
-    single_column: bool = field(default=False)
+    single_column: bool = field(default=True)
     """Makes the table one column wide in a two column."""
 
     hlines: Union[Sequence[Set[int]]] = field(default_factory=set)
@@ -246,8 +246,10 @@ class CsvToLatexTable(object):
         self.writer.write("""\\NeedsTeXFormat{LaTeX2e}
 \\ProvidesPackage{%(package_name)s}[%(date)s Tables]
 
-"""  % {'date': date, 'package_name': self.package_name})
-        for use in chain.from_iterable(map(lambda t: t.uses, self.tables)):
+""" % {'date': date, 'package_name': self.package_name})
+        uses: Set[str] = set(chain.from_iterable(
+            map(lambda t: t.uses, self.tables)))
+        for use in sorted(uses):
             self.writer.write(f'\\usepackage{{{use}}}\n')
 
     def _write_footer(self):
