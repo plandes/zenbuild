@@ -65,12 +65,27 @@
 \end{frame}}
 
 %% quotes in boxes
-\newenvironment{zsquote}{
-\begin{beamercolorbox}[dp=0.3cm,rounded=true,shadow=true]{postit}%
+%\newcommand{\zsquotestyle}{dp=0.3cm,rounded=true,shadow=true}
+\providecommand{\zsquotecolor}{postit}
+\newenvironment{zsquotebox}[1][dp=0.3cm,rounded=true,shadow=true]{%
+\begin{beamercolorbox}[#1]{\zsquotecolor}%
 \footnotesize%
 \it%
-\noindent%
+\noindent
 }{\end{beamercolorbox}}
+
+% \begin{zsquoteboxauthor}[rounded=false]{Richard Stallman}
+\newenvironment{zsquoteboxauthor}[2][dp=0.3cm,rounded=true,shadow=true]{%
+\newcommand{\zsquoteauthorname}{#2}%
+\begin{zsquotebox}[#1]\ignorespaces}
+{\\ \noindent\hspace*{\fill}---\zsquoteauthorname%
+\end{zsquotebox}}
+
+% \begin{zsquoteauthor}{Richard Stallman}
+\newenvironment{zsquoteauthor}[1]{%
+\renewcommand{\zsquotecolor}{white}%
+\begin{zsquoteboxauthor}[shadow=false]{#1}}
+{\end{zsquoteboxauthor}}
 
 
 %% commands
