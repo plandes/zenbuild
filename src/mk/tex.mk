@@ -4,8 +4,8 @@
 ## to include in a makefile.in
 TEX_SHOWPREV_BIN ?=	$(BUILD_BIN_DIR)/showpreview.py
 TEX_SHOWPREV_ARGS ?=	resize $(TEX_PDF_FILE)
-TEX_PRESENT_BIN ?=	/Applications/Presentation.app/Contents/MacOS/presentation.py
-TEX_PYTHON_BIN ?=	/usr/bin/python
+TEX_PRESENT_BIN ?=	/Applications/Présentation.app/Contents/MacOS/presentation.py
+TEX_PYTHON_BIN ?=	python
 
 ## everything else shouldn't need modifying paths
 TEX_nullstr=
@@ -224,6 +224,16 @@ texpresentpdf:
 			fi ; \
 		done
 
+.PHONY:		texpresentshow
+texpresentshow:	texpresentpdf
+		$(TEX_SHOWPREV_BIN) $(TEX_SHOWPREV_ARGS)
+
+# present a slide deck
+.PHONY:		texpresent
+texpresent:	texpackage
+		@echo "Imporant: uncheck Mirror Mode: Sys Prefs > Display > Arragenemnt"
+		$(TEX_PYTHON_BIN) $(TEX_PRESENT_BIN) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME)-presenetation.pdf
+
 # create a zip file with the only the PDF as its contents
 .PHONY:		texpackage
 texpackage:	$(TEX_PKG_FINAL_DIR) $(TEX_PKG_ADD)
@@ -240,12 +250,6 @@ $(TEX_PKG_FINAL_DIR):
 			make texpresentpdf ; \
 			cp $(TEX_PDF_FILE) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME)-presenetation.pdf ; \
 		fi
-
-# present a slide deck
-.PHONY:		texpresent
-texpresent:	texpackage
-		@echo "NOTE!: uncheck mirror mode: Sys Prefs > Display > Arragenemnt"
-		$(TEX_PYTHON_BIN) $(TEX_PRESENT_BIN) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME)-presenetation.pdf
 
 # create final version, compress if mulitple files, then copy to install
 # location
