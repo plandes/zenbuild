@@ -105,6 +105,23 @@
 \endtable%
 }
 
+% same as zzvarcoltable but as a figure
+\newenvironment{zzvarcolfigure}[6][\textwidth]%
+{%
+\newcommand{\zzvarcoltablelab}{fig:#3}%
+\newcommand{\zzvarcoltablecap}{#4}%
+\figure[#2]%
+\centering#5%
+\tabularx{#1}{#6}%
+}
+{%
+\endtabularx%
+\caption{\zzvarcoltablecap}%
+\label{\zzvarcoltablelab}%
+\endfigure%
+}
+
+
 % \newenvironment{zzvarcoltabletcol}[5][\textwidth]%
 % {%
 % \newcommand{\zzvarcoltablelab}{tab:#2}%
