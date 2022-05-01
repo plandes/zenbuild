@@ -127,10 +127,15 @@ class Table(object):
         """Return the latex environment for the table.
 
         """
+        tab: str
         if self.single_column:
-            return 'zztable'
+            tab = 'zztable'
         else:
-            return 'zztabletcol'
+            if self.placement is None:
+                tab = 'zztabletcol'
+            else:
+                tab = 'zztabletcolplace'
+        return tab
 
     @property
     def columns(self) -> str:

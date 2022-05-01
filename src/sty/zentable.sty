@@ -47,6 +47,24 @@
 }%
 
 % basic two column table
+% ex: \begin{zztabletcolplace}[ht!]{results}{Results}{\small}{|l|l}
+\newenvironment{zztabletcolplace}[5][ht!]%
+{%
+\newcommand{\zzbasictablecap}{#3}
+\newcommand{\zzbasictablelab}{tab:#2}
+\begin{table*}[#1]
+\centering
+#4
+\begin{tabular}{#5}
+}%
+{%
+\end{tabular}
+\caption{\zzbasictablecap}
+\label{\zzbasictablelab}
+\end{table*}
+}%
+
+% basic two column table
 % ex: \begin{zztable}{results}{Results}{\small}{|l|l}
 \newenvironment{zztabletcol}[4]%
 {%
