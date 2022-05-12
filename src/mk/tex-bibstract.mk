@@ -3,14 +3,13 @@
 BIB_FILE ?=		$(TEX).bib
 BIB_MASTER_FILE ?=
 BIBSTRACT ?=		bibstract
+BIBSTRACT_ARGS ?=	export
 ifdef BIBSTRACT_EXPORT_ALL
 BIBSTRACT_SPACE :=	$(subst ,, )
 # add entire tex path in colon syntax
 BIBSTRACT_TEX_PATH ?=	$(subst $(BIBSTRACT_SPACE),:,$(TEX_PATH)):.
-BIBSTRACT_ARGS ?=	exportall
 else
 BIBSTRACT_TEX_PATH ?=	..
-BIBSTRACT_ARGS ?=	export
 endif
 COMP_DEPS +=		$(BIB_FILE)
 ADD_CLEAN_ALL +=	$(BIB_FILE)
