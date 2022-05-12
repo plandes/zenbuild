@@ -71,9 +71,11 @@ class ImageCleaner(Cleaner):
     _INCUDE_REGEX = tuple(
         map(re.compile,
             # leave off end for multi-line titles
-            [r'^\\zzfigure\{.*\}\{(.+)\}\{.*$',
+            [r'^\\zzfigure(?:tcp)?\{.*\}\{(.+)\}\{.*$',
              r'^\\zzfiguretc(?:\[.+\])\{(.+)\}\{.*$',
-             r'^\\zzfigurerast(?:tc)?\{.*\}\{(.+)\}\{(.+)\}\{.*$']))
+             r'^\\zzfigurerast(?:tc)?\{.*\}\{(.+)\}\{(.+)\}\{.*$',
+             r'^\\zzfigurerasttcp(?:tc)?\{.*\}\{.*\}\{(.+)\}\{(.+)\}\{.*$',
+             ]))
     _DEL_REGEX = re.compile(r'.*(' + '|'.join('eps png jpg gif'.split()) + ')$')
     _ADD_EXT = 'eps'
 
@@ -109,9 +111,11 @@ def main(exportdir: Path, keeps: str = None, dryrun: bool = False):
     logging.basicConfig(level=logging.INFO,
                         format='cleaneps.py: %(levelname)s: %(message)s')
     keeps = keeps.split(',') if keeps is not None else ()
+    keeps = set(keeps)
+    exts = {'tex', 'sty'}
     cleaners = [
-        ImageCleaner(exportdir, {'tex'}, set(keeps), dryrun),
-        StyleCleaner(exportdir, {'tex'}, set(keeps), dryrun),
+        ImageCleaner(exportdir, exts, keeps, dryrun),
+        StyleCleaner(exportdir, exts, keeps, dryrun),
     ]
     for cleaner in cleaners:
         cleaner()
