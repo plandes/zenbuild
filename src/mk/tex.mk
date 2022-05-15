@@ -212,6 +212,11 @@ texfinal:
 			fi ; \
 		done
 
+# create the final version, then display it like texshow
+.PHONY:		texfinalshow
+texfinalshow:	texfinal
+		$(TEX_SHOWPREV_BIN) $(TEX_SHOWPREV_ARGS)
+
 # create the presentation form of the slides
 .PHONY:		texpresentpdf
 texpresentpdf:
