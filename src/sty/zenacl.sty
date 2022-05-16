@@ -1,0 +1,28 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zenacl}[2/03/2022 Import and configure ACL]
+
+\ifisfinal%
+  \usepackage[nohyperref]{acl}
+\else
+  \usepackage[nohyperref,review]{acl}
+\fi
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
+
+% for proper rendering and hyphenation of words containing Latin characters
+% (including in bib files)
+\usepackage[T1]{fontenc}
+
+% This is not strictly necessary, and may be commented out,
+% but it will improve the layout of the manuscript,
+% and will typically save some space.
+\usepackage{microtype}
+
+% enable href
+\zzhrefinit%
+% use natlib cite commands
+\zzaddcommandsnatlib%
+
+% disable acro italics/hover over for conferences that don't use it like AAAI
+\zzacrodisablelinks\relax
