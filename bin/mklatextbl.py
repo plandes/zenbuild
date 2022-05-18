@@ -6,28 +6,27 @@ file.
 
 Example::
     latextablenamehere:
-    type: slack
-    slack_col: 0
-    path: ../config/table-name.csv
-    caption: Some Caption
-    placement: t!
-    size: small
-    single_column: true
-    uses: zentable
-    percent_column_names: ['Proportion']
+        type: slack
+        slack_col: 0
+        path: ../config/table-name.csv
+        caption: Some Caption
+        placement: t!
+        size: small
+        single_column: true
+        percent_column_names: ['Proportion']
 
 
 """
 __author__ = 'Paul Landes'
 
-from typing import Dict, List, Sequence, Set, Union, Tuple
+from typing import Dict, List, Sequence, Set, Union, Tuple, Any
 from dataclasses import dataclass, field
 import sys
 import logging
 import yaml
 import re
 from itertools import chain
-from io import TextIOWrapper
+from io import TextIOWrapper, StringIO
 from pathlib import Path
 from datetime import datetime
 from tabulate import tabulate
@@ -88,6 +87,10 @@ class Table(object):
     double_hlines: Union[Sequence[Set[int]]] = field(default_factory=set)
     """Indexes of rows to put double horizontal line breaks."""
 
+    column_removes: List[str] = field(default_factory=list)
+    """The name of the columns to remove from the table, if any.
+
+    """
     percent_column_names: Sequence[str] = field(default=())
     """Column names that have a percent sign to be escaped."""
 
@@ -113,6 +116,8 @@ class Table(object):
     """
     bold_cells: List[Tuple[int, int]] = field(default=())
     """A list of row/column cells to bold."""
+
+    df_code: str = field(default=None)
 
     def __post_init__(self):
         if isinstance(self.uses, str):
@@ -192,7 +197,48 @@ class Table(object):
         df = pd.read_csv(self.path, **self.read_kwargs)
         for col in self.percent_column_names:
             df[col] = df[col].apply(lambda s: s.replace('%', '\\%'))
+        df = df.drop(columns=self.column_removes)
+        if self.df_code is not None:
+            df = eval(self.df_code)
         return df
+
+    def _get_rows(self, df: pd.DataFrame) -> List[List[Any]]:
+        df: pd.DataFrame = self.dataframe
+        cols = [tuple(map(lambda c: f'\\textbf{{{c}}}', df.columns))]
+        return it.chain(cols, map(lambda x: x[1].tolist(), df.iterrows()))
+
+    def _get_tabulate_params(self) -> Dict[str, Any]:
+        params = dict(tablefmt='latex_raw', headers='firstrow')
+        params.update(self.write_kwargs)
+        return params
+
+    def write(self, writer: TextIOWrapper):
+        df: pd.DataFrame = self.dataframe
+        if self.replace_nan is not None:
+            df = df.fillna(self.replace_nan)
+        if len(self.blank_columns) > 0:
+            cols = df.columns.to_list()
+            for i in self.blank_columns:
+                cols[i] = ''
+            df.columns = cols
+        if len(self.bold_cells) > 0:
+            for r, c in self.bold_cells:
+                df.iloc[r, c] = '\\textbf{' + str(df.iloc[r, c]) + '}'
+        data = self._get_rows(df)
+        params: Dict[str, Any] = self._get_tabulate_params()
+        lines = tabulate(data, **params).split('\n')
+        params = dict(self.params)
+        params['cvars'] = '[1]' if self.is_placement_variable else ''
+        writer.write('\n\\newcommand{\\%(tabname)s}%(cvars)s{%%\n' % params)
+        writer.write(self.header)
+        writer.write('\n')
+        for lix, ln in enumerate(lines[1:-1]):
+            writer.write(ln + '\n')
+            if (lix - 2) in self.hlines:
+                writer.write('\\hline  \n')
+            if (lix - 2) in self.double_hlines:
+                writer.write('\\hline \\hline \n')
+        writer.write('\\end{%s}}\n' % self.latex_environment)
 
     def __str__(self):
         return f'{self.name}: env={self.latex_environment}, size={self.size}'
@@ -208,10 +254,10 @@ class SlackTable(Table):
 
     @property
     def latex_environment(self):
-        return 'zzvarcoltable'
+        return 'zzvarcoltable' if self.single_column else 'zzvarcoltabletcol'
 
     @property
-    def header(self):
+    def header(self) -> str:
         params = self.params
         width = '\\columnwidth' if self.single_column else '\\textwidth'
         params['width'] = width
@@ -220,13 +266,46 @@ class SlackTable(Table):
 {\\%(size)s}{%(columns)s}""" % params
 
     @property
-    def columns(self):
+    def columns(self) -> str:
         df = self.dataframe
         i = self.slack_col
         cols = ('l' * (df.shape[1] - 1))
         cols = cols[:i] + 'X' + cols[i:]
         cols = '|' + '|'.join(cols) + '|'
         return cols
+
+
+@dataclass
+class LongTable(SlackTable):
+    @property
+    def latex_environment(self):
+        return 'zzvarcoltabletcollong'
+
+    @property
+    def header(self):
+        df = self.dataframe
+        hcols = ' & '.join(map(lambda c: f'\\textbf{{{c}}}', df.columns))
+        return f'{super().header}{{{hcols}}}{{{df.shape[1]}}}'
+
+    def _get_rows(self, df: pd.DataFrame) -> List[List[Any]]:
+        df: pd.DataFrame = self.dataframe
+        return map(lambda x: x[1].tolist(), df.iterrows())
+
+    def _get_tabulate_params(self) -> Dict[str, Any]:
+        params = super()._get_tabulate_params()
+        del params['headers']
+        return params
+
+    def write(self, writer: TextIOWrapper):
+        sio = StringIO()
+        super().write(sio)
+        sio.seek(0)
+        hlremove = 1
+        for line in map(str.strip, sio.readlines()):
+            if line == '\\hline' and hlremove > 0:
+                hlremove += 1
+                continue
+            writer.write(line + '\n')
 
 
 class CsvToLatexTable(object):
@@ -260,48 +339,13 @@ class CsvToLatexTable(object):
         for use in sorted(uses):
             self.writer.write(f'\\usepackage{{{use}}}\n')
 
-    def _write_footer(self):
-        pass
-
-    def _write_table(self, table):
-        writer = self.writer
-        df: pd.DataFrame = table.dataframe
-        if table.replace_nan is not None:
-            df = df.fillna(table.replace_nan)
-        if len(table.blank_columns) > 0:
-            cols = df.columns.to_list()
-            for i in table.blank_columns:
-                cols[i] = ''
-            df.columns = cols
-        if len(table.bold_cells) > 0:
-            for r, c in table.bold_cells:
-                df.iloc[r, c] = '\\textbf{' + str(df.iloc[r, c]) + '}'
-        cols = [tuple(map(lambda c: f'\\textbf{{{c}}}', df.columns))]
-        data = it.chain(cols, map(lambda x: x[1].tolist(), df.iterrows()))
-        params = dict(tablefmt='latex_raw', headers='firstrow')
-        params.update(table.write_kwargs)
-        lines = tabulate(data, **params).split('\n')
-        params = dict(table.params)
-        params['cvars'] = '[1]' if table.is_placement_variable else ''
-        writer.write('\n\\newcommand{\\%(tabname)s}%(cvars)s{%%\n' % params)
-        writer.write(table.header)
-        writer.write('\n')
-        for lix, ln in enumerate(lines[1:-1]):
-            writer.write(ln + '\n')
-            if (lix - 2) in table.hlines:
-                writer.write('\\hline  \n')
-            if (lix - 2) in table.double_hlines:
-                writer.write('\\hline \\hline \n')
-        writer.write('\\end{%s}}\n' % table.latex_environment)
-
     def write(self):
         """Write the Latex table to the writer given in the initializer.
 
         """
         self._write_header()
         for table in self.tables:
-            self._write_table(table)
-        self._write_footer()
+            table.write(self.writer)
 
 
 class TableFileManager(object):

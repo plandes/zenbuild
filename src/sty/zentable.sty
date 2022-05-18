@@ -6,7 +6,7 @@
 \ProvidesPackage{zentable}[2016/10/18 Simple and Variable Table Column]
 
 \usepackage{tabularx}
-
+%\newcolumntype{C}{>{\Centering\arraybackslash}X}
 
 
 %% basic table
@@ -82,21 +82,60 @@
 \end{table*}
 }%
 
-\newenvironment{zzvarcoltabletcol}[4]%
+
+% single column table in two column mode with slack column
+% ex: \begin{zzvarcoltabletcol}[h]{sectiondesc}{Section description.}{\small}{|l|l|X|}
+\newenvironment{zzvarcoltabletcol}[6][\textwidth]
 {%
-\newcommand{\zzbasictablecap}{#2}
-\newcommand{\zzbasictablelab}{tab:#1}
-\begin{table*}[!ht]
-\centering
-#3
-\begin{tabularx}{\textwidth}{#4}
+\newcommand{\zzbasictablecap}{#4}
+\newcommand{\zzbasictablelab}{tab:#3}
+\table[#2]%
+\centering%
+#5
+\tabularx{#1}{#6}
 }%
 {%
-\end{tabularx}
+\endtabularx%
 \caption{\zzbasictablecap}
 \label{\zzbasictablelab}
-\end{table*}
+\endtable%
 }%
+
+
+%%
+\usepackage{xltabular}
+% multi-page space table requires \onecolumn and \twocolumn if in twocolumn
+% document (3 in the example is number of columns)
+% ex:
+% \begin{zzvarcoltabletcollong}[\textwidth]{h}{sectiondesc}
+% {Section % description.}{\small}{|l|l|X|}
+% {\textbf{Section Id} & \textbf{Name} & \textbf{Description}}{3}
+\newenvironment{zzvarcoltabletcollong}[8][\textwidth]
+{%
+\newcommand{\zzbasictablecap}{#4}
+\newcommand{\zzbasictablelab}{tab:#3}
+#5
+\xltabular{#1}{#6}
+\caption{\zzbasictablecap}
+\label{\zzbasictablelab}\\
+  \hline
+  #7 \\
+  \hline
+\endfirsthead
+\caption[]{\zzbasictablecap\ (cont)} \\
+  \hline
+  #7 \\
+  \hline
+\endhead
+  \hline
+\multicolumn{#8}{c}{\zzbasictablecap\textit{Continue on the next page}}
+\endfoot%
+  \hline
+\endlastfoot
+}%
+{%
+\endxltabular%
+}
 
 
 
@@ -138,22 +177,6 @@
 \label{\zzvarcoltablelab}%
 \endfigure%
 }
-
-
-% \newenvironment{zzvarcoltabletcol}[5][\textwidth]%
-% {%
-% \newcommand{\zzvarcoltablelab}{tab:#2}%
-% \newcommand{\zzvarcoltablecap}{#3}%
-% \table*[ht]%
-% \centering#4%
-% \tabularx{#1}{#5}%
-% }
-% {%
-% \endtabularx%
-% \caption{\zzvarcoltablecap}%
-% \label{\zzvarcoltablelab}%
-% \endtable*%
-% }
 
 
 %% -- References
