@@ -117,8 +117,15 @@ class Table(object):
     bold_cells: List[Tuple[int, int]] = field(default=())
     """A list of row/column cells to bold."""
 
-    df_code: str = field(default=None)
+    index_col_name: str = field(default=None)
+    """If set, add an index column with the given name."""
 
+    df_code: str = field(default=None)
+    """Python code executed that manipulates the table's dataframe.  The code has a
+    local ``df`` variable and the returned value is used as the replacement.
+    This is usually a one-liner used to subset the data etc.
+
+    """
     def __post_init__(self):
         if isinstance(self.uses, str):
             self.uses = re.split(r'\s*,\s*', self.uses)
@@ -200,6 +207,12 @@ class Table(object):
         df = df.drop(columns=self.column_removes)
         if self.df_code is not None:
             df = eval(self.df_code)
+        if self.index_col_name is not None:
+            df = df.copy()
+            df[self.index_col_name] = range(1, len(df) + 1)
+            cols = df.columns.to_list()
+            cols = [cols[-1]] + cols[:-1]
+            df = df[cols]
         return df
 
     def _get_rows(self, df: pd.DataFrame) -> List[List[Any]]:
