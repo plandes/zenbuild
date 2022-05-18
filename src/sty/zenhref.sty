@@ -51,3 +51,10 @@
 \newcommand*{\zznolink}[1]{%
   {\protect\NoHyper#1\protect\endNoHyper}%
 }
+
+% anonymizing URLs
+\ifisfinal
+  \newcommand{\hrefanon}[2]{\href{#1}{#2}}
+\else
+  \newcommand{\hrefanon}[2]{\href{http://example.com/anonymous}{#2}}
+\fi
