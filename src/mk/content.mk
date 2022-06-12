@@ -3,6 +3,8 @@
 
 # URL to deploy content
 CNT_DOC_URL ?=		https://example.com/webdavroot
+#
+CNT_MOUNT_CMD ?= 	osascript -e 'tell application "Finder" to mount volume "$(CNT_DOC_URL)"'
 # if provided, the mount is skipped if the directory is found
 CNT_MOUNT_CHECK_DIR ?=
 # where source static content lives
@@ -77,7 +79,7 @@ cntmount:
 					echo "already mounted: $(CNT_MOUNT_CHECK_DIR)" ; \
 				else \
 					echo "mounting $(CNT_DOC_URL)..." ; \
-					osascript -e 'tell application "Finder" to mount volume "$(CNT_DOC_URL)"' ; \
+					$(CNT_MOUNT_CMD) ; \
 				fi \
 			fi
 
