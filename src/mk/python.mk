@@ -86,7 +86,7 @@ pydeps:			$(PY_DEP_PRE_DEPS) pydepsreqs $(PY_DEP_POST_DEPS)
 # find inconsistent dependencies
 .PHONY:			pydepcheck
 pydepcheck:
-			$(PIP_BIND) check
+			$(PIP_BIN) check
 
 # show a dependency tree (inclusion of PROJ_MODULES=git needed)
 .PHONY:			pydeptree

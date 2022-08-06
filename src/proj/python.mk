@@ -18,6 +18,9 @@ package:	pypackage
 .PHONY:		deps
 deps:		pydeps
 
+.PHONY:		deps
+depcheck:	pydepcheck
+
 .PHONY:		deptree
 deptree:	pydeptree
 
