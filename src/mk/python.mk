@@ -1,4 +1,4 @@
-## make include file for Python projects
+# make include file for Python projects
 ## PL 7/20/2018
 
 ## config
@@ -79,8 +79,14 @@ pydeppeek:
 pydepsreqs:
 			$(PIP_BIN) install $(PIP_ARGS) -r $(PY_SRC)/requirements.txt
 
+# install python dependency packages
 .PHONY:			pydeps
 pydeps:			$(PY_DEP_PRE_DEPS) pydepsreqs $(PY_DEP_POST_DEPS)
+
+# find inconsistent dependencies
+.PHONY:			pydepcheck
+pydepcheck:
+			$(PIP_BIND) check
 
 # show a dependency tree (inclusion of PROJ_MODULES=git needed)
 .PHONY:			pydeptree
