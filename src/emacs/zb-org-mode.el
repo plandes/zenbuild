@@ -112,7 +112,7 @@ INFO is optional information about the export process."
 	(unless lib-key
 	  (message "Missing item key %s--skipping" item-key))
 	(when lib-key
-	  (setq url (format "%s/site/zotero/?id=%s" host-url lib-key)
+	  (setq url (format "%s/site/zotero/?id=%s&isView=1" host-url lib-key)
 		text (format "<a href=\"%s\">%s</a>%s" url link-text
 			     some-buggy-whitesapce))
 	  (message "Replacing link %s -> %s" prev-link text))))
