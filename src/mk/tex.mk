@@ -2,7 +2,7 @@
 # created: 01/27/2011
 
 ## to include in a makefile.in
-TEX_SHOWPREV_BIN ?=	showpreview
+TEX_SHOWPREV_BIN ?=	showfile
 TEX_SHOWPREV_ARGS ?=	resize $(TEX_PDF_FILE)
 TEX_PRESENT_BIN ?=	/Applications/Présentation.app/Contents/MacOS/presentation.py
 TEX_PYTHON_BIN ?=	python
