@@ -216,7 +216,6 @@ class Table(object):
         return df
 
     def _get_rows(self, df: pd.DataFrame) -> List[List[Any]]:
-        df: pd.DataFrame = self.dataframe
         cols = [tuple(map(lambda c: f'\\textbf{{{c}}}', df.columns))]
         return it.chain(cols, map(lambda x: x[1].tolist(), df.iterrows()))
 

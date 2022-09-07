@@ -44,6 +44,10 @@ export:		texexport
 .PHONY:		show
 show:		texshow
 
+# build use macOS Preview.app to display in a specified lcoation
+.PHONY:		finalshow
+finalshow:	texfinalshow
+
 # like show, but no reposition
 .PHONY:		open
 open:		texopen
