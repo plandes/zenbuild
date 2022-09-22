@@ -4,7 +4,7 @@
 ## to include in a makefile.in
 TEX_SHOWPREV_BIN ?=	showfile
 TEX_SHOWPREV_ARGS ?=	show $(TEX_PDF_FILE)
-TEX_PRESENT_BIN ?=	/Applications/Présentation.app/Contents/MacOS/presentation.py
+TEX_PRESENT_BIN ?=	/Applications/Présentation.app
 TEX_PYTHON_BIN ?=	python
 
 ## everything else shouldn't need modifying paths
@@ -229,15 +229,11 @@ texpresentpdf:
 			fi ; \
 		done
 
-.PHONY:		texpresentshow
-texpresentshow:	texpresentpdf
-		$(TEX_SHOWPREV_BIN) $(TEX_SHOWPREV_ARGS)
-
 # present a slide deck
 .PHONY:		texpresent
 texpresent:	texpackage
 		@echo "Imporant: uncheck Mirror Mode: Sys Prefs > Display > Arragenemnt"
-		$(TEX_PYTHON_BIN) $(TEX_PRESENT_BIN) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME)-presenetation.pdf
+		open -a $(TEX_PRESENT_BIN) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME)-presenetation.pdf
 
 # create a zip file with the only the PDF as its contents
 .PHONY:		texpackage
