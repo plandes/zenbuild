@@ -9,10 +9,13 @@
 \usepackage{xspace}
 
 %% theme
+% https://deic.uab.cat/~iblanes/beamer_gallery/index_by_color.html
+% https://mirrors.rit.edu/CTAN/macros/latex/contrib/beamer-contrib/themes/metropolis/doc/metropolistheme.pdf
 \newcommand{\zsmetropolistheme}{%
   \usepackage{pgfpages}
   \usetheme{metropolis}
-  \usecolortheme{seahorse}}
+  \usecolortheme{seahorse}
+  \setbeamercolor{title separator}{fg=blue}}
 
 % academic
 \providecommand{\zsaddlogosize}{1cm}
@@ -20,10 +23,9 @@
 \logo{\includegraphics[height=\zsaddlogosize]{\theorganizationlogo}}}
 
 \newcommand{\zsaddsepcolors}{%
-\setbeamercolor{title separator}{fg=blue}}
-
 %% theme
 \setbeamercolor{postit}{fg=black,bg=lightgray}
+\setbeamercolor{frametitle}{bg=lightgray}}
 
 %% beamer env
 \makeatletter
@@ -91,12 +93,14 @@
 %% commands
 \renewcommand{\zzsec}[2][<none>]{\section{#2}\label{sec:#1}}
 
+\newcommand{\zsdemoframe}{%
+\begin{frame}[standout]
+   Demo
+\end{frame}}
+
 \newcommand{\zsquestionsframe}{%
-\begin{frame}[plain,c]{Thank You!}
-  \begin{center}
-    \Huge
-    Questions?
-  \end{center}
+\begin{frame}[standout]
+  Questions
 \end{frame}}
 
 \newcommand{\zzcitelong}[1]{\citeauthor{#1}, \citetitle{#1} \citeyear{#1}}
