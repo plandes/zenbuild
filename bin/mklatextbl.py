@@ -421,22 +421,51 @@ class TableFileManager(object):
         return tables
 
 
+@dataclass
+class Application(object):
+    _TABLE_FILE_REGEX: ClassVar[re.Pattern] = re.compile(r'^.+-table\.yml$')
+    table_path: Path
+    output_path: Path
+
+    def _process_file(self, table_file: Path, output_file: Path):
+        mng = TableFileManager(Path(table_file))
+        logger.info(f'{table_file} -> {output_file}, pkg={mng.package_name}')
+        with open(output_file, 'w') as f:
+            tab = CsvToLatexTable(mng.tables, mng.package_name, f)
+            tab.write()
+        logger.info(f'wrote {output_file}')
+
+    def __call__(self):
+        if self.table_path.is_dir() and not self.output_path.is_dir() or \
+           not self.table_path.is_dir() and self.output_path.is_dir():
+            raise ValueError(
+                'Both parameters must both be either files or directories')
+        if self.table_path.is_dir():
+            tfiles = filter(lambda p: self._TABLE_FILE_REGEX.match(p.name),
+                            self.table_path.iterdir())
+            tfile: Path
+            for tfile in tfiles:
+                ofile: Path = self.output_path / f'{tfile.stem}.sty'
+                self._process_file(tfile, ofile)
+        else:
+            self._process_file(self.table_path, self.output_path)
+
+
 @plac.annotations(
-    table_path=('The table definitions YAML path location.',
+    table_path=('The table definitions YAML path location or directory.',
                 'positional', None, str),
-    output_file=('The output file .sty file.', 'positional', None, str))
-def write_latex_table(table_path, output_file):
-    """Generate Latex tables in a .sty file from CSV files.  The paths to the CSV
-    files to create tables from and their metadata is given as a YAML
-    configuration file."""
-    logging.basicConfig(level=logging.INFO,
-                        format='mklatextbl: %(message)s')
-    mng = TableFileManager(Path(table_path))
-    logger.info(f'preparing package {mng.package_name}')
-    with open(output_file, 'w') as f:
-        tab = CsvToLatexTable(mng.tables, mng.package_name, f)
-        tab.write()
-    logger.info(f'wrote {output_file}')
+    output_path=('The output file .sty file or directory.',
+                 'positional', None, str))
+def write_latex_table(table_path, output_path):
+    """Generate Latex tables in a .sty file from CSV files.  The paths to the
+    CSV files to create tables from and their metadata is given as a YAML
+    configuration file.  Paraemters are both files or both directories.  When
+    using directories, only files that match *-table.yml are considered.
+
+    """
+    logging.basicConfig(level=logging.INFO, format='mklatextbl: %(message)s')
+    app = Application(*map(Path, (table_path, output_path)))
+    app()
 
 
 if __name__ == '__main__':
