@@ -19,7 +19,7 @@ Example::
 """
 __author__ = 'Paul Landes'
 
-from typing import Dict, List, Sequence, Set, Union, Tuple, Any
+from typing import Dict, List, Sequence, Set, Union, Tuple, Any, ClassVar
 from dataclasses import dataclass, field
 import sys
 import logging
@@ -39,10 +39,22 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
+class VariableParam(object):
+    name: str = field()
+    index_format: str = field(default='#{index}')
+    value_format: str = field(default='\\{val}')
+
+
+@dataclass
 class Table(object):
     """Generates a Zensols styled Latex table from a CSV file.
 
     """
+    _VARIABLE: ClassVar[str] = 'VAR'
+    _VARIABLE_ATTRIBUTES: ClassVar[Tuple[VariableParam]] = (
+        VariableParam('placement'),
+        VariableParam('size'))
+
     path: str = field()
     """The path to the CSV file to make a latex table."""
 
@@ -54,9 +66,6 @@ class Table(object):
 
     placement: str = field(default=None)
     """The placement of the table."""
-
-    placement_number: int = field(default=1)
-    """The number of the placement argument to pass in the Latex command."""
 
     size: str = field(default='normalsize')
     """The size of the table, and one of::
@@ -159,41 +168,49 @@ class Table(object):
         cols = '|' + '|'.join(cols) + '|'
         return cols
 
-    @property
-    def is_placement_variable(self) -> bool:
-        return self.placement == 'VAR'
+    def get_cmd_args(self, add_brackets: bool) -> Dict[str, str]:
+        args = {}
+        var: VariableParam
+        for i, var in enumerate(self._VARIABLE_ATTRIBUTES):
+            attr: str = var.name
+            val = getattr(self, attr)
+            if val is None:
+                val = ''
+            elif val == self._VARIABLE:
+                val = var.index_format.format(index=(i + 1), val=val, var=var)
+            else:
+                val = var.value_format.format(index=(i + 1), val=val, var=var)
+            if add_brackets and len(val) > 0:
+                val = f'[{val}]'
+            args[attr] = val
+        return args
 
-    def _placement_param(self, add_brackets: bool = True) -> str:
-        if self.placement is None:
-            placement = ''
-        elif self.is_placement_variable:
-            arg_num = self.placement_number
-            placement = f'#{arg_num}'
-        else:
-            placement = self.placement
-        if add_brackets and len(placement) > 0:
-            placement = f'[{placement}]'
-        return placement
-
     @property
-    def params(self) -> Dict[str, str]:
+    @persisted('_var_args')
+    def var_args(self) -> Tuple[str]:
+        var = tuple(map(lambda a: (a, getattr(self, a.name)),
+                        self._VARIABLE_ATTRIBUTES))
+        return tuple(map(lambda x: x[0],
+                         filter(lambda x: x[1] == self._VARIABLE, var)))
+
+    def get_params(self, add_brackets: bool) -> Dict[str, str]:
         """Return the parameters used for creating the table.
 
         """
-        return {'tabname': self.name,
-                'latex_environment': self.latex_environment,
-                'caption': self.caption,
-                'placement': self._placement_param(),
-                'columns': self.columns,
-                'size': self.size}
+        params = {'tabname': self.name,
+                  'latex_environment': self.latex_environment,
+                  'caption': self.caption,
+                  'columns': self.columns}
+        params.update(self.get_cmd_args(add_brackets))
+        return params
 
     @property
     def header(self) -> str:
         """Return the Latex environment header.
 
         """
-        return """\\begin{%(latex_environment)s}%(placement)s{%(tabname)s}%%
-{%(caption)s}{\\%(size)s}{%(columns)s}""" % self.params
+        return """\\begin{%(latex_environment)s}[%(placement)s]{%(tabname)s}%%
+{%(caption)s}{%(size)s}{%(columns)s}""" % self.get_params(False)
 
     @property
     @persisted('_dataframe')
@@ -239,8 +256,11 @@ class Table(object):
         data = self._get_rows(df)
         params: Dict[str, Any] = self._get_tabulate_params()
         lines = tabulate(data, **params).split('\n')
-        params = dict(self.params)
-        params['cvars'] = '[1]' if self.is_placement_variable else ''
+        params = dict(self.get_params(True))
+        params['cvars'] = ''
+        n_var_args = len(self.var_args)
+        if n_var_args > 0:
+            params['cvars'] = f'[{n_var_args}]'
         writer.write('\n\\newcommand{\\%(tabname)s}%(cvars)s{%%\n' % params)
         writer.write(self.header)
         writer.write('\n')
@@ -270,12 +290,11 @@ class SlackTable(Table):
 
     @property
     def header(self) -> str:
-        params = self.params
+        params = self.get_params(False)
         width = '\\columnwidth' if self.single_column else '\\textwidth'
         params['width'] = width
-        params['placement'] = self._placement_param(False)
         return """\\begin{%(latex_environment)s}[%(width)s]{%(placement)s}{%(tabname)s}{%(caption)s}%%
-{\\%(size)s}{%(columns)s}""" % params
+{%(size)s}{%(columns)s}""" % params
 
     @property
     def columns(self) -> str:
