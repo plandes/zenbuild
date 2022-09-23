@@ -5,36 +5,86 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenunfloat}[9/11/2022 Redefined commands as non-floats]
 
+\RequirePackage{kvoptions}
+\DeclareBoolOption{usecaptions}
+\DeclareStringOption[small]{fontsize}
+\ProcessKeyvalOptions*
+
+\ifzenunfloat@usecaptions
+  % required for specifying captions to tables and figures
+  \usepackage[font=\zenunfloat@fontsize,labelfont=bf]{caption}
+
+  \newcommand{\zufigcaption}[2]{%
+    \captionof{figure}{#2}%
+    \label{fig:#1}}
+
+  \newcommand{\zutabcaption}[2]{%
+    \captionof{table}{#2}%
+    \label{fig:#1}}
+\else
+  \newcommand{\zufigcaption}[2]{}
+  \newcommand{\zutabcaption}[2]{}
+\fi
+
+
 \@ifpackageloaded{zenfig}{%
-% same as \zzfigurect but provides a first argument for placement
-% ex: \zzfiguretcp{t}{some-graphic}{Some description}
 \renewcommand{\zzfiguretcp}[4][\textwidth]{%
 \begin{center}
 \includegraphics[width=#1]{#3.eps}
-\captionof{figure}{#4}
-\label{fig:#3}
+\zufigcaption{#3}{#4}
 \end{center}
 }%zzfigtcp
 }%ifpackgeloaded
 {}
 
 \@ifpackageloaded{zentable}{%
-%% basic table
-% ex: \begin{zztable}{results}{Results}{\small}{|l|l}
 \renewenvironment{zztable}[5][ht]%
 {%
 \newcommand{\zzbasictablecap}{#3}
 \newcommand{\zzbasictablelab}{tab:#2}
-%\begin{table}[#1]
 #4
 \begin{center}
 \begin{tabular}{#5}
 }{%
 \end{tabular}
-\captionof{table}{\zzbasictablecap}
-\label{\zzbasictablelab}
+\zutabcaption{\zzbasictablelab}{\zzbasictablecap}
 \end{center}
-%\end{table}
 }%zztable
+
+\renewenvironment{zzvarcolfigure}[6][\textwidth]%
+{%
+\newcommand{\zzvarcoltablelab}{fig:#3}%
+\newcommand{\zzvarcoltablecap}{#4}%
+#5%
+\tabularx{#1}{#6}%
 }
+{%
+\endtabularx%
+\zutabcaption{\zzvarcoltablelab}{\zzvarcoltablecap}
+}
+
+\renewenvironment{zzvarcoltable}[6][\textwidth]%
+{%
+\newcommand{\zzvarcoltablelab}{tab:#3}%
+\newcommand{\zzvarcoltablecap}{#4}%
+#5%
+\tabularx{#1}{#6}%
+}
+{%
+\endtabularx%
+\zutabcaption{\zzvarcoltablelab}{\zzvarcoltablecap}
+}
+%
+\renewenvironment{zztabletcolplace}[5][ht!]%
+{%
+\newcommand{\zzbasictablecap}{#3}
+\newcommand{\zzbasictablelab}{tab:#2}
+#4
+\begin{tabular}{#5}
+}%
+{%
+\end{tabular}
+\zutabcaption{\zzbasictablelab}{\zzbasictablecap}
+}%
+}%ifpackageloaded
 {}
