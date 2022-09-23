@@ -23,9 +23,8 @@ textabinfo:
 
 .PHONY:		textab
 textab:
-		@echo "recreating $(TEX_TAB_STYS)"
-		rm -f $(TEX_TAB_STYS)
-		make $(TEX_TAB_STYS)
+		@echo "creating $(TEX_TAB_STYS)"
+		$(TEX_TAB_BIN) $(TEX_TAB_DIR) $(TEX_LAT_PATH)
 
 %-table.sty:	$(TEX_TAB_DIR)/$(@F) $(TEX_MTARG_FILE)
-		$(TEX_TAB_BIN) $(TEX_TAB_DIR)/$(*F)-table.yml $(@D)/$(*F)-table.sty
+		make textab
