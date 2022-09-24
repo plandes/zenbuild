@@ -28,6 +28,13 @@
 
 
 \@ifpackageloaded{zenfig}{%
+\renewcommand{\zzfigure}[4][h!]{%
+\begin{center}
+\includegraphics[width=#2]{#3.eps}
+\zufigcaption{#3}{#4}
+\end{center}
+}
+
 \renewcommand{\zzfiguretcp}[4][\textwidth]{%
 \begin{center}
 \includegraphics[width=#1]{#3.eps}
