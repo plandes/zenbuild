@@ -20,7 +20,10 @@
 
   \newcommand{\zutabcaption}[2]{%
     \captionof{table}{#2}%
-    \label{fig:#1}}
+    \label{#1}}
+
+  \renewcommand{\zzseefig}[1]{(\zzfigref{#1})}
+  \renewcommand{\zzseetab}[1]{(\zztabref{#1})}
 \else
   \newcommand{\zufigcaption}[2]{}
   \newcommand{\zutabcaption}[2]{}
