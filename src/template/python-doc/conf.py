@@ -34,16 +34,18 @@ release = version
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx_rtd_theme',
+    # doc string processing
     'sphinx.ext.autodoc',
     'sphinx_autodoc_typehints',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
+
+    # add view code button
     'sphinx.ext.viewcode',
 
+    'sphinx_copybutton',
+
     # inheritance diagrams
-    # 'sphinx.ext.graphviz',
-    # 'sphinx.ext.inheritance_diagram',
     'btd.sphinx.graphviz',
     'btd.sphinx.inheritance_diagram',
 
@@ -62,8 +64,22 @@ autodoc_default_options = {
     'special-members': True,
 }
 
-# make more readable
-inheritance_graph_attrs = dict(rankdir="TB", size='""')
+# make more inheritance diagrams more readable
+inheritance_node_attrs = dict(
+    color='grey60',
+    fontcolor='red',
+    fontsize=14,
+    penwidth=2,
+)
+inheritance_edge_attrs = dict(
+    color='grey60',
+    fontcolor='red',
+    penwidth=2,
+)
+inheritance_graph_attrs = dict(
+    bgcolor='grey8',
+    rankdir="TB", size='"9.0, 8.0"',
+    ratio='compress')
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -91,7 +107,8 @@ latex_engine = 'xelatex'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+#html_theme = 'sphinx_rtd_theme'
+html_theme = 'furo'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -131,8 +148,12 @@ def maybe_skip_member(app, what, name, obj, skip, options):
 def setup(app):
     app.add_config_value('recommonmark_config', {
         'url_resolver': lambda url: link_doc_root + url,
-        'auto_toc_tree_section': 'Table of Contents',
+        'enable_auto_toc_tree': True,
+        'auto_toc_tree_section': 'Contents',
         'auto_toc_maxdepth': 4,
+        'autosectionlabel_maxdepth': 4,
+        'enable_math': True,
+        'enable_inline_math': True,
     }, True)
     app.add_transform(AutoStructify)
     app.connect('autodoc-skip-member', maybe_skip_member)
