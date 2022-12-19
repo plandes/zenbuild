@@ -33,7 +33,7 @@
 
 
 %% -- Commands
-\newenvironment{zzexample}[2]%
+\newenvironment{zzmathexample}[2]%
 {%
 \zzequations{#1}
 \begin{\framevar}
@@ -72,11 +72,8 @@
 
 % \zzsimpleequationalign{label}
 \newenvironment{zzsimpleequationalign}[1]%
-{\begin{align}
-\label{eq:#1}
-}%
-{%
-\end{align}}
+{\align\label{eq:#1}}
+{\endalign}
 
 
 % envs
@@ -188,3 +185,8 @@
 \newenvironment{algocase}%
 {\begin{enumerate}[label=(\roman*)]}%
 {\end{enumerate}}
+
+% -- Machine learning
+% "defined as"
+\newcommand{\zzmathdef}{\triangleq}
+%  \mathrel{\ensurestackMath{\stackon[1pt]{=}{\scriptstyle\Delta}}}}
