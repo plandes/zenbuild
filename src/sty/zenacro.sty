@@ -269,7 +269,7 @@
 % print class of acros (not for client use)
 \newcommand{\zzprintclass}[3]{%
   \zzsecaddtoc{#1}{#3}{acro:#1}{false}%
-  \printacronyms[include-classes=#2, name=#3]}
+  \printacronyms[include-classes=#2, heading=#1*, name=#3]}
 
 % print the abbreviations list and add toc entry
 \newcommand{\zzprintabbrevs}[1][section]{\zzprintclass{#1}{abbrev}{Abbreviations}}
