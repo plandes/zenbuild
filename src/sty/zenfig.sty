@@ -4,11 +4,22 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenfig}[2018/05/06 Elements: figures, listings, tables, references]
+\RequirePackage{kvoptions}
+
+\DeclareBoolOption{disable}
+\ProcessKeyvalOptions*
 
 \usepackage{graphicx}
 \usepackage{float}
 
-\ifx\zenfigdisable\undefined%
+\ifzenfig@disable
+\newcommand{\zzfigdisabled}[1]{{\it Figures disabled (#1).}}
+\providecommand{\zzfigure}[4][h!]{\zzfigdisabled{#3}\label{fig:#3}}
+\providecommand{\zzfiguretc}[3][\textwidth]{\zzfigdisabled{#2}\label{fig:#2}}
+\providecommand{\zzfigurerast}[4]{\zzfigdisabled{#2}\label{fig:#2}}
+\providecommand{\zzfiguretcp}[4]{\zzfigdisabled{#2}\label{fig:#2}}
+\providecommand{\zzfigurerasttcp}[5]{\zzfigdisabled{#2}\label{fig:#2}}
+\else
 %% -- style
 % ex:
 % \zzfigure{\textwidth}{filename}{the caption}
@@ -74,13 +85,6 @@
 \caption{#5}%
 \label{fig:#3}
 \end{figure*}}
-\else
-\newcommand{\zzfigdisabled}[1]{{\it Figures disabled (#1).}}
-\providecommand{\zzfigure}[4][h!]{<\zzfigdisabled{#3}>\label{fig:#3}}
-\providecommand{\zzfiguretc}[3][\textwidth]{\zzfigdisabled{#2}\label{fig:#2}}
-\providecommand{\zzfigurerast}[4]{\zzfigdisabled{#2}\label{fig:#2}}
-\providecommand{\zzfiguretcp}[4]{\zzfigdisabled{#2}\label{fig:#2}}
-\providecommand{\zzfigurerasttcp}[5]{\zzfigdisabled{#2}\label{fig:#2}}
 \fi
 
 % toc names
