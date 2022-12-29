@@ -29,6 +29,7 @@
 \newcommand{\zzpart}[2]{\part*{#2}\label{sec:#1}%
 \addcontentsline{toc}{part}{#2}}
 
+\newcommand{\zzchap}[2]{\chapter{#2}\label{chap:#1}}
 \newcommand{\zzsec}[2]{\section{#2}\label{sec:#1}}
 \newcommand{\zzsubsec}[2]{\subsection{#2}\label{sec:#1}}
 \newcommand{\zzsubsubsec}[2]{\subsubsection{#2}\label{sec:#1}}
@@ -36,6 +37,9 @@
 
 
 %% -- References
+\newcommand{\zzchapref}[1]{Chapter~\ref{chap:#1}}
+\newcommand{\zzseechap}[1]{(see \zzchapref{#1})}
+\newcommand{\zzchapnameref}[1]{\nameref{chap:#1}}
 \newcommand{\zzsecref}[1]{Section~\ref{sec:#1}}
 \newcommand{\zzseesec}[1]{(see \zzsecref{#1})}
 \newcommand{\zzsecnameref}[1]{\nameref{sec:#1}}
