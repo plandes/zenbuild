@@ -120,6 +120,7 @@
 \newcommand{\zzdefnamedclassacro}[7][default]{%
 \DeclareAcronym{#2}{
   short={\zzacroshortlink{#3}},
+  short-plural-form={\zzacroshortlink{#2s}},
   long={#4},
   first-style=#1,
   class=#5,
@@ -171,6 +172,7 @@
 \newcommand{\zzdefdef}[3]{%
 \DeclareAcronym{#1}{
   short={\zzacroshortlink{#2}},
+  short-plural-form={\zzacroshortlink{#2s}},
   long={\xmakefirstuc{#3}.},
   first-style=zznobrack,
   first-long-format=\normalfont,
@@ -183,6 +185,7 @@
 \newcommand{\zzdefdefverbatim}[3]{%
 \DeclareAcronym{#1}{
   short={\zzacroshortlink{#2}},
+  short-plural-form={\zzacroshortlink{#2s}},
   long={{#3}},
   first-style=zznobrack,
   first-long-format=\normalfont,
@@ -242,6 +245,7 @@
 \newcommand{\zzdefintroacrodef}[4]{%
 \DeclareAcronym{#1}{
   short={\zzacroshortlink{#2}},
+  short-plural-form={\zzacroshortlink{#2s}},
   long={#3},
   first-long-format=\normalfont,
   list={#4},
