@@ -75,6 +75,18 @@
 {\align\label{eq:#1}}
 {\endalign}
 
+\usepackage{amsmath}
+% let set of variables
+\newenvironment{zzletlist}{
+\noindent\textit{Let:}
+\begin{list}{\tiny$\bullet$}{
+  \setlength{\topsep}{0pt}
+  \setlength{\partopsep}{0pt}
+  \setlength{\itemsep}{4pt}
+  \setlength{\parskip}{4pt}
+  \setlength{\parsep}{0pt}
+  \setlength{\leftmargin}{.2in}
+}}{\end{list}}
 
 % envs
 

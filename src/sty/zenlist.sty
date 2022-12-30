@@ -42,19 +42,6 @@
 \begin{zzpackedenumlen}{0pt}{0pt}{2pt}{0pt}}
 {\end{zzpackedenumlen}}
 
-% nice for a math let set of variables
-\newenvironment{zzletlist}{
-\noindent
-Let:
-\begin{list}{}{
-  \setlength{\topsep}{0pt}
-  \setlength{\partopsep}{0pt}
-  \setlength{\itemsep}{5pt}
-  \setlength{\parskip}{5pt}
-  \setlength{\parsep}{0pt}
-  \setlength{\leftmargin}{.2in}
-}}{\end{list}}
-
 \newenvironment{zzdescribebylist}[1]{
 \noindent
 #1:
@@ -98,7 +85,7 @@ Let:
 % horizontal enumerate (inline list) with letters: a) one b) two...
 % usage: \begin{zzenumerateinline} or \begin{zzenumerateinline}[\Alph]
 \newenvironment{zzenumerateinline}[1][\alph*\upshape)]
-{\begin{enumerate*}[label=#1, itemjoin={,\ }, itemjoin*={, and\ }]}
+{\begin{enumerate*}[label=#1, itemjoin={,\ }, itemjoin*={, and\ }, afterlabel={}, after={.}]}
 {\end{enumerate*}}
 
 % horizontal itemize inline comma separated list
