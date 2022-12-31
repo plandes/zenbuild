@@ -5,19 +5,24 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenmath}[5/06/2018 Math notation]
 
-
 %% -- Math
 %% https://en.wikibooks.org/wiki/LaTeX/Algorithms
 \providecommand{\zzalgoconfig}{linesnumbered,lined,boxed,commentsnumbered}
 
 \providecommand{\framevar}{oframed}
 
-\usepackage{amsthm}
-\usepackage{amssymb}
-\usepackage{amsmath}
 \usepackage{framed}
 \usepackage[\zzalgoconfig]{algorithm2e}
 \usepackage{latexsym}
+
+%% fonts
+%
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{bm}
+% commonly defined Zapf Chancery
+\DeclareMathAlphabet{\mathpzc}{T1}{pzc}{m}{it}
 
 
 %% -- Equation listing
@@ -78,7 +83,7 @@
 \usepackage{amsmath}
 % let set of variables
 \newenvironment{zzletlist}{
-\noindent\textit{Let:}
+\noindent$\mathpzc{Let}$:
 \begin{list}{\tiny$\bullet$}{
   \setlength{\topsep}{0pt}
   \setlength{\partopsep}{0pt}
