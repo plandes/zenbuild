@@ -229,12 +229,28 @@ where:%
 {\begin{enumerate}[label=(\roman*)]}%
 {\end{enumerate}}
 
+
+%% Fonts
+%
+% "A Short Guide to Typesetting Math in NLP Papers"
+% http://demo.clab.cs.cmu.edu/cdyer/short-guide-typesetting.pdf
+\newcommand{\zmgraph}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\zmset}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\zmst}[1]{\ensuremath{\bm{#1}}}
+\newcommand{\zmfunc}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\zmvec}[1]{\ensuremath{\mathbf{#1}}}
+% how do we to enforce Greek letters?
+\newcommand{\zmhyper}[1]{\ensuremath{\mathbf{#1}}}
+
+
 %% Machine learning
+%
 % "defined as"
 \newcommand{\zmdef}{\hspace{2px}\triangleq\hspace{2px}}
 %  \mathrel{\ensurestackMath{\stackon[1pt]{=}{\scriptstyle\Delta}}}}
 
 
 %% Indicator function
+%
 \usepackage{dsfont}
 \newcommand{\1}[2][]{\ensuremath{\mathds{1}_{#1}\hspace{-2px}\left[{#2}\right]}}
