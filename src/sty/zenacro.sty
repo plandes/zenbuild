@@ -175,9 +175,7 @@
 \DeclareAcronym{#1}{
   short={\zzacroshortlink{#2}},
   short-plural-form={\zzacroshortlink{#2s}},
-  % string to use when hyperref warns "Token not allowed" for bookmarks
-  long={{\texorpdfstring{\xmakefirstuc{#3}}{#3}.}},
-%  long={\texorpdfstring{\xmakefirstuc{#3}}.},
+  long={\xmakefirstuc{#3}.},
   first-style=zznobrack,
   first-long-format=\normalfont,
   class=def
@@ -206,8 +204,7 @@
 \DeclareAcronym{#1}{
   short={\zzacroshortlink{#2}},
   short-plural-form={\zzacroshortlink{#3}},
-  % string to use when hyperref warns "Token not allowed" for bookmarks
-  long={\texorpdfstring{\xmakefirstuc{#4}}{#4}.},
+  long={\xmakefirstuc{#4}.},
   first-style=zznobrack,
   first-long-format=\normalfont,
   class=def
@@ -226,14 +223,9 @@
   short={\zzacroshortlink{#2}},
   short-plural-form={\zzacroshortlink{\hyperlink{#1}{#2}}},
   alt={#3},
-  % this creates href warnings that seem to not be available, looks like acro
-  % is substituting characters that make it all the way to the \hyperlink
-  % command
   long={\zzacrolong{#1}{#2}{#4}},
-  %long={#2 (#4)},
   long-plural-form={\zzacrowhlong{#1}{#2}{#4}},
-  % string to use when hyperref warns "Token not allowed" for bookmarks
-  list={\texorpdfstring{\xmakefirstuc{#4}}{#4}.  {#5}},
+  list={\xmakefirstuc{#4}.  {#5}},
   first-long-format=\normalfont,
   first-style=\zzacrofirststyle,
   class=def
@@ -258,8 +250,7 @@
   short-plural-form={\zzacroshortlink{#2s}},
   long={#3},
   first-long-format=\normalfont,
-  % string to use when hyperref warns "Token not allowed" for bookmarks
-  list={\texorpdfstring{#4}{#4}},
+  list={#4},
   class=def
 }%
 \zzexpandacrocmd{#1}{#2}{#3}}
