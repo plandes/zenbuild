@@ -3,9 +3,9 @@
 ## includes
 include $(BUILD_MK_DIR)/tex.mk
 
-# run to find issues otherwise dropped
+# run to find issues otherwise dropped; run show after since errors stop make
 .PHONY:		debug
-debug:		texdebug
+debug:		texdebugshow
 
 # re-compile quickly (for references, use `package`)
 .PHONY:		compile

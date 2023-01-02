@@ -1,13 +1,19 @@
 # latex document creation make file
 # created: 01/27/2011
 
-## to include in a makefile.in
+
+## Binary setup
+#
+# to include in a makefile.in
 TEX_SHOWPREV_BIN ?=	showfile
 TEX_SHOWPREV_ARGS ?=	show $(TEX_PDF_FILE)
 TEX_PRESENT_BIN ?=	/Applications/Présentation.app
 TEX_PYTHON_BIN ?=	python
 
-## everything else shouldn't need modifying paths
+
+## Latex command
+#
+# should not need to modify these path variables
 TEX_nullstr=
 TEX_space=		$(TEX_nullstr) $(TEX_nullstr)
 TEX_PATH +=		$(BUILD_SRC_DIR)/sty $(abspath ./sty)
@@ -17,31 +23,38 @@ TEX_PATHSTR =		$(subst $(TEX_space),:,$(TEX_PATH_MTARG))
 # trailing colon needed
 TEX_TPATH =		TEXINPUTS=$(TEX_PATHSTR):
 TEX_PDFLAT_ARGS +=
-TEX_LATEX_CMD ?=	$(TEX_TPATH) pdflatex -output-directory $(TEX_LAT_PATH) $(TEX_PDFLAT_ARGS)
+TEX_ENV +=
+# latex command command
+TEX_LATEX_CMD ?=	$(TEX_TPATH) $(TEX_ENV) pdflatex -output-directory $(TEX_LAT_PATH) $(TEX_PDFLAT_ARGS)
 
+
+## Deployment configuration
+#
 # install/distribution
 TEX_INSTALL_DIR ?=	$(HOME)/Desktop
 TEX_INSTALL_PDF ?=	$(TEX_INSTALL_DIR)/$(FINAL_NAME).pdf
 TEX_INSTALL_ZIP ?=	$(TEX_INSTALL_DIR)/$(FINAL_NAME).zip
-
-# paths
-TEX_CACHE_DIR ?= 	$(abspath ../cache)
-TEX_IMG_DIR ?=		$(abspath ../image)
-TEX_IMGC_DIR ?=		$(TEX_CACHE_DIR)/image
-TEX_CONF_DIR ?=		$(abspath ../config)
 
 # package
 TEX_PKG_DIR ?=		$(MTARG)/pkg
 TEX_PKG_FINAL_DIR ?= 	$(TEX_PKG_DIR)/$(FINAL_NAME)
 TEX_PKG_ADD +=
 
-# file deps
+
+## Derived object dependency paths
+#
+TEX_CACHE_DIR ?= 	$(abspath ../cache)
+TEX_IMG_DIR ?=		$(abspath ../image)
+TEX_IMGC_DIR ?=		$(TEX_CACHE_DIR)/image
+TEX_CONF_DIR ?=		$(abspath ../config)
+
+# image file dependencies
 TEX_IMG_EPS =		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.eps)))
 TEX_IMG_PNG =		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.png)))
 TEX_IMG_JPG =		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.jpg)))
 TEX_IMAGES =		$(TEX_IMG_EPS) $(TEX_IMG_PNG) $(TEX_IMG_JPG)
 
-# files
+# target files
 TEX_LATEX_FILE =	$(TEX_LAT_PATH)/$(TEX).tex
 TEX_PDF_FILE =		$(TEX_LAT_PATH)/$(TEX).pdf
 TEX_MTARG_FILE =	$(TEX_LAT_PATH)/mtarg.txt
@@ -56,23 +69,23 @@ TEX_PRE_COMP_DEPS +=	$(TEX_IMAGES)
 COMP_DEPS +=		$(TEX_MTARG_FILE) $(TEX_LATEX_FILE) $(TEX_ADD_LATEX_DEPS) \
 				$(TEX_PRE_COMP_DEPS) $(TEX_PRERUN_FILE)
 
-# control verbosity
-TEX_QUIET ?=		1
-ifeq ($(TEX_QUIET),1)
+## Verbosity and debugging
+#
+TEX_DEBUG ?=		0
+ifeq ($(TEX_DEBUG),0)
 # https://tex.stackexchange.com/questions/1191/reducing-the-console-output-of-latex
 TEX_PDFLAT_ARGS +=	-interaction batchmode
 # no output at all
 TEX_QUIET_REDIR ?=	> /dev/null
+else
+# filter output in "debug mode"
+TEX_ENV +=		texfot
 endif
 
 # default init commands
 TEX_LATEX_INIT_CMD ?=	\newif\ifisfinal
 TEX_LATEX_INIT_ADD ?=
 TEX_PDFLAT_ARGS +=	'$(TEX_LATEX_INIT_CMD) $(TEX_LATEX_INIT_ADD) \input{$(TEX).tex}'
-
-# default position of Preview.app
-TEX_PREV_POS ?=		{1500, 0}
-TEX_PREV_SIZE ?=	{1400, 1600}
 
 # invokes a pre run
 TEX_INIT_RUN =
@@ -184,7 +197,7 @@ texcompile:	$(TEX_PDF_FILE)
 # "debug" the compilation process by not adding quiet flags to pdflatex
 .PHONY:		texdebug
 texdebug:
-		make TEX_QUIET=0 texforce
+		make TEX_DEBUG=1 texforce
 
 # compile and display the file using a simple open (MacOS or alias out)
 .PHONY:		texopen
@@ -199,6 +212,11 @@ texreopen:	texforce
 # show and reposition the Preview.app window (under MacOS)
 .PHONY:		texshow
 texshow:	texforce
+		$(TEX_SHOWPREV_BIN) $(TEX_SHOWPREV_ARGS)
+
+# run in "debug mode" and then show
+.PHONY:		texdebugshow
+texdebugshow:	texdebug
 		$(TEX_SHOWPREV_BIN) $(TEX_SHOWPREV_ARGS)
 
 # final version: compile twice for refs and bibliography
