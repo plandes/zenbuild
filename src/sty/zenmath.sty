@@ -39,7 +39,7 @@
 
 
 %% Commands
-\newenvironment{zzmathexample}[2]%
+\newenvironment{zmexample}[2]%
 {%
 \zzequations{#1}
 \begin{\framevar}
@@ -50,7 +50,7 @@
 \end{\framevar}}
 
 % \zzequation{label}{Equation Name In TOC}{Header Description}{Footer Content}
-\newenvironment{zzequation}[4]%
+\newenvironment{zmequation}[4]%
 {%
 \newcommand{\zzequationfoot}{\zzequations{#2}#4}%
 \begin{\framevar}
@@ -67,7 +67,7 @@
 \end{\framevar}}
 
 % \zzsimpleequation{label}
-\newenvironment{zzsimpleequation}[1]%
+\newenvironment{zmsimpleequation}[1]%
 {\begin{equation}
 \label{eq:#1}
 \begin{gathered}
@@ -77,13 +77,13 @@
 \end{equation}}
 
 % \zzsimpleequationalign{label}
-\newenvironment{zzsimpleequationalign}[1]%
+\newenvironment{zmsimpleequationalign}[1]%
 {\align\label{eq:#1}}
 {\endalign}
 
 \usepackage{amsmath}
 % let set of variables
-\newenvironment{zzletlist}[1][4pt]{
+\newenvironment{zmletlist}[1][4pt]{
 \noindent%
 $\mathpzc{Let}$:
 \begin{list}{\tiny$\bullet$}{
@@ -97,7 +97,7 @@ $\mathpzc{Let}$:
 \vspace{2\topsep+\parskip}}
 
 % "where" list: "where: x = y..."
-\newenvironment{zzwherelist}[1][4pt]{
+\newenvironment{zmwherelist}[1][4pt]{
 \noindent%
 where:%
 \begin{list}{\tiny$\bullet$}{
@@ -114,7 +114,7 @@ where:%
 
 %% ex: \begin{zzacdefinition}{01234567890}
 % \item[key item] define...
-\newenvironment{zzacdefinition}[1]
+\newenvironment{zmacdefinition}[1]
 {\begin{zzdefinitiontype}{#1}{\bf}{0cm}{0.3in}}
 {\end{zzdefinitiontype}}
 
@@ -123,18 +123,18 @@ where:%
 %\newtheorem{theorem}{Theorem}
 \renewcommand{\qedsymbol}{$\blacksquare$}
 
-\newenvironment{zztheorem}[1]%
+\newenvironment{zmtheorem}[1]%
 {\begin{theorem}
 \label{the:#1}}
 {\end{theorem}}
 
 %\newtheorem{lemma}{Lemma}
-\newenvironment{zzlemma}[1]%
+\newenvironment{zmlemma}[1]%
 {\begin{lemma}
 \label{lem:#1}}
 {\end{lemma}}
 
-\newenvironment{zzproof}[1]%
+\newenvironment{zmproof}[1]%
 {\begin{proof}
 \label{prf:#1}}
 {\end{proof}}
@@ -154,7 +154,7 @@ where:%
 
 \providecommand{\zzallabel}[1]{NOT DEFINED}
 
-\newenvironment{zzalgo}[3]%
+\newenvironment{zmalgo}[3]%
 {%
 \begin{algorithm}[#1]
 \SetKwProg{Fn}{Function}{}{end}%
@@ -173,17 +173,17 @@ where:%
 
 
 %% References
-\newcommand{\zztheoremref}[1]{Theorem~\ref{the:#1}}
-\newcommand{\zzTheoremref}[1]{\zztheoremref{#1}}
-\newcommand{\zzlemmaref}[1]{Lemma~\ref{lem:#1}}
-\newcommand{\zzLemmaref}[1]{\zzlemmaref{#1}}
-\newcommand{\zzProofref}[1]{Proof~\ref{the:#1}}
-\newcommand{\zzproofref}[1]{proof~\ref{the:#1}}
-\newcommand{\zzeqref}[1]{equation~\ref{eq:#1}}
-\newcommand{\zzEqref}[1]{Equation~\ref{eq:#1}}
-\newcommand{\zzalgoref}[1]{Algorithm~\ref{algo:#1}}
-\newcommand{\zzAlgoref}[1]{\zzalgoref{#1}}
-\newcommand{\zzseealgo}[1]{(see \zzalgoref{#1})}
+\newcommand{\zmtheoremref}[1]{Theorem~\ref{the:#1}}
+\newcommand{\zmTheoremref}[1]{\zmtheoremref{#1}}
+\newcommand{\zmlemmaref}[1]{Lemma~\ref{lem:#1}}
+\newcommand{\zmLemmaref}[1]{\zmlemmaref{#1}}
+\newcommand{\zmProofref}[1]{Proof~\ref{the:#1}}
+\newcommand{\zmproofref}[1]{proof~\ref{the:#1}}
+\newcommand{\zmeqref}[1]{equation~\ref{eq:#1}}
+\newcommand{\zmEqref}[1]{Equation~\ref{eq:#1}}
+\newcommand{\zmalgoref}[1]{Algorithm~\ref{algo:#1}}
+\newcommand{\zmAlgoref}[1]{\zmalgoref{#1}}
+\newcommand{\zmseealgo}[1]{(see \zmalgoref{#1})}
 
 
 %% Commands
@@ -193,39 +193,45 @@ where:%
 
 %% Stats/machine learning
 %
-\newcommand{\zzdf}{\triangleq}
-\newcommand{\zza}{\wedge}
-\newcommand{\zzo}{\vee}
-\newcommand{\zztd}{\mathcal D}
-\newcommand{\zzthetaest}{\hat{\theta}}
-\newcommand{\zzargmax}{\operatornamewithlimits{argmax}}
-\newcommand{\zzargmin}{\operatornamewithlimits{argmin}}
-\newcommand{\zzlikelihood}{\mathcal L}
-\newcommand{\zzlikelihoodfn}{P(\td \g \theta)}
-\newcommand{\zzlikelihoodest}{\hat{\theta}_{\text{MLE}}}
-\newcommand{\zzmapfn}{\hat{\theta}_{\text{map}}}
+\newcommand{\zma}{\wedge}
+\newcommand{\zmo}{\vee}
+\newcommand{\zmtd}{\mathcal D}
+\newcommand{\zmthetaest}{\hat{\theta}}
+\newcommand{\zmargmax}{\operatornamewithlimits{argmax}}
+\newcommand{\zmargmin}{\operatornamewithlimits{argmin}}
+\newcommand{\zmlikelihood}{\mathcal L}
+\newcommand{\zmlikelihoodfn}{P(\td \g \theta)}
+\newcommand{\zmlikelihoodest}{\hat{\theta}_{\text{MLE}}}
+\newcommand{\zmmapfn}{\hat{\theta}_{\text{map}}}
 
 
 %% Complexity
 %
-\newcommand{\optsym}{\mathcal{O}}
-\newcommand{\bigoh}[1]{\ensuremath{\optsym(#1)}}
-\newcommand{\bigtheta}[1]{\ensuremath{\Theta(#1)}}
-\newcommand{\bigomega}[1]{\ensuremath{\Omega(#1)}}
-\newcommand{\optsol}[1]{\optsym(#1)}
-\newcommand{\reduces}{\ensuremath{\leq_p}}
-\newcommand{\NPsp}{\ensuremath{\mathcal{NP}}}
-\newcommand{\Psp}{\ensuremath{\mathcal{P}}}
-\newcommand{\npc}{\textit{NP-complete}}
+\newcommand{\zmoptsym}{\mathcal{O}}
+\newcommand{\zmbigoh}[1]{\ensuremath{\optsym(#1)}}
+\newcommand{\zmbigtheta}[1]{\ensuremath{\Theta(#1)}}
+\newcommand{\zmbigomega}[1]{\ensuremath{\Omega(#1)}}
+\newcommand{\zmoptsol}[1]{\optsym(#1)}
+\newcommand{\zmreduces}{\ensuremath{\leq_p}}
+\newcommand{\zmNPsp}{\ensuremath{\mathcal{NP}}}
+\newcommand{\zmPsp}{\ensuremath{\mathcal{P}}}
+\newcommand{\zmnpc}{\textit{NP-complete}}
+
+
+%% Graph
+%
+\newcommand{\zmnetneigh}[1][n]{\ensuremath{\mathcal{N}({\bm{#1}})}}
+
 
 %% Algorithms
-\newenvironment{algocase}%
+%
+\newenvironment{zmalgocase}%
 {\begin{enumerate}[label=(\roman*)]}%
 {\end{enumerate}}
 
 %% Machine learning
 % "defined as"
-\newcommand{\zzmathdef}{\hspace{2px}\triangleq\hspace{2px}}
+\newcommand{\zmdef}{\hspace{2px}\triangleq\hspace{2px}}
 %  \mathrel{\ensurestackMath{\stackon[1pt]{=}{\scriptstyle\Delta}}}}
 
 
