@@ -82,16 +82,34 @@
 
 \usepackage{amsmath}
 % let set of variables
-\newenvironment{zzletlist}{
-\noindent$\mathpzc{Let}$:
+\newenvironment{zzletlist}[1][4pt]{
+\noindent%
+$\mathpzc{Let}$:
+\vspace{-.5\topsep}
 \begin{list}{\tiny$\bullet$}{
   \setlength{\topsep}{0pt}
   \setlength{\partopsep}{0pt}
-  \setlength{\itemsep}{4pt}
-  \setlength{\parskip}{4pt}
+  \setlength{\itemsep}{#1}
+  \setlength{\parskip}{#1}
   \setlength{\parsep}{0pt}
-  \setlength{\leftmargin}{.2in}
-}}{\end{list}}
+  \setlength{\leftmargin}{.4in}
+}}{\end{list}
+\vspace{2\topsep+\parskip}}
+
+% "where" list: "where: x = y..."
+\newenvironment{zzwherelist}[1][4pt]{
+\noindent%
+where:%
+\vspace{-.5\topsep}%
+\begin{list}{\tiny$\bullet$}{
+  \setlength{\topsep}{0pt}
+  \setlength{\partopsep}{0pt}
+  \setlength{\itemsep}{#1}
+  \setlength{\parskip}{#1}
+  \setlength{\parsep}{0pt}
+  \setlength{\leftmargin}{.4in}
+}}{\end{list}
+\vspace{\topsep+\parskip}}
 
 % envs
 
