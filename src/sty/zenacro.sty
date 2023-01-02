@@ -176,7 +176,8 @@
   short={\zzacroshortlink{#2}},
   short-plural-form={\zzacroshortlink{#2s}},
   % string to use when hyperref warns "Token not allowed" for bookmarks
-  long={\texorpdfstring{\xmakefirstuc{#3}}.},
+  long={{\texorpdfstring{\xmakefirstuc{#3}}{#3}.}},
+%  long={\texorpdfstring{\xmakefirstuc{#3}}.},
   first-style=zznobrack,
   first-long-format=\normalfont,
   class=def
@@ -206,7 +207,7 @@
   short={\zzacroshortlink{#2}},
   short-plural-form={\zzacroshortlink{#3}},
   % string to use when hyperref warns "Token not allowed" for bookmarks
-  long={\texorpdfstring{\xmakefirstuc{#4}}.},
+  long={\texorpdfstring{\xmakefirstuc{#4}}{#4}.},
   first-style=zznobrack,
   first-long-format=\normalfont,
   class=def
@@ -232,7 +233,7 @@
   %long={#2 (#4)},
   long-plural-form={\zzacrowhlong{#1}{#2}{#4}},
   % string to use when hyperref warns "Token not allowed" for bookmarks
-  list={\texorpdfstring{\xmakefirstuc{#4}}.  {#5}},
+  list={\texorpdfstring{\xmakefirstuc{#4}}{#4}.  {#5}},
   first-long-format=\normalfont,
   first-style=\zzacrofirststyle,
   class=def
