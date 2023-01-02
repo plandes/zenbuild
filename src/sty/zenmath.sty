@@ -5,7 +5,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenmath}[5/06/2018 Math notation]
 
-%% -- Math
+%% Math
 %% https://en.wikibooks.org/wiki/LaTeX/Algorithms
 \providecommand{\zzalgoconfig}{linesnumbered,lined,boxed,commentsnumbered}
 
@@ -14,6 +14,7 @@
 \usepackage{framed}
 \usepackage[\zzalgoconfig]{algorithm2e}
 \usepackage{latexsym}
+
 
 %% fonts
 %
@@ -25,7 +26,7 @@
 \DeclareMathAlphabet{\mathpzc}{T1}{pzc}{m}{it}
 
 
-%% -- Equation listing
+%% Equation listing
 % equation listing not supported in beamer
 \newcommand{\zzlistequations}{%
 \usepackage{tocloft}
@@ -37,7 +38,7 @@
 
 
 
-%% -- Commands
+%% Commands
 \newenvironment{zzmathexample}[2]%
 {%
 \zzequations{#1}
@@ -85,7 +86,6 @@
 \newenvironment{zzletlist}[1][4pt]{
 \noindent%
 $\mathpzc{Let}$:
-\vspace{-.5\topsep}
 \begin{list}{\tiny$\bullet$}{
   \setlength{\topsep}{0pt}
   \setlength{\partopsep}{0pt}
@@ -100,7 +100,6 @@ $\mathpzc{Let}$:
 \newenvironment{zzwherelist}[1][4pt]{
 \noindent%
 where:%
-\vspace{-.5\topsep}%
 \begin{list}{\tiny$\bullet$}{
   \setlength{\topsep}{0pt}
   \setlength{\partopsep}{0pt}
@@ -173,7 +172,7 @@ where:%
 
 
 
-%% -- References
+%% References
 \newcommand{\zztheoremref}[1]{Theorem~\ref{the:#1}}
 \newcommand{\zzTheoremref}[1]{\zztheoremref{#1}}
 \newcommand{\zzlemmaref}[1]{Lemma~\ref{lem:#1}}
@@ -187,11 +186,13 @@ where:%
 \newcommand{\zzseealgo}[1]{(see \zzalgoref{#1})}
 
 
-%% -- Commands
+%% Commands
+%
 \newcommand{\zztrans}{\ensuremath{^{\scriptscriptstyle\mathsf{T}}}}
 
 
-%% -- Stats/machine learning
+%% Stats/machine learning
+%
 \newcommand{\zzdf}{\triangleq}
 \newcommand{\zza}{\wedge}
 \newcommand{\zzo}{\vee}
@@ -205,7 +206,8 @@ where:%
 \newcommand{\zzmapfn}{\hat{\theta}_{\text{map}}}
 
 
-% -- Complexity
+%% Complexity
+%
 \newcommand{\optsym}{\mathcal{O}}
 \newcommand{\bigoh}[1]{\ensuremath{\optsym(#1)}}
 \newcommand{\bigtheta}[1]{\ensuremath{\Theta(#1)}}
@@ -216,12 +218,17 @@ where:%
 \newcommand{\Psp}{\ensuremath{\mathcal{P}}}
 \newcommand{\npc}{\textit{NP-complete}}
 
-% -- Algorithms
+%% Algorithms
 \newenvironment{algocase}%
 {\begin{enumerate}[label=(\roman*)]}%
 {\end{enumerate}}
 
-% -- Machine learning
+%% Machine learning
 % "defined as"
-\newcommand{\zzmathdef}{\triangleq}
+\newcommand{\zzmathdef}{\hspace{2px}\triangleq\hspace{2px}}
 %  \mathrel{\ensurestackMath{\stackon[1pt]{=}{\scriptstyle\Delta}}}}
+
+
+%% Indicator function
+\usepackage{dsfont}
+\newcommand{\1}[2][]{\ensuremath{\mathds{1}_{#1}\hspace{-2px}\left[{#2}\right]}}
