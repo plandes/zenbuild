@@ -27,6 +27,9 @@
   pages=first,
   only-used=true}%
 
+% allow disable of \texorpdfstring when not defined
+\newcommand{\zzacrotexorpdfstring}[2]{\texorpdfstring{#1}{#2}}
+
 % overridden command when disabling links; default to identity for hypertext
 % color
 \newcommand{\zzacroshortlink}[1]{#1}
@@ -49,7 +52,8 @@
 \expandafter\renewcommand\csname zzexpandacrowrap\endcsname[1]{##1}
 % disable hyperlink creation
 \renewcommand{\zzacrolong}[3]{{##2 (##3)}}
-\renewcommand{\zzacrowhlong}[3]{##2, which is {##3}}}
+\renewcommand{\zzacrowhlong}[3]{##2, which is {##3}}
+\renewcommand{\zzacrotexorpdfstring}[2]{##1}}
 
 \ifzenacro@nouseindex
 \else
@@ -175,7 +179,7 @@
 \DeclareAcronym{#1}{
   short={\zzacroshortlink{#2}},
   short-plural-form={\zzacroshortlink{#2s}},
-  long={\texorpdfstring{\xmakefirstuc{#3}}{#3}.},
+  long={\zzacrotexorpdfstring{\xmakefirstuc{#3}}{#3}.},
   first-style=zznobrack,
   first-long-format=\normalfont,
   class=def
@@ -188,7 +192,7 @@
 \DeclareAcronym{#1}{
   short={\zzacroshortlink{#2}},
   short-plural-form={\zzacroshortlink{#2s}},
-  long={{\texorpdfstring{#3}{#3}}},
+  long={{\zzacrotexorpdfstring{#3}{#3}}},
   first-style=zznobrack,
   first-long-format=\normalfont,
   class=def
@@ -204,7 +208,7 @@
 \DeclareAcronym{#1}{
   short={\zzacroshortlink{#2}},
   short-plural-form={\zzacroshortlink{#3}},
-  long={\texorpdfstring{\xmakefirstuc{#4}}{#4}},
+  long={\zzacrotexorpdfstring{\xmakefirstuc{#4}}{#4}},
   first-style=zznobrack,
   first-long-format=\normalfont,
   class=def
