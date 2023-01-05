@@ -27,10 +27,10 @@ fi
 
 echo "installing libraries for Python documentation"
 # pin sphinx version since 3.4 has error: search page freezes
-for i in 'sphinx==3.3.1' recommonmark rst2pdf furo \
-			 sphinx-autodoc-typehints sphinx-copybutton \
-			 btd.sphinx.graphviz \
-			 btd.sphinx.inheritance_diagram ; do
+for i in sphinx recommonmark rst2pdf furo \
+		sphinx-autodoc-typehints sphinx-copybutton \
+		btd.sphinx.graphviz \
+		btd.sphinx.inheritance_diagram ; do
     pip install -U $i
 done
 
