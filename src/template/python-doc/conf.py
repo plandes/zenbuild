@@ -40,9 +40,9 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
 
-    # add view code button
+    # add link to view code
     'sphinx.ext.viewcode',
-
+    # add view code button
     'sphinx_copybutton',
 
     # inheritance diagrams
@@ -107,7 +107,6 @@ latex_engine = 'xelatex'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-#html_theme = 'sphinx_rtd_theme'
 html_theme = 'furo'
 
 # Add any paths that contain custom static files (such as style sheets) here,
