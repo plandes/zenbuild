@@ -45,6 +45,24 @@
 \end{center}
 \end{table}
 }%
+\newenvironment{zztablehead}[6][ht]%
+{%
+\newcommand{\zzbasictablecap}{#3}
+\newcommand{\zzbasictablelab}{tab:#2}
+\newcommand{\zzbasictablehead}{#6}
+\begin{table}[#1]
+#4
+\begin{center}
+\begin{tabular}{#5}
+}%
+{%
+\end{tabular}
+\caption[\zzbasictablehead]{\textbf{\zzbasictablehead.} \zzbasictablecap}%
+
+\label{\zzbasictablelab}
+\end{center}
+\end{table}
+}%
 
 % basic two column table
 % ex: \begin{zztabletcolplace}[ht!]{results}{Results}{\small}{|l|l}
@@ -160,6 +178,21 @@
 \label{\zzvarcoltablelab}%
 \endtable%
 }
+\newenvironment{zzvarcoltablehead}[7][\textwidth]%
+{%
+\newcommand{\zzvarcoltablelab}{tab:#3}%
+\newcommand{\zzvarcoltablecap}{#4}%
+\newcommand{\zzvarcoltableheadcap}{#7}%
+\table[#2]%
+\centering#5%
+\tabularx{#1}{#6}%
+}
+{%
+\endtabularx%
+\caption[\zzvarcoltableheadcap]{\textbf{\zzvarcoltableheadcap.} \zzvarcoltablecap}%
+\label{\zzvarcoltablelab}%
+\endtable%
+}
 
 % same as zzvarcoltable but as a figure
 \newenvironment{zzvarcolfigure}[6][\textwidth]%
@@ -180,14 +213,14 @@
 {%
 \newcommand{\zzvarcoltablelab}{fig:#3}%
 \newcommand{\zzvarcoltablecap}{#4}%
-\newcommand{\zzvarcoltablecapdesc}{#7}%
+\newcommand{\zzvarcoltableheadcap}{#7}%
 \figure[#2]%
 \centering#5%
 \tabularx{#1}{#6}%
 }
 {%
 \endtabularx%
-\caption[\zzvarcoltablecapdesc]{\textbf{\zzvarcoltablecapdesc.} \zzvarcoltablecap}%
+\caption[\zzvarcoltableheadcap]{\textbf{\zzvarcoltableheadcap.} \zzvarcoltablecap}%
 \label{\zzvarcoltablelab}%
 \endfigure%
 }
