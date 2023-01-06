@@ -20,7 +20,7 @@
 \ifzenfig@disable
 \newcommand{\zzfigdisabled}[1]{{\it Figures disabled (#1).}}
 \providecommand{\zzfigure}[4][h!]{\zzfigdisabled{#3}\label{fig:#3}}
-\providecommand{\zzfigurecap}[5][h!]{\zzfigdisabled{#3}\label{fig:#3}}
+\providecommand{\zzfigurehead}[5][h!]{\zzfigdisabled{#3}\label{fig:#3}}
 \providecommand{\zzfiguretc}[3][\textwidth]{\zzfigdisabled{#2}\label{fig:#2}}
 \providecommand{\zzfigurerast}[4]{\zzfigdisabled{#2}\label{fig:#2}}
 \providecommand{\zzfiguretcp}[4]{\zzfigdisabled{#2}\label{fig:#2}}
@@ -45,7 +45,7 @@
 % figure with caption and description
 % ex:
 % \zzfigure{\textwidth}{filename}{the caption}{description}
-\providecommand{\zzfigurecap}[5][h!]{%
+\providecommand{\zzfigurehead}[5][h!]{%
 \begin{figure}[#1]
 \begin{center}
 \includegraphics[width=#2]{#3.eps}
