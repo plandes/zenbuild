@@ -6,7 +6,7 @@
 \ProvidesPackage{zentable}[2016/10/18 Simple and Variable Table Column]
 
 \usepackage{tabularx}
-%\newcolumntype{C}{>{\Centering\arraybackslash}X}
+\usepackage{caption}
 
 
 %% basic table
@@ -173,6 +173,22 @@
 {%
 \endtabularx%
 \caption{\zzvarcoltablecap}%
+\label{\zzvarcoltablelab}%
+\endfigure%
+}
+
+\newenvironment{zzvarcolfigurecap}[7][\textwidth]%
+{%
+\newcommand{\zzvarcoltablelab}{fig:#3}%
+\newcommand{\zzvarcoltablecap}{#4}%
+\newcommand{\zzvarcoltablecapdesc}{#7}%
+\figure[#2]%
+\centering#5%
+\tabularx{#1}{#6}%
+}
+{%
+\endtabularx%
+\caption[\zzvarcoltablecapdesc]{\textbf{\zzvarcoltablecapdesc.} \zzvarcoltablecap}%
 \label{\zzvarcoltablelab}%
 \endfigure%
 }
