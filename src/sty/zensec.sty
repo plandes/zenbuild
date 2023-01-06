@@ -18,6 +18,8 @@
 % add an 'invisible' section and table of contents entry for abbrevs, index, etc
 % <section|chapter|etc> <toc name> <label> <add number in toc: true|false>
 \newcommand{\zzsecaddtoc}[4]{%
+  \newpage
+  \phantomsection
   \refstepcounter{#1}%
   % use the next line instead to create a numbered entry
   \ifthenelse{\equal{#4}{true}}%
