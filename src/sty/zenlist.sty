@@ -84,7 +84,7 @@
 
 % horizontal enumerate (inline list) with letters: a) one b) two...
 % usage: \begin{zzenumerateinline} or \begin{zzenumerateinline}[\Alph]
-\newenvironment{zzenumerateinline}[1][\alph*\upshape)]
+\newenvironment{zzenumerateinline}[1][\alph*\upshape)\ ]
 {\begin{enumerate*}[label=#1, itemjoin={,\ }, itemjoin*={, and\ }, afterlabel={}, after={.}]}
 {\end{enumerate*}}
 
