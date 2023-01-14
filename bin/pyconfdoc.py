@@ -199,7 +199,8 @@ def main(binfo: Path, projsrcdir: Path, templatesrc: Path,
 
 
 if __name__ == '__main__':
+    prog: str = Path(sys.argv[0]).stem
     logging.basicConfig(
         level=logging.DEBUG if DEBUG else logging.INFO,
-        format='pytopdoc.py: %(levelname)s: %(message)s')
+        format=f'{prog}: %(levelname)s: %(message)s')
     plac.call(main)
