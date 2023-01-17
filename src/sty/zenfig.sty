@@ -115,6 +115,6 @@
 
 
 %% -- References
-\newcommand{\zzfigref}[1]{Figure~\ref{fig:#1}}
-\newcommand{\zzFigref}[1]{Figure~\ref{fig:#1}}
+\newcommand{\zzfigref}[1]{\zzhyperref{fig}{#1}{Figure}}
+\newcommand{\zzFigref}[1]{\zzfigref{#1}}
 \newcommand{\zzseefig}[1]{(see \zzfigref{#1})}

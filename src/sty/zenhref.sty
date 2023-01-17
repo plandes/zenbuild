@@ -31,9 +31,14 @@
 \usepackage[all]{hypcap}}
 
 % enable href commands without using the href package
-\newcommand{\zzhrefdisable}{\newcommand{\href}[2]{##2}}
+\newcommand{\zzhrefdisable}{%
+  \providecommand{\href}[2]{##2}
+  \renewcommand{\href}[2]{##2}
+  \renewcommand{\zzhyperref}[3]{##2~\ref{##1:##2}}}
 
 \newcommand{\zzhref}[1]{\href{#1}{#1}}
+
+\newcommand{\zzhyperref}[3]{\hyperref[#1:#2]{#3~\ref{#1:#2}}}
 
 % example: \zzfootref{command-name}{text}{href-link}
 \newcommand{\zzfootref}[3]{%
