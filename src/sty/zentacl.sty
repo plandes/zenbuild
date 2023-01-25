@@ -1,0 +1,81 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zentacl}[2/03/2022 Import and configure TACL]
+
+% File tacl2021v1.tex
+% Dec. 15, 2021
+
+% The English content of this file was modified from various *ACL instructions
+% by Lillian Lee and Kristina Toutanova
+%
+% LaTeXery is mostly all adapted from acl2018.sty.
+
+\usepackage{times,latexsym}
+\usepackage{url}
+\usepackage[T1]{fontenc}
+
+%% Package options:
+%% Short version: "hyperref" and "submission" are the defaults.
+%% More verbose version:
+%% Most compact command to produce a submission version with hyperref enabled
+%%    \usepackage[]{tacl2021v1}
+%% Most compact command to produce a "camera-ready" version
+%%    \usepackage[acceptedWithA]{tacl2021v1}
+%% Most compact command to produce a double-spaced copy-editor's version
+%%    \usepackage[acceptedWithA,copyedit]{tacl2021v1}
+%
+%% If you need to disable hyperref in any of the above settings (see Section
+%% "LaTeX files") in the TACL instructions), add ",nohyperref" in the square
+%% brackets. (The comma is a delimiter in case there are multiple options specified.)
+%\usepackage[]{tacl2021v1}
+\ifisfinal%
+  \usepackage[nohyperref,acceptedWithA]{tacl2021v1}
+\else
+  \usepackage[nohyperref]{tacl2021v1}
+\fi
+
+%%%% Material in this block is specific to generating TACL instructions
+\usepackage{xspace,mfirstuc,tabulary}
+\newcommand{\dateOfLastUpdate}{Dec. 15, 2021}
+\newcommand{\styleFileVersion}{tacl2021v1}
+
+\newcommand{\ex}[1]{{\sf #1}}
+
+\newif\iftaclinstructions
+\taclinstructionsfalse % AUTHORS: do NOT set this to true
+\iftaclinstructions
+\renewcommand{\confidential}{}
+\renewcommand{\anonsubtext}{(No author info supplied here, for consistency with
+TACL-submission anonymization requirements)}
+\newcommand{\instr}
+\fi
+
+%
+\iftaclpubformat % this "if" is set by the choice of options
+\newcommand{\taclpaper}{final version\xspace}
+\newcommand{\taclpapers}{final versions\xspace}
+\newcommand{\Taclpaper}{Final version\xspace}
+\newcommand{\Taclpapers}{Final versions\xspace}
+\newcommand{\TaclPapers}{Final Versions\xspace}
+\else
+\newcommand{\taclpaper}{submission\xspace}
+\newcommand{\taclpapers}{{\taclpaper}s\xspace}
+\newcommand{\Taclpaper}{Submission\xspace}
+\newcommand{\Taclpapers}{{\Taclpaper}s\xspace}
+\newcommand{\TaclPapers}{Submissions\xspace}
+\fi
+
+%%%% End TACL-instructions-specific macro block
+%%%%
+
+
+% enable href
+\zzhrefinit%
+% use natlib cite commands
+\zzaddcommandsnatlib%
+
+% disable acro italics/hover over for conferences that don't use it like AAAI
+\zzacrodisablelinks\relax
+
+\newcommand{\zzaclend}[1]{%
+\bibliography{#1}
+\bibliographystyle{acl_natbib}}
