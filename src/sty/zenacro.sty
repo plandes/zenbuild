@@ -184,7 +184,8 @@
   first-long-format=\normalfont,
   class=def
 }%
-\zzexpandacrocmd{#1}{#2}{#3}}
+\zzexpandacrocmd{#1}{#2}{#3}
+\expandafter\newcommand\csname #1def\endcsname{{#3}}}
 
 % same as \zzdefdef but creates the definition entry verbatim instead of
 % capitalizing and add a period at the end
