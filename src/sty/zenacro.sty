@@ -209,12 +209,13 @@
 \DeclareAcronym{#1}{
   short={\zzacroshortlink{#2}},
   short-plural-form={\zzacroshortlink{#3}},
-  long={\zzacrotexorpdfstring{\xmakefirstuc{#4}}{#4}},
+  long={\zzacrotexorpdfstring{\xmakefirstuc{#4}}{#4}.},
   first-style=zznobrack,
   first-long-format=\normalfont,
   class=def
 }%
-\zzexpandacrocmd{#1}{#2}{#3}}
+\zzexpandacrocmd{#1}{#2}{#3}
+\expandafter\newcommand\csname #1def\endcsname{{#4}}}
 
 
 % define a intro definition (contains an intro text)
