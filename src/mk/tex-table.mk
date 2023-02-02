@@ -4,7 +4,7 @@
 # 9/15/2019
 
 # the script to generate the latex table
-TEX_TAB_BIN ?=		$(BUILD_BIN_DIR)/mklatextbl.py
+TEX_TAB_BIN ?=		datdesc
 # where JSON table definitions live
 TEX_TAB_DIR ?=		$(TEX_CONF_DIR)
 # all table definitions
