@@ -91,8 +91,7 @@ pydepcheck:
 # show a dependency tree (inclusion of PROJ_MODULES=git needed)
 .PHONY:			pydeptree
 pydeptree:
-			$(eval proj-name=$(shell $(GIT_BUILD_ATTR) .name))
-			$(PYTHON_BIN) -m johnnydep $(proj-name)
+			$(PYTHON_BIN) -m pipdeptree
 
 # show conflicts in dependencies
 .PHONY:			pydoctor
