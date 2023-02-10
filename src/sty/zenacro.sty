@@ -255,10 +255,11 @@
   short-plural-form={\zzacroshortlink{#2s}},
   long={#3},
   first-long-format=\normalfont,
-  list={#4},
+  list={(#3) #4},
   class=def
 }%
-\zzexpandacrocmd{#1}{#2}{#3}}
+\zzexpandacrocmd{#1}{#2}{#3}
+\expandafter\newcommand\csname #1def\endcsname{{#4}}}
 
 % Introduce a acronym term with an inline description; this is like both
 % \zzdefintrodef and \zzdefintroacrodef combined.  This lets you decide between
