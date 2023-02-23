@@ -24,7 +24,7 @@ textabinfo:
 .PHONY:		textab
 textab:
 		@echo "creating $(TEX_TAB_STYS)"
-		$(TEX_TAB_BIN) $(TEX_TAB_DIR) $(TEX_LAT_PATH)
+		$(TEX_TAB_BIN) table $(TEX_TAB_DIR) $(TEX_LAT_PATH)
 
 %-table.sty:	$(TEX_TAB_DIR)/$(@F) $(TEX_MTARG_FILE)
 		make textab
