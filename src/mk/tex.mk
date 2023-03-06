@@ -275,6 +275,9 @@ $(TEX_PKG_FINAL_DIR):
 # location
 .PHONY:		texinstall
 texinstall:	texpackage
+		@if [ ! -z "$(TEX_PKG_ADD)" ] ; then \
+			cp $(TEX_PKG_ADD) $(TEX_PKG_DIR)/$(FINAL_NAME) ; \
+		fi
 		@if [ `ls $(TEX_PKG_DIR)/$(FINAL_NAME) | wc -l` -gt 1 ] ; then \
 			echo "installing zip of all resources..." ; \
 			( cd $(TEX_PKG_DIR) ; zip -r $(FINAL_NAME).zip $(FINAL_NAME) ) ; \
