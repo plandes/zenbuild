@@ -52,7 +52,8 @@ TEX_CONF_DIR ?=		$(abspath ../config)
 TEX_IMG_EPS =		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.eps)))
 TEX_IMG_PNG =		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.png)))
 TEX_IMG_JPG =		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.jpg)))
-TEX_IMAGES =		$(TEX_IMG_EPS) $(TEX_IMG_PNG) $(TEX_IMG_JPG)
+TEX_IMG_SVG =		$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_IMG_DIR)/*.svg)))
+TEX_IMAGES =		$(TEX_IMG_EPS) $(TEX_IMG_PNG) $(TEX_IMG_JPG) $(TEX_IMG_SVG)
 
 # target files
 TEX_LATEX_FILE =	$(TEX_LAT_PATH)/$(TEX).tex
@@ -146,6 +147,13 @@ $(TEX_LAT_PATH)/%.tex:		%.tex
 # copy over all raster .jpg static files
 %.jpg:
 		@cp $(TEX_IMG_DIR)/$(@F) $@
+
+# convert over all svg to pdf files
+%.svg:
+		@if [ ! -f $*.eps ] ; then \
+			echo "converting $(TEX_IMG_DIR)/$(@F) -> $*.eps" ; \
+			inkscape $(TEX_IMG_DIR)/$(@F) --export-filename=$*.eps ; \
+		fi
 
 .PHONY:		texversion
 texversion:
