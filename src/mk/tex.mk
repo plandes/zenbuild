@@ -172,10 +172,11 @@ $(TEX_PRERUN_FILE):
 		@if [ ! -z "$(TEX_INIT_RUN)" ] ; then \
 			echo "copying images $(TEX_IMGC_DIR) -> $(TEX_LAT_PATH)" ; \
 			cp $(TEX_IMGC_DIR)/* $(TEX_LAT_PATH) ; \
-			echo "starting latex pre-start run..." ; \
+			echo "starting latex pre-start run : $(TEX_LAT_PATH)" ; \
 			echo $(TEX_LATEX_CMD) ; \
 			( cd $(TEX_LAT_PATH) ; $(TEX_LATEX_CMD) ) ; \
 			if [ $$? != 0 ] ; then \
+				echo "failed last compile (use TEX_DEBUG=1): $$?" ; \
 				exit 1 ; \
 			fi ; \
 			date >> $(TEX_PRERUN_FILE) ; \
@@ -247,6 +248,7 @@ texfinalshow:	texfinal texshowfile
 # create the presentation form of the slides
 .PHONY:		texpresentpdf
 texpresentpdf:
+		@echo "creating prsentation slides; final runs: $(TEX_FINAL_RUNS)"
 		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
 			echo "run number $$i" ; \
 			make TEX_LATEX_INIT_CMD="\newif\ifisfinal\isfinaltrue \def\ispresentation{1}" \
@@ -271,8 +273,10 @@ $(TEX_PKG_FINAL_DIR):
 		mkdir -p $(TEX_PKG_FINAL_DIR)
 		make texfinal
 		@if [ -z "$(TEX_SLIDES)" ] ; then \
+			echo "copying non-slides file to package dir" ; \
 			cp $(TEX_PDF_FILE) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME).pdf ; \
 		else \
+			echo "copying slides files to package dir" ; \
 			cp $(TEX_PDF_FILE) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME)-slides.pdf ; \
 			rm -rf $(TEX_LAT_PATH) ; \
 			make texpresentpdf ; \
