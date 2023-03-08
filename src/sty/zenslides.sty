@@ -108,11 +108,18 @@
 \newcommand{\zzfootciteauthor}[1]{\zzciteauthorcite{#1}\zzfootcite{#1}}
 \newcommand{\zzfootciteshort}[1]{\zzciteshortcite{#1}\zzfootcite{#1}}
 
+\newcommand{\zscr}{\textCR}
 %% presentation
 \ifdefined\ispresentation%
   % used by Presentation.app with \zsnote
   \usepackage[draft]{pdfcomment}
-  \newcommand{\zsnote}[1]{\marginnote{\pdfcomment[icon=note]{#1}}}
+  \makeatletter
+  \newcommand{\zsnote}[1]{\marginnote{
+      \let\par\textCR
+      \pdfcomment[icon=note]{#1}}}
+  \makeatother
 \else
-  \newcommand{\zsnote}[1]{\note[item]{#1}}
+  \newcommand{\zsnote}[1]{\note[item]{
+      \let\par\textCR%
+      #1}}
 \fi
