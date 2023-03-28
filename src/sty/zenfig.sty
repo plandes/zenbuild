@@ -116,5 +116,7 @@
 
 %% -- References
 \newcommand{\zzfigref}[1]{\zzhyperref{fig}{#1}{Figure}}
+\newcommand{\zzfigrefsub}[2]{\hyperref[fig:#1]{Figure \getrefnumber{fig:#1}#2}}
 \newcommand{\zzFigref}[1]{\zzfigref{#1}}
 \newcommand{\zzseefig}[1]{(see \zzfigref{#1})}
+\newcommand{\zzseefigsub}[2]{(see \zzfigrefsub{#1}{#2})}
