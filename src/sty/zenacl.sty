@@ -24,13 +24,13 @@
 % the typewriter font.
 \usepackage{inconsolata}
 
-% enable href
-\zzhrefinit%
-% use natlib cite commands
-\zzaddcommandsnatlib%
-
-% disable acro italics/hover over for conferences that don't use it like AAAI
-\zzacrodisablelinks\relax
+\newcommand{\zzaclinit}{
+  % enable href
+  \zzhrefinit%
+  % use natlib cite commands
+  \zzaddcommandsnatlib%
+  % disable acro italics/hover over for conferences that don't use it like AAAI
+  \zzacrodisablelinks\relax}
 
 \newcommand{\zzaclend}[1]{%
 \bibliography{#1}
