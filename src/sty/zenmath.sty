@@ -110,6 +110,12 @@ where:%
 }}{\end{list}
 \vspace{\topsep+\parskip}}
 
+% same inlines to the text
+\newenvironment{zmwherelistinline}[1][, and\ ]
+{where \begin{itemize*}[label={}, itemjoin={;\ }, itemjoin*={{#1}}, afterlabel={}, after={.}]}
+{\end{itemize*}}
+
+
 % envs
 
 %% ex: \begin{zmacdefinition}{01234567890}
