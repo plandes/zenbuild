@@ -40,6 +40,8 @@
 
 \newcommand{\zzhyperref}[3]{\hyperref[#1:#2]{#3~\ref{#1:#2}}}
 
+\newcommand{\zzfooturl}[2]{{\href{#2}{#1}}\footnote{\href{#2}{#2}}}
+
 % example: \zzfootref{command-name}{text}{href-link}
 \newcommand{\zzfootref}[3]{%
   \expandafter\newcommand\csname #1\endcsname{{\href{#3}{#2}}\footnote{\href{#3}{#3}}}}
