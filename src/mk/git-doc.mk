@@ -51,7 +51,7 @@ $(GIT_DOC_DST_DIR):	$(GIT_DOC_SRC_DIR)
 
 # deploy the documentation to github
 .PHONY:			gitdocdeploy
-gitdocdeploy:		$(GIT_DOC_PUSH_DEPS)
+gitdocdeploy:		clean $(GIT_DOC_PUSH_DEPS)
 			@echo "pushing to $(GIT_DOC_REMOTE)"
 			git push $(GIT_DOC_REMOTE) --mirror
 			( cd $(GIT_DOC_DST_DIR) ; \

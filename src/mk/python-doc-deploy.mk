@@ -62,7 +62,7 @@ pydocdeployhtml:
 			make PY_DOC_CONF_ARGS_SUP="$(PY_DOC_CONF_ASUPS)" pydochtml
 
 .PHONY:			pydocdeploy
-pydocdeploy:		pydocdeployhtml cntdeploy
+pydocdeploy:		clean pydocdeployhtml cntdeploy
 
 .PHONY:			pydocdeploymv
 pydocdeploymv:
