@@ -10,6 +10,9 @@ CL_RUN_ARGS ?=		run
 # info
 INFO_TARGETS +=		clinfo
 
+# silence warnings on git.mk import
+GIT_BUILD_INFO_BIN =	echo
+
 
 .PHONY:			test
 test:
