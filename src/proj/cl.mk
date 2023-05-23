@@ -7,7 +7,6 @@ CL_PROTO_APP ?= 	./main.ros
 # run arguments
 CL_RUN_ARGS ?=		run
 
-
 # info
 INFO_TARGETS +=		clinfo
 
