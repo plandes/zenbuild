@@ -10,6 +10,9 @@ CL_RUN_ARGS ?=		run
 # info
 INFO_TARGETS +=		clinfo
 
+# clean
+CLEAN_DEPS +=		clclean
+
 # silence warnings on git.mk import
 GIT_BUILD_INFO_BIN =	echo
 
@@ -25,3 +28,8 @@ run:
 .PHONY:			clinfo
 clinfo:
 			@echo "proto-app: $(PROTO_APP)"
+
+
+.PHONY:			clclean
+clclean:
+			find . -type f -name \*.fasl -exec rm {} \;
