@@ -15,6 +15,9 @@ TEX_EXPORT_INST_ZIP ?=	$(TEX_INSTALL_DIR)/$(TEX_EXPORT_ZIP)
 # clean unused image files not needed in the latex file
 #TEX_EXPORT_DEPS +=	texexportimgclean
 
+# additional files to include
+TEX_EXPORT_ADDS +=
+
 # include PDF with all compiled derived objects in zip
 TEX_EXPORT_ADD_PDF ?=
 
@@ -40,6 +43,9 @@ texexportprep:	texinstall
 			$(TEX_LAT_PATH)/*.jpg $(TEX_LAT_PATH)/*.gif \
 			$(TEX_LAT_PATH)/*.sty) $(TEX_EXPORT_DIR)
 		cp $(wildcard $(addsuffix /*,$(TEX_PATH))) $(TEX_EXPORT_DIR)
+		if [ ! -z "$(TEX_EXPORT_ADDS)" ] ; then \
+			cp -r $(TEX_EXPORT_ADDS) $(TEX_EXPORT_DIR) ; \
+		fi
 		cat $(BUILD_SRC_DIR)/template/tex/export-makefile | \
 			sed 's/{{TEX_FILE_NAME}}/$(FINAL_NAME)/g' | \
 			sed 's/{{TEX_FINAL_RUNS}}/$(TEX_FINAL_RUNS)/g' | \
