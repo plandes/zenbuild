@@ -1,10 +1,14 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenacl}[2/03/2022 Import and configure ACL]
+\RequirePackage{kvoptions}
+
+\DeclareStringOption[acl]{confpackage}
+\ProcessKeyvalOptions*
 
 \ifisfinal%
-  \usepackage[nohyperref]{acl}
+  \usepackage[nohyperref]{\zenacl@confpackage}
 \else
-  \usepackage[nohyperref,review]{acl}
+  \usepackage[nohyperref,review]{\zenacl@confpackage}
 \fi
 % Standard package includes
 \usepackage{times}
