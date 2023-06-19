@@ -4,6 +4,9 @@
 #
 include $(BUILD_MK_DIR)/markdown.mk
 
+# silence warnings on git.mk import
+GIT_BUILD_INFO_BIN =	echo
+
 # force compile
 .PHONY:			compile
 compile:		markdown-force-compile
