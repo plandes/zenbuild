@@ -64,6 +64,7 @@ markdown-install:	$(MD_INSTALL_FILE)
 $(MD_INSTALL_FILE):	markdown-package
 			mkdir -p $(MTARG)/$(MD_SRC_NAME)
 			cp $(MD_DERIVE_FILES) $(MTARG)/$(MD_SRC_NAME)
+			cp $(MD_SRC_FILE) $(MTARG)/$(MD_SRC_NAME)
 			( cd $(MTARG) ; zip -r $(MD_SRC_NAME).zip $(MD_SRC_NAME) )
 			cp $(MTARG)/$(MD_SRC_NAME).zip $(MD_INSTALL_FILE)
 
