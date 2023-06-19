@@ -42,12 +42,12 @@ markdown-package:	$(MD_DEPS)
 
 # create and show the html document
 .PHONY:			markdown-show-html
-markdown-show-html:	$(MD_HTML_FILE)
+markdown-show-html:	$(MTARG) $(MD_HTML_FILE)
 			showfile show $(MTARG)/$(MD_SRC_NAME).html
 
 # create and show the pdf document
 .PHONY:			markdown-show-pdf
-markdown-show-pdf:	$(MD_PDF_FILE)
+markdown-show-pdf:	$(MTARG) $(MD_PDF_FILE)
 			showfile show $(MTARG)/$(MD_SRC_NAME).pdf
 
 # force a recompile for all files
