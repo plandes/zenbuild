@@ -7,6 +7,7 @@
 MD_PANDOC_BIN ?=	pandoc
 
 # metadata
+MD_SRC_NAME ?=		README
 MD_SRC_FILE =		$(MD_SRC_NAME).md
 MD_TITLE ?=		$(shell head -1 $(MD_SRC_FILE) | sed 's/^#\s*\(.*\)/\1/')
 
