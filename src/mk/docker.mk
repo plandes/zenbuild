@@ -17,6 +17,7 @@ DOCKER_IMG=		$(DOCKER_USER)/$(DOCKER_IMG_NAME)
 DOCKER_VERSION ?=	snapshot
 DOCKER_UP_DEPS ?=	dockerbuild
 DOCKER_CMP_UP_ARGS ?=
+DOCKER_CMP_DOWN_ARGS ?=
 
 INFO_TARGETS +=		dockerinfo
 
@@ -76,7 +77,7 @@ dockerup:	$(DOCKER_UP_DEPS)
 
 .PHONY:		dockerdown
 dockerdown:
-		$(DOCKER_CMP_CMD) down
+		$(DOCKER_CMP_CMD) down -d $(DOCKER_CMP_DOWN_ARGS)
 
 .PHONY:		dockerrestart
 dockerrestart:		dockerdown dockerup
