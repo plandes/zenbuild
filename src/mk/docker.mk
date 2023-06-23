@@ -77,7 +77,7 @@ dockerup:	$(DOCKER_UP_DEPS)
 
 .PHONY:		dockerdown
 dockerdown:
-		$(DOCKER_CMP_CMD) down $(DOCKER_CMP_DOWN_ARGS
+		$(DOCKER_CMP_CMD) down $(DOCKER_CMP_DOWN_ARGS)
 
 .PHONY:		dockerrestart
 dockerrestart:		dockerdown dockerup
