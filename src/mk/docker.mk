@@ -1,11 +1,16 @@
 ## docker makefile include
 
+
+## User config
+#
 # must declare these these
 #DOCKER_IMG_NAME =
 #DOCKER_BUILD_OBJS =
 #DOCKER_BUILD_ARGS = --build-arg var_name=${VARIABLE_NAME}
 #DOCKER_CONTAINER =
 
+## Build config
+#
 # docker config
 DOCKER_CMD ?=		docker
 DOCKER_CMP_CMD ?=	docker-compose
@@ -19,8 +24,15 @@ DOCKER_UP_DEPS ?=	dockerbuild
 DOCKER_CMP_UP_ARGS ?=
 DOCKER_CMP_DOWN_ARGS ?=
 
+# system config
 INFO_TARGETS +=		dockerinfo
 
+# silence warnings on git.mk import
+GIT_BUILD_INFO_BIN =	echo
+
+
+## Target
+##
 .PHONY:		dockerinfo
 dockerinfo:
 		@echo "image-name: $(DOCKER_IMG_NAME)"
