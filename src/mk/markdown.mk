@@ -21,6 +21,7 @@ MD_INSTALL_FILE ?=	$(MD_INSTALL_DIR)/$(MD_SRC_NAME).zip
 MD_HTML_FILE ?=		$(addprefix $(MTARG)/$(MD_SRC_NAME),.html)
 MD_PDF_FILE ?=		$(addprefix $(MTARG)/$(MD_SRC_NAME),.pdf)
 MD_DERIVE_FILES =	$(MD_HTML_FILE) $(MD_PDF_FILE)
+MD_MTARG_DEPS +=
 MD_DEPS +=		$(MTARG) $(MD_DERIVE_FILES)
 
 # build system
@@ -34,7 +35,7 @@ markdowninfo:
 			@echo "md-src-file: $(MD_SRC_FILE)"
 
 # create the `target` directory for derived objects
-$(MTARG):
+$(MTARG):		$(MD_MTARG_DEPS)
 			mkdir -p $(MTARG)
 
 # convert the markdown file to html and pdf files
