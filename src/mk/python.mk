@@ -119,10 +119,11 @@ pytestvirtual:
 .PHONY:			pypackage
 pypackage:		$(MTARG_PYDIST_ATFC)
 $(MTARG_PYDIST_ATFC):	$(MTARG_PYDIST_BDIR)
-			( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py bdist_egg )
+			@echo "egg no longer supported by PyPi--skipping"
+#			( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py bdist_egg )
 			( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py bdist_wheel )
 			cp $(MTARG_PYDIST_ATFC)/* $(MTARG_PYDIST_DIR)
-			@echo "create egg in $(MTARG_PYDIST_DIR)"
+			@echo "create wheel in $(MTARG_PYDIST_DIR)"
 
 # install the library locally
 .PHONY:			pyinstall
