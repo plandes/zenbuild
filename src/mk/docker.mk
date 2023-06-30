@@ -42,31 +42,50 @@ dockerinfo:
 		@echo "container: $(DOCKER_CONTAINER)"
 		@echo "docker-version: $(DOCKER_VERSION)"
 
-.PHONY:		dockercheckver
-dockercheckver:
-		$(eval DOCKER_VER_LAST_TAG := $(shell git tag -l | sort -V | tail -1 | sed 's/.//'))
-		@echo $(DOCKER_VER_LAST_TAG) =? $(DOCKER_VERSION) ; [ "$(DOCKER_VER_LAST_TAG)" == "$(DOCKER_VERSION)" ]
+.PHONY:		dockersettag
+dockersettag:
+		$(eval DOCKER_VER_LAST_TAG := $(shell git tag -l | sort -V | tail -1 | sed 's/^v//'))
 
+# make a new docker tag
+.PHONY:		dockermktag
+dockermktag:	dockersettag
+		@if [ -z "$(DOCKER_VER_LAST_TAG)" ] ; then \
+			echo "no git tag" ; \
+			exit 1 ; \
+		fi
+		$(DOCKER_CMD) tag $(DOCKER_IMG) $(DOCKER_IMG):$(DOCKER_VER_LAST_TAG)
+
+# check the set version again the git version
+.PHONY:		dockercheckver
+dockercheckver:	dockersettag
+		@echo $(DOCKER_VER_LAST_TAG) =? $(DOCKER_VERSION) ; \
+			[ "$(DOCKER_VER_LAST_TAG)" == "$(DOCKER_VERSION)" ]
+
+# build the docker image from the Dockerfil
 .PHONY:		dockerbuild
 dockerbuild:	$(DOCKER_BUILD_OBJS)
 		$(DOCKER_CMD) rmi $(DOCKER_IMG) || true
 		$(DOCKER_CMD) build $(DOCKER_BUILD_ARGS) -t $(DOCKER_IMG) $(DOCKER_PREFIX)
 		$(DOCKER_CMD) tag $(DOCKER_IMG) $(DOCKER_IMG):$(DOCKER_VERSION)
 
+# build the image from scratch without intermediate caches
 .PHONY: 	dockerbuildnocache
 dockerbuildnocache:	$(DOCKER_BUILD_OBJS)
 		$(DOCKER_CMD) rmi $(DOCKER_IMG) || true
 		$(DOCKER_CMD) build --no-cache -t $(DOCKER_IMG) .
 		$(DOCKER_CMD) tag $(DOCKER_IMG) $(DOCKER_IMG):$(DOCKER_VERSION)
 
+# push the build docker image to dockerhub
 .PHONY:		dockerpush
 dockerpush:	dockerbuild
 		$(DOCKER_CMD) push $(DOCKER_IMG)
 
-.PHONY:		dockerinstall
-dockerinstall:	dockercheckver
-		make DOCKER_VERSION=$(GIT_VER) dockerbuild
+# push the tagged docker image to dockerhub (use dockermktag first)
+.PHONY:		dockerpushtag
+dockerpushtag:	dockersettag
+		$(DOCKER_CMD) push $(DOCKER_IMG):$(DOCKER_VER_LAST_TAG)
 
+# remove the docker image from the local image library
 .PHONY:		dockerrm
 dockerrm:	dockerrmi
 		@echo "remember to shut down the image first"
@@ -77,6 +96,7 @@ dockerrm:	dockerrmi
 dockerrmi:
 		$(DOCKER_CMD) images | grep '<none>' | awk '{print $$3}' | xargs docker rmi || true
 
+# remove all complete containers that are no long running (only logs available)
 .PHONY:		dockerrmzombie
 dockerrmzombie:
 		for i in $$($(DOCKER_CMD) ps -a --format '{{.Names}} {{.Status}}' | \
@@ -85,31 +105,33 @@ dockerrmzombie:
 			$(DOCKER_CMD) rm $$i ; \
 		done
 
+# start the container
 .PHONY:		dockerup
 dockerup:	$(DOCKER_UP_DEPS)
 		$(DOCKER_CMP_CMD) $(DOCKER_PRE_UP_ARGS) \
 			up -d $(DOCKER_CMP_UP_ARGS)
 
+# stop the container
 .PHONY:		dockerdown
 dockerdown:
 		$(DOCKER_CMP_CMD) $(DOCKER_PRE_DOWN_ARGS) \
 			down $(DOCKER_CMP_DOWN_ARGS)
 
+# restart the container
 .PHONY:		dockerrestart
 dockerrestart:		dockerdown dockerup
 
+# list all running containers
 .PHONY:		dockerps
 dockerps:
 		$(DOCKER_CMD) ps -a
 
+# login to the the container as root
 .PHONY:		dockerlogin
 dockerlogin:
 		$(DOCKER_CMD) exec -it $(DOCKER_CONTAINER) bash
 
-.PHONY: dockerlog
+# dump the standard output/log of the container
+.PHONY:		dockerlog
 dockerlog:
 		$(DOCKER_CMD) logs $(DOCKER_CONTAINER) -f
-
-.PHONY:		dockerstatus
-dockerstatus:
-		$(DOCKER_CMP_CMD) ps

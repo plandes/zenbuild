@@ -6,9 +6,6 @@ include $(BUILD_MK_DIR)/docker.mk
 .PHONY:	build
 build:		dockerbuild
 
-.PHONY:	install
-install:	dockerinstall
-
 .PHONY: deploy
 deploy:		dockerpush
 
