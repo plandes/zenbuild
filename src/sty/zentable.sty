@@ -9,7 +9,8 @@
 \usepackage{caption}
 
 
-%% basic table
+%% Basic table
+%
 % ex: \begin{zzbasictable}{results}{Results}{|l|l}
 \newenvironment{zzbasictable}[3]%
 {%
@@ -27,7 +28,6 @@
 \end{table}
 }%
 
-%% basic table
 % ex: \begin{zztable}{results}{Results}{\small}{|l|l}
 \newenvironment{zztable}[5][ht]%
 {%
@@ -226,7 +226,30 @@
 }
 
 
-%% -- References
+%% References
+%
 \newcommand{\zztabref}[1]{\zzhyperref{tab}{#1}{Table}}
 \newcommand{\zzTabref}[1]{\zztabref{#1}}
 \newcommand{\zzseetab}[1]{(see \zztabref{#1})}
+
+
+%% Variable size tables
+%
+% usage: \zztabvarsize[<size command name>]{portion size change}
+% ex: \zztabvarsize[\zzsmallertabsize]{2.2}
+\newcommand{\zztabvarsize}[2][\zztabsize]{%
+  % make tables a size between \small and \normalize
+  \usepackage{xfp,anyfontsize}
+  \makeatletter
+  {\small % Capture font definitions of \small
+    \xdef\f@size@small{\f@size}
+    \xdef\f@baselineskip@small{\f@baselineskip}
+    \normalsize % Capture font definitions for \normalsize
+    \xdef\f@size@normalsize{\f@size}
+    \xdef\f@baselineskip@normalsize{\f@baselineskip}}
+  \newcommand{#1}{%
+    \fontsize%
+    {\fpeval{(\f@size@small+\f@size@normalsize)/#2}}
+    {\fpeval{(\f@baselineskip@small+\f@baselineskip@normalsize)/2}}%
+    \selectfont}
+}
