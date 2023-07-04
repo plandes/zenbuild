@@ -63,12 +63,14 @@
 }
 
 % initialize the header, top right logo and conference information
-% usage: \zpheaderinit{<>}{<conference name, year, city, country, date>}
-% ex: \zpheaderinit{uic}{BioNLP 2023, Toronto, Canada, July 13, 2023}
-\newcommand{\zpheaderinit}[2]{%
-  \rightlogo[1]{#1}
-  \title{\docshorttitle}
-  \conference{#2}
+% usage: \zpheaderinit[title/author space]{<>}{<conference name, year, city, country, date>}
+% ex: \zpheaderinit[1cm]{uic}{BioNLP 2023, Toronto, Canada, July 13, 2023}
+\newcommand{\zpheaderinit}[3][0cm]{%
+  \rightlogo[1]{#2}
+  \title{%
+    \docshorttitle%
+    \vspace{#1}}
+  \conference{#3}
   \renewcommand\Authfont{\Large}
   \renewcommand\Affilfont{\small}
 }
