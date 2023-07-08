@@ -10,6 +10,7 @@ MD_PANDOC_BIN ?=	pandoc
 MD_SRC_NAME ?=		README
 MD_SRC_FILE =		$(MD_SRC_NAME).md
 MD_TITLE ?=		$(shell head -1 $(MD_SRC_FILE) | sed 's/^#\s*\(.*\)/\1/')
+MD_PANDOC_FROM ?=	gfm
 
 # paths
 MD_GITHUB_CSS ?=	$(BUILD_SRC_DIR)/template/markdown/github.css
@@ -73,7 +74,7 @@ $(MD_INSTALL_FILE):	markdown-package
 # pandoc compile an html file
 %.html:			$(MD_SRC_FILE)
 			@echo "compiling HTML"
-			$(MD_PANDOC_BIN) --from=gfm --to=html \
+			$(MD_PANDOC_BIN) --from=$(MD_PANDOC_FROM) --to=html \
 				--metadata title="" \
 				--metadata pagetitle="$(MD_TITLE)" \
 				--css="$(MD_GITHUB_CSS)" \
