@@ -1,6 +1,8 @@
 ## make include file for content distribution projects
 ## PL 12/08/2018
 
+# executables
+CNT_SHOWPREV_BIN ?=	showfile
 # URL to deploy content
 CNT_DOC_URL ?=		https://example.com/webdavroot
 #
@@ -104,8 +106,7 @@ cntshow:		$(CNT_SHOW_TARG)
 # create, deploy the site, then browse to it
 .PHONY:			cntshowremote
 cntshowremote:		cntdeploy
-			open $(CNT_DEPLOY_URL)
-			osascript -e 'tell application "Emacs" to activate'
+			$(CNT_SHOWPREV_BIN) show $(CNT_DEPLOY_URL)
 
 # reload the browser (useful for deployed/remote Javascript debugging)
 .PHONY:			cntreload

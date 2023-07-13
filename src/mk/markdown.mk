@@ -5,12 +5,12 @@
 #
 # executables
 MD_PANDOC_BIN ?=	pandoc
+MD_SHOWPREV_BIN ?=	showfile
 
 # metadata
 MD_SRC_NAME ?=		README
 MD_SRC_FILE =		$(MD_SRC_NAME).md
 MD_TITLE ?=		$(shell head -1 $(MD_SRC_FILE) | sed 's/^#\s*\(.*\)/\1/')
-MD_PANDOC_FROM ?=	gfm
 
 # paths
 MD_GITHUB_CSS ?=	$(BUILD_SRC_DIR)/template/markdown/github.css
@@ -46,12 +46,12 @@ markdown-package:	$(MD_DEPS)
 # create and show the html document
 .PHONY:			markdown-show-html
 markdown-show-html:	$(MTARG) $(MD_HTML_FILE)
-			showfile show $(MTARG)/$(MD_SRC_NAME).html
+			$(MD_SHOWPREV_BIN) show $(MTARG)/$(MD_SRC_NAME).html
 
 # create and show the pdf document
 .PHONY:			markdown-show-pdf
 markdown-show-pdf:	$(MTARG) $(MD_PDF_FILE)
-			showfile show $(MTARG)/$(MD_SRC_NAME).pdf
+			$(MD_SHOWPREV_BIN) show $(MTARG)/$(MD_SRC_NAME).pdf
 
 # force a recompile for all files
 .PHONY:			markdown-force-compile
@@ -74,7 +74,7 @@ $(MD_INSTALL_FILE):	markdown-package
 # pandoc compile an html file
 %.html:			$(MD_SRC_FILE)
 			@echo "compiling HTML"
-			$(MD_PANDOC_BIN) --from=$(MD_PANDOC_FROM) --to=html \
+			$(MD_PANDOC_BIN) --from=gfm --to=html \
 				--metadata title="" \
 				--metadata pagetitle="$(MD_TITLE)" \
 				--css="$(MD_GITHUB_CSS)" \
