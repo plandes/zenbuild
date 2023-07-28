@@ -3,44 +3,62 @@
 ## includes
 include $(BUILD_MK_DIR)/python.mk
 
-.PHONY:		run
-run:		pycli
+# run the program with default parameters using the Python CLI make system
+.PHONY:			run
+run:			pycli
 
-.PHONY:		help
-help:		pyhelp
+# print the program command line help using the Python CLI make system
+.PHONY:			help
+help:			pyhelp
 
-.PHONY:		test
-test:		pytest
+# run the unit tests
+.PHONY:			test
+test:			pytest
 
-.PHONY:		package
-package:	pypackage
+# create the wheel distribution binary
+.PHONY:			package
+package:		pypackage
 
-.PHONY:		deps
-deps:		pydeps
+# pip install dependencies
+.PHONY:			deps
+deps:			pydeps
 
-.PHONY:		deps
-depcheck:	pydepcheck
+# run pip check
+.PHONY:			deps
+depcheck:		pydepcheck
 
-.PHONY:		deptree
-deptree:	pydeptree
+# print the python dependency tree
+.PHONY:			deptree
+deptree:		pydeptree
 
-.PHONY:		install
-install:	pyinstall
+# build and install the package locally
+.PHONY:			install
+install:		pyinstall
 
-.PHONY:		uninstall
-uninstall:	pyuninstall
+# uninstall the package locally
+.PHONY:			uninstall
+uninstall:		pyuninstall
 
-.PHONY:		reinstall
-reinstall:	uninstall install
+# remove the locally installed library (if installed), build and install
+.PHONY:			reinstall
+reinstall:		uninstall install
 
-.PHONY:		installnotest
-installnotest:	uninstall pyinstallnotest
+# same as `install` but do not run the tests
+.PHONY:			installnotest
+installnotest:		uninstall pyinstallnotest
 
-.PHONY:		reinstallnotest
+# same as `reinstall` but do not run the tests
+.PHONY:			reinstallnotest
 reinstallnotest:	uninstall pyinstallnotest
 
-.PHONY:		doc
-doc:		pydochtml
+# generate the API HTML documentation
+.PHONY:			doc
+doc:			pydochtml
 
-.PHONY:		deploy
-deploy:		pydist
+# like `doc` but deploy it to local site after generation
+.PHONY:			docdeploy
+docdeploy:		pydocdeploy
+
+# deploy the application to PyPi
+.PHONY:			deploy
+deploy:			pydist
