@@ -28,6 +28,10 @@ package:	texpackage
 .PHONY:		install
 install:	texinstall
 
+# build a final version and copy it to the install directory with a unique name
+.PHONY:		installtracked
+installtracked:	texinstalltracked
+
 # another name for install
 .PHONY:		dist
 dist:		texinstall

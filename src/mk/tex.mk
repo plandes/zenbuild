@@ -298,3 +298,11 @@ texinstall:	texpackage
 			echo "installing just PDF" ; \
 			cp $(TEX_PKG_DIR)/$(FINAL_NAME)/$(FINAL_NAME).pdf $(TEX_INSTALL_PDF) ; \
 		fi
+
+# compile a final version and copy it to the install directory with a unique
+# file name
+.PHONY:			texinstalltracked
+texinstalltracked:	texfinal
+			$(eval DFMT=$(shell date "+$(USER)-$(FINAL_NAME)-%b%d-%H%M" | tr "A-Z" "a-z"))
+			@echo $(DFMT)
+			cp $(TEX_PDF_FILE) $(TEX_INSTALL_DIR)/$(DFMT).pdf
