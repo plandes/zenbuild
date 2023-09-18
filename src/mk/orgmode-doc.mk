@@ -62,5 +62,5 @@ $(OM_HTML_DIR)/%.html:	%.html
 .PHONY:			orgmode-doc-show
 orgmode-doc-show:	orgmode-doc-html
 			@for i in $(OM_SHOW_FILES) ; do \
-				echo $(OM_SHOWPREV_BIN) show $$i ; \
+				$(OM_SHOWPREV_BIN) show $$i ; \
 			done
