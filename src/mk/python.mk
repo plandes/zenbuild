@@ -32,8 +32,8 @@ MTARG_PYDIST_ATFC ?=	$(MTARG_PYDIST_BDIR)/dist
 MTARG_WHEEL_DIR ?=	$(MTARG)/wheel
 
 # deploy
-PYPI_TEST_URL ?=	https://test.pypi.org/legacy/
-PYPI_NON_TEST_URL ?=	https://upload.pypi.org/legacy/
+PYPI_TEST_NAME ?=	pypitest
+PYPI_NON_TEST_NAME ?=	pypi
 PYPI_USER ?=		pypiuser
 PYPI_SIGN ?=		pypiuser@example.com
 
@@ -120,7 +120,6 @@ pytestvirtual:
 pypackage:		$(MTARG_PYDIST_ATFC)
 $(MTARG_PYDIST_ATFC):	$(MTARG_PYDIST_BDIR)
 			@echo "egg no longer supported by PyPi--skipping"
-#			( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py bdist_egg )
 			( cd $(MTARG_PYDIST_BDIR) ; $(PYTHON_BIN) setup.py bdist_wheel )
 			cp $(MTARG_PYDIST_ATFC)/* $(MTARG_PYDIST_DIR)
 			@echo "create wheel in $(MTARG_PYDIST_DIR)"
@@ -137,10 +136,10 @@ pyinstallnotest:
 # create a pip distribution and upload it
 .PHONY:			pydist
 pydist:			$(MTARG_PYDIST_ATFC)
-			@for url in $(PYPI_TEST_URL) $(PYPI_NON_TEST_URL) ; do \
-			    $(PYTHON_BIN) -m twine upload \
+			@for url in $(PYPI_TEST_NAME) $(PYPI_NON_TEST_NAME) ; do \
+			    $(PYTHON_BIN) -m twine upload --non-interactive \
 				--sign-with $(PYPI_SIGN) --username $(PYPI_USER) \
-				--repository-url $$url $(MTARG_PYDIST_ATFC)/* ; \
+				--repository $$url $(MTARG_PYDIST_ATFC)/* ; \
 			done
 
 # create wheel and its dependencies
