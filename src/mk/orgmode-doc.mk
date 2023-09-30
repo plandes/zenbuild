@@ -5,7 +5,7 @@
 include $(BUILD_MK_DIR)/emacs.mk
 
 # executables
-OM_SHOWPREV_BIN ?=	showfile
+OM_SHOWPREV_BIN ?=	rend
 
 # Emacs config
 OM_EMACS_SWITCHES +=	$(EMACS_SWITCHES)

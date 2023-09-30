@@ -2,7 +2,7 @@
 ## PL 12/08/2018
 
 # executables
-CNT_SHOWPREV_BIN ?=	showfile
+CNT_SHOWPREV_BIN ?=	rend
 # URL to deploy content
 CNT_DOC_URL ?=		https://example.com/webdavroot
 #

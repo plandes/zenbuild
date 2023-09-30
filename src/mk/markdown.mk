@@ -5,7 +5,7 @@
 #
 # executables
 MD_PANDOC_BIN ?=	pandoc
-MD_SHOWPREV_BIN ?=	showfile
+MD_SHOWPREV_BIN ?=	rend
 
 # metadata
 MD_SRC_NAME ?=		README

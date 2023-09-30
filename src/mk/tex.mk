@@ -5,7 +5,7 @@
 ## Binary setup
 #
 # to include in a makefile.in
-TEX_SHOWPREV_BIN ?=	showfile
+TEX_SHOWPREV_BIN ?=	rend
 TEX_SHOWPREV_ARGS ?=	show $(TEX_PDF_FILE)
 TEX_PRESENT_BIN ?=	/Applications/Présentation.app
 TEX_PYTHON_BIN ?=	python
