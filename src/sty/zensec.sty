@@ -30,7 +30,6 @@
 
 \newcommand{\zzpart}[2]{\part*{#2}\label{sec:#1}%
 \addcontentsline{toc}{part}{#2}}
-
 \newcommand{\zzchap}[2]{\chapter{#2}\label{chap:#1}}
 \newcommand{\zzsec}[2]{\section{#2}\label{sec:#1}}
 \newcommand{\zzsubsec}[2]{\subsection{#2}\label{sec:#1}}
@@ -39,17 +38,23 @@
 
 
 %% -- References
+% chapter
 \newcommand{\zzchapref}[1]{\zzhyperref{chap}{#1}{Chapter}}
 \newcommand{\zzseechap}[1]{(see \zzchapref{#1})}
 \newcommand{\zzchapnameref}[1]{\nameref{chap:#1}}
+% section
 \newcommand{\zzsecref}[1]{\zzhyperref{sec}{#1}{Section}}
 \newcommand{\zzSecref}[1]{\zzsecref{#1}}
 \newcommand{\zzseesec}[1]{(see \zzsecref{#1})}
 \newcommand{\zzsecnameref}[1]{\nameref{sec:#1}}
-% "see paragraph N" just uses the section number and is awkward
+% appendix
+\newcommand{\zzapxref}[1]{\zzhyperref{sec}{#1}{Appendix}}
+\newcommand{\zzApxref}[1]{\zzapxref{#1}}
+\newcommand{\zzseeapx}[1]{(see \zzapxref{#1})}
+\newcommand{\zzapxnameref}[1]{\nameref{sec:#1}}
+% paragraph: "see paragraph N" just uses the section number and is awkward
 \newcommand{\zzpararef}[1]{\zzsecnameref{#1}}
 \newcommand{\zzseepara}[1]{(see \nameref{sec:#1})}
-
 
 %% -- Mark places to return to work (must use zenindex.sty)
 \newcommand{\zztodo}[1]{FINISH MORE HERE: #1\idx{NOT FINISHED!#1}}
