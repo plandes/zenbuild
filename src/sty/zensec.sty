@@ -56,6 +56,15 @@
 \newcommand{\zzpararef}[1]{\zzsecnameref{#1}}
 \newcommand{\zzseepara}[1]{(see \nameref{sec:#1})}
 
+% shorten reference terms
+\newcommand{\zzabbrevrefs}{%
+  \renewcommand{\zzfigref}[1]{\zzhyperref{fig}{#1}{Fig}}
+  \renewcommand{\zzfigrefsub}[2]{\hyperref[fig:#1]{Fig \getrefnumber{fig:#1}#2}}
+  \renewcommand{\zzsecref}[1]{\zzhyperref{sec}{#1}{Sec}}
+  \renewcommand{\zztabref}[1]{\zzhyperref{tab}{#1}{Tab}}
+  \renewcommand{\zzapxref}[1]{\zzhyperref{sec}{#1}{Appx}}
+}
+
 %% -- Mark places to return to work (must use zenindex.sty)
 \newcommand{\zztodo}[1]{FINISH MORE HERE: #1\idx{NOT FINISHED!#1}}
 \newcommand{\zzsecreftbd}{Section~{\color{red}TBD}}
