@@ -302,7 +302,8 @@ texinstall:	texpackage
 # compile a final version and copy it to the install directory with a unique
 # file name
 .PHONY:			texinstalltracked
-texinstalltracked:	texfinal
+texinstalltracked:	compile
 			$(eval DFMT=$(shell date "+$(USER)-$(FINAL_NAME)-%b%d-%H%M" | tr "A-Z" "a-z"))
-			@echo $(DFMT)
+			@echo "copy tex source and PDF to $(TEX_INSTALL_DIR)..."
+			cp $(TEX).tex $(TEX_INSTALL_DIR)/$(DFMT).tex
 			cp $(TEX_PDF_FILE) $(TEX_INSTALL_DIR)/$(DFMT).pdf
