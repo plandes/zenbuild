@@ -61,6 +61,24 @@
 \end{center}
 }%zztable
 
+\renewenvironment{zztablehead}[6][ht]%
+{%
+\newcommand{\zzbasictablecap}{#3}
+\newcommand{\zzbasictablelab}{tab:#2}
+\newcommand{\zzbasictablehead}{#6}
+\begin{table}[#1]
+#4
+\begin{center}
+\begin{tabular}{#5}
+}%
+{%
+\end{tabular}
+\zutabcaption{\zzbasictablelab}{\textbf{\zzbasictablehead.} \zzbasictablecap}%
+\end{center}
+\end{table}
+}%zztablehead
+
+
 \renewenvironment{zzvarcolfigure}[6][\textwidth]%
 {%
 \newcommand{\zzvarcoltablelab}{fig:#3}%
