@@ -160,14 +160,18 @@ where:%
 
 \providecommand{\zmallabel}[1]{NOT DEFINED}
 
-\newenvironment{zmalgo}[3]%
-{%
-\begin{algorithm}[#1]
+
+\newcommand{\zmalgoinit}{%
 \SetKwProg{Fn}{Function}{}{end}%
 \SetKwInput{Input}{Input}%
 \SetKwInput{Output}{Output}%
 \SetKw{False}{false}%
-\SetKw{True}{true}%
+\SetKw{True}{true}}
+
+\newenvironment{zmalgo}[3]%
+{%
+\begin{algorithm}[#1]
+\zmalgoinit%
 \caption{#3}%
 \label{algo:#2}%
 \renewcommand{\zmallabel}[1]{\label{algoline:#2:##1}}%
