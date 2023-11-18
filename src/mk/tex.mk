@@ -129,23 +129,28 @@ $(TEX_MTARG_FILE):
 
 # copy over included latex source files
 $(TEX_LAT_PATH)/%.tex:		%.tex
+		@echo "copy tex file: $< -> $@"
 		@mkdir -p $(TEX_LAT_PATH)/$(*D)
 		@cp $< $@
 
 # copy over all vector .eps static files
 %.eps:		$(TEX_IMG_DIR)/$(@F) $(TEX_MTARG_FILE)
+		@echo "copy eps file: $(TEX_IMG_DIR)/$(@F) $@"
 		@cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all vector .pdf static files
 %.pdf:		$(TEX_IMG_DIR)/$(@F) $(TEX_MTARG_FILE)
+		@echo "copy pdf file: $(TEX_IMG_DIR)/$(@F) $@"
 		@cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all raster .png static files
 %.png:
+		@echo "copy png file: $(TEX_IMG_DIR)/$(@F) $@"
 		@cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all raster .jpg static files
 %.jpg:
+		@echo "copy jpg file: $(TEX_IMG_DIR)/$(@F) $@"
 		@cp $(TEX_IMG_DIR)/$(@F) $@
 
 # convert over all svg to pdf files
