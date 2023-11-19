@@ -1,8 +1,9 @@
 # make module for converting OmniGraffle diagrams to Encapsulated Postscript
 # files that are embedded in the final PDF.
+#
 # to use, add the following to the make file:
 # PROJ_LOCAL_MODULES= tex-graffle
-# 9/15/2019
+
 
 # script to generate EPS from OmniGraffle files
 TEX_GRF_BIN ?=	$(BUILD_BIN_DIR)/exportgraffle.scpt

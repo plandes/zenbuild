@@ -1,4 +1,8 @@
 # make module for generating a .bib file from a master source .bib file
+#
+# to use, add the following to the make file:
+# PROJ_LOCAL_MODULES= tex-bibstract
+
 
 BIB_FILE ?=		$(TEX).bib
 BIB_MASTER_FILE ?=

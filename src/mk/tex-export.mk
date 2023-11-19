@@ -1,6 +1,9 @@
 # latex export: create an export of the system so someone else can compile with
 # make, or for arXiv submissions
-# created: 9/07/2021
+#
+# to use, add the following to the make file:
+# PROJ_LOCAL_MODULES= tex-export
+
 
 ## environment
 #

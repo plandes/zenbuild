@@ -1,4 +1,8 @@
 # make module for creating bibtex (old) style bibliographies in latex
+#
+# to use, add the following to the make file:
+# PROJ_MODULES= tex-bib
+
 
 BIBTEX=		BSTINPUTS=$(TEX_PATHSTR) bibtex
 BIB_FILE ?=	$(TEX).bib

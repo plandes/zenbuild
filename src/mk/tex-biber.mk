@@ -1,4 +1,8 @@
 # make module for creating biber (new) style bibliographies in latex
+#
+# to use, add the following to the make file:
+# PROJ_MODULES= tex-biber
+
 
 BIBER ?=	BSTINPUTS=$(TEX_PATHSTR) biber
 BIB_FILE ?=	$(TEX).bib

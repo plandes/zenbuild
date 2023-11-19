@@ -1,7 +1,8 @@
 # make module for creating latex tables from CSV files
+#
 # to use, add the following to the make file:
 # PROJ_LOCAL_MODULES= tex-table
-# 9/15/2019
+
 
 # the script to generate the latex table
 TEX_TAB_BIN ?=		datdesc
