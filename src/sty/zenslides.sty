@@ -5,10 +5,15 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zenslides}[4/30/2018 Slides]
 
-%% beamer
+%% Imports
+%
+% beamer
 \usepackage{xspace}
 
-%% theme
+
+
+%% Theme / configuration
+%
 % https://deic.uab.cat/~iblanes/beamer_gallery/index_by_color.html
 % https://mirrors.rit.edu/CTAN/macros/latex/contrib/beamer-contrib/themes/metropolis/doc/metropolistheme.pdf
 \newcommand{\zsmetropolistheme}{%
@@ -22,25 +27,22 @@
 \newcommand{\zsaddlogo}{%
 \logo{\includegraphics[height=\zsaddlogosize]{\theorganizationlogo}}}
 
+% theme customization
 \newcommand{\zsaddsepcolors}{%
-%% theme
-\setbeamercolor{postit}{fg=black,bg=lightgray}
-\setbeamercolor{frametitle}{bg=lightgray}}
+  \setbeamercolor{postit}{fg=black,bg=lightgray}
+  \setbeamercolor{frametitle}{bg=lightgray}}
 
-%% beamer env
+% beamer environment
 \makeatletter
 % make footer slide number, title, etc
-\setbeamertemplate{footline}
-{
+\setbeamertemplate{footline}{
   \leavevmode%
   \hbox{%
   \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{section in head/foot}%
-%    \usebeamerfont{author in head/foot}\insertshortauthor~~\beamer@ifempty{\insertshortinstitute}{}{(\insertshortinstitute)}
-    \usebeamerfont{author in head/foot}\theauthor
+    \usebeamerfont{author in head/foot}\theauthor%
   \end{beamercolorbox}%
   \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{section in head/foot}%
-%    \usebeamerfont{title in head/foot}\insertshorttitle
-    \usebeamerfont{title in head/foot}\doctitle
+    \usebeamerfont{title in head/foot}\doctitle%
   \end{beamercolorbox}%
   \begin{beamercolorbox}[wd=.34\paperwidth,ht=2.25ex,dp=1ex,right]{section in head/foot}%
     \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
@@ -49,11 +51,104 @@
   \vskip0pt%
 }
 
-%% config
 % no navigation
 \setbeamertemplate{navigation symbols}{}
 
-%% references frame command
+
+
+%% Additive: title pages, banners, section images
+%
+% add watermark background and left image (i.e. QR code) in title frame
+% examples: \zswatermarktitle{qr-code.eps}{myorg-background.jpg}
+\newcommand{\zswatermarktitle}[3][1cm]{%
+  \usepackage{transparent}
+  \usepackage{eso-pic}
+  \usepackage[absolute,overlay]{textpos}
+  \setlength{\TPHorizModule}{1mm}
+  \setlength{\TPVertModule}{1mm}
+  \titlegraphic{%
+    \vspace{-.8cm}\hspace{-.2cm}\noindent\makebox[\textwidth]{
+      {\transparent{0.4}\includegraphics[width=1.4\paperwidth]{#3}}}
+    \begin{textblock}{0} (9.2, 78.5)
+      \includegraphics[width=#1]{#2}
+    \end{textblock}
+  }
+}
+
+% add the a logo to the banner at the top right
+\newcommand{\zsaddlogobanner}[2][0.8cm]{%
+  \addtobeamertemplate{frametitle}{}{%
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[anchor=north east,yshift=2pt] at (current page.north east)
+      {\includegraphics[height=0.8cm]{#2}};
+    \end{tikzpicture}
+  }
+}
+
+% add image to section slides
+% example: \AtBeginSection[]{\zssectionimage{clipart.eps}}
+\newcommand{\zssectionimage}[2][8pt]{%
+  \begin{frame}
+     \vfill
+     \centering
+     \includegraphics[width=3cm]{#2}
+     \begin{beamercolorbox}[sep=#1,center,shadow=true,rounded=true]{title}
+        \usebeamerfont{title}\insertsectionhead\par%
+     \end{beamercolorbox}
+     \vfill 
+  \end{frame}
+}
+
+% add page number to center bottom
+\newcommand{\zsbottompagenumber}{%
+  \defbeamertemplate{footline}{centered page number}{%
+    \hspace*{\fill}%
+    \usebeamercolor[fg]{page number in head/foot}%
+    \usebeamerfont{page number in head/foot}%
+    \insertpagenumber\,/\,\insertpresentationendpage%
+    \hspace*{\fill}\vskip2pt}
+  \setbeamertemplate{footline}[centered page number]
+}
+
+
+
+%% Commands
+%
+% reduce space between institutions in maketitle
+\newcommand{\zsinstspace}{%
+  \makeatletter
+  \def\beamer@andinst{\\[0em]}
+  \makeatother
+}
+\renewcommand{\zzsec}[2][<none>]{\section{#2}\label{sec:#1}}
+
+% citations
+\newcommand{\zzcitelong}[1]{\citeauthor{#1}, \citetitle{#1} \citeyear{#1}}
+\newcommand{\zzfootcite}[2][]{\footnote{\zzcitelong{#2}~\cite[#1]{#2}}}
+\newcommand{\zzfootciteauthor}[1]{\zzciteauthorcite{#1}\zzfootcite{#1}}
+\newcommand{\zzfootciteshort}[1]{\zzciteshortcite{#1}\zzfootcite{#1}}
+
+% commands annotations used by macOS Présentation.app
+\newcommand{\zscr}{\textCR}
+\ifdefined\ispresentation%
+  % used by Presentation.app with \zsnote
+  \usepackage[draft]{pdfcomment}
+  \makeatletter
+  \newcommand{\zsnote}[1]{\marginnote{
+      \let\par\textCR%
+      \pdfcomment[icon=note]{#1}}}
+  \makeatother
+\else
+  \newcommand{\zsnote}[1]{\note[item]{
+      \let\par\textCR%
+      #1}}
+\fi
+
+
+
+%% Frames
+%
+% references frame command
 \newcommand{\zsrefframe}{%
 \setbeamertemplate{bibliography item}{\insertbiblabel}
 \setbeamertemplate{frametitle continuation}[from second]
@@ -66,8 +161,7 @@
   \printbibliography%
 \end{frame}}
 
-%% quotes in boxes
-%\newcommand{\zsquotestyle}{dp=0.3cm,rounded=true,shadow=true}
+% quotes in boxes
 \providecommand{\zsquotecolor}{postit}
 \newenvironment{zsquotebox}[1][dp=0.3cm,rounded=true,shadow=true]{%
 \begin{beamercolorbox}[#1]{\zsquotecolor}%
@@ -76,7 +170,7 @@
 \noindent
 }{\end{beamercolorbox}}
 
-% \begin{zsquoteboxauthor}[rounded=false]{Richard Stallman}
+% example: \begin{zsquoteboxauthor}[rounded=false]{Richard Stallman}
 \newenvironment{zsquoteboxauthor}[2][dp=0.3cm,rounded=true,shadow=true]{%
 \newcommand{\zsquoteauthorname}{#2}%
 \begin{zsquotebox}[#1]\ignorespaces}
@@ -89,37 +183,30 @@
 \begin{zsquoteboxauthor}[shadow=false]{#1}}
 {\end{zsquoteboxauthor}}
 
-
-%% commands
-\renewcommand{\zzsec}[2][<none>]{\section{#2}\label{sec:#1}}
-
+% demo frame
 \newcommand{\zsdemoframe}{%
 \begin{frame}[standout]
    Demo
 \end{frame}}
 
+% questions frame
 \newcommand{\zsquestionsframe}{%
 \begin{frame}[standout]
   Questions
 \end{frame}}
 
-\newcommand{\zzcitelong}[1]{\citeauthor{#1}, \citetitle{#1} \citeyear{#1}}
-\newcommand{\zzfootcite}[2][]{\footnote{\zzcitelong{#2}~\cite[#1]{#2}}}
-\newcommand{\zzfootciteauthor}[1]{\zzciteauthorcite{#1}\zzfootcite{#1}}
-\newcommand{\zzfootciteshort}[1]{\zzciteshortcite{#1}\zzfootcite{#1}}
+% a frame with an image (designed as "Questions" w/QR but any image will work)
+% example: \zsqrframe{https://example.com}{qr-code.eps}
+\newcommand{\zsqrframe}[3][Questions]{%
+  \begin{frame}[standout]
+    \href{#2}{#2}
 
-\newcommand{\zscr}{\textCR}
-%% presentation
-\ifdefined\ispresentation%
-  % used by Presentation.app with \zsnote
-  \usepackage[draft]{pdfcomment}
-  \makeatletter
-  \newcommand{\zsnote}[1]{\marginnote{
-      \let\par\textCR
-      \pdfcomment[icon=note]{#1}}}
-  \makeatother
-\else
-  \newcommand{\zsnote}[1]{\note[item]{
-      \let\par\textCR%
-      #1}}
-\fi
+    \vspace{1cm}
+
+    \includegraphics[width=2cm]{#3}
+
+    \vspace{1cm}
+
+    #1
+  \end{frame}
+}
