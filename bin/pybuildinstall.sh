@@ -1,10 +1,6 @@
 #!/bin/sh
 
-if [ "$1" == "--help" ] ; then
-    echo "usage: $0 [--skip]"
-    echo "if --skip is given, then skip keyring install"
-    exit 0
-fi
+# @meta {desc: 'install Python build dependencies', date: '2023-11-30'}
 
 PYPI_URLS="https://test.pypi.org/legacy/ https://upload.pypi.org/legacy/"
 
@@ -16,7 +12,7 @@ fi
 
 
 echo "installing libraries for Python deployments"
-for i in setuptools twine wheel keyring pip-tools pipdeptree ; do
+for i in setuptools twine wheel keyring pip-tools pipdeptree plac ; do
     pip install -U $i
 done
 
@@ -43,14 +39,6 @@ echo "installing jupyter and widgets for notebook web interface"
 for i in notebook ipywidgets ; do
     pip install -U $i
 done
-
-if [ "$1" != "--skip" ] ; then
-    echo "yeah, you really have to provide password (each time); this stores it with keyring"
-    echo "on linux or if you don't want to store a password, press <RET> several times"
-    for i in $PYPI_URLS ; do
-	python -m keyring set $i zensols
-    done
-fi
 
 # needed for python utililty scripts
 pip install -r requirements.txt 
