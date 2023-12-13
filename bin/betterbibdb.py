@@ -21,8 +21,9 @@ apps = list: config_cli, app
 class_name = zensols.cli.ConfigurationImporter
 
 [sqlite_conn_manager]
-class_name = zensols.db.SqliteConnectionManager
+class_name = zensols.db.SqliteAttachConnectionManager
 db_file = path: ${default:data_dir}/better-bibtex.sqlite
+database_name = betterbibtex
 
 [import]
 sections = list: imp_env
@@ -38,7 +39,8 @@ conn_manager = instance: sqlite_conn_manager
 
 [app]
 class_name = betterbibdb.Application
-sql = select data from 'better-bibtex' where name = 'better-bibtex.citekey'
+sql = select * from betterbibtex.`better-bibtex`
+      where name = 'better-bibtex.citekey'
 persister = instance: db_persister
 """
 
@@ -54,12 +56,12 @@ class Application(object):
 
     @property
     def database(self) -> Dict[str, Dict[str, Any]]:
-        """Get all entries from the BetterBibtex database with <libraryID>_<itemKey> as
-        keys and the dict entry as values.
+        """Get all entries from the BetterBibtex database with
+        <libraryID>_<itemKey> as keys and the dict entry as values.
 
         """
-        res: Tuple[Tuple[str]] = self.persister.execute(self.sql)
-        col_data = json.loads(res[0][0])
+        rows: Tuple[Tuple[str]] = self.persister.execute(self.sql)
+        col_data = json.loads(rows[0][1])
         db = col_data['data']
         return {f"{d['libraryID']}_{d['itemKey']}": d for d in db}
 
