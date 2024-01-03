@@ -21,7 +21,7 @@ apps = list: config_cli, app
 class_name = zensols.cli.ConfigurationImporter
 
 [sqlite_conn_manager]
-class_name = zensols.db.SqliteAttachConnectionManager
+class_name = zensols.db.sqlite.SqliteAttachConnectionManager
 db_file = path: ${default:data_dir}/better-bibtex.sqlite
 database_name = betterbibtex
 
