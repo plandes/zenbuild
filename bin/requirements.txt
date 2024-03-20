@@ -2,5 +2,5 @@ PyYAML~=6.0.1
 tabulate>=0.8.3
 pandas>=0.23.4
 plac>=0.9.6
-black==21.12b0
+black==24.3.0
 zensols.datdesc
