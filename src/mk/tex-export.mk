@@ -46,6 +46,9 @@ texexportprep:	texinstall
 			$(TEX_LAT_PATH)/*.jpg $(TEX_LAT_PATH)/*.gif \
 			$(TEX_LAT_PATH)/*.sty) $(TEX_EXPORT_DIR)
 		cp $(wildcard $(addsuffix /*,$(TEX_PATH))) $(TEX_EXPORT_DIR)
+		if [ ! -z "$(TEX_ADD_LATEX_FILES)" ] ; then \
+			cp $(TEX_ADD_LATEX_FILES) $(TEX_EXPORT_DIR) ; \
+		fi
 		if [ ! -z "$(TEX_EXPORT_ADDS)" ] ; then \
 			cp -r $(TEX_EXPORT_ADDS) $(TEX_EXPORT_DIR) ; \
 		fi
