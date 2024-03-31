@@ -20,6 +20,8 @@ TEX_PATH +=		$(BUILD_SRC_DIR)/sty $(abspath ./sty)
 TEX_LAT_PATH =		$(MTARG)/lat
 TEX_PATH_MTARG =	$(TEX_LAT_PATH) $(TEX_PATH)
 TEX_PATHSTR =		$(subst $(TEX_space),:,$(TEX_PATH_MTARG))
+# entire tex path (colon) separated syntax
+TEX_PATHSEP =		$(subst $(TEX_space),:,$(TEX_PATH)):.
 # trailing colon needed
 TEX_TPATH =		TEXINPUTS=$(TEX_PATHSTR):
 TEX_PDFLAT_ARGS +=

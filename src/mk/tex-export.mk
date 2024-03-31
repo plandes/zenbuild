@@ -5,12 +5,18 @@
 # PROJ_LOCAL_MODULES= tex-export
 
 
-## environment
+## Environment
 #
-# bin
-TEX_EXPORT_IMG_CLEAN=	$(BUILD_BIN_DIR)/cleanlatex.py
+# executables
+TEX_EXPORT_IMG_CLEAN =	$(BUILD_BIN_DIR)/cleanlatex.py
+TEX_EXPORT_LATIDX =	$(HOME)/view/util/latidx/latidx
 
-# export
+# tex path
+TEX_EXPORT_SPACE :=	$(subst ,, )
+# latidx path
+TEX_EXPORT_LATIDX_PATH=	$(TEX_PATHSEP):$(TEX_LAT_PATH)
+
+# paths
 TEX_EXPORT_DIR ?=	$(MTARG)/export/$(FINAL_NAME)
 TEX_EXPORT_ZIP_DIR ?=	$(notdir $(TEX_EXPORT_DIR))
 TEX_EXPORT_ZIP ?=	$(FINAL_NAME).zip
@@ -25,16 +31,22 @@ TEX_EXPORT_ADDS +=
 TEX_EXPORT_ADD_PDF ?=
 
 # build
+INFO_TARGETS +=		texexportinfo
 ADD_CLEAN_ALL +=	$(TEX_EXPORT_INST_ZIP)
 
 
-## targets
+## Targets
 #
+.PHONY:		texexportinfo
+texexportinfo:
+		@echo "tex-export-latidx-path: $(TEX_EXPORT_LATIDX_PATH)"
+
 # re-export running only the necessary steps to create the export directory
 # handy for debugging
 .PHONY:		texexportredo
 texexportredo:
 		rm -fr $(TEX_EXPORT_DIR)
+		rm -f $(TEX_EXPORT_DIR).zip
 		make texexport
 
 # prepare for export by copy files and creating configuration
@@ -43,15 +55,15 @@ texexportprep:	texinstall
 		mkdir -p $(TEX_EXPORT_DIR)
 		cp $(wildcard $(BIB_FILE) $(BBL_FILE)) $(TEX_EXPORT_DIR)
 		cp $(wildcard $(TEX_LAT_PATH)/*.eps $(TEX_LAT_PATH)/*.png \
-			$(TEX_LAT_PATH)/*.jpg $(TEX_LAT_PATH)/*.gif \
-			$(TEX_LAT_PATH)/*.sty) $(TEX_EXPORT_DIR)
-		cp $(wildcard $(addsuffix /*,$(TEX_PATH))) $(TEX_EXPORT_DIR)
-		if [ ! -z "$(TEX_ADD_LATEX_FILES)" ] ; then \
-			cp $(TEX_ADD_LATEX_FILES) $(TEX_EXPORT_DIR) ; \
-		fi
+			$(TEX_LAT_PATH)/*.jpg $(TEX_LAT_PATH)/*.gif) \
+			$(TEX_EXPORT_DIR)
 		if [ ! -z "$(TEX_EXPORT_ADDS)" ] ; then \
 			cp -r $(TEX_EXPORT_ADDS) $(TEX_EXPORT_DIR) ; \
 		fi
+		$(TEX_EXPORT_LATIDX) deps $(TEX_EXPORT_LATIDX_PATH) \
+			--source $(TEX_LATEX_FILE) -f list | \
+			grep -v $(notdir $(TEX_LATEX_FILE)) | \
+			xargs -i{} cp {} $(TEX_EXPORT_DIR)
 		cat $(BUILD_SRC_DIR)/template/tex/export-makefile | \
 			sed 's/{{TEX_FILE_NAME}}/$(FINAL_NAME)/g' | \
 			sed 's/{{TEX_FINAL_RUNS}}/$(TEX_FINAL_RUNS)/g' | \
@@ -63,6 +75,13 @@ texexportprep:	texinstall
 		if [ ! -z "$(BIBER)" ] ; then \
 			touch $(TEX_EXPORT_DIR)/zenbiber ; \
 		fi
+
+# print (use)package dependency tree
+.PHONY:		texexportdeps
+texexportdeps:	texcompile
+		@echo "tex path: $(TEX_EXPORT_LATIDX_PATH)"
+		@$(TEX_EXPORT_LATIDX) deps $(TEX_EXPORT_LATIDX_PATH) \
+			--source $(TEX_LATEX_FILE)
 
 # remove superfluous image files
 .PHONY:		texexportimgclean

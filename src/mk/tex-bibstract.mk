@@ -9,9 +9,8 @@ BIB_MASTER_FILE ?=
 BIBSTRACT ?=		bibstract
 BIBSTRACT_ARGS ?=	export
 ifdef BIBSTRACT_EXPORT_ALL
-BIBSTRACT_SPACE :=	$(subst ,, )
 # add entire tex path in colon syntax
-BIBSTRACT_TEX_PATH ?=	$(subst $(BIBSTRACT_SPACE),:,$(TEX_PATH)):.
+BIBSTRACT_TEX_PATH ?=	$(TEX_PATHSEP)
 else
 BIBSTRACT_TEX_PATH ?=	..
 endif
