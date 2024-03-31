@@ -53,11 +53,10 @@ $(GIT_DOC_DST_DIR):	$(GIT_DOC_SRC_DIR)
 .PHONY:			gitdocdeploy
 gitdocdeploy:		clean $(GIT_DOC_PUSH_DEPS)
 			@echo "pushing to $(GIT_DOC_REMOTE)"
-			git push $(GIT_DOC_REMOTE) --mirror
 			( cd $(GIT_DOC_DST_DIR) ; \
 			  git add . ; \
 			  git commit -am "new doc push" ; \
-			  git push -u origin gh-pages ; \
+			  git push -u origin gh-pages --force ; \
 			  sleep 2 ; \
 			  git commit --allow-empty -m "trigger rebuild" ; \
 			  git push )
