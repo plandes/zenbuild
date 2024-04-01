@@ -9,7 +9,7 @@
 #
 # executables
 TEX_EXPORT_IMG_CLEAN =	$(BUILD_BIN_DIR)/cleanlatex.py
-TEX_EXPORT_LATIDX =	$(HOME)/view/util/latidx/latidx
+TEX_EXPORT_LATIDX =	latidx
 
 # tex path
 TEX_EXPORT_SPACE :=	$(subst ,, )
