@@ -97,6 +97,17 @@
 \label{fig:#2}
 \end{figure}}
 
+% raster version with a an extension; split of name and extension for refs
+% ex: \zzfigurerasthead{\columnwidth}{loss-snapshot}{png}{Validation and Training Loss}{description}
+\providecommand{\zzfigurerasthead}[5]{%
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=#1]{#2.#3}
+\end{center}
+\caption[#4]{\textbf{#4.} #5}%
+\label{fig:#2}
+\end{figure}}
+
 % raster version with a an extension two column
 % ex: \zzfigurerast{\textwidth}{loss-snapshot}{png}{Validation and Training Loss}
 \providecommand{\zzfigurerasttc}[4]{%

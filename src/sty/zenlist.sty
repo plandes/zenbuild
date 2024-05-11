@@ -93,3 +93,6 @@
 \newenvironment{zzitemizeinline}[1][,\ ]
 {\begin{itemize*}[label={}, itemjoin={#1}, itemjoin*={, and\ }, afterlabel={}, after={.}]}
 {\end{itemize*}}
+
+% reference a step in an enumerated list
+\newcommand{\zzsecstep}[1]{(\ref{sec:#1})}
