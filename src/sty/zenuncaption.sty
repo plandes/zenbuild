@@ -1,0 +1,31 @@
+% This package removes figure and table captions; useful in slides
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zenuncaption}[5/24/2024 Remove figure and table captions]
+
+% remove figure captions
+\renewcommand{\zzfigure}[3]{\center{\includegraphics[width=#1]{#2}}}
+%% remove "figure"
+\renewcommand{\zzfigurerast}[4]{%
+\begin{center}
+\includegraphics[width=#1]{#2.#3}
+\end{center}}
+
+%% remove "table" and captions
+\renewenvironment{zztablehead}[6][ht]%
+{%
+\begin{center}
+#4
+\begin{tabular}{#5}
+}%
+{\end{tabular}\end{center}}%
+
+\renewenvironment{zztable}[5][ht]%
+{%
+#4
+\begin{center}
+\begin{tabular}{#5}
+}%
+{%
+\end{tabular}
+\end{center}
+}%

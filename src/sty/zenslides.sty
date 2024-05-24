@@ -59,7 +59,7 @@
 %% Additive: title pages, banners, section images
 %
 % add watermark background in the title frame
-% examples: \zswatermarktitle{qr-code.eps}{myorg-background.jpg}
+% examples: \zswatermarktitle{myorg-background.jpg}
 \newcommand{\zswatermarktitle}[2][1cm]{%
   \usepackage{transparent}
   \usepackage{eso-pic}
@@ -90,6 +90,7 @@
 }
 
 % add the a logo to the banner at the top right
+% example: \zsaddlogobanner{your-org.eps}
 \newcommand{\zsaddlogobanner}[2][0.8cm]{%
   \addtobeamertemplate{frametitle}{}{%
     \begin{tikzpicture}[remember picture,overlay]
@@ -113,7 +114,7 @@
   \end{frame}
 }
 
-% add page number to center bottom
+% move page number to center bottom and add total slide count
 \newcommand{\zsbottompagenumber}{%
   \defbeamertemplate{footline}{centered page number}{%
     \hspace*{\fill}%
@@ -122,6 +123,15 @@
     \insertpagenumber\,/\,\insertpresentationendpage%
     \hspace*{\fill}\vskip2pt}
   \setbeamertemplate{footline}[centered page number]
+}
+
+% add table of contents between each section
+\newcommand{\zstocsections}{%
+  \AtBeginSection[]{
+    \begin{frame}
+      \tableofcontents[currentsection, subsectionstyle=show/show/hide]
+    \end{frame}
+  }
 }
 
 
