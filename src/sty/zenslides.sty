@@ -207,6 +207,20 @@
 \begin{zsquoteboxauthor}[shadow=false]{#1}}
 {\end{zsquoteboxauthor}}
 
+% entire width image frames
+% example: \begin{zsimageframe}{someeps}{Frame Title}
+\makeatletter
+\newlength\beamerleftmargin%
+\setlength\beamerleftmargin{\Gm@lmargin}
+\makeatother
+\newenvironment{zsimageframe}[3][\paperwidth]{%
+  \begin{centering}
+    \setbeamercolor{background canvas}{bg=white}
+    \begin{frame}{#3}
+      \hspace*{-\beamerleftmargin}%
+      \includegraphics[width=#1]{#2}
+}{\end{frame}\end{centering}}
+
 % demo frame
 \newcommand{\zsdemoframe}{%
 \begin{frame}[standout]
