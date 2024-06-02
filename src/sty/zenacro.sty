@@ -265,6 +265,7 @@
 % \zzdefintrodef and \zzdefintroacrodef combined.  This lets you decide between
 % having the acro version: Rouge (Recall-Oriented..), or the description
 % version (\rougewhich) : Rouge, which is a measure that...
+% The description and definition is available with \rougedesc and \rougedef
 % ex:
 % \zzdefintroacrodescdef{rouge}{\rougename}{%
 %   Recall-Oriented Understudy for Gisting Evaluation}{%
@@ -284,7 +285,9 @@
 }%
 \expandafter\newcommand\csname #1\endcsname{\ac{#1}}%
 \expandafter\newcommand\csname #1which\endcsname{\acp{#1}}%
-\expandafter\newcommand\csname #1s\endcsname{\aca{#1}}}
+\expandafter\newcommand\csname #1s\endcsname{\aca{#1}}%
+\expandafter\newcommand\csname #1def\endcsname{{#5}}%
+\expandafter\newcommand\csname #1desc\endcsname{{\xmakefirstuc{#4}.}}}
 
 
 % NOTE: leaves bad links in the main body text, use \zznoteref instead
