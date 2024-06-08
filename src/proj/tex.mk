@@ -40,6 +40,10 @@ dist:		texinstall
 .PHONY:		present
 present:	texpresent
 
+# compile and view the presentation version of the file in the presentation app
+.PHONY:		presentshow
+presentshow:	texpresentshow
+
 # create a no dependency (from zenbuild) directory with files to recreate PDF
 .PHONY:		export
 export:		texexport

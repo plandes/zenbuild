@@ -252,14 +252,31 @@ texfinal:
 .PHONY:		texfinalshow
 texfinalshow:	texfinal texshowfile
 
+# force compile the presentation version
+.PHONY:			texpresentforce
+texpresentforce:
+			make TEX_LATEX_INIT_CMD="\newif\ifisfinal\isfinaltrue \def\ispresentation{1}" \
+				texforce
+
+# kill the presentation app if running, then restart with new file version
+.PHONY:			texpresentopen
+texpresentopen:
+			@for i in $$( ps -eaf | grep presentation.py | grep -v grep | awk '{print $$2}' ) ; do \
+				kill $$i ; \
+			done
+			open -a $(TEX_PRESENT_BIN) $(TEX_PDF_FILE)
+
+# compile and view the presentation version of the file in the presentation app
+.PHONY:			texpresentshow
+texpresentshow:		texpresentforce texpresentopen
+
 # create the presentation form of the slides
 .PHONY:		texpresentpdf
 texpresentpdf:
 		@echo "creating prsentation slides; final runs: $(TEX_FINAL_RUNS)"
 		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
 			echo "run number $$i" ; \
-			make TEX_LATEX_INIT_CMD="\newif\ifisfinal\isfinaltrue \def\ispresentation{1}" \
-				texforce ; \
+			make texpresentforce
 			if [ $$? != 0 ] ; then \
 				exit 1 ; \
 			fi ; \
