@@ -276,7 +276,7 @@ texpresentpdf:
 		@echo "creating prsentation slides; final runs: $(TEX_FINAL_RUNS)"
 		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
 			echo "run number $$i" ; \
-			make texpresentforce
+			make texpresentforce ; \
 			if [ $$? != 0 ] ; then \
 				exit 1 ; \
 			fi ; \
