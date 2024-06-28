@@ -225,17 +225,17 @@ texopen:	texcompile
 texreopen:	texforce
 		osascript -e 'tell application "Preview" to activate'
 
-.PHONY:		texshowfile
-texshowfile:
+.PHONY:		texrend
+texrend:
 		$(TEX_SHOWPREV_BIN) $(TEX_SHOWPREV_ARGS)
 
 # show and reposition the Preview.app window (under MacOS)
 .PHONY:		texshow
-texshow:	texforce texshowfile
+texshow:	texforce texrend
 
 # run in "debug mode" and then show
 .PHONY:		texdebugshow
-texdebugshow:	texdebug texshowfile
+texdebugshow:	texdebug texrend
 
 # final version: compile twice for refs and bibliography
 .PHONY:		texfinal
@@ -250,7 +250,7 @@ texfinal:
 
 # create the final version, then display it like texshow
 .PHONY:		texfinalshow
-texfinalshow:	texfinal texshowfile
+texfinalshow:	texfinal texrend
 
 # force compile the presentation version
 .PHONY:			texpresentforce

@@ -52,6 +52,10 @@ export:		texexport
 .PHONY:		show
 show:		texshow
 
+# same as show, but don't compile first
+.PHONY:		rend
+rend:		texrend
+
 # build use macOS Preview.app to display in a specified lcoation
 .PHONY:		finalshow
 finalshow:	texfinalshow
