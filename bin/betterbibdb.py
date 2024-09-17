@@ -4,7 +4,6 @@ from typing import Tuple, Any, Dict
 from dataclasses import dataclass
 from io import StringIO
 import sys
-import json
 from sqlite3 import OperationalError
 from zensols.config import ConfigurableError
 from zensols.cli import ApplicationFactory as CliApplicationFactory
@@ -14,7 +13,6 @@ from zensols.db import DbPersister
 
 CONFIG = """
 [cli]
-class_name = zensols.cli.ActionCliManager
 apps = list: config_cli, app
 
 [config_cli]
@@ -39,8 +37,7 @@ conn_manager = instance: sqlite_conn_manager
 
 [app]
 class_name = betterbibdb.Application
-sql = select * from betterbibtex.`better-bibtex`
-      where name = 'better-bibtex.citekey'
+sql = select libraryID, itemKey, citationKey from betterbibtex.`citationkey`
 persister = instance: db_persister
 """
 
@@ -60,10 +57,13 @@ class Application(object):
         <libraryID>_<itemKey> as keys and the dict entry as values.
 
         """
+        def map_row(r: Tuple[Any, ...]) -> Tuple[str, Dict[str, Any]]:
+            key = f'{r[0]}_{r[1]}'
+            data = {'libraryID': r[0], 'itemKey': r[1], 'citekey': r[2]}
+            return key, data
+
         rows: Tuple[Tuple[str]] = self.persister.execute(self.sql)
-        col_data = json.loads(rows[0][1])
-        db = col_data['data']
-        return {f"{d['libraryID']}_{d['itemKey']}": d for d in db}
+        return dict(map(map_row, rows))
 
     def lookup(self, format: str = '{entry}', key: str = None):
         """Look up a citation key and print out BetterBibtex field(s).

@@ -120,6 +120,10 @@ INFO is optional information about the export process."
 
 (add-hook 'org-export-filter-link-functions 'zb-org-filter-link-function)
 
+;; Org Mode 9.x needs an entry entry in `org-link-parameters'
+(org-link-set-parameters "zotero" :export nil)
+
+
 (defun zb-org-mode-publish (output-directory &optional publish-fn
 					     better-bibtex-program
 					     includes excludes)
@@ -142,6 +146,7 @@ used as additional resource directories that are copied to the OUTPUT-DIRECTORY.
 
 EXCLUDES is used in the `:exclude' property, which is a regular expression of
 files, that if matches, is excluded from the list of files to copy."
+  (message "Remember to close the Zotero application")
   (setq excludes (or excludes "^\\(.gitignore\\|.*\\.org\\)$"))
   (setq publish-fn (or publish-fn #'org-html-publish-to-html))
   (when (stringp includes)
