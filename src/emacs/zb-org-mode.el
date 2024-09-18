@@ -130,8 +130,7 @@ INFO is optional information about the export process."
 	  (message "Replacing link %s -> %s" prev-link text))))
     text))
 
-(defun zb-org-mode-publish (output-directory &optional publish-fn
-					     better-bibtex-program
+(defun zb-org-mode-publish (output-directory &optional publish-fn betterbibtexp
 					     includes excludes)
   "Publish an Org Mode project in to a website.
 
@@ -141,11 +140,10 @@ This first sets `org-publish-project-alist', and then calls
 OUTPUT-DIRECTORY is the directory where the output files are generated and/or
 copied.
 
+BETTERBIBTEXP is non-nil to indicate to use BetterBibtex cite keys.
+
 PUBLISH-FN is the function that is used for the `:publishing-function' and
 defaults to `org-html-publish-to-html'.
-
-BETTER-BIBTEX-PROGRAM is the program that creates item key to BetterBibtex
-citekeys.
 
 INCLUDES is either a string (which is split on whitespace) or a list of strings
 used as additional resource directories that are copied to the OUTPUT-DIRECTORY.
@@ -158,13 +156,13 @@ files, that if matches, is excluded from the list of files to copy."
   (when (stringp includes)
     (setq includes (split-string (string-trim includes))))
   ;; set cache of item key to BetterBibtex keys if the script is available
-  (let (bb-ids)
-    (if better-bibtex-program
-	(setq bb-ids (zb-org-get-better-bibtex-ids better-bibtex-program))
-      (setq zb-org-better-bibtex-enabled nil))
+  (let* ((bb-ids (when betterbibtexp
+		   (condition-case nil
+		       (zb-org-get-better-bibtex-ids)
+		     (error nil))))
+	 (zb-org-better-bibtex-enabled (if bb-ids t nil)))
     (when zb-org-better-bibtex-debug
-      (message "BetterBibtex mapping (prog=%s, enable=%S, link count=%d)"
-	       better-bibtex-program
+      (message "BetterBibtex mapping (enable=%S, link count=%d)"
 	       zb-org-better-bibtex-enabled
 	       (length bb-ids))))
   (->> includes

@@ -1,48 +1,47 @@
-## make include file for Emacs Org using the publish functionality
-## PL 8/08/2021
+#@meta {desc: 'Emacs Org using the publish functionality', date: '2021-08-08'}
 
 
+## Build
+#
 # override the execution target to publish vs. export from orgmode-doc.mk
 OM_BUILD_TARG =		orgmode-publish-html
 
 
-# project
-
+## Project
+#
 # export function for output formt: use Bootstrap compatible HTML Back-End for
 # Org instead of default emacs
 #OM_PB_FUNC_HTML ?=	org-html-publish-to-html
 OM_PB_FUNC_HTML ?=	org-twbs-publish-to-html
-# the script to create BetterBibtex item key to better bibtex ID mapping
-OM_PB_BET_BIB_PROG ?=	$(BUILD_BIN_DIR)/betterbibdb.py
-# set this to 1 in the makefile to enable zotero to zotsite links
+
+# set this to "t" in the makefile to enable zotero to zotsite links
 # (https://github.com/plandes/zotsite) and environment variable CNT_SITE_SERV
 # to be set to the URL of your deployed Zotero site.
-OM_PB_BET_BIB_USE ?=	0
-ifeq ($(OM_PB_BET_BIB_USE),1)
-OM_PB_BET_BIB_PROG_USE = \"$(OM_PB_BET_BIB_PROG)\"
-else
-OM_PB_BET_BIB_PROG_USE = nil
-endif
+OM_PB_BET_BIB_USE ?=	nil
+
 # declare additional directories to copy to the site export directory
 OM_PB_SITE_OBJS +=	
+
 # emacs lisp that invokes the org-mode publish
 OM_PB_EXPORT_EVAL =	$(subst PUB_LIB,$(BUILD_SRC_DIR)/emacs/zb-org-mode.el,\
 			$(subst FILE,$(OM_MD_ORG_NAME),\
 			$(subst OM_PB_FUNC_HTML,$(OM_PB_FUNC_HTML),\
 			$(subst OM_PB_SITE_OBJS,$(OM_PB_SITE_OBJS),\
-			$(subst OM_PB_BET_BIB_PROG,$(OM_PB_BET_BIB_PROG_USE),\
+			$(subst OM_PB_BET_BIB_USE,$(OM_PB_BET_BIB_USE),\
 			$(subst OM_HTML_DIR,$(OM_HTML_DIR),"\
 (progn\
   (load \"~/.emacs\")\
   (load \"PUB_LIB\")\
   (with-temp-buffer (org-mode)\
   (find-file \"FILE\")\
-  (zb-org-mode-publish \"OM_HTML_DIR\" 'OM_PB_FUNC_HTML OM_PB_BET_BIB_PROG \"OM_PB_SITE_OBJS\")))"\
+  (zb-org-mode-publish \"OM_HTML_DIR\" 'OM_PB_FUNC_HTML OM_PB_BET_BIB_USE \"OM_PB_SITE_OBJS\")))"\
 			))))))
 
 
-# targets
-
+## Targets
+#
+# 
+# only invoke the publish process to generate the site files if necessary
 .PHONY:			orgmode-publish-html
 orgmode-publish-html:
 			@if [ ! -d $(OM_HTML_DIR) ] ; then \
@@ -51,6 +50,7 @@ orgmode-publish-html:
 				echo "nothing to do (try cleaning): $(OM_HTML_DIR) exists" ; \
 			fi
 
+# invoke the publish process to generate the site files
 .PHONY:			orgmode-publish-invoke
 orgmode-publish-invoke:
 			@echo "publishing..."
