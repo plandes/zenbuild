@@ -35,6 +35,8 @@
 
 (require 'org)
 (require 'dash)
+(require 'ox-publish)
+(require 'org-zotxt)
 
 (defvar zb-org-better-bibtex-enabled t
   "Whether or not to use BetterBibtex key -> citekey link replacements.")
@@ -45,29 +47,28 @@
 (defvar zb-org-better-bibtex-debug nil
   "Debug BetterBibtex functionality using `message`.")
 
-(defun zb-org-read-better-bibtex-ids (betterbibid-program)
-  "Return all BetterBibtex key to citekey mappings.
-BETTERBIBID-PROGRAM is the program that reads the BetterBibtex database."
-  (unless (file-exists-p betterbibid-program)
-    (error "Missing BetterBibtex ID mapping script: %s"
-	   betterbibid-program))
-  (let ((cmd (list "python" betterbibid-program "-f"
-		   "(\"{libraryID}_{itemKey}\" . \"{citekey}\")"
-		   "-k" "all")))
-    (with-temp-buffer
-      (unless (eq 0 (apply 'call-process (car cmd) nil (current-buffer)
-			   zb-org-better-bibtex-debug
-			   (cdr cmd)))
-	(error "Could not get better bibtex IDs: %s" (buffer-string)))
-      (goto-char (point-min))
-      (insert "(")
-      (goto-char (point-max))
-      (insert ")")
-      (goto-char (point-min))
-      (condition-case err
-	  (read (current-buffer))
-	(error (error "Can not read as lisp: %S <%s>"
-		      err (buffer-string)))))))
+(defun zb-org-read-better-bibtex-ids ()
+  "Return all BetterBibtex key to citekey mappings."
+  (let ((zotsite-program (executable-find "zotsite")))
+    (unless zotsite-program
+      (error "Missing '%s' progam; use 'pip install zotsite'" zotsite-program))
+    (let ((cmd (list zotsite-program "lookup" "-f"
+		     "(\"{libraryID}_{itemKey}\" . \"{citationKey}\")"
+		     "-k" "all")))
+      (with-temp-buffer
+	(unless (eq 0 (apply 'call-process (car cmd) nil (current-buffer)
+			     zb-org-better-bibtex-debug
+			     (cdr cmd)))
+	  (error "Could not get better bibtex IDs: %s" (buffer-string)))
+	(goto-char (point-min))
+	(insert "(")
+	(goto-char (point-max))
+	(insert ")")
+	(goto-char (point-min))
+	(condition-case err
+	    (read (current-buffer))
+	  (error (error "Can not read as lisp: %S <%s>"
+			err (buffer-string))))))))
 
 (defun zb-org-get-better-bibtex-ids (&rest args)
   "Return all BetterBibtex key to citekey mappings.
@@ -83,6 +84,16 @@ If cached, return that, otherwise use ARGS with
   "Clear any cached BetterBibtex IDs."
   (setq zb-org-better-bibtex-cache nil))
 
+(defun zb-org-url (item-key)
+  "Render a paper in Zotsite with key ITEM-KEY.
+ITEM-KEY is a unique entry ID prefixed with the library ID such as
+`1_JRTSFSSG'.  If ITEM-KEY is nil, then initialize the bibliography keys."
+  (let ((host-url (getenv "CNT_SITE_SERV")))
+    (->> (zb-org-read-better-bibtex-ids)
+	 (assoc item-key)
+	 cdr
+	 (format "%s/site/zotero/?id=%s&isView=1" host-url))))
+
 (defun zb-org-filter-link-function (text backend info)
   "Replace links TEXT with Zotero Zotsync links.
 This requires environment variable `CNT_SITE_SERV' to be set to the zotsite
@@ -91,12 +102,13 @@ Zotero site.
 
 BACKEND the backend, which is usually `twbs'.
 INFO is optional information about the export process."
+  (ignore backend)
+  (ignore info)
   (set-text-properties 0 (length text) nil text)
   (when zb-org-better-bibtex-debug
     (message "Remapping %s" text))
   (let ((prev-link text)
 	(regex "^<a href=\"//select/items/\\(.*?\\)\">\\(.*\\)</a>\\([ ]*\\)$")
-	(host-url (getenv "CNT_SITE_SERV"))
 	(bb-ids (zb-org-get-better-bibtex-ids)))
     (unless bb-ids
       (message "Warning: no better bibtex IDs found"))
@@ -112,17 +124,11 @@ INFO is optional information about the export process."
 	(unless lib-key
 	  (message "Missing item key %s--skipping" item-key))
 	(when lib-key
-	  (setq url (format "%s/site/zotero/?id=%s&isView=1" host-url lib-key)
-		text (format "<a href=\"%s\">%s</a>%s" url link-text
+	  (setq text (format "<a href=\"%s\">%s</a>%s" (zb-org-url item-key)
+			     link-text
 			     some-buggy-whitesapce))
 	  (message "Replacing link %s -> %s" prev-link text))))
     text))
-
-(add-hook 'org-export-filter-link-functions 'zb-org-filter-link-function)
-
-;; Org Mode 9.x needs an entry entry in `org-link-parameters'
-(org-link-set-parameters "zotero" :export nil)
-
 
 (defun zb-org-mode-publish (output-directory &optional publish-fn
 					     better-bibtex-program
@@ -185,6 +191,12 @@ files, that if matches, is excluded from the list of files to copy."
 		  :recursive t)))
        (setq org-publish-project-alist))
   (org-publish-current-project t))
+
+;; hook to substitute `zotero' protocols with zotsite links
+(add-hook 'org-export-filter-link-functions 'zb-org-filter-link-function)
+
+;; create the Org Mode export/publish and follow hooks
+(org-zotxt--define-links)
 
 (provide 'zb-org-mode)
 
