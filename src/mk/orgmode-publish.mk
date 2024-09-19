@@ -23,19 +23,19 @@ OM_PB_BET_BIB_USE ?=	nil
 OM_PB_SITE_OBJS +=	
 
 # emacs lisp that invokes the org-mode publish
-OM_PB_EXPORT_EVAL =	$(subst PUB_LIB,$(BUILD_SRC_DIR)/emacs/zb-org-mode.el,\
-			$(subst FILE,$(OM_MD_ORG_NAME),\
+OM_PB_EXPORT_EVAL =	$(subst FILE,$(OM_MD_ORG_NAME),\
 			$(subst OM_PB_FUNC_HTML,$(OM_PB_FUNC_HTML),\
 			$(subst OM_PB_SITE_OBJS,$(OM_PB_SITE_OBJS),\
 			$(subst OM_PB_BET_BIB_USE,$(OM_PB_BET_BIB_USE),\
 			$(subst OM_HTML_DIR,$(OM_HTML_DIR),"\
 (progn\
   (load \"~/.emacs\")\
-  (load \"PUB_LIB\")\
+  (require 'zotsite)\
+  (setq zotsite-url (getenv \"CNT_SITE_SERV\"))\
   (with-temp-buffer (org-mode)\
   (find-file \"FILE\")\
-  (zb-org-mode-publish \"OM_HTML_DIR\" 'OM_PB_FUNC_HTML OM_PB_BET_BIB_USE \"OM_PB_SITE_OBJS\")))"\
-			))))))
+  (zotsite-publish \"OM_HTML_DIR\" 'OM_PB_FUNC_HTML OM_PB_BET_BIB_USE \"OM_PB_SITE_OBJS\")))"\
+			)))))
 
 
 ## Targets
