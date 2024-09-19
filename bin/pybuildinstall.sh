@@ -22,13 +22,7 @@ if [ $(uname -s) == "Darwin" ] ; then
 fi
 
 echo "installing libraries for Python documentation"
-# pin sphinx version since 3.4 has error: search page freezes
-for i in sphinx recommonmark rst2pdf furo \
-		sphinx-autodoc-typehints sphinx-copybutton \
-		btd.sphinx.graphviz \
-		btd.sphinx.inheritance_diagram ; do
-    pip install -U $i
-done
+pip install -r requirements-sphinx.txt
 
 echo "installing libraries for development with Emacs Elpy, virtualenv for jedi"
 for i in jedi flake8 autopep8 yapf importmagic virtualenv ; do
