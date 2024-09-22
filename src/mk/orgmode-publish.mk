@@ -30,11 +30,11 @@ OM_PB_EXPORT_EVAL =	$(subst FILE,$(OM_MD_ORG_NAME),\
 			$(subst OM_HTML_DIR,$(OM_HTML_DIR),"\
 (progn\
   (load \"~/.emacs\")\
-  (require 'zotsite)\
-  (setq zotsite-url (getenv \"CNT_SITE_SERV\"))\
+  (require 'zotmacs)\
+  (setq zotmacs-zotsite-url (getenv \"CNT_SITE_SERV\"))\
   (with-temp-buffer (org-mode)\
   (find-file \"FILE\")\
-  (zotsite-publish \"OM_HTML_DIR\" 'OM_PB_FUNC_HTML OM_PB_BET_BIB_USE \"OM_PB_SITE_OBJS\")))"\
+  (zotmacs-publish \"OM_HTML_DIR\" 'OM_PB_FUNC_HTML OM_PB_BET_BIB_USE \"OM_PB_SITE_OBJS\")))"\
 			)))))
 
 
