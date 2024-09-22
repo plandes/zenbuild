@@ -1,16 +1,19 @@
-## make include file for Emacs Lisp projects
-## PL 7/07/2019
+#@meta {desc: 'include for Emacs Lisp projects', date: '2019-07-07'}
 
-## includes
+
+## Includes
+#
 include $(BUILD_MK_DIR)/emacs.mk
 
-## config
+## Config
+#
 # emacs lisp
 EL_APP_NAME ?=		$(shell grep package-file Cask | sed 's/.*\"\(.*\)\.el.*/\1/')
 EL_CASK_BIN ?=		EMACS=$(EMACS_BIN) cask
 EL_LISP_DIR ?=		.
 EL_DOC_DIR ?=		doc
 EL_ELPA_FILE ?=		elpa
+EL_DEPS +=		$(EL_ELPA_FILE)
 EL_FILES +=		$(wildcard $(EL_LISP_DIR)/*.el)
 EL_OBJECTS +=		$(EL_FILES:.el=.elc)
 EL_DIST_DIR ?=		dist
@@ -18,12 +21,15 @@ EL_EMACS_SWITCHES +=	-q
 # set to skip package lint
 EL_SKIP_LINT ?=
 
-# build environment
+
+## Build environment
+#
 ADD_CLEAN +=		$(EL_OBJECTS) $(EL_ELPA_FILE) $(EL_DOC_DIR) $(EL_DIST_DIR)
 ADD_CLEAN_ALL +=	.cask
 INFO_TARGETS +=		elinfo
 
-# package-lint
+## Package-lint
+#
 # A space-separated list of required package names
 EL_NEEDED_PACKAGES ?=	package-lint
 
@@ -39,27 +45,12 @@ EL_INIT_INSTALL = "(progn \
        (package-install pkg) \
        (require pkg))))"
 
-# instead of installing, assume Cask has installed package dependencies
-# the second path element is the Emacs version dependency in the package file
-EL_INIT_CASK = "(progn \
-    (setq package-user-dir (car (file-expand-wildcards \".cask/*/elpa\" t))) \
-    (message \"Using package directory: %s\" package-user-dir) \
-    (package-initialize) \
-    (require 'package) \
-    (setq package-selected-packages '(package-lint choice-program)) \
-    (message \"Selected packages: %s\" package-selected-packages) \
-    (message (with-output-to-string \
-               (with-current-buffer standard-output \
-                 (describe-package-1 'package-lint)))) \
-    (message \"Installed: %S\" (featurep 'choice-program)) \
-    (require 'package-lint))"
-
 # evaluate on target 'ellint'
 EL_INIT ?= 		$(EL_INIT_INSTALL)
-#EL_INIT ?= 		$(EL_INIT_CASK)
 
 
-## targets
+## Targets
+#
 .PHONY: 		elinfo
 elinfo:
 			@echo "el-app-name: $(EL_APP_NAME)"
@@ -84,7 +75,7 @@ $(EL_ELPA_FILE):
 
 # cask downloads and installs dependencies found in the `Cask` file
 .PHONY:			eldeps
-eldeps:			$(EL_ELPA_FILE)
+eldeps:			$(EL_DEPS)
 
 # clean compiled Emacs Lisp files, which is useful for forcing recompilation to
 # get byte compiled warnings/errors
