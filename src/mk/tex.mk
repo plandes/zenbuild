@@ -16,7 +16,7 @@ TEX_PYTHON_BIN ?=	python
 # should not need to modify these path variables
 TEX_nullstr=
 TEX_space=		$(TEX_nullstr) $(TEX_nullstr)
-TEX_PATH +=		$(BUILD_SRC_DIR)/sty $(abspath ./sty)
+TEX_PATH +=		$(abspath ./sty)
 TEX_LAT_PATH =		$(MTARG)/lat
 TEX_PATH_MTARG =	$(TEX_LAT_PATH) $(TEX_PATH)
 TEX_PATHSTR =		$(subst $(TEX_space),:,$(TEX_PATH_MTARG))
