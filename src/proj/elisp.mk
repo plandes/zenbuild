@@ -3,8 +3,6 @@
 ## includes
 include $(BUILD_MK_DIR)/elisp.mk
 
-MTARG=		dist
-
 .PHONY:		compile
 compile:	elbuild
 
