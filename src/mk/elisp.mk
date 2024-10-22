@@ -5,14 +5,6 @@
 #
 include $(BUILD_MK_DIR)/emacs.mk
 
-
-## Build
-#
-ADD_CLEAN +=		$(EL_OBJECTS) $(EL_ELPA_FILE) $(EL_DOC_DIR)
-ADD_CLEAN_ALL +=	.cask
-INFO_TARGETS +=		elinfo
-
-
 ## Config
 #
 # emacs lisp
@@ -29,6 +21,12 @@ EL_EMACS_SWITCHES +=	-q
 # set to skip package lint
 EL_SKIP_LINT ?=
 
+
+## Build environment
+#
+ADD_CLEAN +=		$(EL_OBJECTS) $(EL_ELPA_FILE) $(EL_DOC_DIR)
+ADD_CLEAN_ALL +=	.cask
+INFO_TARGETS +=		elinfo
 
 ## Package-lint
 #
@@ -88,7 +86,7 @@ elcleancompiled:
 
 # build/compile
 .PHONY:			elbuild
-elbuild:		$(EL_ELPA_FILE) $(EL_OBJECTS)
+elbuild:		$(EL_BUILD_DEPS) $(EL_ELPA_FILE) $(EL_OBJECTS)
 
 # run unit tests
 .PHONY:			eltest
@@ -110,31 +108,22 @@ ellint:			eldeps
 				echo "skipping package lint" ; \
 			fi
 
-# create docs
+# docs
 $(EL_DOC_DIR):
 			mkdir -p $(EL_DOC_DIR)
 			@if [ -f README.md ] ; then \
 				pandoc README.md -s -o $(EL_DOC_DIR)/$(EL_APP_NAME).texi ; \
 			fi
 
-# create docs
 .PHONY:			eldoc
 eldoc:			$(EL_DOC_DIR)
 
 # package
 .PHONY:			elpackage
 elpackage:		eltest eldoc ellint
-			$(eval PKG_NAME=$(shell grep package-file Cask | \
-				sed 's/.*package-file\s*"\(.*\)\.el.*/\1/'))
-			$(eval PKG_VERSION=$(shell grep "^;; Version" $(PKG_NAME).el | \
-				sed 's/.*Version:\s*\(.*\)/\1/'))
-			$(eval PKG_ARCH=$(PKG_NAME)-$(PKG_VERSION))
-			$(eval PKG_DIST_FILE=$(EL_DIST_DIR)/$(PKG_ARCH).tar.bz2)
-			@echo "package name: $(PKG_NAME), version: $(PKG_VERSION)"
-			mkdir -p $(MTARG) $(EL_DIST_DIR)
-			$(EL_CASK_BIN) package $(MTARG)/$(PKG_ARCH)
-			( cd $(MTARG) ; tar cf - $(PKG_ARCH) | bzip2 > $(PKG_DIST_FILE) )
-			@echo "created distribution file $(PKG_DIST_FILE)"
+			mkdir -p $(MTARG)
+			$(EL_CASK_BIN) package $(EL_DIST_DIR)
+			@echo "created distribution in $(EL_DIST_DIR) and docs in $(EL_DOC_DIR)"
 
 # deploy: assume melpa, which collects from github
 .PHONY:			eldeploy
