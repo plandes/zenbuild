@@ -19,6 +19,7 @@ PY_SRC ?=		src/python
 PY_SRC_TEST ?=		test/python
 PY_SRC_TEST_PAT ?=	'test_*.py'
 PY_TEST_DEPS +=
+PY_TEST_POST_DEPS +=
 PY_COMPILED +=		$(shell find $(PY_SRC) -name \*.pyc -type f)
 PY_FLYMAKE +=		$(shell find $(PY_SRC) -name \*_flymake.py -type f)
 PY_CACHE +=		$(shell find $(PY_SRC) $(PY_SRC_TEST) -type d -name __pycache__)
@@ -99,8 +100,8 @@ pydoctor:
 			$(PYTHON_BIN) -m pip check
 
 # execute python tests
-.PHONY:			pytest
-pytest:			$(PY_TEST_DEPS)
+.PHONY:			pytestunit
+pytestunit:
 			@echo "test: $(PY_SRC_TEST)"
 			@echo "version: `$(PYTHON_BIN) --version`"
 			@echo "args: -s $(PY_SRC_TEST) -p $(PY_SRC_TEST_PAT)"
@@ -109,6 +110,9 @@ pytest:			$(PY_TEST_DEPS)
 					$(PYTHON_BIN) $(PYTHON_TEST_ARGS) -m unittest discover \
 					-s $(PY_SRC_TEST) -p $(PY_SRC_TEST_PAT) -v ; \
 			fi
+# execute all tests (i.e. integration)
+.PHONY:			pytest
+pytest:			$(TEST_DEPS) pytestunit $(PY_TEST_POST_DEPS)
 
 # execute tests in a virtual environment
 .PHONY:			pytestvirtual
