@@ -16,6 +16,8 @@ GIT_BUILD_INFO ?=	$(MTARG)/build.json
 GIT_BIN ?=		git
 # see bin/py-install-setup.sh
 GIT_BUILD_BIN ?=	zenpybuild
+# change log parse and util script
+GIT_CHANGELOG_BIN ?=	$(BUILD_BIN_DIR)/chlogutil.py
 # script to quickly access the build json blob
 GIT_BUILD_INFO_BIN ?=	$(BUILD_BIN_DIR)/buildinfo.py
 # get a build attribute
@@ -91,7 +93,15 @@ gitforcepush:
 
 .PHONY: 	gitmktag
 gitmktag:
-		$(GIT_BUILD_BIN) create -m "`$(GIT_BIN) log -1 --pretty=%B`"
+		@if [ -z "$(GIT_TAG_COMMENT)" ] ; then \
+			echo "use:\nmake GIT_TAG_COMMENT='comment' gitmktag" ; \
+			exit 1 ; \
+		fi
+		$(eval ver := $(shell $(GIT_CHANGELOG_BIN)))
+		$(if $(ver),, $(error "Can not get version"))
+		@echo "creating tag $(ver) with comment: \"$(GIT_TAG_COMMENT)\""
+		git tag -am "$(GIT_TAG_COMMENT)" $(ver)
+		@echo "to remove:\n  git tag -d $(ver)"
 
 .PHONY: 	gitrmtag
 gitrmtag:
