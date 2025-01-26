@@ -135,7 +135,7 @@ pyinstall:		pytest pypackage
 
 .PHONY:			pyinstallnotest
 pyinstallnotest:
-			make "PY_SRC_TEST_PAT=NONE" "PY_TEST_DEPS=" pyinstall
+			make "PY_SRC_TEST=/dev/null" pyinstall
 
 # create a pip distribution and upload it
 .PHONY:			pydist
