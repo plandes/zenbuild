@@ -63,9 +63,6 @@ class CondaEnvironmentLocker(Dictable):
             env: Dict[str, Any] = yaml.load(f, yaml.FullLoader)
         env = self._add_repo_spec(env)
         self._write_env(env)
-        if 1:
-            with open(self.output_file) as f:
-                print(f.read())
 
     def export(self):
         env: Dict[str, Any] = self._export_env()
