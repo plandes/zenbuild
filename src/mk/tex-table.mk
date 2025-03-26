@@ -10,6 +10,8 @@
 TEX_TAB_BIN ?=		datdesc
 # directory to run the program assumes the parent Python path for imports
 TEX_TAB_WD ?=		$(abspath ..)
+# Python path include
+TEX_PYTHON_SRC ?=	.
 # where JSON table definitions live
 TEX_TAB_DIR ?=		$(TEX_CONF_DIR)
 # all table definitions
@@ -36,7 +38,7 @@ textabinfo:
 textab:
 		@echo "creating $(TEX_TAB_STYS) in $(TEX_TAB_WD)"
 		( cd $(TEX_TAB_WD) ; \
-		   PYTHONPATH='.' \
+		   PYTHONPATH=$(TEX_PYTHON_SRC) \
 		   $(TEX_TAB_BIN) table $(TEX_TAB_DIR) $(TEX_LAT_PATH) )
 
 # convenience: run the program, compile the PDF, then display it
