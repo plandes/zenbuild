@@ -37,7 +37,7 @@ textabinfo:
 .PHONY:		textab
 textab:
 		@echo "creating $(TEX_TAB_STYS) in $(TEX_TAB_WD)"
-		( cd $(TEX_TAB_WD) ; \
+		@( cd $(TEX_TAB_WD) ; \
 		   PYTHONPATH=$(TEX_PYTHON_SRC) \
 		   $(TEX_TAB_BIN) table $(TEX_TAB_DIR) $(TEX_LAT_PATH) )
 
