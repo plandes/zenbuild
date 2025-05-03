@@ -28,5 +28,9 @@ gitreinit:
 		$(eval cmd := $(GIT_BIN) remote -v | head -1 | sed -E $(regex))
 		$(eval name_url := $(shell $(cmd)))
 		rm -fr .git .gitmodules zenbuild
-		make gitinit
+		$(GIT_BIN) init .
+		$(GIT_BIN) add -A :/
+		$(GIT_BIN) submodule add $(GIT_BUILD_REPO)
+		$(GIT_BIN) commit -am 'initial commit'
+		$(GIT_BIN) tag -am 'initial release' v0.0.1
 		$(GIT_BIN) remote add $(name_url)
