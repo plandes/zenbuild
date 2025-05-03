@@ -17,9 +17,9 @@ GIT_BUILD_REPO ?=	https://github.com/plandes/zenbuild
 gitinit:
 		$(GIT_BIN) init .
 		$(GIT_BIN) add -A :/
-		@if [ ! -d $(GIT_BUILD_REPO) ] ; then \
+		@if [ ! -d zenbuild ] ; then \
 			echo "creating build submodule" ; \
-			$(GIT_BIN) submodule add zenbuild ; \
+			$(GIT_BIN) submodule add $(GIT_BUILD_REPO) ; \
 		fi
 		$(GIT_BIN) commit -am 'initial commit'
 		$(GIT_BIN) tag -am 'initial release' v0.0.1
