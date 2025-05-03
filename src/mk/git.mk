@@ -19,7 +19,7 @@ gitinit:
 		$(GIT_BIN) add -A :/
 		@if [ ! -d $(GIT_BUILD_REPO) ] ; then \
 			echo "creating build submodule" ; \
-			$(GIT_BIN) submodule add $(GIT_BUILD_REPO) ; \
+			$(GIT_BIN) submodule add zenbuild ; \
 		fi
 		$(GIT_BIN) commit -am 'initial commit'
 		$(GIT_BIN) tag -am 'initial release' v0.0.1
