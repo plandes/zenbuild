@@ -1,4 +1,6 @@
-## makefile automates the build and deployment for markdown -> html documents
+#@meta {author: "Paul Landes"}
+#@meta {desc: "build and deploy markdown -> html docs", date: "2025-04-27"}
+
 
 ## Includes
 #
@@ -7,6 +9,9 @@ include $(BUILD_MK_DIR)/markdown.mk
 # silence warnings on git.mk import
 GIT_BUILD_INFO_BIN =	echo
 
+
+## Targets
+#
 # force compile
 .PHONY:			compile
 compile:		markdown-force-compile

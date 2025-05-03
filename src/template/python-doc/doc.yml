@@ -1,0 +1,30 @@
+#@meta {author: "Paul Landes"}
+#@meta {desc: "zenbuild python default doc config", date: "2025-04-22"}
+#@meta {doc: "modifications require a zenbuild clean"}
+
+doc:
+  # sphinx Python environment
+  #python_home: {{ env.PYTHON_UTIL_HOME }}
+  # where to write the Sphinx temporary configuration files
+  stage_dir: doc/stage
+  # the template directory to create the Sphinx API config files
+  config_template_dir: zenbuild/src/template/python-doc/config
+  # the input directory used by sphinx-api to generate Sphinx RST files
+  apidoc_template_dir: zenbuild/src/template/python-doc/apidoc
+  # the sphinx-api output directory
+  apidoc_output_dir: doc/stage/api
+  # sphinx API config values
+  api_config:
+    source_dirs: [src]
+    intersphinx_mapping:
+      python-v3:
+        modules: [python]
+        url: https://docs.python.org/3
+  # files to copy to the sphinx source dir to be added to the docs
+  copy:
+    README.md: index.md
+    CHANGELOG.md:
+    LICENSE.md:
+    CONTRIBUTING.md:
+    tests:
+    doc:

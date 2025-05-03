@@ -1,8 +1,14 @@
-## makefile automates the build and deployment for python projects
+#@meta {author: "Paul Landes"}
+#@meta {desc: "build for local latex projects", date: "2025-04-27"}
 
-## includes
-include $(BUILD_MK_DIR)/tex.mk
 
+## Includes
+#
+include $(BUILD_MK_DIR)/tex/build.mk
+
+
+## Targets
+#
 # run to find issues otherwise dropped; run show after since errors stop make
 .PHONY:		debug
 debug:		texdebugshow

@@ -11,20 +11,22 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import sys
-from datetime import datetime
-import recommonmark
+import recommonmark  # must be imported, even though not used by name
 from recommonmark.transform import AutoStructify
 
-sys.path.insert(0, 'src/python')
+# give Sphinx access Python source code
+{%- for path in config.doc.api_config.source_dirs %}
+sys.path.insert(0, '{{ path }}')
+{%- endfor %}
 
 
 # -- Project information -----------------------------------------------------
-project = '%(short_description)s'
-author = '%(author)s'
-copyright = f'{datetime.now().year}, {author}'
+project = '{{ config.project.short_description }}'
+author = '{{ config.author.name }}'
+copyright = '{{ date.year }} {{ config.author.name }}'
 
 # the full version, including alpha/beta/rc tags
-version = '%(build.tag)s'
+version = '{{ project.change_log.entries[-1].version.simple }}'
 release = version
 
 
@@ -87,10 +89,16 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['api/%(package)s.rst']
+exclude_patterns = ['api/{{ config.project.domain }}.rst']
 
 # map to other sphinx docs
-%(intersphinx_mapping)s
+intersphinx_mapping = {
+{%- for package, pkg in config.doc.api_config.intersphinx_mapping.items() %}
+  {%- for mod in pkg['modules'] %}
+    '{{mod}}': ('{{ pkg['url'].format(package=package, **env) }}', None),
+  {%- endfor %}
+{%- endfor %}
+}
 
 # The master toctree document.
 master_doc = 'top'
@@ -98,7 +106,7 @@ master_doc = 'top'
 
 # PDF
 
-pdf_documents = [('index', 'rst2pdf', '%(name)s', author)]
+pdf_documents = [('index', 'rst2pdf', '{{ config.project.domain }}.{{config.project.name }}', author)]
 latex_engine = 'xelatex'
 
 
@@ -127,7 +135,7 @@ tls_verify = False
 autosectionlabel_prefix_document = True
 
 # docroot to use for linking documentation
-link_doc_root = '%(link_doc_root_url)s'
+link_doc_root = 'https://github.com/{{ config.github.user }}/{{ config.project.domain }}/{{config.project.name }}/tree/master/doc'
 
 
 def maybe_skip_member(app, what, name, obj, skip, options):

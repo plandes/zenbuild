@@ -1,5 +1,9 @@
-## makefile automates org mode files/documents
+#@meta {author: "Paul Landes"}
+#@meta {desc: "automates org mode files and documents", date: "2025-04-27"}
 
+
+## Module
+#
 # tell org mode where to generate HTML files
 OM_HTML_DIR ?=		$(MTARG)/site
 # default show target for orgmode files
@@ -14,11 +18,15 @@ CNT_STAGE_DIR ?=	$(OM_HTML_DIR)/
 # used for `orgmode-show'
 OM_SHOW_FILES ?=	$(OM_HTML_DIR)/*.html
 
-## include org mode and content modules
-include $(BUILD_MK_DIR)/orgmode-doc.mk
+
+## Include org mode and content modules
+#
+include $(BUILD_MK_DIR)/orgmode/doc.mk
 include $(BUILD_MK_DIR)/content.mk
 
 
+## Targets
+#
 # package files in staging directory that has the generate site
 .PHONY:			package
 package:		cntsite

@@ -1,6 +1,9 @@
-# ANSI C program compilation
-# Created: 9/26/2018
+#@meta {author: "Paul Landes"}
+#@meta {desc: "ANSI C program compilation", date: "2018-09-26"}
 
+
+## Module
+#
 # compliation
 SRC_DIR ?=		src
 INC_DIR ?=		$(SRC_DIR)
@@ -25,6 +28,8 @@ INFO_TARGETS +=		cinfo
 ADD_CLEAN_ALL +=	$(CPROG_INST_DIR)
 
 
+## Targets
+#
 # C make build information
 .PHONY:			cinfo
 cinfo:

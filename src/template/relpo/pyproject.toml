@@ -1,0 +1,47 @@
+{% set project_name = config.project.domain + '_' + config.project.name -%}
+#@meta {author: "{{ config.author.name }}"}
+#@meta {desc: "Python build configuration", date: "{{ date.strftime('%Y-%m-%d') }}"}
+
+
+### Project
+#
+[project]
+name = "{{ project_name }}"
+version = "{{ project.change_log.entries[-1].version.simple }}"
+authors = [{name = "{{ config.author.name }}", email = "{{ config.author.email }}"}]
+description = "{{ config.project.long_description }}"
+readme = "README.md"
+requires-python = "{{ config.project.python.version.required }}"
+dependencies = [
+{%- for dep in config.project.python.dependencies %}
+  "{{ dep }}",
+{%- endfor %}
+]
+scripts = { {{ config.project.name }} = "{{ config.project.domain }}.{{ config.project.name}}.cli:main" }
+license = "MIT"
+license-files = ["LICENSE.md"]
+keywords = ["{{ config.project.keywords|join('", "') }}"]
+
+[project.urls]
+Homepage = "https://github.com/{{ config.github.user }}/{{ config.project.name }}"
+Documentation = "https://{{ config.github.user }}.github.io/{{ config.project.name }}"
+Repository = "https://github.com/{{ config.github.user }}/{{ config.project.name }}.git"
+Issues = "https://github.com/{{ config.github.user }}/{{ config.project.name }}/issues"
+Changelog = "https://github.com/{{ config.github.user }}/{{ config.project.name }}/blob/master/CHANGELOG.md"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+### Hatchling
+#
+[tool.hatch.build.targets.wheel]
+packages = ["src/{{ config.project.domain }}", "resources"]
+artifacts = ["*.conf", "*.json", "*.yml"]
+
+[tool.hatch.build.targets.wheel.sources]
+resources = "{{ config.project.domain }}/{{ config.project.name }}/resources"
+
+
+{% include 'pixi.toml' %}

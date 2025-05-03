@@ -1,3 +1,7 @@
+{{ config.project.short_description }}
+{{ '=' * (config.project.short_description | length) }}
+{{ config.project.long_description }}
+
 .. toctree::
    :maxdepth: 3
    :glob:

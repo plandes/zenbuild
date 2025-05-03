@@ -1,6 +1,9 @@
-# ANSI common lisp
-# Created: 5/22/2023
+#@meta {author: "Paul Landes"}
+#@meta {desc: "ANSI common lisp", date: "2023-05-22"}
 
+
+## Module
+#
 # entry application
 CL_PROTO_APP ?= 	./main.ros
 
@@ -17,6 +20,8 @@ CLEAN_DEPS +=		clclean
 GIT_BUILD_INFO_BIN =	echo
 
 
+## Targets
+#
 .PHONY:			test
 test:
 			$(CL_PROTO_APP) test

@@ -1,5 +1,17 @@
-## project make include
-## include one of the files from ../proj instead of htis
+#@meta {author: "Paul Landes"}
+#@meta {desc: "entry point include file", date: "2025-04-22"}
+#@meta {doc: "include one of the files from ../proj instead of this"}
+
+
+## Build
+#
+# substitution utility
+null :=
+comma :=		,
+space := 		${null} ${null}
+
+# enable make debugging statements
+BUILD_DEBUG :=		0
 
 # build environment
 BUILD_HOME_DIR :=	$(realpath $(dir $(lastword $(MAKEFILE_LIST))))
@@ -22,14 +34,24 @@ PROJ_TYPE ?=		default
 MTARG ?=		$(abspath ./target)
 APP_INST_DIR ?=		./inst
 
-## targets
+# default programs
+RENDER_BIN ?=		rend
+
+
+## Default targets
+#
 all:			info
 
-## includes
+
+## Includes
+#
 include $(PROJ_LOCAL_MKS)
 include $(BUILD_SRC_DIR)/proj/$(PROJ_TYPE).mk
 include $(PROJ_MKS)
 
+
+## Targets
+#
 ## print build information
 .PHONY:	info
 info:	$(INFO_TARGETS)

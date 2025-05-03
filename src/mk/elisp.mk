@@ -1,4 +1,5 @@
-#@meta {desc: 'include for Emacs Lisp projects', date: '2019-07-07'}
+#@meta {author: "Paul Landes"}
+#@meta {desc: "include for Emacs Lisp projects", date: "2019-07-07"}
 
 
 ## Includes

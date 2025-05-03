@@ -1,0 +1,4 @@
+build:
+  project_dir: .
+  template_dir: zenbuild/src/template/relpo
+  change_log_file_name: CHANGELOG.md

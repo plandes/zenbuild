@@ -1,15 +1,17 @@
-## docker makefile include
+#@meta {author: "Paul Landes"}
+#@meta {desc: "docker makefile include", date: "2025-05-03"}
 
 
-## User config
+## Project
 #
-# must declare these these
+# must set these in the make file
 #DOCKER_IMG_NAME =
 #DOCKER_BUILD_OBJS =
 #DOCKER_BUILD_ARGS = --build-arg var_name=${VARIABLE_NAME}
 #DOCKER_CONTAINER =
 
-## Build config
+
+## Module
 #
 # docker config
 DOCKER_CMD ?=		docker
@@ -26,11 +28,11 @@ DOCKER_PRE_DOWN_ARGS ?=	--ansi never
 DOCKER_CMP_UP_ARGS ?=
 DOCKER_CMP_DOWN_ARGS ?=
 
+
+## Build
+#
 # system config
 INFO_TARGETS +=		dockerinfo
-
-# silence warnings on git.mk import
-GIT_BUILD_INFO_BIN =	echo
 
 
 ## Target

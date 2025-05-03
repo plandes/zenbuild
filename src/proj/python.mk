@@ -1,64 +1,59 @@
-## makefile automates the build and deployment for python projects
+#@meta {author: "Paul Landes"}
+#@meta {desc: "build and deployment for python projects", date: "2025-04-17"}
 
-## includes
-include $(BUILD_MK_DIR)/python.mk
 
-# run the program with default parameters using the Python CLI make system
-.PHONY:			run
-run:			pycli
+## Includes
+#
+include $(BUILD_MK_DIR)/python/build.mk
 
-# print the program command line help using the Python CLI make system
-.PHONY:			help
-help:			pyhelp
 
-# run the unit tests
+## Targets
+#
+# test
 .PHONY:			test
 test:			pytest
 
-# create the wheel distribution binary
-.PHONY:			package
-package:		pypackage
+# command line help
+.PHONY:			help
+help:			pyhelp
 
-# pip install dependencies
-.PHONY:			deps
-deps:			pydeps
-
-# run pip check
-.PHONY:			deps
-depcheck:		pydepcheck
-
-# print the python dependency tree
+# dependency tree
 .PHONY:			deptree
 deptree:		pydeptree
 
-# build and install the package locally
+# source control
+.PHONY:			mktag
+gitmktag:		pymktag
+
+.PHONY:			rmtag
+gitrmtag:		pyrmtag
+
+.PHONY:			bumptag
+gitbumptag:		pybumptag
+
+.PHONY:			check
+check:			pycheck
+
+# package
+.PHONY:			package
+package:		pypackage
+
+# [un,re]install the wheel
 .PHONY:			install
 install:		pyinstall
 
-# uninstall the package locally
-.PHONY:			uninstall
+.PHONY:			pyuninstall
 uninstall:		pyuninstall
 
-# remove the locally installed library (if installed), build and install
-.PHONY:			reinstall
-reinstall:		uninstall install
+.PHONY:			pyreinstall
+reinstall:		pyreinstall
 
-# same as `install` but do not run the tests
-.PHONY:			installnotest
-installnotest:		uninstall pyinstallnotest
+# [un,re]install in the global environment
+.PHONY:			installglob
+installglobal:		pyinstallglobal
 
-# same as `reinstall` but do not run the tests
-.PHONY:			reinstallnotest
-reinstallnotest:	uninstall pyinstallnotest
+.PHONY:			pyuninstallglobal
+uninstallglobal:	pyuninstallglobal
 
-# generate the API HTML documentation
-.PHONY:			doc
-doc:			pydochtml
-
-# like `doc` but deploy it to local site after generation
-.PHONY:			docdeploy
-docdeploy:		pydocdeploy
-
-# deploy the application to PyPi
-.PHONY:			deploy
-deploy:			pydist
+.PHONY:			pyreinstallglobal
+reinstallglobal:	pyreinstallglobal

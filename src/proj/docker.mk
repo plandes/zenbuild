@@ -1,37 +1,43 @@
-## makefile automates the build and deployment for python projects
+#@meta {author: "Paul Landes"}
+#@meta {desc: "build and deployment for docker images", date: "2025-04-27"}
 
-## includes
-include $(BUILD_MK_DIR)/docker.mk
 
-.PHONY:	build
+## Includes
+#
+include $(BUILD_MK_DIR)/docker/build.mk
+
+
+## Targets
+#
+.PHONY:		build
 build:		dockerbuild
 
-.PHONY: deploy
+.PHONY: 	deploy
 deploy:		dockerpush
 
-.PHONY:	up
+.PHONY:		up
 up:		dockerup
 
-.PHONY:	down
+.PHONY:		down
 down:		dockerdown
 
-.PHONY:	ps
+.PHONY:		ps
 ps:		dockerps
 
-.PHONY: log
+.PHONY: 	log
 log:		dockerlog
 
-.PHONY:	restart
+.PHONY:		restart
 restart:	dockerrestart
 
-.PHONY:	login
+.PHONY:		login
 login:		dockerlogin
 
-.PHONY:	rmi
+.PHONY:		rmi
 rmi:		dockerrmi
 
-.PHONY:	rmzombie
+.PHONY:		rmzombie
 rmzombie:	dockerrmzombie
 
-.PHONY:	rmz
+.PHONY:		rmz
 rmz:		dockerrmzombie

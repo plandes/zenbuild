@@ -1,12 +1,20 @@
-## makefile automates website files/documents
+#@meta {author: "Paul Landes"}
+#@meta {desc: "website files and documents", date: "2025-04-28"}
 
+
+## Module
+#
 # the source repository directory that has content to copy to the site
 CNT_SRC_STAGE_DIR ?=	$(CNT_CONTENT_DIR)/
 
-## include content modules
+
+## Include
+#
 include $(BUILD_MK_DIR)/content.mk
 
 
+## Targets
+#
 # package files in staging directory that has the generate site
 .PHONY:			package
 package:		cntsite

@@ -1,8 +1,15 @@
-## makefile automates the build and deployment for Emacs Lisp projects
+#@meta {author: "Paul Landes"}
+#@meta {desc: "build and deploy Emacs Lisp projects", date: "2025-04-27"}
 
-## includes
+
+## Includes
+##
+
 include $(BUILD_MK_DIR)/elisp.mk
 
+
+## Targets
+#
 .PHONY:		compile
 compile:	elbuild
 
