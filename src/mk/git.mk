@@ -36,4 +36,4 @@ gitreinit:
 		$(GIT_BIN) submodule add $(GIT_BUILD_REPO)
 		$(GIT_BIN) commit -am 'initial commit'
 		$(GIT_BIN) tag -am 'initial release' v0.0.1
-		$(GIT_BIN) remote add $(name_url)
+		[ -z "$(name_url)" ] && $(GIT_BIN) remote add $(name_url)
