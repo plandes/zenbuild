@@ -45,6 +45,7 @@ py_template = {{ config.project.domain }} $\
 	      {{ project.change_log.entries[-1].version.simple }}
 py_rendered := $(shell echo $(py_template) | \
 	$(PY_RP_RELPO_BIN) template --tmp $(MTARG) -c $(PY_RP_PROJ_FILES_))
+$(info RENDERED $(py_rendered))
 PY_DOMAIN_NAME := $(word 1,$(py_rendered))
 PY_PROJECT_NAME := $(word 2,$(py_rendered))
 PY_GITHUB_USER := $(word 3,$(py_rendered))
@@ -93,6 +94,7 @@ pyinfo:
 			@echo "py_version: $(PY_VERSION)"
 			@echo "py_conda_file: $(PY_CONDA_FILE)"
 			@echo "py_env_file: $(PY_ENV_FILE)"
+			@echo "py_github_user: $(PY_GITHUB_USER)"
 
 # dump a yaml version of the project metadata
 .PHONY:			pyyamlmetafile

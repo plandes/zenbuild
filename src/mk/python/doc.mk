@@ -42,10 +42,12 @@ PY_GIT_DOC_PUSH_DEPS +=	$(PY_GIT_DOC_DST_DIR)
 .PHONY:			pydocinfo
 pydocinfo:
 			@echo "py_doc_im_url_cmd: $(PY_DOC_IM_URL_CMD)"
+			@echo "py_git_doc_push_deps: $(PY_GIT_DOC_PUSH_DEPS)"
 
 
 # generate site documentation
 $(PY_DOC_BUILD):
+			@echo "buliding doc website"
 			$(eval site_mod_path := $(shell $(PY_SITE_PKG_CMD)))
 			$(eval doc_im_url := $(shell $(PY_DOC_IM_URL_CMD)))
 			@RP_DOC_IM_URL=$(doc_im_url) \
@@ -53,20 +55,14 @@ $(PY_DOC_BUILD):
 				$(call relpo,mkdoc -o $(PY_DOC_BUILD))
 			touch $(PY_DOC_BUILD_HTML)/.nojekyll
 
-.PHONY:			pydochtml
-pydochtml:
-			make clean
-			make $(PY_DOC_BUILD)
-
 # generate and render site documentation
 .PHONY:			pydocshow
 pydocshow:		$(PY_DOC_BUILD)
 			$(RENDER_BIN) $(PY_DOC_BUILD)/html/index.html
 
 .PHONY:			pydocdeploy
-pydocdeploy:		pydochtml
-			@$(shell $(PY_DOC_DEPLOY_CMD) $(PY_DOC_BUILD_HTML) \
-				$(PY_PROJECT_NAME))
+pydocdeploy:		clean $(PY_DOC_BUILD)
+			@$(PY_DOC_DEPLOY_CMD) $(PY_DOC_BUILD_HTML) $(PY_PROJECT_NAME)
 
 
 ## Git
