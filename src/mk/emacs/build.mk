@@ -4,7 +4,7 @@
 
 ## Includes
 #
-include $(BUILD_MK_DIR)/emacs.mk
+include $(BUILD_MK_DIR)/emacs/env.mk
 
 ## Config
 #

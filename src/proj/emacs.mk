@@ -5,7 +5,7 @@
 ## Includes
 ##
 
-include $(BUILD_MK_DIR)/elisp.mk
+include $(BUILD_MK_DIR)/emacs/build.mk
 
 
 ## Targets

@@ -2,7 +2,7 @@
 ## PL 12/08/2018
 
 ## includes
-include $(BUILD_MK_DIR)/emacs.mk
+include $(BUILD_MK_DIR)/emacs/env.mk
 
 # executables
 OM_SHOWPREV_BIN ?=	rend
