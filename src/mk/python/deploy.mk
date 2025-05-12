@@ -16,7 +16,7 @@ PYPI_SIGN ?=		pypiuser@example.com
 #
 # create a pip distribution and upload it
 .PHONY:			pydeploy
-pydeploy:		$(PY_WHEEL_FILE)
+pydeploy:		pycheck $(PY_WHEEL_FILE)
 			@for url in $(PYPI_TEST_NAME) $(PYPI_NON_TEST_NAME) ; do \
 			    $(PY_PYTHON_BIN) -m twine upload --non-interactive \
 				--sign-with $(PYPI_SIGN) --username $(PYPI_USER) \
