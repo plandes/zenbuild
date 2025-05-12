@@ -54,7 +54,7 @@ class DocMetadataAPI(object):
         entry: Dict[str, Any] = {
             'project': name,
             'build.tag': conf['project']['version'],
-            'descripton': conf['project']['description'],
+            'description': conf['project']['description'],
             'short_description': re.sub(r'^#+\s*(.*)\s*$', r'\1', readme_line),
         }
         meta[name] = entry
