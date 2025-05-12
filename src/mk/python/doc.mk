@@ -30,7 +30,6 @@ endif
 PY_GIT_DOC_REMOTE ?=	github
 # generated and temp github pages directoreis
 PY_GIT_DOC_DIR ?=	$(MTARG)/doc/github
-#PY_GIT_DOC_SRC_DIR ?=	$(PY_GIT_DOC_DIR)/doc
 PY_GIT_DOC_SRC_DIR ?=	$(MTARG)/doc/build/html
 PY_GIT_DOC_DST_DIR ?=	$(PY_GIT_DOC_DIR)/build
 # dependencies before git push
