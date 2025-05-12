@@ -1,3 +1,5 @@
+project:
+  artifacts: ["*.conf", "*.json", "*.yml"]
 build:
   project_dir: .
   template_dir: zenbuild/src/template/relpo
