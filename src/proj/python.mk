@@ -57,3 +57,7 @@ uninstallglobal:	pyuninstallglobal
 
 .PHONY:			pyreinstallglobal
 reinstallglobal:	pyreinstallglobal
+
+# deploy (needs PROJ_MODULES=python/deploy)
+.PHONY:			deploy
+deploy:			pydeploy
