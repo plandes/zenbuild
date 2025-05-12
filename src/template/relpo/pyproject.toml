@@ -38,7 +38,7 @@ build-backend = "hatchling.build"
 #
 [tool.hatch.build.targets.wheel]
 packages = ["src/{{ config.project.domain }}", "resources"]
-artifacts = {{ config.project.artifacts }}
+artifacts = ["{{ config.project.artifacts | join('", "') }}"]
 
 [tool.hatch.build.targets.wheel.sources]
 resources = "{{ config.project.domain }}/{{ config.project.name }}/resources"
