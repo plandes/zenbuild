@@ -253,7 +253,7 @@ pybumptag:
 
 # print this repo's info
 .PHONY:			pycheck
-pycheck:
+pycheck:		$(PY_PYPROJECT_FILE)
 			$(PY_PX_BIN) lock
 			@$(call relpo,check) || true
 
