@@ -119,13 +119,17 @@ pyinit:			$(PY_PYPROJECT_FILE)
 			$(PY_PX_BIN) install
 
 # run unit tests
-.PHONY:			pytest
-pytest:			$(PY_PYPROJECT_FILE)
-			$(PY_PX_BIN) run test ''$(PY_TEST_GLOB)''
-
-.PHONY:			pytestcurrent
-pytestcurrent:		$(PY_PYPROJECT_FILE)
+.PHONY:			pytestprev
+pytestprev:		$(PY_PYPROJECT_FILE)
 			$(PY_PX_BIN) run testcur ''$(PY_TEST_GLOB)''
+
+.PHONY:			pytestcur
+pytestcur:		$(PY_PYPROJECT_FILE)
+			$(PY_PX_BIN) run testcur ''$(PY_TEST_GLOB)''
+
+.PHONY:			pytest
+pytest:			pytestprev pytestcur
+
 
 ## Shared environment install targets
 #

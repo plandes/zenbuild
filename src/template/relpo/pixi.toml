@@ -61,8 +61,6 @@ cmd = "python -m unittest discover -s tests -p '{% raw %}{{glob_pat}}{% endraw %
 [tool.pixi.feature.testcur.tasks.testcur]
 args = [{ "arg" = "glob_pat" }]
 cmd = "python -m unittest discover -s tests -p '{% raw %}{{glob_pat}}{% endraw %}' -v"
-[tool.pixi.tasks.test]
-depends-on = [{ "task" = "testprev" }, { "task" = "testcur" }]
 
 # tasks that use the 'default' environment
 [tool.pixi.tasks]
