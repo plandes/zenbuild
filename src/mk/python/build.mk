@@ -18,6 +18,8 @@ PY_PIP_BIN ?=		$(PY_PYTHON_BIN) -m pip
 # pixi programs
 PY_PX_BIN ?=		pixi
 PY_PX_PACK_BIN ?=	pixi-pack
+# test file glob pattern
+PY_TEST_GLOB ?=		test_*.py
 # homegrown
 PY_RP_RELPO_BIN ?=	relpo
 
@@ -119,12 +121,11 @@ pyinit:			$(PY_PYPROJECT_FILE)
 # run unit tests
 .PHONY:			pytest
 pytest:			$(PY_PYPROJECT_FILE)
-			$(PY_PX_BIN) run test
+			$(PY_PX_BIN) run test ''$(PY_TEST_GLOB)''
 
 .PHONY:			pytestcurrent
 pytestcurrent:		$(PY_PYPROJECT_FILE)
-			$(PY_PX_BIN) run testcur
-
+			$(PY_PX_BIN) run testcur ''$(PY_TEST_GLOB)''
 
 ## Shared environment install targets
 #

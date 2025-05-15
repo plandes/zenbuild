@@ -55,11 +55,12 @@ hatchling = "==1.26.3"
 build-wheel = "python -m hatchling build -t wheel --dir $PX_DIST_DIR"
 
 # use Python built-in unittest library for tests
-[tool.pixi.feature.testprev.tasks]
-testprev = "python -m unittest discover -s tests -p 'test_*.py' -v"
-[tool.pixi.feature.testcur.tasks]
-testcur = "python -m unittest discover -s tests -p 'test_*.py' -v"
-
+[tool.pixi.feature.testprev.tasks.testprev]
+args = [{ "arg" = "glob_pat" }]
+cmd = "python -m unittest discover -s tests -p '{% raw %}{{glob_pat}}{% endraw %}' -v"
+[tool.pixi.feature.testcur.tasks.testcur]
+args = [{ "arg" = "glob_pat" }]
+cmd = "python -m unittest discover -s tests -p '{% raw %}{{glob_pat}}{% endraw %}' -v"
 [tool.pixi.tasks.test]
 depends-on = [{ "task" = "testprev" }, { "task" = "testcur" }]
 
