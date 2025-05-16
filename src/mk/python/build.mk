@@ -271,16 +271,11 @@ pydoc:
 
 ## Clean
 #
-# clean up cached compiled source files
-.PHONY:			pycleancache
-pycleancache:
-			find . -type d -name __pycache__ -prune -exec rm -r {} \;
-
 # clean derived objects
 .PHONY:			pyclean
 pyclean:
 			@echo "removing __pycache__"
-			@find src -type d -name __pycache__ -prune -exec rm -r {} \;
+			@find . -type d -name __pycache__ -prune -exec rm -r {} \;
 			@if [ -d tests ] ; then \
 				find tests -type d -name __pycache__ -prune -exec rm -r {} \; ; \
 			fi
