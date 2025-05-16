@@ -271,6 +271,11 @@ pydoc:
 
 ## Clean
 #
+# clean up cached compiled source files
+.PHONY:			pycleancache
+pycleancache:
+			find . -type d -name __pycache__ -prune -exec rm -r {} \;
+
 # clean derived objects
 .PHONY:			pyclean
 pyclean:
