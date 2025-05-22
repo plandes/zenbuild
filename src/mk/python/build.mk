@@ -136,6 +136,8 @@ pytest:			pytestprev pytestcur
 $(PY_WHEEL_FILE):	$(PY_PYPROJECT_FILE)
 			@echo "creating dist file: $(PY_WHEEL_FILE)"
 			PX_DIST_DIR=$(PY_DIST_DIR) $(PY_PX_BIN) run build-wheel
+.PHONY:			pywheel
+pywheel:		$(PY_WHEEL_FILE)
 
 # install the wheel in the shared environment
 .PHONY:			pyinstall
