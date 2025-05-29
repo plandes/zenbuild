@@ -17,6 +17,14 @@ test:			pytest
 .PHONY:			help
 help:			pyhelp
 
+# running the app via Pixi
+.PHONY:			invoke
+invoke:			pyinvoke
+
+# running the app via the harness
+.PHONY:			run
+run:			pyrun
+
 # dependency tree
 .PHONY:			deptree
 deptree:		pydeptree

@@ -35,7 +35,7 @@ MTARG ?=		$(abspath ./target)
 APP_INST_DIR ?=		./inst
 
 # default programs
-RENDER_BIN ?=		rend
+RENDER_BIN ?=		$(PYTHON_UTIL_HOME)/bin/rend
 
 
 ## Default targets

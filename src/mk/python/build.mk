@@ -67,9 +67,6 @@ PY_GITIGNORE_ORG ?=	$(MTARG)/gitignore-old
 PY_ENV_FILE ?=		$(PY_DIST_DIR)/$(PY_PACKAGE_NAME)-$(PY_VERSION)-environment.tar
 PY_ENV_EXTRACT_DIR ?=	$(MTARG)/envex
 
-# help
-PY_HELP_ARGS ?=		invoke '$(PY_PROJECT_NAME) --help'
-
 # set to non-empty if the file hasn't been created
 ifeq ($(strip $(PY_CONDA_FILE)),)
 	PY_CONDA_FILE = force-target
@@ -112,6 +109,8 @@ $(PY_PYPROJECT_FILE):	$(PY_RP_PROJ_MAIN_FILE)
 			@echo "creating project file: $(PY_PYPROJECT_FILE)"
 			mkdir -p $(dir $(PY_PYPROJECT_FILE))
 			$(call relpo,pyproject) > $(PY_PYPROJECT_FILE)
+.PHONY:			pyproject
+pyproject:		$(PY_PYPROJECT_FILE)
 
 # pixi install loal environment
 .PHONY:			pyinit
@@ -227,10 +226,26 @@ pyreinstallglobal:
 
 ## Command line and source control
 #
+# run a command via Pixi using the ApplicationFactory class
+.PHONY:			pyinvoke
+pyinvoke:		$(PY_PYPROJECT_FILE)
+			@if [ -z "$(ARG)" ] ; then \
+				echo "warning: use:\nmake ARG='[arguments]' pyinvoke" ; \
+			fi
+			@$(PY_PX_BIN) run invoke '$(PY_PROJECT_NAME) $(ARG)'
+
+# run a command through the harness
+.PHONY:			pyrun
+pyrun:			$(PY_PYPROJECT_FILE)
+			@if [ -z "$(ARG)" ] ; then \
+				echo "warning: use:\nmake ARG='[arguments]' pyrun" ; \
+			fi
+			@$(PY_PX_BIN) run python $(PY_PROJECT_NAME) $(ARG)
+
 # print help
 .PHONY:			pyhelp
 pyhelp:			$(PY_PYPROJECT_FILE)
-			$(PY_PX_BIN) run $(PY_HELP_ARGS)
+			@make ARG="--help" pyinvoke
 
 # dependency tree
 .PHONY:			pydeptree

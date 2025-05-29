@@ -11,7 +11,7 @@ INFO_TARGETS +=		pydocinfo
 ## Module
 #
 # build
-PY_SITE_PKG_CMD ?=	$(PYTHON_UTIL_HOME)/bin/python -c \
+PY_SITE_PKG_CMD ?=	$(PY_PX_BIN) run python -c \
 			'import site; print(site.getsitepackages()[0])'
 PY_RP_PROJ_FILES +=	zenbuild/src/template/python-doc/doc.yml
 PY_DOC_BUILD ?=		$(MTARG)/doc/build
@@ -40,12 +40,13 @@ PY_GIT_DOC_PUSH_DEPS +=	$(PY_GIT_DOC_DST_DIR)
 #
 .PHONY:			pydocinfo
 pydocinfo:
+			@echo "py_site_pkg_cmd: $(PY_SITE_PKG_CMD)"
 			@echo "py_doc_im_url_cmd: $(PY_DOC_IM_URL_CMD)"
 			@echo "py_git_doc_push_deps: $(PY_GIT_DOC_PUSH_DEPS)"
 
 
 # generate site documentation
-$(PY_DOC_BUILD):
+$(PY_DOC_BUILD):	pyinit
 			@echo "buliding doc website"
 			$(eval site_mod_path := $(shell $(PY_SITE_PKG_CMD)))
 			$(eval doc_im_url := $(shell $(PY_DOC_IM_URL_CMD)))
