@@ -29,7 +29,6 @@ PY_RP_PROJ_FILES ?=	relpo.yml,zenbuild/src/template/relpo/build.yml
 PY_RP_PROJ_FILES_ +=	$(subst ${space},${comma},$(PY_RP_PROJ_FILES))
 PY_RP_PROJ_MAIN_FILE ?=	$(word 1,$(subst $(comma), ,$(PY_RP_PROJ_FILES_)))
 PY_PYPROJECT_FILE ?=	pyproject.toml
-PY_META_FILE ?=		$(MTARG)/build.json
 PY_SRC_DIR ?=		src
 PY_TEST_DIR ?=		tests
 
@@ -189,12 +188,16 @@ $(PY_ENV_FILE):		$(PY_CONDA_FILE)
 				--output-file $(PY_ENV_FILE) \
 				--inject $(PY_CONDA_GLOB) \
 				--use-cache $(PY_PX_PACK_CACHE_DIR)
+.PHONY:			pyenvfile
+pyenvfile:		$(PY_ENV_FILE)
 
 # export environment.yml
 $(PY_CONDA_ENV_FILE):
 			@$(PY_PX_BIN) workspace export \
 				conda-environment > $(PY_CONDA_ENV_FILE)
 			@echo "wrote: $(PY_CONDA_ENV_FILE)"
+.PHONY:			pycondaenv
+pycondaenv:		$(PY_CONDA_ENV_FILE)
 
 # extract the packed environment file into a temp dir
 $(PY_ENV_EXTRACT_DIR):	$(PY_ENV_FILE)
