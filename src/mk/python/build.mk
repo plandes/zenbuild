@@ -29,6 +29,7 @@ PY_RP_PROJ_FILES ?=	relpo.yml,zenbuild/src/template/relpo/build.yml
 PY_RP_PROJ_FILES_ +=	$(subst ${space},${comma},$(PY_RP_PROJ_FILES))
 PY_RP_PROJ_MAIN_FILE ?=	$(word 1,$(subst $(comma), ,$(PY_RP_PROJ_FILES_)))
 PY_PYPROJECT_FILE ?=	pyproject.toml
+PY_META_FILE ?=		$(MTARG)/build.json
 PY_SRC_DIR ?=		src
 PY_TEST_DIR ?=		tests
 
@@ -192,7 +193,8 @@ $(PY_ENV_FILE):		$(PY_CONDA_FILE)
 pyenvfile:		$(PY_ENV_FILE)
 
 # export environment.yml
-$(PY_CONDA_ENV_FILE):
+$(PY_CONDA_ENV_FILE):	$(PY_PYPROJECT_FILE)
+			mkdir -p $(dir $(PY_CONDA_ENV_FILE))
 			@$(PY_PX_BIN) workspace export \
 				conda-environment > $(PY_CONDA_ENV_FILE)
 			@echo "wrote: $(PY_CONDA_ENV_FILE)"
@@ -252,7 +254,7 @@ pyhelp:			$(PY_PYPROJECT_FILE)
 
 # dependency tree
 .PHONY:			pydeptree
-pydeptree:
+pydeptree:		$(PY_PYPROJECT_FILE)
 			$(PY_PX_BIN) tree
 
 # make a tag using the version of the last commit
