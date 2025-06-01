@@ -108,7 +108,7 @@ pyrelpoconfig:
 $(PY_PYPROJECT_FILE):	$(PY_RP_PROJ_MAIN_FILE)
 			@echo "creating project file: $(PY_PYPROJECT_FILE)"
 			mkdir -p $(dir $(PY_PYPROJECT_FILE))
-			$(call relpo,pyproject) > $(PY_PYPROJECT_FILE)
+			$(call relpo,pyproject -o $(PY_PYPROJECT_FILE))
 .PHONY:			pyproject
 pyproject:		$(PY_PYPROJECT_FILE)
 
