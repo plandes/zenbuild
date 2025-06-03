@@ -8,11 +8,11 @@ preview = ["pixi-build"]
 
 # virtual environments (each under '.pixi/envs') for specific tasks
 [tool.pixi.environments]
-default = { features = ["pyverprev"], solve-group = "default" }
+default = { features = ["pyvercur"], solve-group = "default" }
 testprev = { features = ["pyverprev", "testprev"] }
 testcur = { features = ["pyvercur", "testcur"] }
 invoke = { features = ["invoke"], solve-group = "default" }
-build-pypi = { features = ["pyverprev", "build-pypi"], solve-group = "default" }
+build-pypi = { features = ["pyvercur", "build-pypi"], solve-group = "default" }
 
 # specify where to download the build backend that builds conda files
 [tool.pixi.package.build]

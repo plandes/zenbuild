@@ -24,7 +24,7 @@ PY_RP_RELPO_BIN ?=	relpo
 
 # paths
 PY_PX_PACK_CACHE_DIR ?=	$(HOME)/.cache/pixi-pack
-PY_RP_PROJ_FILES_DEF =	relpo.yml,zenbuild/src/template/relpo/build.yml
+PY_RP_PROJ_FILES_DEF =	relpo.yml,zenbuild/src/relpo/template/build.yml
 PY_RP_PROJ_FILES ?=	$(PY_RP_PROJ_FILES_DEF)
 PY_RP_PROJ_FILES_ +=	$(subst ${space},${comma},$(PY_RP_PROJ_FILES))
 PY_RP_PROJ_MAIN_FILE ?=	$(word 1,$(subst $(comma), ,$(PY_RP_PROJ_FILES_)))

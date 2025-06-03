@@ -6,7 +6,7 @@
 ## Build
 #
 INFO_TARGETS +=		pyenvdistinfo
-PY_RP_PROJ_FILES +=	zenbuild/src/template/relpo/envdist.yml
+PY_RP_PROJ_FILES +=	zenbuild/src/relpo/envdist.yml
 PY_PACKAGE_DEPS +=	$(PY_ENV_DIST_FILE)
 
 
