@@ -1,0 +1,16 @@
+#@meta {author: "Paul Landes"}
+#@meta {desc: "zenbuild python environment distribution", date: "2025-05-31"}
+
+envdist:
+  # the directory to cache conda and PyPi library files (usually '~/.cache/relpo')
+  cache_dir: ~/.cache/relpo
+  # the Pixi lock file (usually 'pixi.lock')
+  pixi_lock_file: pixi.lock
+  # the environment to export (i.e. 'default', 'testcur')
+  environment: build-pypi
+  # the platforms to export, or all if not provided (i.e. 'linux-64')
+  #platforms: [linux-64, osx-64]
+  # local files to add to the distribution
+  injects:
+    all:
+      - pypi: target/dist/*.whl

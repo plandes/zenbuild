@@ -17,7 +17,6 @@ PY_PYTHON_BIN ?=	python
 PY_PIP_BIN ?=		$(PY_PYTHON_BIN) -m pip
 # pixi programs
 PY_PX_BIN ?=		pixi
-PY_PX_PACK_BIN ?=	pixi-pack
 # test file glob pattern
 PY_TEST_GLOB ?=		test_*.py
 # homegrown
@@ -25,7 +24,8 @@ PY_RP_RELPO_BIN ?=	relpo
 
 # paths
 PY_PX_PACK_CACHE_DIR ?=	$(HOME)/.cache/pixi-pack
-PY_RP_PROJ_FILES ?=	relpo.yml,zenbuild/src/template/relpo/build.yml
+PY_RP_PROJ_FILES_DEF =	relpo.yml,zenbuild/src/template/relpo/build.yml
+PY_RP_PROJ_FILES ?=	$(PY_RP_PROJ_FILES_DEF)
 PY_RP_PROJ_FILES_ +=	$(subst ${space},${comma},$(PY_RP_PROJ_FILES))
 PY_RP_PROJ_MAIN_FILE ?=	$(word 1,$(subst $(comma), ,$(PY_RP_PROJ_FILES_)))
 PY_PYPROJECT_FILE ?=	pyproject.toml
@@ -64,8 +64,7 @@ PY_CONDA_ENV_FILE ?=	$(PY_DIST_DIR)/$(PY_PACKAGE_NAME)-$(PY_VERSION)-environment
 PY_CONDA_GLOB ?=	$(PY_DIST_DIR)/$(PY_PACKAGE_NAME)-*.conda
 PY_CONDA_FILE ?=	$(wildcard $(PY_CONDA_GLOB))
 PY_GITIGNORE_ORG ?=	$(MTARG)/gitignore-old
-PY_ENV_FILE ?=		$(PY_DIST_DIR)/$(PY_PACKAGE_NAME)-$(PY_VERSION)-environment.tar
-PY_ENV_EXTRACT_DIR ?=	$(MTARG)/envex
+PY_PACKAGE_DEPS ?=	$(PY_WHEEL_FILE) $(PY_CONDA_ENV_FILE)
 
 # set to non-empty if the file hasn't been created
 ifeq ($(strip $(PY_CONDA_FILE)),)
@@ -74,7 +73,7 @@ endif
 
 # relpo function used in targets to automate pixi
 define relpo
-	$(PY_RP_RELPO_BIN) $(1) \
+	@$(PY_RP_RELPO_BIN) $(1) \
 		--tmp $(MTARG) \
 		--config $(PY_RP_PROJ_FILES_) $(2)
 endef
@@ -88,10 +87,10 @@ pyinfo:
 			@echo "py_rp_proj_files: $(PY_RP_PROJ_FILES_)"
 			@echo "py_rp_proj_main_file: $(PY_RP_PROJ_MAIN_FILE)"
 			@echo "py_pyproject_file: $(PY_PYPROJECT_FILE)"
+			@echo "py_package_deps: $(PY_PACKAGE_DEPS)"
 			@echo "py_package_name: $(PY_PACKAGE_NAME)"
 			@echo "py_version: $(PY_VERSION)"
 			@echo "py_conda_file: $(PY_CONDA_FILE)"
-			@echo "py_env_file: $(PY_ENV_FILE)"
 			@echo "py_github_user: $(PY_GITHUB_USER)"
 
 # dump a yaml version of the project metadata
@@ -107,7 +106,7 @@ pyrelpoconfig:
 # use relpo to generate the pyproject.toml file used by pixi
 $(PY_PYPROJECT_FILE):	$(PY_RP_PROJ_MAIN_FILE)
 			@echo "creating project file: $(PY_PYPROJECT_FILE)"
-			mkdir -p $(dir $(PY_PYPROJECT_FILE))
+			@mkdir -p $(dir $(PY_PYPROJECT_FILE))
 			$(call relpo,pyproject -o $(PY_PYPROJECT_FILE))
 .PHONY:			pyproject
 pyproject:		$(PY_PYPROJECT_FILE)
@@ -133,8 +132,8 @@ pytest:			pytestprev pytestcur
 ## Shared environment install targets
 #
 $(PY_WHEEL_FILE):	$(PY_PYPROJECT_FILE)
-			@echo "creating dist file: $(PY_WHEEL_FILE)"
-			PX_DIST_DIR=$(PY_DIST_DIR) $(PY_PX_BIN) run build-wheel
+			@echo "creating wheel file: $(PY_WHEEL_FILE)"
+			@PX_DIST_DIR=$(PY_DIST_DIR) $(PY_PX_BIN) run build-wheel
 .PHONY:			pywheel
 pywheel:		$(PY_WHEEL_FILE)
 
@@ -158,9 +157,10 @@ pyreinstall:
 ## Package
 #
 # create the distribution files
+# use a make subprocess to allow sub modules to add to PY_PACKAGE_DEPS
 .PHONY:			pypackage
-pypackage:		$(PY_WHEEL_FILE) $(PY_ENV_FILE) $(PY_CONDA_ENV_FILE)
-
+pypackage:
+			@make --no-print-directory $(PY_PACKAGE_DEPS)
 
 ## Global install targets
 #
@@ -176,57 +176,22 @@ pyrestoregitignore:
 $(PY_CONDA_FILE):	$(PY_PYPROJECT_FILE)
 			$(PY_PX_BIN) lock
 			@echo "copy original version of $(PY_GITIGNORE_ORG)"
-			mkdir -p $$(dirname $(PY_GITIGNORE_ORG))
-			cp .gitignore $(PY_GITIGNORE_ORG)
-			sed -i '/^\/pyproject.toml$$/d' .gitignore
-			PX_DIST_DIR=$(PY_DIST_DIR) $(PY_PX_BIN) run build-conda || \
+			@mkdir -p $$(dirname $(PY_GITIGNORE_ORG))
+			@cp .gitignore $(PY_GITIGNORE_ORG)
+			@sed -i '/^\/pyproject.toml$$/d' .gitignore
+			@PX_DIST_DIR=$(PY_DIST_DIR) $(PY_PX_BIN) run build-conda || \
 				make pyrestoregitignore
-			make pyrestoregitignore
-
-# build the conda packed environment file
-$(PY_ENV_FILE):		$(PY_CONDA_FILE)
-			$(PY_PX_PACK_BIN) pack \
-				--output-file $(PY_ENV_FILE) \
-				--inject $(PY_CONDA_GLOB) \
-				--use-cache $(PY_PX_PACK_CACHE_DIR)
-.PHONY:			pyenvfile
-pyenvfile:		$(PY_ENV_FILE)
+			@make --no-print-directory pyrestoregitignore
 
 # export environment.yml
 $(PY_CONDA_ENV_FILE):	$(PY_PYPROJECT_FILE)
-			mkdir -p $(dir $(PY_CONDA_ENV_FILE))
+			@echo "creating conda env file $(PY_CONDA_ENV_FILE)..."
+			@mkdir -p $(dir $(PY_CONDA_ENV_FILE))
 			@$(PY_PX_BIN) workspace export \
 				conda-environment > $(PY_CONDA_ENV_FILE)
 			@echo "wrote: $(PY_CONDA_ENV_FILE)"
 .PHONY:			pycondaenv
 pycondaenv:		$(PY_CONDA_ENV_FILE)
-
-# extract the packed environment file into a temp dir
-$(PY_ENV_EXTRACT_DIR):	$(PY_ENV_FILE)
-			@echo "creating dist file: $(PY_ENV_EXTRACT_DIR)"
-			mkdir -p $(PY_ENV_EXTRACT_DIR)
-			tar xf $(PY_ENV_FILE) -C $(PY_ENV_EXTRACT_DIR)
-
-
-# install in the global pixi environment
-.PHONY:			pyinstallglobal
-pyinstallglobal:	clean $(PY_ENV_EXTRACT_DIR)
-			$(PY_PX_BIN) global install $(PY_PACKAGE_NAME) \
-				-c file://$(PY_ENV_EXTRACT_DIR)/channel \
-				-c conda-forge --with pip && \
-			$(PIXI_HOME)/envs/$(PY_PACKAGE_NAME)/bin/pip install \
-				$(PY_ENV_EXTRACT_DIR)/pypi/*
-
-# uninstall from the global pixi environment
-.PHONY:			pyuninstallglobal
-pyuninstallglobal:
-			$(PY_PX_BIN) global uninstall $(PY_PACKAGE_NAME)
-
-# reinstall into the global pixi environment
-.PHONY:			pyreinstallglobal
-pyreinstallglobal:
-			@make pyuninstallglobal || true
-			@make pyinstallglobal
 
 
 ## Command line and source control
@@ -281,13 +246,14 @@ pybumptag:
 # print this repo's info
 .PHONY:			pycheck
 pycheck:		$(PY_PYPROJECT_FILE)
-			$(PY_PX_BIN) lock
+			@$(PY_PX_BIN) lock
 			@$(call relpo,check) || true
 
 
 # generate site documentation
 .PHONY:			pydoc
 pydoc:
+			@echo "generating project documentation..."
 			@$(call relpo,doc)
 
 
@@ -305,9 +271,11 @@ pyclean:
 # also clean up the pixi environments and other temporary files
 .PHONY:			pycleanall
 pycleanall:
-			rm -fr .pixi
+			@echo "removing pixi environments"
+			@rm -fr .pixi
 
 # remove lock file
 .PHONY:			pyvaporize
 pyvaporize:		pycleanall
+			@echo "removing pixi lock file"
 			rm pixi.lock

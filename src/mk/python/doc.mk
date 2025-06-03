@@ -6,6 +6,7 @@
 ## Build
 #
 INFO_TARGETS +=		pydocinfo
+PY_RP_PROJ_FILES +=	zenbuild/src/template/python-doc/doc.yml
 
 
 ## Module
@@ -13,7 +14,6 @@ INFO_TARGETS +=		pydocinfo
 # build
 PY_SITE_PKG_CMD ?=	$(PY_PX_BIN) run python -c \
 			'import site; print(site.getsitepackages()[0])'
-PY_RP_PROJ_FILES +=	zenbuild/src/template/python-doc/doc.yml
 PY_DOC_BUILD ?=		$(MTARG)/doc/build
 PY_DOC_BUILD_HTML ?=	$(PY_DOC_BUILD)/html
 ifndef PY_DOC_IM_URL_CMD

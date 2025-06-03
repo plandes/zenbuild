@@ -57,14 +57,14 @@ uninstall:		pyuninstall
 reinstall:		pyreinstall
 
 # [un,re]install in the global environment
-.PHONY:			installglob
-installglobal:		pyinstallglobal
+.PHONY:			globalinstall
+globalinstall:		pyppinstall
 
-.PHONY:			pyuninstallglobal
-uninstallglobal:	pyuninstallglobal
+.PHONY:			globaluninstall
+globaluninstall:	pyppuninstall
 
-.PHONY:			pyreinstallglobal
-reinstallglobal:	pyreinstallglobal
+.PHONY:			globalreinstall
+globalreinstall:	pyppreinstall
 
 # deploy (needs PROJ_MODULES=python/deploy)
 .PHONY:			deploy
