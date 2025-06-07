@@ -9,13 +9,13 @@ include $(BUILD_MK_DIR)/python/build.mk
 
 ## Targets
 #
-# test
-.PHONY:			test
-test:			pytest
-
 # command line help
 .PHONY:			help
 help:			pyhelp
+
+# dependency tree
+.PHONY:			deptree
+deptree:		pydeptree
 
 # running the app via Pixi
 .PHONY:			invoke
@@ -25,9 +25,12 @@ invoke:			pyinvoke
 .PHONY:			run
 run:			pyrun
 
-# dependency tree
-.PHONY:			deptree
-deptree:		pydeptree
+# test
+.PHONY:			test
+test:			pytest
+
+.PHONY:			testcur
+testcur:		pytestcur
 
 # source control
 .PHONY:			mktag
@@ -45,6 +48,9 @@ check:			pycheck
 # package
 .PHONY:			package
 package:		pypackage
+
+.PHONY:			wheel
+wheel:			pywheel
 
 # [un,re]install the wheel
 .PHONY:			install
