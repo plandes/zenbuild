@@ -119,7 +119,7 @@ pyinit:			$(PY_PYPROJECT_FILE)
 # run unit tests
 .PHONY:			pytestprev
 pytestprev:		$(PY_PYPROJECT_FILE)
-			$(PY_PX_BIN) run testcur ''$(PY_TEST_GLOB)''
+			$(PY_PX_BIN) run testprev ''$(PY_TEST_GLOB)''
 
 .PHONY:			pytestcur
 pytestcur:		$(PY_PYPROJECT_FILE)
