@@ -73,7 +73,7 @@ endif
 
 # relpo function used in targets to automate pixi
 define relpo
-	@$(PY_RP_RELPO_BIN) $(1) \
+	$(PY_RP_RELPO_BIN) $(1) \
 		--tmp $(MTARG) \
 		--config $(PY_RP_PROJ_FILES_) $(2)
 endef
@@ -96,18 +96,18 @@ pyinfo:
 # dump a yaml version of the project metadata
 .PHONY:			pyyamlmetafile
 pyyamlmetafile:
-			$(call relpo,meta -f yaml)
+			@$(call relpo,meta -f yaml)
 
 # project what is used as the (synthesized) relpo.yml config file
 .PHONY:			pyrelpoconfig
 pyrelpoconfig:
-			$(call relpo,config)
+			@$(call relpo,config)
 
 # use relpo to generate the pyproject.toml file used by pixi
 $(PY_PYPROJECT_FILE):	$(PY_RP_PROJ_MAIN_FILE)
 			@echo "creating project file: $(PY_PYPROJECT_FILE)"
 			@mkdir -p $(dir $(PY_PYPROJECT_FILE))
-			$(call relpo,pyproject -o $(PY_PYPROJECT_FILE))
+			@$(call relpo,pyproject -o $(PY_PYPROJECT_FILE))
 .PHONY:			pyproject
 pyproject:		$(PY_PYPROJECT_FILE)
 
@@ -202,7 +202,7 @@ pyinvoke:		$(PY_PYPROJECT_FILE)
 			@if [ -z "$(ARG)" ] ; then \
 				echo "warning: use:\nmake ARG='[arguments]' pyinvoke" ; \
 			fi
-			@$(PY_PX_BIN) run invoke '$(PY_PROJECT_NAME) $(ARG)'
+			@$(PY_PX_BIN) run $(PY_INVOKE_ARG) invoke '$(PY_PROJECT_NAME) $(ARG)'
 
 # run a command through the harness
 .PHONY:			pyrun
@@ -210,17 +210,17 @@ pyrun:			$(PY_PYPROJECT_FILE)
 			@if [ -z "$(ARG)" ] ; then \
 				echo "warning: use:\nmake ARG='[arguments]' pyrun" ; \
 			fi
-			@$(PY_PX_BIN) run python $(PY_PROJECT_NAME) $(ARG)
+			@$(PY_PX_BIN) run $(PY_INVOKE_ARG) python $(PY_PROJECT_NAME) $(ARG)
 
 # print help
 .PHONY:			pyhelp
 pyhelp:			$(PY_PYPROJECT_FILE)
-			@make ARG="--help" pyinvoke
+			@make --no-print-directory ARG="--help" pyinvoke
 
 # dependency tree
 .PHONY:			pydeptree
 pydeptree:		$(PY_PYPROJECT_FILE)
-			$(PY_PX_BIN) tree
+			@$(PY_PX_BIN) tree
 
 # make a tag using the version of the last commit
 .PHONY:			pymktag
@@ -262,7 +262,7 @@ pydoc:
 # clean derived objects
 .PHONY:			pyclean
 pyclean:
-			@echo "removing __pycache__"
+			@echo "removing: __pycache__"
 			@find . -type d -name __pycache__ -prune -exec rm -r {} \;
 			@if [ -d tests ] ; then \
 				find tests -type d -name __pycache__ -prune -exec rm -r {} \; ; \

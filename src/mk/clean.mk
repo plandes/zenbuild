@@ -22,8 +22,10 @@ cleaninfo:
 
 .PHONY:			clean
 clean:			$(CLEAN_DEPS)
-			rm -fr $(ADD_CLEAN)
+			@echo "removing: $(ADD_CLEAN)"
+			@rm -fr $(ADD_CLEAN)
 
 .PHONY:			cleanall
 cleanall:		$(CLEAN_ALL_DEPS)
-			rm -fr $(ADD_CLEAN_ALL)
+			@echo "removing: $(ADD_CLEAN_ALL)"
+			@rm -fr $(ADD_CLEAN_ALL)
