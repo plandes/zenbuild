@@ -4,10 +4,11 @@
 
 ## Build system
 #
+INFO_TARGETS +=		pyinfo
 ADD_CLEAN +=		$(PY_PYPROJECT_FILE)
 CLEAN_DEPS +=		pyclean
 CLEAN_ALL_DEPS +=	pycleanall
-INFO_TARGETS +=		pyinfo
+VAPORIZE_DEPS +=	pyvaporize
 
 
 ## Module
@@ -271,11 +272,15 @@ pyclean:
 # also clean up the pixi environments and other temporary files
 .PHONY:			pycleanall
 pycleanall:
-			@echo "removing pixi environments"
-			@rm -fr .pixi
+			@if [ -f .pixi ] ; then \
+				echo "removing: pixi environments" ; \
+				rm -fr .pixi ; \
+			fi
 
 # remove lock file
 .PHONY:			pyvaporize
-pyvaporize:		pycleanall
-			@echo "removing pixi lock file"
-			rm pixi.lock
+pyvaporize:
+			@if [ -f pixi.lock ] ; then \
+				echo "removing: pixi lock file" ; \
+				rm pixi.lock ; \
+			fi
