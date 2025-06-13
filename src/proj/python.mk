@@ -23,14 +23,20 @@ invoke:			pyinvoke
 
 # running the app via the harness
 .PHONY:			run
-run:			pyrun
+run:			pyharn
 
 # test
 .PHONY:			test
 test:			pytest
 
+.PHONY:			testprev
+testprev:		pytestprev
+
 .PHONY:			testcur
 testcur:		pytestcur
+
+.PHONY:			testall
+testall:		pytestall
 
 # source control
 .PHONY:			mktag

@@ -5,6 +5,7 @@
 ## Build system
 #
 INFO_TARGETS +=		pyinfo
+PY_TEST_ALL_TARGETS +=
 ADD_CLEAN +=		$(PY_PYPROJECT_FILE)
 CLEAN_DEPS +=		pyclean
 CLEAN_ALL_DEPS +=	pycleanall
@@ -22,6 +23,8 @@ PY_PX_BIN ?=		pixi
 PY_TEST_GLOB ?=		test_*.py
 # homegrown
 PY_RP_RELPO_BIN ?=	relpo
+# the entry point prototyping script
+PY_HARNESS_BIN ?=	harness.py
 
 # paths
 PY_PX_PACK_CACHE_DIR ?=	$(HOME)/.cache/pixi-pack
@@ -206,12 +209,14 @@ pyinvoke:		$(PY_PYPROJECT_FILE)
 			@$(PY_PX_BIN) run $(PY_INVOKE_ARG) invoke '$(PY_PROJECT_NAME) $(ARG)'
 
 # run a command through the harness
-.PHONY:			pyrun
-pyrun:			$(PY_PYPROJECT_FILE)
+.PHONY:			pyharn
+pyharn:			$(PY_PYPROJECT_FILE)
 			@if [ -z "$(ARG)" ] ; then \
-				echo "warning: use:\nmake ARG='[arguments]' pyrun" ; \
+				echo "warning: use:\nmake ARG='[arguments]' run" ; \
 			fi
-			@$(PY_PX_BIN) run $(PY_INVOKE_ARG) python $(PY_PROJECT_NAME) $(ARG)
+			@PYTHONPATH="${PYTHONPATH:+"$PYTHONPATH:"}src" \
+				$(PY_PX_BIN) run $(PY_INVOKE_ARG) \
+				python $(PY_HARNESS_BIN) $(ARG)
 
 # print help
 .PHONY:			pyhelp
@@ -250,7 +255,6 @@ pycheck:		$(PY_PYPROJECT_FILE)
 			@$(PY_PX_BIN) lock
 			@$(call relpo,check) || true
 
-
 # generate site documentation
 .PHONY:			pydoc
 pydoc:
@@ -284,3 +288,7 @@ pyvaporize:
 				echo "removing: pixi lock file" ; \
 				rm pixi.lock ; \
 			fi
+
+# run unit and integration tests
+.PHONY:			pytestall
+pytestall:		pytest $(PY_TEST_ALL_TARGETS)

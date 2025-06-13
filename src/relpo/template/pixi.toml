@@ -11,7 +11,6 @@ preview = ["pixi-build"]
 default = { features = ["pyvercur"], solve-group = "default" }
 testprev = { features = ["pyverprev", "testprev"] }
 testcur = { features = ["pyvercur", "testcur"] }
-invoke = { features = ["invoke"], solve-group = "default" }
 build-pypi = { features = ["pyvercur", "build-pypi"], solve-group = "default" }
 
 # specify where to download the build backend that builds conda files
@@ -27,15 +26,6 @@ channels = [
 python = "~={{ config.project.python.version.previous }}"
 [tool.pixi.feature.pyvercur.dependencies]
 python = "~={{ config.project.python.version.current }}"
-
-# pixi directly supports depending on PyPI packages, the PyPA calls a
-# distributed package a 'distribution'
-[tool.pixi.feature.testprev.pypi-dependencies]
-{{ project_name }} = { path = ".", editable = true }
-[tool.pixi.feature.testcur.pypi-dependencies]
-{{ project_name }} = { path = ".", editable = true }
-[tool.pixi.feature.invoke.pypi-dependencies]
-{{ project_name }} = { path = ".", editable = true }
 
 # dependencies needed during build/link time that are specific to the host
 # machine
@@ -57,9 +47,11 @@ build-wheel = "python -m hatchling build -t wheel --dir $PX_DIST_DIR"
 # use Python built-in unittest library for tests
 [tool.pixi.feature.testprev.tasks.testprev]
 args = [{ "arg" = "glob_pat" }]
+env = { PYTHONPATH = "src" }
 cmd = "python -m unittest discover -s tests -p '{% raw %}{{glob_pat}}{% endraw %}' -v"
 [tool.pixi.feature.testcur.tasks.testcur]
 args = [{ "arg" = "glob_pat" }]
+env = { PYTHONPATH = "src" }
 cmd = "python -m unittest discover -s tests -p '{% raw %}{{glob_pat}}{% endraw %}' -v"
 
 # tasks that use the 'default' environment
