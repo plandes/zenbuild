@@ -213,7 +213,7 @@ pyharn:			$(PY_PYPROJECT_FILE)
 			@if [ -z "$(ARG)" ] ; then \
 				echo "warning: use:\nmake ARG='[arguments]' run" ; \
 			fi
-			@PYTHONPATH="${PYTHONPATH:+"$PYTHONPATH:"}src" \
+			@PYTHONPATH="$${PYTHONPATH:+$${PYTHONPATH}:}src" \
 				$(PY_PX_BIN) run $(PY_INVOKE_ARG) \
 				python $(PY_HARNESS_BIN) $(ARG)
 
