@@ -2,8 +2,12 @@
 #@meta {desc: "creating latex figures from CSV files", date: "2025-06-13"}
 #@meta {requires: "python/build.mk", order: "before"}
 #
-# to use, add the following to the make file:
+# To use, add the following to the make file:
 # PROJ_LOCAL_MODULES= tex/figure
+#
+# For now, ther is one <table name>-figure.yml file with 'table name' matching
+# the table name in the configuration file.  If this pattern isn't followed,
+# the GNU make target file name matching won't work.
 
 
 ## Module
@@ -12,7 +16,6 @@
 TEX_FIG_DIR ?=		$(TEX_CONF_DIR)
 # all figure definitions
 TEX_FIG_DEFS +=		$(wildcard $(TEX_FIG_DIR)/*-figure.yml)
-#TEX_FIG_DEFS +=		$(call datdesc,listfigs $(TEX_FIG_DIR))
 TEX_FIG_EPS =		$(addprefix $(TEX_LAT_PATH)/,$(notdir $(patsubst %-figure.yml,%.eps,$(TEX_FIG_DEFS))))
 TEX_FIG_SVG =		$(addprefix $(TEX_LAT_PATH)/,$(notdir $(patsubst %-figure.yml,%.svg,$(TEX_FIG_DEFS))))
 
@@ -51,6 +54,7 @@ texfigshow:	texfig show
 %.eps:		$(TEX_FIG_DIR)/$(@F) $(TEX_MTARG_FILE)
 		make texfig
 
+# output a vector graphics files, and then display them
 .PHONY:		texfigrender
 texfigrender:
 		@$(call datdesc,figure -e svg $(TEX_FIG_DIR) $(TEX_LAT_PATH))
