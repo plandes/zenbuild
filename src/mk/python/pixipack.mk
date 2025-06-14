@@ -11,6 +11,7 @@ PY_PACKAGE_DEPS +=	$(PY_ENV_PP_FILE)
 
 ## Module
 #
+PY_PX_PACK_CACHE_DIR ?=	$(HOME)/.cache/pixi-pack
 PY_PX_PACK_BIN ?=	pixi-pack
 PY_ENV_PP_FILE ?=	$(PY_DIST_DIR)/$(PY_PACKAGE_NAME)-$(PY_VERSION)-environment.tar
 PY_ENV_PP_EXT_DIR ?=	$(MTARG)/ppenv

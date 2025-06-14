@@ -27,7 +27,6 @@ PY_RP_RELPO_BIN ?=	relpo
 PY_HARNESS_BIN ?=	harness.py
 
 # paths
-PY_PX_PACK_CACHE_DIR ?=	$(HOME)/.cache/pixi-pack
 PY_RP_PROJ_FILES_DEF =	relpo.yml,zenbuild/src/relpo/template/build.yml
 PY_RP_PROJ_FILES ?=	$(PY_RP_PROJ_FILES_DEF)
 PY_RP_PROJ_FILES_ +=	$(subst ${space},${comma},$(PY_RP_PROJ_FILES))
@@ -276,7 +275,7 @@ pyclean:
 # also clean up the pixi environments and other temporary files
 .PHONY:			pycleanall
 pycleanall:
-			@if [ -f .pixi ] ; then \
+			@if [ -d .pixi ] ; then \
 				echo "removing: pixi environments" ; \
 				rm -fr .pixi ; \
 			fi
