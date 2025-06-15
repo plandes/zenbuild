@@ -116,3 +116,7 @@ texexport:	texexportprep $(TEX_EXPORT_DEPS)
 			zip -r $(TEX_EXPORT_ZIP) $(TEX_EXPORT_ZIP_DIR) ; \
 			cp $(TEX_EXPORT_ZIP) $(TEX_EXPORT_INST_ZIP) )
 		@echo "exported stand-alone build to $(TEX_EXPORT_INST_ZIP)"
+
+# create a zip file to be uploaded to arXiv
+.PHONY:		texexportarxiv
+texexportarxiv:	clean texexportprep texexportbibrename texexport
