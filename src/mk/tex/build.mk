@@ -16,7 +16,9 @@ TEX_PYTHON_BIN ?=	python
 # should not need to modify these path variables
 TEX_nullstr=
 TEX_space=		$(TEX_nullstr) $(TEX_nullstr)
+ifneq ($(wildcard ./sty/.*),)
 TEX_PATH +=		$(abspath ./sty)
+endif
 TEX_LAT_PATH =		$(MTARG)/lat
 TEX_PATH_MTARG =	$(TEX_LAT_PATH) $(TEX_PATH)
 TEX_PATHSTR =		$(subst $(TEX_space),:,$(TEX_PATH_MTARG))
@@ -26,8 +28,11 @@ TEX_PATHSEP =		$(subst $(TEX_space),:,$(TEX_PATH)):.
 TEX_TPATH =		TEXINPUTS=$(TEX_PATHSTR):
 TEX_PDFLAT_ARGS +=
 TEX_ENV +=
+TEX_BIN ?=		pdflatex
 # latex command command
-TEX_LATEX_CMD ?=	$(TEX_TPATH) $(TEX_ENV) pdflatex -output-directory $(TEX_LAT_PATH) $(TEX_PDFLAT_ARGS)
+TEX_LATEX_CMD ?=	$(TEX_TPATH) $(TEX_ENV) $(TEX_BIN) -output-directory $(TEX_LAT_PATH) $(TEX_PDFLAT_ARGS)
+# make branch
+TEX_MAKE_ARGS ?=	--no-print-directory
 
 
 ## Deployment configuration
@@ -170,8 +175,8 @@ texversion:
 .PHONY:		texforce
 texforce:	$(COMP_DEPS)
 		@echo "forcing make"
-		make $(COMP_DEPS)
-		( cd $(TEX_LAT_PATH) ; $(TEX_LATEX_CMD) )
+		@make $(TEX_MAKE_ARGS) $(COMP_DEPS)
+		@( cd $(TEX_LAT_PATH) ; $(TEX_LATEX_CMD) )
 
 # run latex before resolving module targets (see tex-bib*.mk, tex-index.mk)
 $(TEX_PRERUN_FILE):
@@ -213,17 +218,20 @@ texcompile:	$(TEX_PDF_FILE)
 # "debug" the compilation process by not adding quiet flags to pdflatex
 .PHONY:		texdebug
 texdebug:
-		make TEX_DEBUG=1 texforce
+		@echo "debugging tex build..."
+		@make $(TEX_MAKE_ARGS) TEX_DEBUG=1 texforce
 
 # compile and display the file using a simple open (MacOS or alias out)
 .PHONY:		texopen
 texopen:	texcompile
-		open $(TEX_PDF_FILE)
+		@echo "opening $(TEX_PDF_FILE)..."
+		@open $(TEX_PDF_FILE)
 
 # a one pass compile and show (will flub refs and bibliography)
 .PHONY:		texreopen
 texreopen:	texforce
-		osascript -e 'tell application "Preview" to activate'
+		@echo "bringing preview to foreground..."
+		@osascript -e 'tell application "Preview" to activate'
 
 .PHONY:		texrend
 texrend:
@@ -255,7 +263,8 @@ texfinalshow:	texfinal texrend
 # force compile the presentation version
 .PHONY:			texpresentforce
 texpresentforce:
-			make TEX_LATEX_INIT_CMD="\newif\ifisfinal\isfinaltrue \def\ispresentation{1}" \
+			@make $(TEX_MAKE_ARGS) \
+				TEX_LATEX_INIT_CMD="\newif\ifisfinal\isfinaltrue \def\ispresentation{1}" \
 				texforce
 
 # kill the presentation app if running, then restart with new file version
@@ -294,8 +303,9 @@ texpackage:	$(TEX_PKG_FINAL_DIR) $(TEX_PKG_ADD)
 
 # package directory target generates both slides versions or default paper/report
 $(TEX_PKG_FINAL_DIR):
-		mkdir -p $(TEX_PKG_FINAL_DIR)
-		make texfinal
+		@echo "packaging into $(TEX_PKG_FINAL_DIR)..."
+		@mkdir -p $(TEX_PKG_FINAL_DIR)
+		@make $(TEX_MAKE_ARGS) texfinal
 		@if [ -z "$(TEX_SLIDES)" ] ; then \
 			echo "copying non-slides file to package dir" ; \
 			cp $(TEX_PDF_FILE) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME).pdf ; \
@@ -329,5 +339,5 @@ texinstall:	texpackage
 texinstalltracked:	compile
 			$(eval DFMT=$(shell date "+$(USER)-$(FINAL_NAME)-%b%d-%H%M" | tr "A-Z" "a-z"))
 			@echo "copy tex source and PDF to $(TEX_INSTALL_DIR)..."
-			cp $(TEX).tex $(TEX_INSTALL_DIR)/$(DFMT).tex
-			cp $(TEX_PDF_FILE) $(TEX_INSTALL_DIR)/$(DFMT).pdf
+			@cp $(TEX).tex $(TEX_INSTALL_DIR)/$(DFMT).tex
+			@cp $(TEX_PDF_FILE) $(TEX_INSTALL_DIR)/$(DFMT).pdf

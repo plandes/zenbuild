@@ -45,34 +45,37 @@ texexportinfo:
 # handy for debugging
 .PHONY:		texexportredo
 texexportredo:
-		rm -fr $(TEX_EXPORT_DIR)
-		rm -f $(TEX_EXPORT_DIR).zip
-		make texexport
+		@echo "removing $(TEX_EXPORT_DIR), $(TEX_EXPORT_DIR).zip..."
+		@rm -fr $(TEX_EXPORT_DIR)
+		@rm -f $(TEX_EXPORT_DIR).zip
+		@make $(TEX_MAKE_ARGS) texexport
 
 # prepare for export by copy files and creating configuration
 .PHONY:		texexportprep
 texexportprep:	texinstall
-		mkdir -p $(TEX_EXPORT_DIR)
-		cp $(wildcard $(BIB_FILE) $(BBL_FILE)) $(TEX_EXPORT_DIR)
-		cp $(wildcard $(TEX_LAT_PATH)/*.eps $(TEX_LAT_PATH)/*.png \
+		@echo "prepare export in $(TEX_EXPORT_DIR)..."
+		@mkdir -p $(TEX_EXPORT_DIR)
+		@cp $(wildcard $(BIB_FILE) $(BBL_FILE)) $(TEX_EXPORT_DIR)
+		@cp $(wildcard $(TEX_LAT_PATH)/*.eps $(TEX_LAT_PATH)/*.png \
 			$(TEX_LAT_PATH)/*.jpg $(TEX_LAT_PATH)/*.gif) \
 			$(TEX_EXPORT_DIR)
-		if [ ! -z "$(TEX_EXPORT_ADDS)" ] ; then \
+		@if [ ! -z "$(TEX_EXPORT_ADDS)" ] ; then \
 			cp -r $(TEX_EXPORT_ADDS) $(TEX_EXPORT_DIR) ; \
 		fi
-		$(TEX_EXPORT_LATIDX) deps $(TEX_EXPORT_LATIDX_PATH) \
+		@$(TEX_EXPORT_LATIDX) deps $(TEX_EXPORT_LATIDX_PATH) \
 			--source $(TEX_LATEX_FILE) -f list | \
 			grep -v $(notdir $(TEX_LATEX_FILE)) | \
 			xargs -i{} cp {} $(TEX_EXPORT_DIR)
-		cat $(BUILD_SRC_DIR)/template/tex/export-makefile | \
+		@cat $(BUILD_SRC_DIR)/template/tex/export-makefile | \
 			sed 's/{{TEX_FILE_NAME}}/$(FINAL_NAME)/g' | \
+			sed 's/{{TEX_LATEX_CMD}}/$(TEX_BIN)/g' | \
 			sed 's/{{TEX_FINAL_RUNS}}/$(TEX_FINAL_RUNS)/g' | \
 			sed 's/{{SRC_FILE_NAME}}/$(TEX)/g' > \
 			$(TEX_EXPORT_DIR)/makefile
-		echo "\\\newif\ifisfinal\isfinaltrue" > \
+		@echo "\\\newif\ifisfinal\isfinaltrue" > \
 			$(TEX_EXPORT_DIR)/$(FINAL_NAME).tex
-		cat $(TEX).tex >> $(TEX_EXPORT_DIR)/$(FINAL_NAME).tex
-		if [ ! -z "$(BIBER)" ] ; then \
+		@cat $(TEX).tex >> $(TEX_EXPORT_DIR)/$(FINAL_NAME).tex
+		@if [ ! -z "$(BIBER)" ] ; then \
 			touch $(TEX_EXPORT_DIR)/zenbiber ; \
 		fi
 

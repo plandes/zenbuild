@@ -12,7 +12,7 @@
 ## setup
 
 # binaries
-TEX_LATEX_CMD =	pdflatex
+TEX_LATEX_CMD =	{{TEX_LATEX_CMD}}
 BIBTEX=		bibtex
 BIBER=		biber
 BIB_FILE=	$(wildcard *.bib)
