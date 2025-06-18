@@ -25,6 +25,8 @@ PY_TEST_GLOB ?=		test_*.py
 PY_RP_RELPO_BIN ?=	relpo
 # the entry point prototyping script
 PY_HARNESS_BIN ?=	harness.py
+# make branch
+PY_MAKE_ARGS ?=		--no-print-directory
 
 # paths
 PY_RP_PROJ_FILES_DEF =	relpo.yml,zenbuild/src/relpo/template/build.yml
@@ -163,7 +165,7 @@ pyreinstall:
 # use a make subprocess to allow sub modules to add to PY_PACKAGE_DEPS
 .PHONY:			pypackage
 pypackage:
-			@make --no-print-directory $(PY_PACKAGE_DEPS)
+			@make $(PY_MAKE_ARGS) $(PY_PACKAGE_DEPS)
 
 ## Global install targets
 #
@@ -184,7 +186,7 @@ $(PY_CONDA_FILE):	$(PY_PYPROJECT_FILE)
 			@sed -i '/^\/pyproject.toml$$/d' .gitignore
 			@PX_DIST_DIR=$(PY_DIST_DIR) $(PY_PX_BIN) run build-conda || \
 				make pyrestoregitignore
-			@make --no-print-directory pyrestoregitignore
+			@make $(PY_MAKE_ARGS) pyrestoregitignore
 
 # export environment.yml
 $(PY_CONDA_ENV_FILE):	$(PY_PYPROJECT_FILE)
@@ -220,7 +222,7 @@ pyharn:			$(PY_PYPROJECT_FILE)
 # print help
 .PHONY:			pyhelp
 pyhelp:			$(PY_PYPROJECT_FILE)
-			@make --no-print-directory ARG="--help" pyinvoke
+			@make $(PY_MAKE_ARGS) ARG="--help" pyinvoke
 
 # dependency tree
 .PHONY:			pydeptree

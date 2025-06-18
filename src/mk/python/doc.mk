@@ -69,7 +69,7 @@ pydocdeploy:		clean $(PY_DOC_BUILD)
 #
 # build the documentation using the default Git URL
 $(PY_GIT_DOC_SRC_DIR):
-			@( unset PY_DOC_IM_URL_CMD ; make $(PY_DOC_BUILD) )
+			@( unset PY_DOC_IM_URL_CMD ; make $(PY_MAKE_ARGS) $(PY_DOC_BUILD) )
 
 .PHONY:			pygitdochtml
 pygitdochtml:		$(PY_GIT_DOC_SRC_DIR)
