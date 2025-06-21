@@ -204,17 +204,11 @@ pycondaenv:		$(PY_CONDA_ENV_FILE)
 # run a command via Pixi using the ApplicationFactory class
 .PHONY:			pyinvoke
 pyinvoke:		$(PY_PYPROJECT_FILE)
-			@if [ -z "$(ARG)" ] ; then \
-				echo "warning: use:\nmake ARG='[arguments]' pyinvoke" ; \
-			fi
 			@$(PY_PX_BIN) run $(PY_INVOKE_ARG) invoke '$(PY_PROJECT_NAME) $(ARG)'
 
 # run a command through the harness
 .PHONY:			pyharn
 pyharn:			$(PY_PYPROJECT_FILE)
-			@if [ -z "$(ARG)" ] ; then \
-				echo "warning: use:\nmake ARG='[arguments]' run" ; \
-			fi
 			@PYTHONPATH="$${PYTHONPATH:+$${PYTHONPATH}:}src" \
 				$(PY_PX_BIN) run $(PY_INVOKE_ARG) \
 				python $(PY_HARNESS_BIN) $(ARG)
