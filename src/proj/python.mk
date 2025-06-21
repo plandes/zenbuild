@@ -78,6 +78,13 @@ globaluninstall:	pyppuninstall
 .PHONY:			globalreinstall
 globalreinstall:	pyppreinstall
 
+# documentation
+.PHONY:			docdeploy
+docdeploy:		pydocdeploy
+
+.PHONY:			gitdocdeploy
+gitdocdeploy:		pygitdocdeploy
+
 # deploy (needs PROJ_MODULES=python/deploy)
 .PHONY:			deploy
 deploy:			pydeploy

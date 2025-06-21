@@ -20,6 +20,9 @@ ifndef PY_DOC_IM_URL_CMD
 PY_DOC_IM_URL_CMD :=	echo https://$(PY_GITHUB_USER).github.io
 endif
 
+# dist name (github repo or local doc sub path)
+PY_DOC_DIST_NAME ?=	$(PY_PROJECT_NAME)
+
 # deploy
 ifndef PY_DOC_DEPLOY_CMD
 PY_DOC_DEPLOY_CMD :=	echo "echo no upload command set--"
@@ -62,7 +65,7 @@ pydocshow:		$(PY_DOC_BUILD)
 
 .PHONY:			pydocdeploy
 pydocdeploy:		clean $(PY_DOC_BUILD)
-			@$(PY_DOC_DEPLOY_CMD) $(PY_DOC_BUILD_HTML) $(PY_PROJECT_NAME)
+			$(PY_DOC_DEPLOY_CMD) $(PY_DOC_BUILD_HTML) $(PY_DOC_DIST_NAME)
 
 
 ## Git
@@ -77,7 +80,7 @@ pygitdochtml:		$(PY_GIT_DOC_SRC_DIR)
 # prepare the documents using PY_GIT_DOC_SRC_DIR to trigger the doc build
 $(PY_GIT_DOC_DST_DIR):	$(PY_GIT_DOC_SRC_DIR)
 			rm -rf $(PY_GIT_DOC_DST_DIR) && mkdir -p $(PY_GIT_DOC_DST_DIR)
-			git clone git@github.com:$(PY_GITHUB_USER)/$(PY_PROJECT_NAME).git \
+			git clone git@github.com:$(PY_GITHUB_USER)/$(PY_DOC_DIST_NAME).git \
 				$(PY_GIT_DOC_DST_DIR)
 			( cd $(PY_GIT_DOC_DST_DIR) ; \
 			  git update-ref -d refs/heads/gh-pages ; \
