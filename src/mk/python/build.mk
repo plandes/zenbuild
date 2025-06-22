@@ -5,6 +5,7 @@
 ## Build system
 #
 INFO_TARGETS +=		pyinfo
+PY_TEST_TARGETS ?=	pytestprev pytestcur
 PY_TEST_ALL_TARGETS +=
 ADD_CLEAN +=		$(PY_PYPROJECT_FILE)
 CLEAN_DEPS +=		pyclean
@@ -121,17 +122,23 @@ pyproject:		$(PY_PYPROJECT_FILE)
 pyinit:			$(PY_PYPROJECT_FILE)
 			$(PY_PX_BIN) install
 
-# run unit tests
+# run unit tests on previous Python version
 .PHONY:			pytestprev
 pytestprev:		$(PY_PYPROJECT_FILE)
 			$(PY_PX_BIN) run testprev ''$(PY_TEST_GLOB)''
 
+# run unit tests on current Python version
 .PHONY:			pytestcur
 pytestcur:		$(PY_PYPROJECT_FILE)
 			$(PY_PX_BIN) run testcur ''$(PY_TEST_GLOB)''
 
+# run unit tests on current version
 .PHONY:			pytest
-pytest:			pytestprev pytestcur
+pytest:			$(PY_TEST_TARGETS)
+
+# run unit and integration tests
+.PHONY:			pytestall
+pytestall:		pytest $(PY_TEST_ALL_TARGETS)
 
 
 ## Shared environment install targets
@@ -283,7 +290,3 @@ pyvaporize:
 				echo "removing: pixi lock file" ; \
 				rm pixi.lock ; \
 			fi
-
-# run unit and integration tests
-.PHONY:			pytestall
-pytestall:		pytest $(PY_TEST_ALL_TARGETS)
