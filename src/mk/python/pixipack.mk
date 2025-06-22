@@ -1,6 +1,7 @@
 #@meta {author: "Paul Landes"}
 #@meta {desc: "create an enviornment file with pixi-pack", date: "2025-06-03"}
 #@meta {requires: "python/build.mk", order: "before"}
+#@meta {requires: "python/package.mk", order: "before"}
 
 
 ## Build

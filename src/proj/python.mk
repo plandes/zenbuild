@@ -5,6 +5,7 @@
 ## Includes
 #
 include $(BUILD_MK_DIR)/python/build.mk
+include $(BUILD_MK_DIR)/python/invoke.mk
 
 
 ## Targets
@@ -40,13 +41,13 @@ testall:		pytestall
 
 # source control
 .PHONY:			mktag
-gitmktag:		pymktag
+mktag:			pymktag
 
 .PHONY:			rmtag
-gitrmtag:		pyrmtag
+mtag:			pyrmtag
 
 .PHONY:			bumptag
-gitbumptag:		pybumptag
+bumptag:		pybumptag
 
 .PHONY:			check
 check:			pycheck
