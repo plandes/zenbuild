@@ -30,6 +30,7 @@ pytestinfo:
 # an set the python path to the test environment and run a command-line program
 .PHONY:			pytestrun
 pytestrun:		$(PY_PYPROJECT_FILE)
+			$(PY_PX_BIN) install -e testcur
 			$(eval pybin := $(shell $(PY_PX_BIN) info --json | jq -r \
 				'.environments_info|.[]|select(.name=="testcur").prefix' ))
 			@export PYTHONPATH="$${PYTHONPATH:+$${PYTHONPATH}:}$(abspath .)/src" \

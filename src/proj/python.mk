@@ -6,6 +6,7 @@
 #
 include $(BUILD_MK_DIR)/python/build.mk
 include $(BUILD_MK_DIR)/python/invoke.mk
+include $(BUILD_MK_DIR)/python/git.mk
 
 
 ## Targets

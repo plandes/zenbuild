@@ -100,36 +100,10 @@ pyproject:		$(PY_PYPROJECT_FILE)
 pyinit:			$(PY_PYPROJECT_FILE)
 			$(PY_PX_BIN) install
 
-
 # dependency tree
 .PHONY:			pydeptree
 pydeptree:		$(PY_PYPROJECT_FILE)
 			@$(PY_PX_BIN) tree
-
-# make a tag using the version of the last commit
-.PHONY:			pymktag
-pymktag:
-			@if [ -z "$(COMMENT)" ] ; then \
-				echo "use:\nmake COMMENT='comment' pymktag" ; \
-				exit 1 ; \
-			fi
-			@$(call relpo,mktag,"--message=$(COMMENT)")
-
-# remove the last tag
-.PHONY:			pyrmtag
-pyrmtag:
-			@$(call relpo,rmtag,"--message=$(COMMENT)")
-
-# delete the last tag and create a new one on the latest commit
-.PHONY:			pybumptag
-pybumptag:
-			@$(call relpo,bumptag)
-
-# print this repo's info
-.PHONY:			pycheck
-pycheck:		$(PY_PYPROJECT_FILE)
-			@$(PY_PX_BIN) lock
-			@$(call relpo,check) || true
 
 
 ## Clean
