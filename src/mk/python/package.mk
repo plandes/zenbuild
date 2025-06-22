@@ -23,6 +23,11 @@ PY_GITIGNORE_ORG ?=	$(MTARG)/gitignore-old
 PY_PKG_DEPS ?=		$(PY_WHEEL_FILE) $(PY_CONDA_ENV_FILE)
 PY_PKG_BUILD_DEPS +=	$(PY_PYPROJECT_FILE)
 
+# wheel (un)install hooks
+PY_WH_INSTALL_DEPS +=
+PY_WH_UNINSTALL_DEPS +=
+
+
 # set to non-empty if the file hasn't been created
 ifeq ($(strip $(PY_CONDA_FILE)),)
 	PY_CONDA_FILE = force-target
@@ -46,14 +51,18 @@ $(PY_WHEEL_FILE):	$(PY_PKG_BUILD_DEPS)
 pywheel:		$(PY_WHEEL_FILE)
 
 # install the wheel in the shared environment
-.PHONY:			pyinstall
-pyinstall:		clean $(PY_WHEEL_FILE)
+.PHONY:			pyinstallwheel
+pyinstallwheel:		clean $(PY_WHEEL_FILE)
 			$(PY_PKG_PIP_BIN) install $(PY_WHEEL_FILE)
+.PHONY:			pyinstall
+pyinstall:		pyinstallwheel $(PY_WH_INSTALL_DEPS)
 
 # uninstall the wheel from the shared environment
-.PHONY:			pyuninstall
-pyuninstall:
+.PHONY:			pyuninstallwheel
+pyuninstallwheel:
 			$(PY_PKG_PIP_BIN) uninstall -y $(PY_WHEEL_FILE)
+.PHONY:			pyuninstall
+pyuninstall:		pyuninstallwheel $(PY_WH_UNINSTALL_DEPS)
 
 # reinstall the wheel
 .PHONY:			pyreinstall
