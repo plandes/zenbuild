@@ -45,8 +45,13 @@ all:			info
 
 ## Includes
 #
+# local site configuration if it exists
+-include $(HOME)/.zenbuild.mk
+# local settings used by the project
 include $(PROJ_LOCAL_MKS)
+# main project include (i.e. python)
 include $(BUILD_SRC_DIR)/proj/$(PROJ_TYPE).mk
+# includes dependent on the project
 include $(PROJ_MKS)
 
 

@@ -5,6 +5,9 @@
 
 ## Module
 #
+# derived
+PY_DEPLOY_PYTHON_BIN ?=	$(PY_PYTHON_BIN)
+
 # deploy
 PYPI_TEST_NAME ?=	pypitest
 PYPI_NON_TEST_NAME ?=	pypi
@@ -18,7 +21,7 @@ PYPI_SIGN ?=		pypiuser@example.com
 .PHONY:			pydeploy
 pydeploy:		pycheck $(PY_WHEEL_FILE)
 			@for url in $(PYPI_TEST_NAME) $(PYPI_NON_TEST_NAME) ; do \
-			    $(PY_PYTHON_BIN) -m twine upload --non-interactive \
+			    $(PY_DEPLOY_PYTHON_BIN) -m twine upload --non-interactive \
 				--sign-with $(PYPI_SIGN) --username $(PYPI_USER) \
 				--repository $$url $(PY_WHEEL_FILE) ; \
 			done
