@@ -99,6 +99,11 @@ pyinfo:
 			@echo "py_conda_file: $(PY_CONDA_FILE)"
 			@echo "py_github_user: $(PY_GITHUB_USER)"
 
+# invoke relpo
+.PHONY:			pyinvokerelpo
+pyinvokerelpo:
+			@$(call relpo,$(ARG))
+
 # dump a yaml version of the project metadata
 .PHONY:			pyyamlmetafile
 pyyamlmetafile:
@@ -162,8 +167,8 @@ pyuninstall:
 # reinstall the wheel
 .PHONY:			pyreinstall
 pyreinstall:
-			@make pyuninstall
-			@make pyinstall
+			@$(MAKE) pyuninstall
+			@$(MAKE) pyinstall
 
 
 ## Package
@@ -172,7 +177,7 @@ pyreinstall:
 # use a make subprocess to allow sub modules to add to PY_PACKAGE_DEPS
 .PHONY:			pypackage
 pypackage:
-			@make $(PY_MAKE_ARGS) $(PY_PACKAGE_DEPS)
+			@$(MAKE) $(PY_MAKE_ARGS) $(PY_PACKAGE_DEPS)
 
 ## Global install targets
 #
@@ -193,7 +198,7 @@ $(PY_CONDA_FILE):	$(PY_PYPROJECT_FILE)
 			@sed -i '/^\/pyproject.toml$$/d' .gitignore
 			@PX_DIST_DIR=$(PY_DIST_DIR) $(PY_PX_BIN) run build-conda || \
 				make pyrestoregitignore
-			@make $(PY_MAKE_ARGS) pyrestoregitignore
+			@$(MAKE) $(PY_MAKE_ARGS) pyrestoregitignore
 
 # export environment.yml
 $(PY_CONDA_ENV_FILE):	$(PY_PYPROJECT_FILE)
@@ -223,7 +228,7 @@ pyharn:			$(PY_PYPROJECT_FILE)
 # print help
 .PHONY:			pyhelp
 pyhelp:			$(PY_PYPROJECT_FILE)
-			@make $(PY_MAKE_ARGS) ARG="--help" pyinvoke
+			@$(MAKE) $(PY_MAKE_ARGS) ARG="--help" pyinvoke
 
 # dependency tree
 .PHONY:			pydeptree

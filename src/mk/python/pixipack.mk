@@ -59,5 +59,5 @@ pyppuninstall:
 # reinstall into the global pixi environment
 .PHONY:			pyppreinstall
 pyppreinstall:
-			@make $(PY_MAKE_ARGS) pyppuninstall || true
-			@make $(PY_MAKE_ARGS) pyppinstall
+			@$(MAKE) $(PY_MAKE_ARGS) pyppuninstall || true
+			@$(MAKE) $(PY_MAKE_ARGS) pyppinstall
