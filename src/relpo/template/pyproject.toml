@@ -17,7 +17,9 @@ dependencies = [
   "{{ dep }}",
 {%- endfor %}
 ]
+{%- if config.project.has_entry_points == true  %}
 scripts = { {{ config.project.name }} = "{{ config.project.domain }}.{{ config.project.name}}.cli:main" }
+{%- endif %}
 license = "MIT"
 license-files = ["LICENSE.md"]
 keywords = ["{{ config.project.keywords|join('", "') }}"]
