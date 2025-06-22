@@ -82,6 +82,11 @@ pyinfo:
 pyyamlmetafile:
 			@$(call relpo,meta -f yaml)
 
+# dump a json version of the project metadata
+.PHONY:			pyjsonmetafile
+pyjsonmetafile:
+			@$(call relpo,meta -f json)
+
 # project what is used as the (synthesized) relpo.yml config file
 .PHONY:			pyrelpoconfig
 pyrelpoconfig:
