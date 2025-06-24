@@ -55,9 +55,6 @@ extensions = [
     'recommonmark',
     # auto-generate section labels.
     'sphinx.ext.autosectionlabel',
-
-    # pdf
-    'rst2pdf.pdfbuilder',
 ]
 
 # autodoc extension configuration
@@ -102,12 +99,6 @@ intersphinx_mapping = {
 
 # The master toctree document.
 master_doc = 'top'
-
-
-# PDF
-
-pdf_documents = [('index', 'rst2pdf', '{{ config.project.domain }}.{{config.project.name }}', author)]
-latex_engine = 'xelatex'
 
 
 # -- Options for HTML output -------------------------------------------------
