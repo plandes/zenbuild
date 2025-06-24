@@ -22,6 +22,8 @@ PY_PX_BIN ?=		pixi
 PY_RP_RELPO_BIN ?=	relpo
 # make branch
 PY_MAKE_ARGS ?=		--no-print-directory
+# clean
+PY_CLEAN_DIRS +=	src tests resources
 
 # paths
 PY_RP_PROJ_FILES_DEF =	relpo.yml,zenbuild/src/relpo/template/build.yml
@@ -116,7 +118,7 @@ pydeptree:		$(PY_PYPROJECT_FILE)
 # clean derived objects
 .PHONY:			pyclean
 pyclean:
-			@for i in src tests resources ; do \
+			@for i in $(PY_CLEAN_DIRS) ; do \
 				if [ -d $$i ] ; then \
 					echo "removing: $${i}/__pycache__" ; \
 					find . -type d -name __pycache__ \
