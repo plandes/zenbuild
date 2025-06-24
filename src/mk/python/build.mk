@@ -116,8 +116,13 @@ pydeptree:		$(PY_PYPROJECT_FILE)
 # clean derived objects
 .PHONY:			pyclean
 pyclean:
-			@echo "removing: __pycache__"
-			@find . -type d -name __pycache__ -prune -exec rm -r {} \;
+			@for i in src tests resources ; do \
+				if [ -d $$i ] ; then \
+					echo "removing: $${i}/__pycache__" ; \
+					find . -type d -name __pycache__ \
+						-prune -exec rm -r {} \; ; \
+				fi ; \
+			done
 
 # also clean up the pixi environments and other temporary files
 .PHONY:			pycleanall
