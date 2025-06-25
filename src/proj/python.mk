@@ -29,16 +29,23 @@ run:			pyharn
 
 # test
 .PHONY:			test
-test:			pytest
-
 .PHONY:			testprev
-testprev:		pytestprev
-
 .PHONY:			testcur
-testcur:		pytestcur
-
 .PHONY:			testall
+ifneq ($(wildcard testsX),)
+include $(BUILD_MK_DIR)/python/test.mk
+test:			pytest
+testprev:		pytestprev
+testcur:		pytestcur
 testall:		pytestall
+else
+notests:
+			@echo "no tests defined"
+test:			notests
+testprev:		notests
+testcur:		notests
+testall:		notests
+endif
 
 # source control
 .PHONY:			mktag
