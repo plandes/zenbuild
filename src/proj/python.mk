@@ -32,7 +32,7 @@ run:			pyharn
 .PHONY:			testprev
 .PHONY:			testcur
 .PHONY:			testall
-ifneq ($(wildcard testsX),)
+ifneq ($(wildcard tests),)
 include $(BUILD_MK_DIR)/python/test.mk
 test:			pytest
 testprev:		pytestprev
