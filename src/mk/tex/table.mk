@@ -47,4 +47,4 @@ textabshow:	textab show
 
 # generate a new LaTeX .sty file for every *-table.yml found
 %-table.sty:	$(TEX_TAB_DIR)/$(@F) $(TEX_MTARG_FILE)
-		make textab
+		@$(MAKE) --no-print-directory textab

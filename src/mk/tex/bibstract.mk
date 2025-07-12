@@ -29,7 +29,8 @@ texbibstract:		$(BIB_FILE)
 # the .bib file target
 $(BIB_FILE):		$(BIB_MASTER_FILE)
 			@echo "running bibstract on $(BIB_FILE)..."
-			$(BIBSTRACT) $(BIBSTRACT_ARGS) $(BIBSTRACT_TEX_PATH) --output $(BIB_FILE)
+			@$(BIBSTRACT) $(BIBSTRACT_ARGS) $(BIBSTRACT_TEX_PATH) \
+				--output $(BIB_FILE)
 
 # remove the .bib file, which forces its recreation on the next compile
 .PHONY:			texcleanbibstract

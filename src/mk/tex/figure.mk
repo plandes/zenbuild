@@ -52,10 +52,11 @@ texfigshow:	texfig show
 
 # generate a new LaTeX .sty file for every *-figure.yml found
 %.eps:		$(TEX_FIG_DIR)/$(@F) $(TEX_MTARG_FILE)
-		make texfig
+		@$(MAKE) $(TEX_MAKE_ARGS) texfig
 
 # output a vector graphics files, and then display them
 .PHONY:		texfigrender
 texfigrender:
+		@echo "generating and rendering $(TEX_FIG_SVG)"
 		@$(call datdesc,figure -e svg $(TEX_FIG_DIR) $(TEX_LAT_PATH))
-		$(RENDER_BIN) $(TEX_FIG_SVG)
+		@$(RENDER_BIN) $(TEX_FIG_SVG)

@@ -12,14 +12,19 @@ TEX_GRF_FILES=	$(addprefix $(TEX_IMGC_DIR)/,$(notdir $(wildcard $(TEX_GRF_DIR)/*
 
 # build
 INFO_TARGETS +=	texgraffleinfo
-TEX_PRE_COMP_DEPS +=$(TEX_GRF_FILES)
+TEX_PRE_COMP_DEPS +=texgraffleimgdir $(TEX_GRF_FILES)
 
 
 .PHONY:		texgraffleinfo
 texgraffleinfo:
 		@echo "tex-grf-files: $(TEX_GRF_FILES)"
 
+.PHONY:		texgraffleimgdir
+texgraffleimgdir:
+		@mkdir -p $(TEX_IMGC_DIR)
+
 # compile all OmniGraffle files
 %.graffle:	$(TEX_MTARG_FILE)
+		@echo "generating images from OmniGraffle file $@..."
 		cp -r $(TEX_GRF_DIR)/$(@F) $@
 		osascript $(TEX_GRF_BIN) $@ $(TEX_IMGC_DIR)

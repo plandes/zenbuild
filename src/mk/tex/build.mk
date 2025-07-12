@@ -130,9 +130,8 @@ texinfo:
 
 # shortgap for dependency marker (with the exception of the .tex file) for now
 $(TEX_MTARG_FILE):
-		mkdir -p $(TEX_LAT_PATH)
-		mkdir -p $(TEX_IMGC_DIR)
-		date >> $(TEX_MTARG_FILE)
+		@mkdir -p $(TEX_LAT_PATH)
+		@date >> $(TEX_MTARG_FILE)
 
 # copy over included latex source files
 $(TEX_LAT_PATH)/%.tex:		%.tex
@@ -175,17 +174,21 @@ texversion:
 .PHONY:		texforce
 texforce:	$(COMP_DEPS)
 		@echo "forcing make"
-		@make $(TEX_MAKE_ARGS) $(COMP_DEPS)
+		@$(MAKE) $(TEX_MAKE_ARGS) $(COMP_DEPS)
 		@( cd $(TEX_LAT_PATH) ; $(TEX_LATEX_CMD) )
 
 # run latex before resolving module targets (see tex-bib*.mk, tex-index.mk)
 $(TEX_PRERUN_FILE):
 		@echo "init run: $(TEX_INIT_RUN)"
 		@if [ ! -z "$(TEX_INIT_RUN)" ] ; then \
-			echo "copying images $(TEX_IMGC_DIR) -> $(TEX_LAT_PATH)" ; \
-			cp $(TEX_IMGC_DIR)/* $(TEX_LAT_PATH) ; \
+			if [ -d $(TEX_IMGC_DIR) ] ; then \
+				echo "copying images $(TEX_IMGC_DIR) -> $(TEX_LAT_PATH)" ; \
+				cp $(TEX_IMGC_DIR)/* $(TEX_LAT_PATH) ; \
+			fi ; \
 			echo "starting latex pre-start run : $(TEX_LAT_PATH)" ; \
-			echo $(TEX_LATEX_CMD) ; \
+			if [ $(TEX_DEBUG) -eq 1 ] ; then \
+				echo "( cd $(TEX_LAT_PATH) ; $(TEX_LATEX_CMD) )" ; \
+			fi ; \
 			( cd $(TEX_LAT_PATH) ; $(TEX_LATEX_CMD) ) ; \
 			if [ $$? != 0 ] ; then \
 				echo "failed last compile (use TEX_DEBUG=1): $$?" ; \
@@ -219,7 +222,7 @@ texcompile:	$(TEX_PDF_FILE)
 .PHONY:		texdebug
 texdebug:
 		@echo "debugging tex build..."
-		@make $(TEX_MAKE_ARGS) TEX_DEBUG=1 texforce
+		@$(MAKE) $(TEX_MAKE_ARGS) TEX_DEBUG=1 texforce
 
 # compile and display the file using a simple open (MacOS or alias out)
 .PHONY:		texopen
@@ -263,7 +266,7 @@ texfinalshow:	texfinal texrend
 # force compile the presentation version
 .PHONY:			texpresentforce
 texpresentforce:
-			@make $(TEX_MAKE_ARGS) \
+			@$(MAKE) $(TEX_MAKE_ARGS) \
 				TEX_LATEX_INIT_CMD="\newif\ifisfinal\isfinaltrue \def\ispresentation{1}" \
 				texforce
 
@@ -305,7 +308,7 @@ texpackage:	$(TEX_PKG_FINAL_DIR) $(TEX_PKG_ADD)
 $(TEX_PKG_FINAL_DIR):
 		@echo "packaging into $(TEX_PKG_FINAL_DIR)..."
 		@mkdir -p $(TEX_PKG_FINAL_DIR)
-		@make $(TEX_MAKE_ARGS) texfinal
+		@$(MAKE) $(TEX_MAKE_ARGS) texfinal
 		@if [ -z "$(TEX_SLIDES)" ] ; then \
 			echo "copying non-slides file to package dir" ; \
 			cp $(TEX_PDF_FILE) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME).pdf ; \
@@ -329,7 +332,7 @@ texinstall:	texpackage
 			( cd $(TEX_PKG_DIR) ; zip -r $(FINAL_NAME).zip $(FINAL_NAME) ) ; \
 			cp $(TEX_PKG_DIR)/$(FINAL_NAME).zip $(TEX_INSTALL_ZIP) ; \
 		else \
-			echo "installing just PDF" ; \
+			echo "installing just PDF to $(TEX_INSTALL_PDF)" ; \
 			cp $(TEX_PKG_DIR)/$(FINAL_NAME)/$(FINAL_NAME).pdf $(TEX_INSTALL_PDF) ; \
 		fi
 

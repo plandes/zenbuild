@@ -27,4 +27,4 @@ tex-eps-pdf-info:
 %.pdf:			$(TEX_IMG_DIR)/$(@F) $(TEX_MTARG_FILE)
 			$(eval DST_EPS=$(patsubst %.pdf,%.eps,$(TEX_IMG_DIR)/$(@F)))
 			@echo "$(DST_EPS) -> $@"
-			convert $(DST_EPS) $@
+			@convert $(DST_EPS) $@
