@@ -7,7 +7,6 @@
 # must set these in the make file
 #DOCKER_IMG_NAME =
 #DOCKER_BUILD_OBJS =
-#DOCKER_BUILD_ARGS = --build-arg var_name=${VARIABLE_NAME}
 #DOCKER_CONTAINER =
 
 
@@ -27,6 +26,7 @@ DOCKER_PRE_UP_ARGS ?=	--ansi never
 DOCKER_PRE_DOWN_ARGS ?=	--ansi never
 DOCKER_CMP_UP_ARGS ?=
 DOCKER_CMP_DOWN_ARGS ?=
+DOCKER_BUILD_ARGS ?=	--progress plain
 
 
 ## Build
