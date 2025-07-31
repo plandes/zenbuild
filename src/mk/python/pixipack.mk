@@ -14,6 +14,7 @@ PY_PACKAGE_DEPS +=	$(PY_ENV_PP_FILE)
 #
 PY_PX_PACK_CACHE_DIR ?=	$(HOME)/.cache/pixi-pack
 PY_PX_PACK_BIN ?=	pixi-pack
+PY_PX_PACK_ARGS ?=
 PY_ENV_PP_FILE ?=	$(PY_DIST_DIR)/$(PY_PACKAGE_NAME)-$(PY_VERSION)-environment.tar
 PY_ENV_PP_EXT_DIR ?=	$(MTARG)/ppenv
 
@@ -34,12 +35,20 @@ $(PY_ENV_PP_EXT_DIR):	$(PY_ENV_PP_FILE)
 # build the conda packed environment file
 $(PY_ENV_PP_FILE):	$(PY_CONDA_FILE)
 			@echo "pixi packing $(PY_ENV_PP_FILE)..."
-			@$(PY_PX_PACK_BIN) pack \
+			$(PY_PX_PACK_BIN) $(PY_PX_PACK_ARGS) \
 				--output-file $(PY_ENV_PP_FILE) \
 				--inject $(PY_CONDA_GLOB) \
 				--use-cache $(PY_PX_PACK_CACHE_DIR)
+
+# build an environment installable file for the current platform
 .PHONY:			pyppenvfile
 pyppenvfile:		$(PY_ENV_PP_FILE)
+
+# build an environment installable file for linux
+.PHONY:			pyppenvfilelinux
+pyppenvfilelinux:
+			@$(MAKE) $(PY_MAKE_ARGS) pyppenvfile \
+				PY_PX_PACK_ARGS='-p linux-64'
 
 # install in the global pixi environment
 .PHONY:			pyppinstall
