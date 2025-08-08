@@ -142,6 +142,7 @@ $(TEX_LAT_PATH)/%.tex:		%.tex
 # copy over all vector .eps static files
 %.eps:		$(TEX_IMG_DIR)/$(@F) $(TEX_MTARG_FILE)
 		@echo "copy eps file: $(TEX_IMG_DIR)/$(@F) $@"
+		@mkdir -p $(dir $@)
 		@cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all vector .pdf static files
