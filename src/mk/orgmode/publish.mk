@@ -14,6 +14,12 @@ OM_BUILD_TARG =		orgmode-publish-html
 #OM_PB_FUNC_HTML ?=	org-html-publish-to-html
 OM_PB_FUNC_HTML ?=	org-twbs-publish-to-html
 
+# org file defaults to the website name
+OM_PB_ORG_NAME	?=	$(CNT_SITE_NAME).org
+
+# if "t", files in sub-directories are considered; disable by setting to "nil"
+OM_PB_ORG_RECURSIVE ?=	t
+
 # set this to "t" in the makefile to enable zotero to zotsite links
 # (https://github.com/plandes/zotsite) and environment variable CNT_SITE_SERV
 # to be set to the URL of your deployed Zotero site.
@@ -23,19 +29,20 @@ OM_PB_BET_BIB_USE ?=	nil
 OM_PB_SITE_OBJS +=	
 
 # emacs lisp that invokes the org-mode publish
-OM_PB_EXPORT_EVAL =	$(subst FILE,$(OM_MD_ORG_NAME),\
+OM_PB_EXPORT_EVAL =	$(subst FILE,$(OM_PB_ORG_NAME),\
 			$(subst OM_PB_FUNC_HTML,$(OM_PB_FUNC_HTML),\
 			$(subst OM_PB_SITE_OBJS,$(OM_PB_SITE_OBJS),\
 			$(subst OM_PB_BET_BIB_USE,$(OM_PB_BET_BIB_USE),\
-			$(subst OM_HTML_DIR,$(OM_HTML_DIR),"\
+			$(subst OM_HTML_DIR,$(OM_HTML_DIR),\
+			$(subst OM_PB_ORG_RECURSIVE,$(OM_PB_ORG_RECURSIVE),"\
 (progn\
   (load \"~/.emacs\")\
   (require 'zotmacs)\
   (setq zotmacs-zotsite-url (or (getenv \"CNT_ZOTSITE_SERV\" ) (getenv \"CNT_SITE_SERV\")))\
   (with-temp-buffer (org-mode)\
   (find-file \"FILE\")\
-  (zotmacs-publish \"OM_HTML_DIR\" 'OM_PB_FUNC_HTML OM_PB_BET_BIB_USE \"OM_PB_SITE_OBJS\")))"\
-			)))))
+  (zotmacs-publish \"OM_HTML_DIR\" 'OM_PB_FUNC_HTML OM_PB_BET_BIB_USE \"OM_PB_SITE_OBJS\" nil OM_PB_ORG_RECURSIVE)))"\
+			))))))
 
 
 ## Targets
