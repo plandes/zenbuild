@@ -1,9 +1,7 @@
 #@meta {author: "Paul Landes"}
 #@meta {desc: "creating latex tables from CSV files", date: "2025-06-13"}
 #@meta {requires: "python/build.mk", order: "before"}
-#
-# to use, add the following to the make file:
-# PROJ_LOCAL_MODULES= tex/table
+#@meta {install: "PROJ_LOCAL_MODULES += tex/table"}
 
 
 ## Module

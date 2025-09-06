@@ -1,7 +1,6 @@
-# make module for generating a .bib file from a master source .bib file
-#
-# to use, add the following to the make file:
-# PROJ_LOCAL_MODULES= tex-bibstract
+#@meta {author: "Paul Landes"}
+#@meta {desc: "generate .bib from a master source .bib file", date: "2025-09-05"}
+#@meta {install: "PROJ_LOCAL_MODULES += tex/bibstract"}
 
 
 ## Environment

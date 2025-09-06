@@ -332,6 +332,7 @@ texinstall:	texpackage
 			echo "installing zip of all resources..." ; \
 			( cd $(TEX_PKG_DIR) ; zip -r $(FINAL_NAME).zip $(FINAL_NAME) ) ; \
 			cp $(TEX_PKG_DIR)/$(FINAL_NAME).zip $(TEX_INSTALL_ZIP) ; \
+			echo "wrote: $(TEX_INSTALL_ZIP)" ; \
 		else \
 			echo "installing just PDF to $(TEX_INSTALL_PDF)" ; \
 			cp $(TEX_PKG_DIR)/$(FINAL_NAME)/$(FINAL_NAME).pdf $(TEX_INSTALL_PDF) ; \
