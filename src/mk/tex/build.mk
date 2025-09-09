@@ -249,16 +249,21 @@ texshow:	texforce texrend
 .PHONY:		texdebugshow
 texdebugshow:	texdebug texrend
 
-# final version: compile twice for refs and bibliography
-.PHONY:		texfinal
-texfinal:
+# nonfinal version: compile N times for refs and bibliography
+.PHONY:		texnonfinal
+texnonfinal:
 		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
 			echo "run number $$i" ; \
-			make TEX_LATEX_INIT_CMD="\newif\ifisfinal\isfinaltrue" texforce ; \
+			$(MAKE) texforce ; \
 			if [ $$? != 0 ] ; then \
 				exit 1 ; \
 			fi ; \
 		done
+
+# final version: compile twice for refs and bibliography
+.PHONY:		texfinal
+texfinal:
+		@$(MAKE) TEX_LATEX_INIT_CMD="\newif\ifisfinal\isfinaltrue" texnonfinal
 
 # create the final version, then display it like texshow
 .PHONY:		texfinalshow
@@ -289,7 +294,7 @@ texpresentpdf:
 		@echo "creating prsentation slides; final runs: $(TEX_FINAL_RUNS)"
 		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
 			echo "run number $$i" ; \
-			make texpresentforce ; \
+			$(MAKE) texpresentforce ; \
 			if [ $$? != 0 ] ; then \
 				exit 1 ; \
 			fi ; \
@@ -317,7 +322,7 @@ $(TEX_PKG_FINAL_DIR):
 			echo "copying slides files to package dir" ; \
 			cp $(TEX_PDF_FILE) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME)-slides.pdf ; \
 			rm -rf $(TEX_LAT_PATH) ; \
-			make texpresentpdf ; \
+			$(MAKE) texpresentpdf ; \
 			cp $(TEX_PDF_FILE) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME)-presenetation.pdf ; \
 		fi
 
@@ -346,3 +351,8 @@ texinstalltracked:	compile
 			@echo "copy tex source and PDF to $(TEX_INSTALL_DIR)..."
 			@cp $(TEX).tex $(TEX_INSTALL_DIR)/$(DFMT).tex
 			@cp $(TEX_PDF_FILE) $(TEX_INSTALL_DIR)/$(DFMT).pdf
+
+# install a non-final version of (only) the pdf
+.PHONY:			texinstallnonfinal
+texinstallnonfinal:	texnonfinal
+			@cp $(TEX_PDF_FILE) $(TEX_INSTALL_DIR)/$(FINAL_NAME).pdf
