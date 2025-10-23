@@ -18,6 +18,7 @@ TEX_FIG_DIR ?=		$(TEX_CONF_DIR)
 TEX_FIG_DEFS +=		$(wildcard $(TEX_FIG_DIR)/*-figure.yml)
 TEX_FIG_EPS =		$(addprefix $(TEX_LAT_PATH)/,$(notdir $(patsubst %-figure.yml,%.eps,$(TEX_FIG_DEFS))))
 TEX_FIG_SVG =		$(addprefix $(TEX_LAT_PATH)/,$(notdir $(patsubst %-figure.yml,%.svg,$(TEX_FIG_DEFS))))
+TEX_FIG_FORMAT ?=	eps
 
 
 ## Build
@@ -44,7 +45,7 @@ texfiginfo:
 .PHONY:		texfig
 texfig:
 		@echo "creating $(TEX_FIG_EPS) in $(TEX_DATDESC_WD)"
-		@$(call datdesc,figure -e eps $(TEX_FIG_DIR) $(TEX_LAT_PATH))
+		@$(call datdesc,figure -e $(TEX_FIG_FORMAT) $(TEX_FIG_DIR) $(TEX_LAT_PATH))
 
 # convenience: run the program, compile the PDF, then display it
 .PHONY:		texfigshow
