@@ -64,3 +64,4 @@ info:	$(INFO_TARGETS)
 	@echo "module-include-files: $(PROJ_MKS)"
 	@echo "info-targs: $(INFO_TARGETS)"
 	@echo "build-home: $(BUILD_HOME_DIR)"
+	@echo "makefile-list: $(MAKEFILE_LIST)"
