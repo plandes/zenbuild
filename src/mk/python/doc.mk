@@ -50,7 +50,7 @@ pydocinfo:
 
 # generate site documentation
 $(PY_DOC_BUILD):	pyinit
-			@echo "buliding doc website"
+			@$(call loginfo,buliding doc website)
 			$(eval site_mod_path := $(shell $(PY_SITE_PKG_CMD)))
 			$(eval doc_im_url := $(shell $(PY_DOC_IM_URL_CMD)))
 			@RP_DOC_IM_URL=$(doc_im_url) \
@@ -93,7 +93,7 @@ $(PY_GIT_DOC_DST_DIR):	$(PY_GIT_DOC_SRC_DIR)
 # deploy the documentation to github
 .PHONY:			pygitdocdeploy
 pygitdocdeploy:		clean $(PY_GIT_DOC_PUSH_DEPS)
-			@echo "pushing to $(PY_GIT_DOC_REMOTE)"
+			@$(call loginfo,pushing to $(PY_GIT_DOC_REMOTE))
 			( cd $(PY_GIT_DOC_DST_DIR) ; \
 			  git add . ; \
 			  git commit -am "new doc push" ; \

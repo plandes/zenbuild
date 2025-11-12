@@ -84,7 +84,7 @@ pypackage:
 # restore the original .gitignore file modified by the $(PY_CONDA_FILE) target
 .PHONY:			pyrestoregitignore
 pyrestoregitignore:
-			@echo "replacing .gitignore"
+			@$(call loginfo,replacing .gitignore)
 			@[ -f $(PY_GITIGNORE_ORG) ] && \
 				mv $(PY_GITIGNORE_ORG) .gitignore
 
@@ -92,7 +92,7 @@ pyrestoregitignore:
 # goes missing from conda_build.sh during the pixi build)
 $(PY_CONDA_FILE):	$(PY_PKG_BUILD_DEPS)
 			$(PY_PX_BIN) lock
-			@echo "copy original version of $(PY_GITIGNORE_ORG)"
+			@$(call loginfo,copy original version of $(PY_GITIGNORE_ORG))
 			@mkdir -p $$(dirname $(PY_GITIGNORE_ORG))
 			@cp .gitignore $(PY_GITIGNORE_ORG)
 			@sed -i '/^\/pyproject.toml$$/d' .gitignore
@@ -102,10 +102,10 @@ $(PY_CONDA_FILE):	$(PY_PKG_BUILD_DEPS)
 
 # export environment.yml
 $(PY_CONDA_ENV_FILE):	$(PY_PKG_BUILD_DEPS)
-			@echo "creating conda env file $(PY_CONDA_ENV_FILE)..."
+			@$(call loginfo,creating conda env file $(PY_CONDA_ENV_FILE)...)
 			@mkdir -p $(dir $(PY_CONDA_ENV_FILE))
 			@$(PY_PX_BIN) workspace export \
 				conda-environment > $(PY_CONDA_ENV_FILE)
-			@echo "wrote: $(PY_CONDA_ENV_FILE)"
+			@$(call loginfo,wrote: $(PY_CONDA_ENV_FILE))
 .PHONY:			pycondaenv
 pycondaenv:		$(PY_CONDA_ENV_FILE)

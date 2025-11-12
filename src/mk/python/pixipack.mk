@@ -28,13 +28,13 @@ pyppinfo:
 
 # extract the packed environment file into a temp dir
 $(PY_ENV_PP_EXT_DIR):	$(PY_ENV_PP_FILE)
-			@echo "creating dist file: $(PY_ENV_PP_EXT_DIR)..."
+			@$(call loginfo,creating dist file: $(PY_ENV_PP_EXT_DIR)...)
 			@mkdir -p $(PY_ENV_PP_EXT_DIR)
 			@tar xf $(PY_ENV_PP_FILE) -C $(PY_ENV_PP_EXT_DIR)
 
 # build the conda packed environment file
 $(PY_ENV_PP_FILE):	$(PY_CONDA_FILE)
-			@echo "pixi packing $(PY_ENV_PP_FILE)..."
+			@$(call loginfo,pixi packing $(PY_ENV_PP_FILE)...)
 			$(PY_PX_PACK_BIN) $(PY_PX_PACK_ARGS) \
 				--output-file $(PY_ENV_PP_FILE) \
 				--inject $(PY_CONDA_GLOB) \
@@ -53,7 +53,7 @@ pyppenvfilelinux:
 # install in the global pixi environment
 .PHONY:			pyppinstall
 pyppinstall:		clean $(PY_ENV_PP_EXT_DIR)
-			@echo "installing $(PY_PACKAGE_NAME)..."
+			@$(call loginfo,installing $(PY_PACKAGE_NAME)...)
 			@$(PY_PX_BIN) global install $(PY_PACKAGE_NAME) \
 				-c file://$(PY_ENV_PP_EXT_DIR)/channel \
 				-c conda-forge --with pip && \
@@ -63,7 +63,7 @@ pyppinstall:		clean $(PY_ENV_PP_EXT_DIR)
 # uninstall from the global pixi environment
 .PHONY:			pyppuninstall
 pyppuninstall:
-			@echo "uninstalling $(PY_PACKAGE_NAME)..."
+			@$(call loginfo,uninstalling $(PY_PACKAGE_NAME)...)
 			@$(PY_PX_BIN) global uninstall $(PY_PACKAGE_NAME)
 
 # reinstall into the global pixi environment

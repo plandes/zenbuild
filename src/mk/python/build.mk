@@ -98,7 +98,7 @@ pyrelpoconfig:
 
 # use relpo to generate the pyproject.toml file used by pixi
 $(PY_PYPROJECT_FILE):	$(PY_RP_PROJ_MAIN_FILE) $(PY_PYPROJECT_DEPS)
-			@echo "creating project file: $(PY_PYPROJECT_FILE)"
+			@$(call loginfo,creating project file: $(PY_PYPROJECT_FILE))
 			@mkdir -p $(dir $(PY_PYPROJECT_FILE))
 			@$(call relpo,pyproject -o $(PY_PYPROJECT_FILE))
 .PHONY:			pyproject

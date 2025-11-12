@@ -10,8 +10,9 @@ null :=
 comma :=		,
 space := 		${null} ${null}
 
-# enable make debugging statements
-BUILD_DEBUG :=		0
+# make logging
+BUILD_DEBUG ?=		0
+BUILD_INFO ?=		1
 
 # build environment
 BUILD_HOME_DIR :=	$(realpath $(dir $(lastword $(MAKEFILE_LIST))))
@@ -36,6 +37,18 @@ APP_INST_DIR ?=		./inst
 
 # default programs
 RENDER_BIN ?=		$(PYTHON_UTIL_HOME)/bin/rend
+
+
+## Defines
+#
+define logdebug
+ifeq ($(BUILD_DEBUG),1)
+	@[ "$(BUILD_DEBUG)" == "1" ] && echo "$(1)" || true
+endif
+endef
+define loginfo
+	@[ "$(BUILD_INFO)" != "0" ] && echo "$(1)" || true
+endef
 
 
 ## Default targets
@@ -64,4 +77,3 @@ info:	$(INFO_TARGETS)
 	@echo "module-include-files: $(PROJ_MKS)"
 	@echo "info-targs: $(INFO_TARGETS)"
 	@echo "build-home: $(BUILD_HOME_DIR)"
-	@echo "makefile-list: $(MAKEFILE_LIST)"
