@@ -19,6 +19,8 @@ PY_TEST_ALL_TARGETS +=
 PY_TEST_DIR ?=		tests
 # test file glob pattern
 PY_TEST_GLOB ?=		test_*.py
+# Python path for tests
+PY_TEST_PATH ?=		$(PYTHONPATH):$(abspath .)/src
 
 
 ## Targets
@@ -33,18 +35,20 @@ pytestrun:		$(PY_PYPROJECT_FILE)
 			$(PY_PX_BIN) install -e testcur
 			$(eval pybin := $(shell $(PY_PX_BIN) info --json | jq -r \
 				'.environments_info|.[]|select(.name=="testcur").prefix' ))
-			@export PYTHONPATH="$${PYTHONPATH:+$${PYTHONPATH}:}$(abspath .)/src" \
+			@export PYTHONPATH=$(PY_TEST_PATH) \
 			 export PATH="$(pybin)/bin:$(PATH)" ; $(ARG)
 
 # run unit tests on previous Python version
 .PHONY:			pytestprev
 pytestprev:		$(PY_PYPROJECT_FILE)
-			$(PY_PX_BIN) run testprev ''$(PY_TEST_GLOB)''
+			@PYTHONPATH=$(PY_TEST_PATH) \
+			 $(PY_PX_BIN) run testprev ''$(PY_TEST_GLOB)''
 
 # run unit tests on current Python version
 .PHONY:			pytestcur
 pytestcur:		$(PY_PYPROJECT_FILE)
-			$(PY_PX_BIN) run testcur ''$(PY_TEST_GLOB)''
+			@PYTHONPATH=$(PY_TEST_PATH) \
+			 $(PY_PX_BIN) run testcur ''$(PY_TEST_GLOB)''
 
 # run unit tests on current version
 .PHONY:			pytest
