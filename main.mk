@@ -27,9 +27,6 @@ PROJ_LOCAL_MKS =	$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_LOCAL_MODUL
 # to be included
 PROJ_MKS =		$(addsuffix .mk,$(addprefix $(BUILD_MK_DIR)/,$(PROJ_MODULES) clean))
 
-# executables
-AWSENV=			$(BUILD_BIN_DIR)/awsenv
-
 # build defaults
 PROJ_TYPE ?=		default
 MTARG ?=		$(abspath ./target)
