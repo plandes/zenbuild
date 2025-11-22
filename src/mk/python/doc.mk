@@ -16,6 +16,8 @@ PY_SITE_PKG_CMD ?=	$(PY_PX_BIN) run python -c \
 			'import site; print(site.getsitepackages()[0])'
 PY_DOC_BUILD ?=		$(MTARG)/doc/build
 PY_DOC_BUILD_HTML ?=	$(PY_DOC_BUILD)/html
+PY_DOC_PRE_BUILD_DEPS +=
+PY_DOC_POST_BUILD_DEPS +=
 ifndef PY_DOC_IM_URL_CMD
 PY_DOC_IM_URL_CMD :=	echo https://$(PY_GITHUB_USER).github.io
 endif
@@ -60,9 +62,10 @@ $(PY_DOC_BUILD):	pyinit
 
 # generate and render site documentation
 .PHONY:			pydocshow
-pydocshow:		$(PY_DOC_BUILD)
+pydocshow:		$(PY_DOC_PRE_BUILD_DEPS) $(PY_DOC_BUILD) $(PY_DOC_POST_BUILD_DEPS)
 			$(RENDER_BIN) $(PY_DOC_BUILD)/html/index.html
 
+# generate and deploy site documentation
 .PHONY:			pydocdeploy
 pydocdeploy:		clean $(PY_DOC_BUILD)
 			$(PY_DOC_DEPLOY_CMD) $(PY_DOC_BUILD_HTML) $(PY_DOC_DIST_NAME)
@@ -73,7 +76,6 @@ pydocdeploy:		clean $(PY_DOC_BUILD)
 # build the documentation using the default Git URL
 $(PY_GIT_DOC_SRC_DIR):
 			@( unset PY_DOC_IM_URL_CMD ; make $(PY_MAKE_ARGS) $(PY_DOC_BUILD) )
-
 .PHONY:			pygitdochtml
 pygitdochtml:		$(PY_GIT_DOC_SRC_DIR)
 

@@ -63,6 +63,9 @@ PY_PACKAGE_NAME ?=	$(PY_DOMAIN_NAME)_$(PY_PROJECT_NAME)
 
 # relpo function used in targets to automate pixi
 define relpo
+	$(call logdebug,$(PY_RP_RELPO_BIN) $(1) \
+		--tmp $(MTARG) \
+		--config $(PY_RP_PROJ_FILES_) $(2))
 	$(PY_RP_RELPO_BIN) $(1) \
 		--tmp $(MTARG) \
 		--config $(PY_RP_PROJ_FILES_) $(2)

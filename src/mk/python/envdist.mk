@@ -21,10 +21,10 @@ PY_ENV_DIST_FILE ?=	$(PY_DIST_DIR)/$(PY_PACKAGE_NAME)-$(PY_VERSION)-envdist.tar
 #
 .PHOHY:			pyenvdistinfo
 pyenvdistinfo:
-			@echo "py_env_dist_file: $(PY_ENV_DIST_FILE)"
+			@$(call loginfo,py_env_dist_file: $(PY_ENV_DIST_FILE))
 
 # create the environment distribution file
 $(PY_ENV_DIST_FILE):	$(PY_WHEEL_FILE)
-			@echo "creating env dist file: $(PY_ENV_DIST_FILE)..."
-			$(call relpo,mkenvdist -o $(PY_ENV_DIST_FILE))
+			@$(call loginfo,creating env dist file: $(PY_ENV_DIST_FILE)...)
+			@$(call relpo,mkenvdist -o $(PY_ENV_DIST_FILE))
 pyenvdist:		$(PY_ENV_DIST_FILE)

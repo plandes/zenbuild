@@ -39,9 +39,8 @@ RENDER_BIN ?=		$(PYTHON_UTIL_HOME)/bin/rend
 ## Defines
 #
 define logdebug
-ifeq ($(BUILD_DEBUG),1)
-	@[ "$(BUILD_DEBUG)" == "1" ] && echo "$(1)" || true
-endif
+# second to last makefile is calling into this file
+	@[ "$(BUILD_DEBUG)" == "1" ] && echo "DEBUG: $(1)" || true
 endef
 define loginfo
 	@[ "$(BUILD_INFO)" != "0" ] && echo "$(1)" || true
