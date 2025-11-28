@@ -7,8 +7,8 @@
 INFO_TARGETS +=		pyinfo
 ADD_CLEAN +=		$(PY_PYPROJECT_FILE)
 CLEAN_DEPS +=		pyclean
-CLEAN_ALL_DEPS +=	pycleanall
-VAPORIZE_DEPS +=	pyvaporize
+CLEAN_ALL_DEPS +=
+VAPORIZE_DEPS +=	pyrmpixienv pyrmlockfile
 
 
 ## Module
@@ -129,16 +129,16 @@ pyclean:
 			done
 
 # also clean up the pixi environments and other temporary files
-.PHONY:			pycleanall
-pycleanall:
+.PHONY:			pyrmpixienv
+pyrmpixienv:
 			@if [ -d .pixi ] ; then \
 				echo "removing: pixi environments" ; \
 				rm -fr .pixi ; \
 			fi
 
 # remove lock file
-.PHONY:			pyvaporize
-pyvaporize:
+.PHONY:			pyrmlockfile
+pyrmlockfile:
 			@if [ -f pixi.lock ] ; then \
 				echo "removing: pixi lock file" ; \
 				rm pixi.lock ; \
