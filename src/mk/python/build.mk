@@ -6,8 +6,8 @@
 #
 INFO_TARGETS +=		pyinfo
 ADD_CLEAN +=		$(PY_PYPROJECT_FILE)
-CLEAN_DEPS +=		pyclean
-CLEAN_ALL_DEPS +=
+CLEAN_DEPS +=
+CLEAN_ALL_DEPS +=	pyclean
 VAPORIZE_DEPS +=	pyrmpixienv pyrmlockfile
 
 
@@ -25,7 +25,7 @@ PY_MAKE_ARGS ?=		--no-print-directory
 # any dependency need by creating the pyproject.toml file
 PY_PYPROJECT_DEPS +=
 # clean
-PY_CLEAN_DIRS +=	src tests resources
+PY_CLEAN_DIRS +=	src resources
 
 # paths
 PY_RP_PROJ_FILES_DEF =	relpo.yml,zenbuild/src/relpo/template/build.yml

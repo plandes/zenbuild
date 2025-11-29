@@ -6,13 +6,15 @@
 ## Build
 #
 INFO_TARGETS +=		pytestinfo
-CLEAN_DEPS +=		pytestclean
+PY_CLEAN_DIRS +=	tests
 
 
 ## Module
 #
 # phony unit test targets
 PY_TEST_TARGETS ?=	pytestprev pytestcur
+# called before tests are run
+PY_TEST_PRE_TARGETS ?=
 # targets for the pytestall target
 PY_TEST_ALL_TARGETS +=
 # directory where the tests live
@@ -40,13 +42,13 @@ pytestrun:		$(PY_PYPROJECT_FILE)
 
 # run unit tests on previous Python version
 .PHONY:			pytestprev
-pytestprev:		$(PY_PYPROJECT_FILE)
+pytestprev:		$(PY_PYPROJECT_FILE) $(PY_TEST_PRE_TARGETS)
 			@PYTHONPATH=$(PY_TEST_PATH) \
 			 $(PY_PX_BIN) run testprev ''$(PY_TEST_GLOB)''
 
 # run unit tests on current Python version
 .PHONY:			pytestcur
-pytestcur:		$(PY_PYPROJECT_FILE)
+pytestcur:		$(PY_PYPROJECT_FILE) $(PY_TEST_PRE_TARGETS)
 			@PYTHONPATH=$(PY_TEST_PATH) \
 			 $(PY_PX_BIN) run testcur ''$(PY_TEST_GLOB)''
 
@@ -57,10 +59,3 @@ pytest:			$(PY_TEST_TARGETS)
 # run unit and integration tests
 .PHONY:			pytestall
 pytestall:		pytest $(PY_TEST_ALL_TARGETS)
-
-
-.PHONY:			pytestclean
-pytestclean:
-			@if [ -d tests ] ; then \
-				find tests -type d -name __pycache__ -prune -exec rm -r {} \; ; \
-			fi
