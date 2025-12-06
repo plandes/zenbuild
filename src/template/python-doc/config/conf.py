@@ -46,6 +46,8 @@ extensions = [
     'sphinx.ext.viewcode',
     # add view code button
     'sphinx_copybutton',
+    # make links in source code examples
+    'sphinx_codeautolink',
 
     # inheritance diagrams
     'btd.sphinx.graphviz',
@@ -92,7 +94,12 @@ exclude_patterns = ['api/{{ config.project.domain }}.rst']
 intersphinx_mapping = {
 {%- for package, pkg in config.doc.api_config.intersphinx_mapping.items() %}
   {%- for mod in pkg['modules'] %}
-    '{{mod}}': ('{{ pkg['url'].format(package=package, **env) }}', None),
+    {%- set mod_last = (mod.split('.')[1]) %}
+    {%- if mod_last == package %}
+    {# avoid zensols.util -> util/util #}
+    {%- set mod_last = null %}
+    {%- endif %}
+    '{{mod}}': ('{{ pkg['url'].format(package=package, mod_last=mod_last, **env) }}', None),
   {%- endfor %}
 {%- endfor %}
 }
@@ -111,7 +118,10 @@ html_theme = 'furo'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ['_static']
+html_static_path = ['zensols-static']
+
+# Extra CSS files to include
+html_css_files = ['codeautolink.css']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
