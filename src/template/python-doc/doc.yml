@@ -28,4 +28,4 @@ doc:
     CONTRIBUTING.md:
     tests:
     doc:
-    zenbuild/src/template/python-doc/zensols-static: zensols-static
+    zenbuild/src/template/python-doc/static: zensols-static
