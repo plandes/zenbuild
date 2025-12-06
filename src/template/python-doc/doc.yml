@@ -3,8 +3,6 @@
 #@meta {doc: "modifications require a zenbuild clean"}
 
 doc:
-  # sphinx Python environment
-  #python_home: {{ env.PYTHON_UTIL_HOME }}
   # where to write the Sphinx temporary configuration files
   stage_dir: doc/stage
   # the template directory to create the Sphinx API config files
@@ -23,9 +21,8 @@ doc:
   # files to copy to the sphinx source dir to be added to the docs
   copy:
     README.md: index.md
-    CHANGELOG.md:
-    LICENSE.md:
-    CONTRIBUTING.md:
-    tests:
+    CHANGELOG.md: CHANGELOG
+    LICENSE.md: LICENSE
+    CONTRIBUTING.md: CONTRIBUTING
     doc:
     zenbuild/src/template/python-doc/static: zensols-static

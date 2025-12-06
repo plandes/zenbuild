@@ -11,6 +11,8 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import sys
+import warnings
+from urllib3.exceptions import InsecureRequestWarning
 import recommonmark  # must be imported, even though not used by name
 from recommonmark.transform import AutoStructify
 
@@ -18,6 +20,16 @@ from recommonmark.transform import AutoStructify
 {%- for path in config.doc.api_config.source_dirs %}
 sys.path.insert(0, '{{ path }}')
 {%- endfor %}
+
+
+# -- Warnings ----------------------------------------------------------------
+# silence intersphinx warnings
+warnings.filterwarnings('ignore', category=InsecureRequestWarning)
+# silence parser missing doc nodes
+warnings.filterwarnings(
+    'ignore',
+    message=r'Container node skipped: type=.*',
+    category=UserWarning)
 
 
 # -- Project information -----------------------------------------------------
@@ -88,18 +100,21 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['api/{{ config.project.domain }}.rst']
+exclude_patterns = [
+  'api/{{ config.project.domain }}.rst',
+]
+# markdown files to not be processed; chokes on links
+html_extra_path = [
+  'CHANGELOG',
+  'LICENSE',
+  'CONTRIBUTING',
+]
 
 # map to other sphinx docs
 intersphinx_mapping = {
 {%- for package, pkg in config.doc.api_config.intersphinx_mapping.items() %}
   {%- for mod in pkg['modules'] %}
-    {%- set mod_last = (mod.split('.')[1]) %}
-    {%- if mod_last == package %}
-    {# avoid zensols.util -> util/util #}
-    {%- set mod_last = null %}
-    {%- endif %}
-    '{{mod}}': ('{{ pkg['url'].format(package=package, mod_last=mod_last, **env) }}', None),
+    '{{mod}}': ('{{ pkg['url'].format(package=package, **env) }}', None),
   {%- endfor %}
 {%- endfor %}
 }
