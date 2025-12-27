@@ -101,13 +101,11 @@ templates_path = ['_templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = [
-  'api/{{ config.project.domain }}.rst',
+    'api/{{ config.project.domain }}.rst',
 ]
 # markdown files to not be processed; chokes on links
 html_extra_path = [
-  'CHANGELOG',
-  'LICENSE',
-  'CONTRIBUTING',
+    'CHANGELOG',
 ]
 
 # map to other sphinx docs

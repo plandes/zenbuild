@@ -9,6 +9,8 @@
    Overview <index.md>
    doc/*
    API Reference <api.rst>
+   Contributing <CONTRIBUTIONS.md>
+   License <LICENSE.md>
 
 
 Indices and tables
