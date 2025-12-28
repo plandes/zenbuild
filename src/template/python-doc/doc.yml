@@ -22,7 +22,7 @@ doc:
   copy:
     README.md: index.md
     CHANGELOG.md: CHANGELOG
-    CONTRIBUTIONS.md:
+    CONTRIBUTING.md:
     LICENSE.md:
     doc:
     zenbuild/src/template/python-doc/static: zensols-static

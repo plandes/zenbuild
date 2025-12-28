@@ -9,7 +9,7 @@
    Overview <index.md>
    doc/*
    API Reference <api.rst>
-   Contributing <CONTRIBUTIONS.md>
+   Contributing <CONTRIBUTING.md>
    License <LICENSE.md>
 
 
