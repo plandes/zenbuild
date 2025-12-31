@@ -23,5 +23,5 @@ pydeploy:		pycheck $(PY_WHEEL_FILE)
 			@for url in $(PYPI_TEST_NAME) $(PYPI_NON_TEST_NAME) ; do \
 			    $(PY_DEPLOY_PYTHON_BIN) -m twine upload --non-interactive \
 				--sign-with $(PYPI_SIGN) --username $(PYPI_USER) \
-				--repository $$url $(PY_WHEEL_FILE) ; \
+				--verbose --repository $$url $(PY_WHEEL_FILE) ; \
 			done
