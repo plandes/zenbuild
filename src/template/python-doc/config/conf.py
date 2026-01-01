@@ -153,17 +153,20 @@ link_doc_root = 'https://github.com/{{ config.github.user }}/{{ config.project.d
 
 
 def maybe_skip_member(app, what, name, obj, skip, options):
-    """Skip only non-init methods.  This filters out all cluttering attributes such
-    as ``__dataclass_parameters`` and ``__abstractmethods__``, which show up
-    after setting ``special-members=True`` in ``autodoc_default_options``.
+    """Skip only non-init methods.  This filters out all cluttering attributes
+    such as ``__dataclass_parameters`` and ``__abstractmethods__``, which show
+    up after setting ``special-members=True`` in ``autodoc_default_options``.
 
     :see: :obj:`autodoc_default_options`
 
+    :return: ``True`` if the object should be skipped or ``False`` to include it
+
     """
-    if not skip and (what == 'class') and (name != '__init__') \
-       and (name.startswith('__') and name.endswith('__')):
-        return True
-    return skip
+    should_skip: bool = skip or \
+        ((what == 'class') and (name != '__init__') and \
+         (name.startswith('__') and name.endswith('__'))) or \
+        ((what == 'module') and (name == 'main'))
+    return should_skip
 
 
 def setup(app):
