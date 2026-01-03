@@ -18,6 +18,8 @@ help:			pyhelp
 # dependency tree
 .PHONY:			deptree
 deptree:		pydeptree
+.PHONY:			pipdeptree
+pipdeptree:		pypipdeptree
 
 # running the app via Pixi
 .PHONY:			invoke

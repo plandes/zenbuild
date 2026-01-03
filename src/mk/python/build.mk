@@ -113,7 +113,12 @@ pyinit:			$(PY_PYPROJECT_FILE)
 .PHONY:			pydeptree
 pydeptree:		$(PY_PYPROJECT_FILE)
 			@$(PY_PX_BIN) tree
-
+.PHONY:			pypipdeptree
+pypipdeptree:		$(PY_PYPROJECT_FILE)
+			$(eval pip := $(PY_PX_BIN) run python -m pip)
+			$(eval has := $(shell $(pip) freeze | grep pipdeptree | wc -l))
+			@[ "$(has)" == "0" ] && $(pip) install pipdeptree || true
+			@$(PY_PX_BIN) run python -m pipdeptree
 
 ## Clean
 #
