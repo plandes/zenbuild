@@ -70,7 +70,7 @@ eldistfiles:
 
 # lifecycle
 $(EL_ELPA_FILE):
-			$(EL_CASK_BIN) install || true
+			$(EL_CASK_BIN) install
 			$(EL_CASK_BIN) update
 			touch $@
 
