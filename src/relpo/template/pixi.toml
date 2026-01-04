@@ -1,7 +1,7 @@
 ### Pixi
 #
 # specifies properties for the whole workspace
-[tool.pixi.project]
+[tool.pixi.workspace]
 channels = ["{{ config.pixi.project.channels | join('", "') }}"]
 platforms = ["{{ config.pixi.project.platforms | join('", "') }}"]
 preview = ["pixi-build"]
