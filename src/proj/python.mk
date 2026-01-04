@@ -90,6 +90,12 @@ globaluninstall:	pyppuninstall
 globalreinstall:	pyppreinstall
 
 # documentation
+.PHONY:			doccompile
+doccompile:		pydoccompile
+
+.PHONY:			docshow
+docshow:		pydocshow
+
 .PHONY:			docdeploy
 docdeploy:		pydocdeploy
 

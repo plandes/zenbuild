@@ -60,9 +60,13 @@ $(PY_DOC_BUILD):	pyinit
 				$(call relpo,mkdoc -o $(PY_DOC_BUILD))
 			touch $(PY_DOC_BUILD_HTML)/.nojekyll
 
-# generate and render site documentation
+# generate
+.PHONY:			pydoccompile
+pydoccompile:		$(PY_DOC_PRE_BUILD_DEPS) $(PY_DOC_BUILD) $(PY_DOC_POST_BUILD_DEPS)
+
+# render site documentation
 .PHONY:			pydocshow
-pydocshow:		$(PY_DOC_PRE_BUILD_DEPS) $(PY_DOC_BUILD) $(PY_DOC_POST_BUILD_DEPS)
+pydocshow:		pydoccompile
 			$(RENDER_BIN) $(PY_DOC_BUILD)/html/index.html
 
 # generate and deploy site documentation
