@@ -14,8 +14,9 @@ testcur = { features = ["pyvercur", "testcur"] }
 build-pypi = { features = ["pyvercur", "build-pypi"], solve-group = "default" }
 
 # specify where to download the build backend that builds conda files
-[tool.pixi.package.build]
-backend = { name = "pixi-build-python", version = "0.1.*" }
+[tool.pixi.package.build.backend]
+name = "pixi-build-python"
+version = "0.1.*"
 channels = [
   "https://prefix.dev/pixi-build-backends",
   "https://prefix.dev/conda-forge",
