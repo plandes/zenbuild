@@ -355,4 +355,17 @@ texinstalltracked:	compile
 # install a non-final version of (only) the pdf
 .PHONY:			texinstallnonfinal
 texinstallnonfinal:	texnonfinal
-			@cp $(TEX_PDF_FILE) $(TEX_INSTALL_DIR)/$(FINAL_NAME).pdf
+			@echo "$(TEX_PDF_FILE) -> $(TEX_INSTALL_PDF)"
+			@cp $(TEX_PDF_FILE) $(TEX_INSTALL_PDF)
+
+# install a final version of (only) the pdf
+.PHONY:			texinstallfinal
+texinstallfinal:	texfinal
+			@echo "$(TEX_PDF_FILE) -> $(TEX_INSTALL_PDF)"
+			@cp $(TEX_PDF_FILE) $(TEX_INSTALL_PDF)
+
+# install the last compiled pdf (whatever it is)
+.PHONY:			texinstalllast
+texinstalllast:
+			@echo "$(TEX_PDF_FILE) -> $(TEX_INSTALL_PDF)"
+			@cp $(TEX_PDF_FILE) $(TEX_INSTALL_PDF)
