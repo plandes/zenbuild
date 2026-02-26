@@ -57,4 +57,4 @@ $(TEX_PDF_FILE):	$(TEX_LATEX_FILE)
 # clean a used build
 clean:
 		rm -f *.pdf *.out *.aux *.log *.bbl *.bcf *.blg \
-			*.upa *.upb *.xml
+			*.upa *.upb *.xml *.toc *.nav *.snm
