@@ -18,7 +18,7 @@ TEX_FIG_DIR ?=		$(TEX_CONF_DIR)
 TEX_FIG_DEFS +=		$(wildcard $(TEX_FIG_DIR)/*-figure.yml)
 TEX_FIG_EPS =		$(addprefix $(TEX_LAT_PATH)/,$(notdir $(patsubst %-figure.yml,%.eps,$(TEX_FIG_DEFS))))
 TEX_FIG_SVG =		$(addprefix $(TEX_LAT_PATH)/,$(notdir $(patsubst %-figure.yml,%.svg,$(TEX_FIG_DEFS))))
-TEX_FIG_FORMAT ?=	eps
+TEX_FIG_FORMAT ?=	pdf
 
 
 ## Build
