@@ -16,20 +16,30 @@
 TEX_FIG_DIR ?=		$(TEX_CONF_DIR)
 # all figure definitions
 TEX_FIG_DEFS +=		$(wildcard $(TEX_FIG_DIR)/*-figure.yml)
-TEX_FIG_EPS =		$(addprefix $(TEX_LAT_PATH)/,$(notdir $(patsubst %-figure.yml,%.eps,$(TEX_FIG_DEFS))))
+TEX_FIG_RUN_FILE ?=	$(TEX_LAT_PATH)/figrun.txt
 TEX_FIG_SVG =		$(addprefix $(TEX_LAT_PATH)/,$(notdir $(patsubst %-figure.yml,%.svg,$(TEX_FIG_DEFS))))
+# use PDF since translucent colors aren't supported in eps
 TEX_FIG_FORMAT ?=	pdf
 
 
 ## Build
 #
 INFO_TARGETS +=		texfiginfo
-TEX_PRE_COMP_DEPS +=	$(TEX_FIG_EPS)
+TEX_PRE_COMP_DEPS +=	texfig
 
 
 ## Includes
 #
 include $(BUILD_MK_DIR)/tex/datdesc.mk
+
+
+## Functions
+#
+define texfigcreate
+  $(call loginfo,"creating figures in $(TEX_DATDESC_WD) from $(TEX_FIG_DIR)")
+  $(call datdesc,figure -e $(TEX_FIG_FORMAT) $(TEX_FIG_DIR) $(TEX_LAT_PATH))
+  $(shell date > $(TEX_FIG_RUN_FILE))
+endef
 
 
 ## Targets
@@ -44,8 +54,7 @@ texfiginfo:
 # run the program to generate the figures
 .PHONY:		texfig
 texfig:
-		@echo "creating $(TEX_FIG_EPS) in $(TEX_DATDESC_WD)"
-		@$(call datdesc,figure -e $(TEX_FIG_FORMAT) $(TEX_FIG_DIR) $(TEX_LAT_PATH))
+		$(if $(wildcard $(TEX_FIG_RUN_FILE)),,$(call texfigcreate))
 
 # convenience: run the program, compile the PDF, then display it
 .PHONY:		texfigshow
