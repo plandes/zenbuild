@@ -56,9 +56,14 @@ texfiginfo:
 texfig:
 		$(if $(wildcard $(TEX_FIG_RUN_FILE)),,$(call texfigcreate))
 
+# remove the check file to allow for a force recreate
+.PHONY:		texcleanfig
+texcleanfig:
+		rm -f $(TEX_FIG_RUN_FILE)
+
 # convenience: run the program, compile the PDF, then display it
 .PHONY:		texfigshow
-texfigshow:	texfig show
+texfigshow:	texcleanfig texfig show
 
 # generate a new LaTeX .sty file for every *-figure.yml found
 %.eps:		$(TEX_FIG_DIR)/$(@F) $(TEX_MTARG_FILE)
