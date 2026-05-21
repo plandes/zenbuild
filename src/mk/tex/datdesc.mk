@@ -21,7 +21,8 @@ TEX_DATDESC_ARGS ?=	--help
 #
 # invoke the datdesc command-line program
 define datdesc
-	( cd $(TEX_DATDESC_WD) ; \
+	$(call logdebug,"call datdesc: path=$(PYTHONPATH) command=\'$(1)\'")
+	@( cd $(TEX_DATDESC_WD) ; \
 	   PYTHONPATH=$(TEX_DATDESC_PY_SRC) \
 	   $(TEX_DATDESC_BIN) $(1) )
 endef
