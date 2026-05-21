@@ -42,7 +42,7 @@ info:
 pdf:		$(TEX_PDF_FILE)
 
 $(TEX_PDF_FILE):	$(TEX_LATEX_FILE)
-		$(TEX_LATEX_CMD) $(TEX).tex
+		$(TEX_LATEX_CMD)
 		if [ -f "$(BIB_FILE)" ] ; then \
 			if [ -f zenbiber ] ; then \
 				$(BIBER) $(TEX) ; \

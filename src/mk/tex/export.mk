@@ -15,6 +15,8 @@ TEX_EXPORT_LATIDX =	latidx
 TEX_EXPORT_SPACE :=	$(subst ,, )
 # latidx path
 TEX_EXPORT_LATIDX_PATH=	$(TEX_PATHSEP):$(TEX_LAT_PATH)
+# command
+TEX_EXPORT_BIN ?=	$(TEX_BIN) "$$(TEX).tex"
 
 # paths
 TEX_EXPORT_DIR ?=	$(MTARG)/export/$(FINAL_NAME)
@@ -68,11 +70,11 @@ texexportprep:	texinstall
 			xargs -i{} cp {} $(TEX_EXPORT_DIR)
 		@cat $(BUILD_SRC_DIR)/template/tex/export-makefile | \
 			sed 's/{{TEX_FILE_NAME}}/$(FINAL_NAME)/g' | \
-			sed 's/{{TEX_LATEX_CMD}}/$(TEX_BIN)/g' | \
+			sed 's/{{TEX_LATEX_CMD}}/$(TEX_EXPORT_BIN)/g' | \
 			sed 's/{{TEX_FINAL_RUNS}}/$(TEX_FINAL_RUNS)/g' | \
 			sed 's/{{SRC_FILE_NAME}}/$(TEX)/g' > \
 			$(TEX_EXPORT_DIR)/makefile
-		@echo "\\\newif\ifisfinal\isfinaltrue" > \
+		@printf '%s\n' '$(TEX_LATEX_INIT_ADD)' > \
 			$(TEX_EXPORT_DIR)/$(FINAL_NAME).tex
 		@cat $(TEX).tex >> $(TEX_EXPORT_DIR)/$(FINAL_NAME).tex
 		@if [ ! -z "$(BIBER)" ] ; then \
