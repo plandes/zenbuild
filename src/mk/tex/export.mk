@@ -15,14 +15,17 @@ TEX_EXPORT_LATIDX =	latidx
 TEX_EXPORT_SPACE :=	$(subst ,, )
 # latidx path
 TEX_EXPORT_LATIDX_PATH=	$(TEX_PATHSEP):$(TEX_LAT_PATH)
-# command
+# command used inside the exported makefile
 TEX_EXPORT_BIN ?=	$(TEX_BIN) "$$(TEX).tex"
 
 # paths
+# The export directory and zip can use FINAL_NAME, but source filenames are not
+# renamed inside the export tree.
 TEX_EXPORT_DIR ?=	$(MTARG)/export/$(FINAL_NAME)
 TEX_EXPORT_ZIP_DIR ?=	$(notdir $(TEX_EXPORT_DIR))
 TEX_EXPORT_ZIP ?=	$(FINAL_NAME).zip
 TEX_EXPORT_INST_ZIP ?=	$(TEX_INSTALL_DIR)/$(TEX_EXPORT_ZIP)
+
 # clean unused image files not needed in the latex file
 #TEX_EXPORT_DEPS +=	texexportimgclean
 
@@ -31,6 +34,9 @@ TEX_EXPORT_ADDS +=
 
 # include PDF with all compiled derived objects in zip
 TEX_EXPORT_ADD_PDF ?=
+
+# optional post-prep hook, e.g. arxiv-fix.sh
+TEX_EXPORT_POST_PREP ?=
 
 # build
 INFO_TARGETS +=		texexportinfo
@@ -42,6 +48,9 @@ ADD_CLEAN_ALL +=	$(TEX_EXPORT_INST_ZIP)
 .PHONY:		texexportinfo
 texexportinfo:
 		@echo "tex-export-latidx-path: $(TEX_EXPORT_LATIDX_PATH)"
+		@echo "tex-export-dir: $(TEX_EXPORT_DIR)"
+		@echo "tex-export-zip: $(TEX_EXPORT_ZIP)"
+		@echo "tex-export-root: $(TEX).tex"
 
 # re-export running only the necessary steps to create the export directory
 # handy for debugging
@@ -50,35 +59,50 @@ texexportredo:
 		@echo "removing $(TEX_EXPORT_DIR), $(TEX_EXPORT_DIR).zip..."
 		@rm -fr $(TEX_EXPORT_DIR)
 		@rm -f $(TEX_EXPORT_DIR).zip
-		@make $(TEX_MAKE_ARGS) texexport
+		@$(MAKE) $(TEX_MAKE_ARGS) texexport
 
-# prepare for export by copy files and creating configuration
+# prepare for export by copying files and creating configuration
 .PHONY:		texexportprep
 texexportprep:	texinstall
 		@echo "prepare export in $(TEX_EXPORT_DIR)..."
+		@rm -fr $(TEX_EXPORT_DIR)
 		@mkdir -p $(TEX_EXPORT_DIR)
 		@cp $(wildcard $(BIB_FILE) $(BBL_FILE)) $(TEX_EXPORT_DIR)
 		@cp $(wildcard $(TEX_LAT_PATH)/*.eps $(TEX_LAT_PATH)/*.png \
-			$(TEX_LAT_PATH)/*.jpg $(TEX_LAT_PATH)/*.gif) \
-			$(TEX_EXPORT_DIR)
+			$(TEX_LAT_PATH)/*.jpg $(TEX_LAT_PATH)/*.jpeg \
+			$(TEX_LAT_PATH)/*.gif $(TEX_LAT_PATH)/*.pdf) \
+			$(TEX_EXPORT_DIR) 2>/dev/null || true
 		@if [ ! -z "$(TEX_EXPORT_ADDS)" ] ; then \
 			cp -r $(TEX_EXPORT_ADDS) $(TEX_EXPORT_DIR) ; \
 		fi
 		@$(TEX_EXPORT_LATIDX) deps $(TEX_EXPORT_LATIDX_PATH) \
 			--source $(TEX_LATEX_FILE) -f list | \
 			grep -v $(notdir $(TEX_LATEX_FILE)) | \
-			xargs -i{} cp {} $(TEX_EXPORT_DIR)
+			xargs -I{} cp {} $(TEX_EXPORT_DIR)
 		@cat $(BUILD_SRC_DIR)/template/tex/export-makefile | \
-			sed 's/{{TEX_FILE_NAME}}/$(FINAL_NAME)/g' | \
+			sed 's/{{TEX_FILE_NAME}}/$(TEX)/g' | \
 			sed 's/{{TEX_LATEX_CMD}}/$(TEX_EXPORT_BIN)/g' | \
 			sed 's/{{TEX_FINAL_RUNS}}/$(TEX_FINAL_RUNS)/g' | \
 			sed 's/{{SRC_FILE_NAME}}/$(TEX)/g' > \
 			$(TEX_EXPORT_DIR)/makefile
 		@printf '%s\n' '$(TEX_LATEX_INIT_ADD)' > \
-			$(TEX_EXPORT_DIR)/$(FINAL_NAME).tex
-		@cat $(TEX).tex >> $(TEX_EXPORT_DIR)/$(FINAL_NAME).tex
+			$(TEX_EXPORT_DIR)/$(TEX).tex
+		@cat $(TEX).tex >> $(TEX_EXPORT_DIR)/$(TEX).tex
+		@rm $(TEX_EXPORT_DIR)/$(TEX).pdf
 		@if [ ! -z "$(BIBER)" ] ; then \
 			touch $(TEX_EXPORT_DIR)/zenbiber ; \
+		fi
+		@if [ ! -z "$(TEX_EXPORT_POST_PREP)" ] ; then \
+			$(TEX_EXPORT_POST_PREP) \
+				--export-dir '$(TEX_EXPORT_DIR)' \
+				--tex '$(TEX)' \
+				--tex-latex-file '$(TEX_LATEX_FILE)' \
+				--bib-file '$(BIB_FILE)' \
+				--bbl-file '$(BBL_FILE)' \
+				--biber '$(BIBER)' \
+				--export-zip '$(TEX_EXPORT_ZIP)' \
+				--export-zip-dir '$(TEX_EXPORT_ZIP_DIR)' \
+				--export-inst-zip '$(TEX_EXPORT_INST_ZIP)' ; \
 		fi
 
 # print (use)package dependency tree
@@ -95,33 +119,25 @@ texexportimgclean:
 		$(TEX_EXPORT_IMG_CLEAN) $(TEX_EXPORT_DIR)
 		@if [ ! -z "$(TEX_EXPORT_ADD_PDF)" ] ; then \
 			echo "compiling PDF to include in distribution" ; \
-			make -C $(TEX_EXPORT_DIR) ; \
+			$(MAKE) -C $(TEX_EXPORT_DIR) ; \
 		fi
 
-# renaming any bib files to final name (useful for arXiv submissions)
+# Deprecated: kept as a no-op for backwards compatibility.
+# File renaming caused .aux/.bibdata mismatches for arXiv.  The export now keeps
+# original file names, usually main.tex, main.bbl, and the original .bib name.
 .PHONY:		texexportbibrename
 texexportbibrename:
-		@echo "renaming any bib files to final name"
-		@( cd $(TEX_EXPORT_DIR) ; \
-		  for i in *.bib ; do \
-			echo "renmaing $$i $(FINAL_NAME).bib" ; \
-			mv $$i $(FINAL_NAME).bib ; \
-		  done ; \
-		  recrepl -r $(FINAL_NAME).bib $$i ; \
-		  recrepl -r $(FINAL_NAME).bbl $$i ; \
-		  for i in *.bbl ; do \
-			echo "renmaing $$i $(FINAL_NAME).bbl" ; \
-			mv $$i $(FINAL_NAME).bbl ; \
-		  done )
+		@echo "texexportbibrename is deprecated: keeping original file names"
 
 # create a no dependency (from zenbuild) directory with files to recreate PDF
 .PHONY:		texexport
 texexport:	texexportprep $(TEX_EXPORT_DEPS)
-		( cd $(TEX_EXPORT_DIR)/.. ; \
-			zip -r $(TEX_EXPORT_ZIP) $(TEX_EXPORT_ZIP_DIR) ; \
+		( cd $(dir $(TEX_EXPORT_DIR)) ; \
+			zip -r $(TEX_EXPORT_ZIP) $(notdir $(TEX_EXPORT_DIR)) ; \
 			cp $(TEX_EXPORT_ZIP) $(TEX_EXPORT_INST_ZIP) )
 		@echo "exported stand-alone build to $(TEX_EXPORT_INST_ZIP)"
 
 # create a zip file to be uploaded to arXiv
 .PHONY:		texexportarxiv
-texexportarxiv:	clean texexportprep texexportbibrename texexport
+texexportarxiv:	clean texexport
+
