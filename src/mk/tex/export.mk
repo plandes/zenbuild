@@ -56,7 +56,7 @@ texexportinfo:
 # handy for debugging
 .PHONY:		texexportredo
 texexportredo:
-		@echo "removing $(TEX_EXPORT_DIR), $(TEX_EXPORT_DIR).zip..."
+		$(call loginfo,removing $(TEX_EXPORT_DIR), $(TEX_EXPORT_DIR).zip)
 		@rm -fr $(TEX_EXPORT_DIR)
 		@rm -f $(TEX_EXPORT_DIR).zip
 		@$(MAKE) $(TEX_MAKE_ARGS) texexport
@@ -64,7 +64,7 @@ texexportredo:
 # prepare for export by copying files and creating configuration
 .PHONY:		texexportprep
 texexportprep:	texinstall
-		@echo "prepare export in $(TEX_EXPORT_DIR)..."
+		$(call loginfo,prepare export in $(TEX_EXPORT_DIR)...)
 		@rm -fr $(TEX_EXPORT_DIR)
 		@mkdir -p $(TEX_EXPORT_DIR)
 		@cp $(wildcard $(BIB_FILE) $(BBL_FILE)) $(TEX_EXPORT_DIR)
@@ -108,26 +108,19 @@ texexportprep:	texinstall
 # print (use)package dependency tree
 .PHONY:		texexportdeps
 texexportdeps:	texcompile
-		@echo "tex path: $(TEX_EXPORT_LATIDX_PATH)"
+		$(call loginfo,tex path: $(TEX_EXPORT_LATIDX_PATH))
 		@$(TEX_EXPORT_LATIDX) deps $(TEX_EXPORT_LATIDX_PATH) \
 			--source $(TEX_LATEX_FILE)
 
 # remove superfluous image files
 .PHONY:		texexportimgclean
 texexportimgclean:
-		@echo "cleaning superfluous image files"
+		$(call loginfo,cleaning superfluous image files)
 		$(TEX_EXPORT_IMG_CLEAN) $(TEX_EXPORT_DIR)
 		@if [ ! -z "$(TEX_EXPORT_ADD_PDF)" ] ; then \
 			echo "compiling PDF to include in distribution" ; \
 			$(MAKE) -C $(TEX_EXPORT_DIR) ; \
 		fi
-
-# Deprecated: kept as a no-op for backwards compatibility.
-# File renaming caused .aux/.bibdata mismatches for arXiv.  The export now keeps
-# original file names, usually main.tex, main.bbl, and the original .bib name.
-.PHONY:		texexportbibrename
-texexportbibrename:
-		@echo "texexportbibrename is deprecated: keeping original file names"
 
 # create a no dependency (from zenbuild) directory with files to recreate PDF
 .PHONY:		texexport
