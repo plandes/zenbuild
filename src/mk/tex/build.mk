@@ -135,29 +135,29 @@ $(TEX_MTARG_FILE):
 
 # copy over included latex source files
 $(TEX_LAT_PATH)/%.tex:		%.tex
-		@echo "copy tex file: $< -> $@"
+		$(call loginfo,copy tex file: $< -> $@)
 		@mkdir -p $(TEX_LAT_PATH)/$(*D)
 		@cp $< $@
 
 # copy over all vector .eps static files
 %.eps:		$(TEX_IMG_DIR)/$(@F) $(TEX_MTARG_FILE)
-		@echo "copy eps file: $(TEX_IMG_DIR)/$(@F) $@"
+		$(call loginfo,copy eps file: $(TEX_IMG_DIR)/$(@F) $@)
 		@mkdir -p $(dir $@)
 		@cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all vector .pdf static files
 %.pdf:		$(TEX_IMG_DIR)/$(@F) $(TEX_MTARG_FILE)
-		@echo "copy pdf file: $(TEX_IMG_DIR)/$(@F) $@"
+		$(call loginfo,copy pdf file: $(TEX_IMG_DIR)/$(@F) $@)
 		@cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all raster .png static files
 %.png:
-		@echo "copy png file: $(TEX_IMG_DIR)/$(@F) $@"
+		$(call loginfo,copy png file: $(TEX_IMG_DIR)/$(@F) $@)
 		@cp $(TEX_IMG_DIR)/$(@F) $@
 
 # copy over all raster .jpg static files
 %.jpg:
-		@echo "copy jpg file: $(TEX_IMG_DIR)/$(@F) $@"
+		$(call loginfo,copy jpg file: $(TEX_IMG_DIR)/$(@F) $@)
 		@cp $(TEX_IMG_DIR)/$(@F) $@
 
 # convert over all svg to pdf files
@@ -174,13 +174,13 @@ texversion:
 # recompile even when editing .sty files (make proper dependencies?)
 .PHONY:		texforce
 texforce:	$(COMP_DEPS)
-		@echo "forcing make"
+		$(call loginfo,forcing make)
 		@$(MAKE) $(TEX_MAKE_ARGS) $(COMP_DEPS)
 		@( cd $(TEX_LAT_PATH) ; $(TEX_LATEX_CMD) )
 
 # run latex before resolving module targets (see tex-bib*.mk, tex-index.mk)
 $(TEX_PRERUN_FILE):
-		@echo "init run: $(TEX_INIT_RUN)"
+		$(call loginfo,init run: $(TEX_INIT_RUN))
 		@if [ ! -z "$(TEX_INIT_RUN)" ] ; then \
 			if [ -d $(TEX_IMGC_DIR) ] ; then \
 				echo "copying images $(TEX_IMGC_DIR) -> $(TEX_LAT_PATH)" ; \
@@ -205,9 +205,9 @@ $(TEX_LATEX_FILE):	$(TEX).tex
 # should be able to put $(COMP_DEPS) as a dependency.  However, given the *.mk
 # file proccessing order, it completely skips the module make files
 $(TEX_PDF_FILE):	$(COMP_DEPS)
-		@echo "generating $(TEX_PDF_FILE)"
+		$(call loginfo,generating $(TEX_PDF_FILE))
 		make $(COMP_DEPS)
-		@echo "latex first compile..."
+		$(call loginfo,latex first compile...)
 		( cd $(TEX_LAT_PATH) ; $(TEX_LATEX_CMD) )
 		@if [ ! -z "$(SECOND_RUN)" ] ; then \
 			echo "starting latex compile second run..." ; \
@@ -222,19 +222,19 @@ texcompile:	$(TEX_PDF_FILE)
 # "debug" the compilation process by not adding quiet flags to pdflatex
 .PHONY:		texdebug
 texdebug:
-		@echo "debugging tex build..."
+		$(call loginfo,debugging tex build...)
 		@$(MAKE) $(TEX_MAKE_ARGS) TEX_DEBUG=1 texforce
 
 # compile and display the file using a simple open (MacOS or alias out)
 .PHONY:		texopen
 texopen:	texcompile
-		@echo "opening $(TEX_PDF_FILE)..."
+		$(call loginfo,opening $(TEX_PDF_FILE)...)
 		@open $(TEX_PDF_FILE)
 
 # a one pass compile and show (will flub refs and bibliography)
 .PHONY:		texreopen
 texreopen:	texforce
-		@echo "bringing preview to foreground..."
+		$(call loginfo,bringing preview to foreground...)
 		@osascript -e 'tell application "Preview" to activate'
 
 .PHONY:		texrend
@@ -291,7 +291,7 @@ texpresentshow:		texpresentforce texpresentopen
 # create the presentation form of the slides
 .PHONY:		texpresentpdf
 texpresentpdf:
-		@echo "creating prsentation slides; final runs: $(TEX_FINAL_RUNS)"
+		$(call loginfo,creating prsentation slides; final runs: $(TEX_FINAL_RUNS))
 		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
 			echo "run number $$i" ; \
 			$(MAKE) texpresentforce ; \
@@ -303,7 +303,7 @@ texpresentpdf:
 # present a slide deck
 .PHONY:		texpresent
 texpresent:	texpackage
-		@echo "Imporant: uncheck Mirror Mode: Sys Prefs > Display > Arragenemnt"
+		$(call loginfo,Imporant: uncheck Mirror Mode: Sys Prefs > Display > Arragenemnt)
 		open -a $(TEX_PRESENT_BIN) $(TEX_PKG_FINAL_DIR)/$(FINAL_NAME)-presenetation.pdf
 
 # create a zip file with the only the PDF as its contents
@@ -312,7 +312,7 @@ texpackage:	$(TEX_PKG_FINAL_DIR) $(TEX_PKG_ADD)
 
 # package directory target generates both slides versions or default paper/report
 $(TEX_PKG_FINAL_DIR):
-		@echo "packaging into $(TEX_PKG_FINAL_DIR)..."
+		$(call loginfo,packaging into $(TEX_PKG_FINAL_DIR)...)
 		@mkdir -p $(TEX_PKG_FINAL_DIR)
 		@$(MAKE) $(TEX_MAKE_ARGS) texfinal
 		@if [ -z "$(TEX_SLIDES)" ] ; then \
@@ -348,24 +348,24 @@ texinstall:	texpackage
 .PHONY:			texinstalltracked
 texinstalltracked:	compile
 			$(eval DFMT=$(shell date "+$(USER)-$(FINAL_NAME)-%b%d-%H%M" | tr "A-Z" "a-z"))
-			@echo "copy tex source and PDF to $(TEX_INSTALL_DIR)..."
+			$(call loginfo,copy tex source and PDF to $(TEX_INSTALL_DIR)...)
 			@cp $(TEX).tex $(TEX_INSTALL_DIR)/$(DFMT).tex
 			@cp $(TEX_PDF_FILE) $(TEX_INSTALL_DIR)/$(DFMT).pdf
 
 # install a non-final version of (only) the pdf
 .PHONY:			texinstallnonfinal
 texinstallnonfinal:	texnonfinal
-			@echo "$(TEX_PDF_FILE) -> $(TEX_INSTALL_PDF)"
+			$(call loginfo,$(TEX_PDF_FILE) -> $(TEX_INSTALL_PDF))
 			@cp $(TEX_PDF_FILE) $(TEX_INSTALL_PDF)
 
 # install a final version of (only) the pdf
 .PHONY:			texinstallfinal
 texinstallfinal:	texfinal
-			@echo "$(TEX_PDF_FILE) -> $(TEX_INSTALL_PDF)"
+			$(call loginfo,$(TEX_PDF_FILE) -> $(TEX_INSTALL_PDF))
 			@cp $(TEX_PDF_FILE) $(TEX_INSTALL_PDF)
 
 # install the last compiled pdf (whatever it is)
 .PHONY:			texinstalllast
 texinstalllast:
-			@echo "$(TEX_PDF_FILE) -> $(TEX_INSTALL_PDF)"
+			$(call loginfo,$(TEX_PDF_FILE) -> $(TEX_INSTALL_PDF))
 			@cp $(TEX_PDF_FILE) $(TEX_INSTALL_PDF)

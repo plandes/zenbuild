@@ -29,7 +29,7 @@ textextinfo:
 
 # create a text version of the compiled pdf
 %.txt:			%.pdf
-			@echo "convert to text: $< -> $@"
+			$(call loginfo,convert to text: $< -> $@)
 			@pdftotext $< $@
 .PHONY:			textext
 textext:
