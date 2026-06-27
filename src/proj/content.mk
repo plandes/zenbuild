@@ -2,12 +2,6 @@
 #@meta {desc: "website files and documents", date: "2025-04-28"}
 
 
-## Module
-#
-# the source repository directory that has content to copy to the site
-CNT_SRC_STAGE_DIR ?=	$(CNT_CONTENT_DIR)/
-
-
 ## Include
 #
 include $(BUILD_MK_DIR)/content.mk

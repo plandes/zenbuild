@@ -4,9 +4,6 @@
 ## includes
 include $(BUILD_MK_DIR)/emacs/env.mk
 
-# executables
-OM_SHOWPREV_BIN ?=	rend
-
 # Emacs config
 OM_EMACS_SWITCHES +=	$(EMACS_SWITCHES)
 OM_INSTALL ?=		install
@@ -62,5 +59,5 @@ $(OM_HTML_DIR)/%.html:	%.html
 .PHONY:			orgmode-doc-show
 orgmode-doc-show:	orgmode-doc-html
 			@for i in $(OM_SHOW_FILES) ; do \
-				$(OM_SHOWPREV_BIN) show $$i ; \
+				$(RENDER_BIN) show $$i ; \
 			done
