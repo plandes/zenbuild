@@ -1,14 +1,7 @@
-## make include file for content distribution projects
-## PL 12/08/2018
+## @meta {author: "Paul Landes"}
+## @meta {desc: "content distribution projects", date: "12/08/2018"}
 
-# executables
-CNT_SHOWPREV_BIN ?=	rend
-# URL to deploy content
-CNT_DOC_URL ?=		https://example.com/webdavroot
-#
-CNT_MOUNT_CMD ?= 	osascript -e 'tell application "Finder" to mount volume "$(CNT_DOC_URL)"'
-# if provided, the mount is skipped if the directory is found
-CNT_MOUNT_CHECK_DIR ?=
+
 # where source static content lives
 CNT_SITE_DIR ?=		./site
 # objects to build during site package
@@ -21,18 +14,16 @@ CNT_INST_DIR ?=
 CNT_SRC_STAGE_DIR ?=	$(CNT_STAGE_DIR)
 # where the site content lives (used by orgmode builds)
 CNT_CONTENT_DIR ?=	$(abspath $(CNT_STAGE_DIR)/$(CNT_SITE_DIR))
+# the path on the remote to rsync to
+CNT_DEPLOY_PATH ?=	$(CNT_SITE_NAME)
 # additional dependencies to build before copying the site
 CNT_DEP_TARGS +=
 # additional dependencies to build after copying the site
 CNT_DEPLOY_DEP_TARGS +=
-# the URL to point the browser on a make remote show
-CNT_DEPLOY_URL ?=	https://example.com/site/index.html
-# default show target to show
-CNT_SHOW_TARG ?=	cntshowremote
-# default rsync options: stage and deploy respectively
-CNT_RSYNC_OPTS ?=	-auv --copy-links
-CNT_RSYNC_DEP_OPTS ?=	$(CNT_RSYNC_OPTS) --delete $(CNT_SRC_STAGE_DIR)
-
+# command used to deploy: takes stage dir, remote leaf path, extra args
+CNT_DEPLOY_CMD ?=	printf "error: CNT_DEPLOY_CMD not set--can not deploy\n"
+# same, but adds option for dry run
+CNT_DEPLOY_DRY_CMD ?=	printf "error: CNT_DEPLOY_DRY_CMD not set--can not deploy\n"
 # module config
 INFO_TARGETS +=		cntinfo
 
@@ -40,13 +31,11 @@ INFO_TARGETS +=		cntinfo
 # info
 .PHONY:			cntinfo
 cntinfo:
-			@echo "cnt-doc-url: $(CNT_DOC_URL)"
 			@echo "cnt-site-dir: $(CNT_SITE_DIR)"
 			@echo "cnt-stage-dir: $(CNT_STAGE_DIR)"
 			@echo "cnt-content-dir: $(CNT_CONTENT_DIR)"
 			@echo "cnt-inst-dir: $(CNT_INST_DIR)"
 			@echo "cnt-dep-targs: $(CNT_DEP_TARGS)"
-			@echo "cnt-deploy-url: $(CNT_DEPLOY_URL)"
 
 
 # generate the content site by making the target dir and copying contents
@@ -59,57 +48,22 @@ cntcopysite:
 				mkdir -pv $(CNT_SITE_DIR) ; \
 			fi
 			@for i in $(CNT_SITE_OBJS) ; do \
-				echo "copying $(CNT_SITE_DIR) -> $(CNT_STAGE_DIR)" ; \
-				if [ ! -e $$i ] ; then \
-					echo "warning: missing path $$i--skipping..." ; \
-				else \
+				if [ -e $$i ] ; then \
+					echo "copying $(CNT_SITE_DIR) -> $(CNT_STAGE_DIR)" ; \
 					rsync $(CNT_RSYNC_OPTS) --exclude .DS_Store $$i $(CNT_STAGE_DIR) || true ; \
 				fi ; \
 			done
 
+# create the site and copy it
 .PHONY:			cntsite
 cntsite:		$(CNT_DEP_TARGS) cntcopysite $(CNT_DEPLOY_DEP_TARGS)
 
-# mount the volume on OSX in order to copy
-.PHONY:			cntmount
-cntmount:
-			@if [ -z "$(CNT_DOC_URL)" ] ; then \
-				echo "CNT_DOC_URL not set, skipping mount" ; \
-			else \
-				echo "checking $(CNT_MOUNT_CHECK_DIR)" ; \
-				if [ ! -z "$(CNT_MOUNT_CHECK_DIR)" -a -d "$(CNT_MOUNT_CHECK_DIR)" ] ; then \
-					echo "already mounted: $(CNT_MOUNT_CHECK_DIR)" ; \
-				else \
-					echo "mounting $(CNT_DOC_URL)..." ; \
-					$(CNT_MOUNT_CMD) ; \
-				fi \
-			fi
-
 # generate the site and copy as dry run for the rsync copy
 .PHONY:			cntdeploydry
-cntdeploydry:		cntmount cntsite
-			rsync $(CNT_RSYNC_DEP_OPTS) -n $(CNT_INST_DIR) || true
+cntdeploydry:		cntsite
+			@$(CNT_DEPLOY_DRY_CMD) $(CNT_STAGE_DIR) $(CNT_DEPLOY_PATH)
 
-
-# generate the site and copy it to the mounted volume that has the destination
+# generate the site and copy it to the remove that has the destination
 .PHONY:			cntdeploy
-cntdeploy:		cntmount cntsite
-			@if [ -z "$(CNT_INST_DIR)" ] ; then \
-				echo "no install directory defined" ; \
-				exit 1 ; \
-			fi
-			rsync $(CNT_RSYNC_DEP_OPTS) $(CNT_INST_DIR) || true
-
-.PHONY:			cntshow
-cntshow:		$(CNT_SHOW_TARG)
-
-# create, deploy the site, then browse to it
-.PHONY:			cntshowremote
-cntshowremote:		cntdeploy
-			$(CNT_SHOWPREV_BIN) show $(CNT_DEPLOY_URL)
-
-# reload the browser (useful for deployed/remote Javascript debugging)
-.PHONY:			cntreload
-cntreload:
-			@echo "reloading..."
-			osascript src/as/reload-events.scpt
+cntdeploy:		cntsite
+			@$(CNT_DEPLOY_CMD) $(CNT_STAGE_DIR) $(CNT_DEPLOY_PATH)
