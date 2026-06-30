@@ -4,7 +4,7 @@
 
 # this must be set in the makefile
 CNT_SITE_NAME ?=	undefined
-# where source static content lives
+# where local source static content lives
 CNT_SITE_DIR ?=		./site
 # objects to build during site package
 CNT_SITE_OBJS +=	$(CNT_SITE_DIR)
