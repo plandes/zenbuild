@@ -19,7 +19,7 @@ PY_DOC_BUILD_HTML ?=	$(PY_DOC_BUILD)/html
 PY_DOC_PRE_BUILD_DEPS +=
 PY_DOC_POST_BUILD_DEPS +=
 ifndef PY_DOC_IM_URL_CMD
-PY_DOC_IM_URL_CMD :=	echo https://$(PY_GITHUB_USER).github.io
+PY_DOC_IM_URL_CMD :=	printf "RP_DOC_IM_URL='https://$(PY_GITHUB_USER).github.io'\n"
 endif
 
 # dist name (github repo or local doc sub path)
@@ -51,14 +51,18 @@ pydocinfo:
 
 
 # generate site documentation
-$(PY_DOC_BUILD):	pyinit
+$(PY_DOC_BUILD): pyinit
 			@$(call loginfo,buliding doc website)
 			$(eval site_mod_path := $(shell $(PY_SITE_PKG_CMD)))
-			$(eval doc_im_url := $(shell $(PY_DOC_IM_URL_CMD)))
-			@RP_DOC_IM_URL=$(doc_im_url) \
-				PYTHONPATH=$(site_mod_path) \
+			$(eval doc_config := $(shell $(call relpo,meta -f json)))
+			@eval "$$($(PY_DOC_IM_URL_CMD) \
+				'$(doc_config)' '$(MTARG)/sphinx-inv')" && \
+				PYTHONPATH='$(site_mod_path)' \
+				RP_DOC_IM_URL="$$RP_DOC_IM_URL" \
+				RP_DOC_IM_INV_URL="$$RP_DOC_IM_INV_URL" \
 				$(call relpo,mkdoc -o $(PY_DOC_BUILD))
 			touch $(PY_DOC_BUILD_HTML)/.nojekyll
+
 
 # generate
 .PHONY:			pydoccompile

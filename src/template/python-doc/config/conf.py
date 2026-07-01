@@ -112,7 +112,12 @@ html_extra_path = [
 intersphinx_mapping = {
 {%- for package, pkg in config.doc.api_config.intersphinx_mapping.items() %}
   {%- for mod in pkg['modules'] %}
+  {%- set inv_file = pkg['url'].format(package=mod, **env) ~ 'objects.inv' %}
+    {%- if is_file(inv_file) %}
+    '{{mod}}': ('{{ env['RP_DOC_IM_INV_URL'] }}/{{ mod }}', '{{ inv_file }}'),
+    {%- else %}
     '{{mod}}': ('{{ pkg['url'].format(package=package, **env) }}', None),
+    {%- endif %}
   {%- endfor %}
 {%- endfor %}
 }
