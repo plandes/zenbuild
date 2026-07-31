@@ -20,7 +20,8 @@ TEX_FIG_RUN_FILE ?=	$(TEX_LAT_PATH)/figrun.txt
 TEX_FIG_SVG =		$(addprefix $(TEX_LAT_PATH)/,$(notdir $(patsubst %-figure.yml,%.svg,$(TEX_FIG_DEFS))))
 # use PDF since translucent colors aren't supported in eps
 TEX_FIG_FORMAT ?=	pdf
-
+# additional arguments to pass to datdesc (only for figure generation)
+TEX_FIG_ARGS ?=
 
 ## Build
 #
@@ -37,7 +38,7 @@ include $(BUILD_MK_DIR)/tex/datdesc.mk
 #
 define texfigcreate
   $(call loginfo,"creating figures in $(TEX_DATDESC_WD) from $(TEX_FIG_DIR)")
-  $(call datdesc,figure -e $(TEX_FIG_FORMAT) $(TEX_FIG_DIR) $(TEX_LAT_PATH))
+  $(call datdesc,figure -e $(TEX_FIG_FORMAT) $(TEX_FIG_ARGS) $(TEX_FIG_DIR) $(TEX_LAT_PATH))
   $(shell date > $(TEX_FIG_RUN_FILE))
 endef
 
