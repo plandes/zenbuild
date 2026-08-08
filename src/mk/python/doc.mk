@@ -39,6 +39,11 @@ PY_GIT_DOC_SRC_DIR ?=	$(MTARG)/doc/build/html
 PY_GIT_DOC_DST_DIR ?=	$(PY_GIT_DOC_DIR)/build
 # dependencies before git push
 PY_GIT_DOC_PUSH_DEPS +=	$(PY_GIT_DOC_DST_DIR)
+# staging directory
+PY_DOC_STAGE_DIR := $(shell echo "{{ config.doc.stage_dir }}" | \
+	$(PY_RP_RELPO_BIN) template --tmp $(MTARG) -c $(PY_RP_PROJ_FILES_))
+# extra doc deployment files
+PY_DOC_STAGE_EX_DIR ?=	$(MTARG)/$(PY_DOC_STAGE_DIR)/doc
 
 
 ## Targets
@@ -48,7 +53,8 @@ pydocinfo:
 			@echo "py_site_pkg_cmd: $(PY_SITE_PKG_CMD)"
 			@echo "py_doc_im_url_cmd: $(PY_DOC_IM_URL_CMD)"
 			@echo "py_git_doc_push_deps: $(PY_GIT_DOC_PUSH_DEPS)"
-
+			@echo "py_git_doc_src_dir: $(PY_GIT_DOC_SRC_DIR)"
+			@echo "py_doc_stage_dir: $(PY_DOC_STAGE_DIR)"
 
 # generate site documentation
 $(PY_DOC_BUILD): pyinit
@@ -61,6 +67,10 @@ $(PY_DOC_BUILD): pyinit
 				RP_DOC_IM_URL="$$RP_DOC_IM_URL" \
 				RP_DOC_IM_INV_URL="$$RP_DOC_IM_INV_URL" \
 				$(call relpo,mkdoc -o $(PY_DOC_BUILD))
+			@if [ -d $(PY_DOC_STAGE_EX_DIR) ] ; then \
+				echo "copying extra ./doc files from $(PY_DOC_STAGE_EX_DIR)" ; \
+				cp -r $(PY_DOC_STAGE_EX_DIR) $(PY_GIT_DOC_SRC_DIR) ; \
+			fi
 			touch $(PY_DOC_BUILD_HTML)/.nojekyll
 
 
