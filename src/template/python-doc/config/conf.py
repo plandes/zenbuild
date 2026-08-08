@@ -78,6 +78,8 @@ extensions = [
 myst_fence_as_directive = [
     'mermaid',
 ]
+# enable heading anchors
+myst_heading_anchors = 6
 
 # autodoc extension configuration
 autodoc_default_options = {
