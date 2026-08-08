@@ -40,10 +40,13 @@ PY_GIT_DOC_DST_DIR ?=	$(PY_GIT_DOC_DIR)/build
 # dependencies before git push
 PY_GIT_DOC_PUSH_DEPS +=	$(PY_GIT_DOC_DST_DIR)
 # staging directory
-PY_DOC_STAGE_DIR := $(shell echo "{{ config.doc.stage_dir }}" | \
+PY_DOC_STAGE_DIR := $(MTARG)/$(shell echo "{{ config.doc.stage_dir }}" | \
 	$(PY_RP_RELPO_BIN) template --tmp $(MTARG) -c $(PY_RP_PROJ_FILES_))
+# additional project root file copy (i.e. ./examples); must add a /doc/copy in
+# relpo.yml (see doc.yml)
+PY_DOC_STAGE_EX +=
 # extra doc deployment files
-PY_DOC_STAGE_EX_DIR ?=	$(MTARG)/$(PY_DOC_STAGE_DIR)/doc
+PY_DOC_STAGE_EX_DIR ?=	$(PY_DOC_STAGE_DIR)/doc
 
 
 ## Targets
@@ -71,6 +74,10 @@ $(PY_DOC_BUILD): pyinit
 				echo "copying extra ./doc files from $(PY_DOC_STAGE_EX_DIR)" ; \
 				cp -r $(PY_DOC_STAGE_EX_DIR) $(PY_GIT_DOC_SRC_DIR) ; \
 			fi
+			@for i in $(PY_DOC_STAGE_EX) ; do \
+				echo "copying extra $$i from $(PY_DOC_STAGE_EX_DIR)" ; \
+				cp -r $(PY_DOC_STAGE_DIR)/$$i $(PY_GIT_DOC_SRC_DIR) ; \
+			done
 			touch $(PY_DOC_BUILD_HTML)/.nojekyll
 
 

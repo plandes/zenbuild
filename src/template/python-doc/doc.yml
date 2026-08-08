@@ -18,7 +18,8 @@ doc:
       python-v3:
         modules: [python]
         url: https://docs.python.org/3
-  # files to copy to the sphinx source dir to be added to the docs
+  # files to copy to the sphinx source dir to be added to the docs; when adding
+  # to using /doc/copy in relpo.yml, the makefile must add to PY_DOC_STAGE_EX
   copy:
     README.md: index.md
     CHANGELOG.md: CHANGELOG
