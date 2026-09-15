@@ -72,6 +72,11 @@ include $(PROJ_MKS)
 help:
 	@$(MKDOC_BIN) --filter '^makefile|(?:zenbuild\/src\/(?:proj|mk\/clean))'
 
+# print all targets for this build process
+.PHONY:	helpall
+helpall:
+	@$(MKDOC_BIN)
+
 # print build information
 .PHONY:	info
 info:	$(INFO_TARGETS)
