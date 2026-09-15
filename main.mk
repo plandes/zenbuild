@@ -34,6 +34,7 @@ APP_INST_DIR ?=		./inst
 
 # default programs
 RENDER_BIN ?=		$(PYTHON_UTIL_HOME)/bin/rend
+MKDOC_BIN ?=		$(PYTHON_UTIL_HOME)/bin/mkdoc
 
 
 ## Defines
@@ -49,7 +50,7 @@ endef
 
 ## Default targets
 #
-all:			info
+all:			help
 
 
 ## Includes
@@ -66,7 +67,12 @@ include $(PROJ_MKS)
 
 ## Targets
 #
-## print build information
+# print help for this build process
+.PHONY:	help
+help:
+	@$(MKDOC_BIN) --filter '^makefile|(?:zenbuild\/src\/(?:proj|mk\/clean))'
+
+# print build information
 .PHONY:	info
 info:	$(INFO_TARGETS)
 	@echo "project-modules: $(PROJ_MODULES)"

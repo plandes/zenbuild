@@ -62,7 +62,7 @@ pyharnshell:		$(PY_PYPROJECT_FILE)
 pyinvokerelpo:
 			@$(call relpo,$(ARG))
 
-# print help
-.PHONY:			pyhelp
-pyhelp:			$(PY_PYPROJECT_FILE)
+# print usage
+.PHONY:			pyusage
+pyusage:		$(PY_PYPROJECT_FILE)
 			@$(MAKE) $(PY_MAKE_ARGS) ARG="--help" pyinvoke

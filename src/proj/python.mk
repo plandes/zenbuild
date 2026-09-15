@@ -11,9 +11,9 @@ include $(BUILD_MK_DIR)/python/git.mk
 
 ## Targets
 #
-# command line help
-.PHONY:			help
-help:			pyhelp
+# command line usage
+.PHONY:			usage
+usage:			pyusage
 
 # dependency tree
 .PHONY:			deptree
