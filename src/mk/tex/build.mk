@@ -191,7 +191,7 @@ $(TEX_PRERUN_FILE):
 				echo "( cd $(TEX_LAT_PATH) ; $(TEX_LATEX_CMD) )" ; \
 			fi ; \
 			( cd $(TEX_LAT_PATH) ; $(TEX_LATEX_CMD) ) ; \
-			if [ $$? != 0 ] ; then \
+			if [ $$? -ne 0 ] ; then \
 				echo "failed last compile (use TEX_DEBUG=1): $$?" ; \
 				exit 1 ; \
 			fi ; \
@@ -255,7 +255,7 @@ texnonfinal:
 		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
 			echo "run number $$i" ; \
 			$(MAKE) texforce ; \
-			if [ $$? != 0 ] ; then \
+			if [ $$? -ne 0 ] ; then \
 				exit 1 ; \
 			fi ; \
 		done
@@ -295,7 +295,7 @@ texpresentpdf:
 		@for i in `seq $(TEX_FINAL_RUNS)` ; do \
 			echo "run number $$i" ; \
 			$(MAKE) texpresentforce ; \
-			if [ $$? != 0 ] ; then \
+			if [ $$? -ne 0 ] ; then \
 				exit 1 ; \
 			fi ; \
 		done

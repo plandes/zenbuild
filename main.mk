@@ -41,10 +41,10 @@ MKDOC_BIN ?=		$(PYTHON_UTIL_HOME)/bin/mkdoc
 #
 define logdebug
 # second to last makefile is calling into this file
-	@[ "$(BUILD_DEBUG)" == "1" ] && echo "DEBUG: $(1)" || true
+	@[ "$(BUILD_DEBUG)" -eq 1 ] && echo "DEBUG: $(1)" || true
 endef
 define loginfo
-	@[ "$(BUILD_INFO)" != "0" ] && echo "$(1)" || true
+	@[ "$(BUILD_INFO)" -ne 0 ] && echo "$(1)" || true
 endef
 
 
